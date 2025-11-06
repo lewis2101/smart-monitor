@@ -2,21 +2,14 @@
 import MainDocsBlock from "@/components/main/main-docs-block/main-docs-block.vue";
 import MainMenuBlock from "@/components/main/main-menu-block/main-menu-block.vue";
 import MainReports from "@/components/main/main-reports/main-reports.vue";
-import {
-  IonPage,
-  IonContent,
-  IonHeader,
-  IonToolbar,
-  IonRefresher,
-  IonRefresherContent,
-  type RefresherCustomEvent,
-} from "@ionic/vue";
+import { IonPage, IonHeader, IonToolbar, type RefresherCustomEvent } from "@ionic/vue";
 import MainLayoutHeader from "@/components/layout/main-layout-header.vue";
+import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 
 const handleRefresh = (event: RefresherCustomEvent) => {
   setTimeout(() => {
     event.target.complete();
-  }, 5000);
+  }, 2000);
 };
 </script>
 
@@ -27,16 +20,13 @@ const handleRefresh = (event: RefresherCustomEvent) => {
         <main-layout-header />
       </ion-toolbar>
     </ion-header>
-    <ion-content class="main-page__content">
-      <ion-refresher slot="fixed" @ion-refresh="handleRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
+    <base-content-with-refresher class="main-page__content" @refresh="handleRefresh">
       <div class="main-page__body">
         <main-docs-block class="main-docs-block" />
         <main-menu-block class="main-menu-block" />
         <main-reports class="main-reports" />
       </div>
-    </ion-content>
+    </base-content-with-refresher>
   </ion-page>
 </template>
 
@@ -45,7 +35,8 @@ const handleRefresh = (event: RefresherCustomEvent) => {
   padding-top: env(safe-area-inset-top);
 
   &__toolbar {
-    padding-top: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
   }
 
   &__content {

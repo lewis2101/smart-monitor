@@ -1,31 +1,42 @@
 <script setup lang="ts">
-import { IonPage, IonContent, IonHeader, IonToolbar } from "@ionic/vue";
-import DocsLayoutHeader from "@/components/layout/docs-layout-header.vue";
+import { IonPage, IonHeader, IonToolbar, type RefresherCustomEvent } from "@ionic/vue";
+import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
+import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
+import DocsLinkedInfoBlock from "@/components/docs/docs-linked-info-block/docs-linked-info-block.vue";
+
+const handleRefresh = (event: RefresherCustomEvent) => {
+  setTimeout(() => {
+    event.target.complete();
+  }, 2000);
+};
 </script>
 
 <template>
-  <ion-page style="padding-top: env(safe-area-inset-top);">
+  <ion-page class="docs-page">
     <ion-header>
-      <ion-toolbar style="padding: 0">
-        <docs-layout-header />
+      <ion-toolbar class="docs-page__toolbar">
+        <default-layout-header title="Ваши документы" />
       </ion-toolbar>
     </ion-header>
-    <ion-content>
-      <div>DOCS</div>
-      <div>DOCS</div>
-      <div>DOCS</div>
-      <div>DOCS</div>
-      <div>DOCS</div>
-      <div>DOCS</div>
-      <div>DOCS</div>
-      <div>DOCS</div>
-      <div>DOCS</div>
-    </ion-content>
+    <base-content-with-refresher @refresh="handleRefresh">
+      <div class="docs-page__body">
+        <docs-linked-info-block />
+      </div>
+    </base-content-with-refresher>
   </ion-page>
 </template>
 
 <style scoped lang="scss">
-.docs {
-  margin-top: 16px;
+.docs-page {
+  padding-top: env(safe-area-inset-top);
+
+  &__toolbar {
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+
+  &__body {
+    padding: 16px 24px;
+  }
 }
 </style>

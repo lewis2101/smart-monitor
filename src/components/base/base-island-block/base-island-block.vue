@@ -1,8 +1,24 @@
 <script setup lang="ts">
-defineProps<{
-  title?: string;
-}>();
+import { computed } from "vue";
 
+type Radius = "S" | "M";
+
+const radiusMapper: Record<Radius, number> = {
+  S: 12,
+  M: 24,
+};
+
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    rounded?: Radius;
+  }>(),
+  {
+    rounded: "M",
+  },
+);
+
+const radius = computed(() => `${radiusMapper[props.rounded]}px`);
 </script>
 
 <template>
@@ -17,7 +33,7 @@ defineProps<{
 <style scoped lang="scss">
 .base-island-block {
   padding: 12px;
-  border-radius: 24px;
+  border-radius: v-bind("radius");
   background: $white;
   box-shadow: 0 8px 16px 0 #00000014;
 

@@ -35,9 +35,9 @@ const router = createRouter({
       ],
     },
     {
-      path: "/order/:uuid",
-      name: "order",
-      component: () => import("@/pages/order.vue"),
+      path: "/new-order/:uuid",
+      name: "new-order",
+      component: () => import("@/pages/new-order.vue"),
     },
   ],
 });
