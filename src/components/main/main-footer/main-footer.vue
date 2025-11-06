@@ -1,0 +1,119 @@
+<script setup lang="ts">
+import FooterItem from "./item.vue";
+import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import { computed, ref, watch } from "vue";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store.ts";
+import { RouteNames } from "@/router/router-list.ts";
+import { IonTabBar, IonTabButton } from "@ionic/vue";
+import { useRoute } from "vue-router";
+
+const globalBackdropStore = useGlobalBackdropStore();
+
+const route = useRoute();
+
+const currentRouteName = computed(() => route.name);
+
+const currentActiveMenu = ref<RouteNames>((currentRouteName.value as RouteNames) || "main");
+
+const getActiveClass = (item: RouteNames) => (currentActiveMenu.value === item ? "active animate" : "");
+
+const handleClickCamera = () => {
+  globalBackdropStore.push("camera");
+};
+
+watch(currentRouteName, (value) => {
+  currentActiveMenu.value = value as RouteNames;
+});
+</script>
+
+<template>
+  <ion-tab-bar slot="bottom" class="main-footer">
+    <ion-tab-button tab="home" href="/home">
+      <footer-item :class="['main-footer__item', getActiveClass(RouteNames.home)]" title="Главная">
+        <base-icon name="home" class="main-footer__icon" />
+      </footer-item>
+    </ion-tab-button>
+    <ion-tab-button tab="docs" href="/docs">
+      <footer-item :class="['main-footer__item', getActiveClass(RouteNames.docs)]" title="Документы">
+        <base-icon name="docs" class="main-footer__icon" />
+      </footer-item>
+    </ion-tab-button>
+    <ion-tab-button tab="camera" @click="handleClickCamera">
+      <footer-item>
+        <div class="main-footer__camera-item">
+          <base-icon name="camera" class="main-footer__camera-icon" />
+        </div>
+      </footer-item>
+    </ion-tab-button>
+    <ion-tab-button tab="application" href="/application">
+      <footer-item :class="['main-footer__item', getActiveClass(RouteNames.application)]" title="Заявки">
+        <base-icon name="application" class="main-footer__icon" />
+      </footer-item>
+    </ion-tab-button>
+    <ion-tab-button tab="service" href="/service">
+      <footer-item :class="['main-footer__item', getActiveClass(RouteNames.service)]" title="Сервисы">
+        <base-icon name="service" class="main-footer__icon" />
+      </footer-item>
+    </ion-tab-button>
+  </ion-tab-bar>
+</template>
+
+<style lang="scss" scoped>
+.main-footer {
+  --bottom-inset: calc(4px + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: space-between;
+
+  background: $white;
+  border: 1px solid #f2f2f7;
+  border-bottom: 0;
+  padding: 8px 0 var(--bottom-inset) 0;
+
+  & > * {
+    background: $white;
+  }
+
+  .main-footer__item {
+    color: #625b71;
+  }
+
+  .active {
+    color: $main-color;
+  }
+
+  .animate {
+    span {
+      animation: bubble 0.3s ease-in-out;
+    }
+  }
+
+  @keyframes bubble {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  &__icon {
+    margin-bottom: 12px;
+  }
+
+  &__camera-item {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: $main-color;
+    border-radius: 50%;
+  }
+
+  &__camera-icon {
+    color: $white;
+  }
+}
+</style>
