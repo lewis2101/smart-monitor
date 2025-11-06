@@ -1,4 +1,4 @@
-export enum RouteNames {
+export enum MainTabRoutes {
   home = "home",
   docs = "docs",
   application = "application",

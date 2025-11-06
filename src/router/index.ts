@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
-import { RouteNames } from "@/router/router-list.ts";
+import { MainTabRoutes } from "@/router/router-list.ts";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,13 +14,23 @@ const router = createRouter({
       children: [
         {
           path: "home",
-          name: RouteNames.home,
+          name: MainTabRoutes.home,
           component: () => import("@/pages/main.vue"),
         },
         {
           path: "docs",
-          name: RouteNames.docs,
+          name: MainTabRoutes.docs,
           component: () => import("@/pages/docs.vue"),
+        },
+        {
+          path: "application",
+          name: MainTabRoutes.application,
+          component: () => import("@/pages/application.vue"),
+        },
+        {
+          path: "service",
+          name: MainTabRoutes.service,
+          component: () => import("@/pages/service.vue"),
         },
       ],
     },

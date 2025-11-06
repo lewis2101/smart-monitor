@@ -1,4 +1,5 @@
 import { StatusBar, Style } from "@capacitor/status-bar";
+import { useIsSupport } from "@/composables/native/use-is-support.ts";
 
 enum Color {
   main = "main",
@@ -22,10 +23,17 @@ const statusBarColors: Record<Color, StatusBarColor> = {
 };
 
 async function setNativeColors(key: Color) {
+  const isSupport = useIsSupport();
+
   try {
-    // const bg = StatusBar.setBackgroundColor({ color: statusBarColors[key].bg });
     const html = document.querySelector("html")!;
     html.style.background = statusBarColors[key].bg;
+
+    if (!isSupport.value) {
+      return;
+    }
+
+    // const bg = StatusBar.setBackgroundColor({ color: statusBarColors[key].bg });
     const text = StatusBar.setStyle({ style: statusBarColors[key].text });
     const overlay = StatusBar.setOverlaysWebView({ overlay: true });
     await Promise.all([text, overlay]);

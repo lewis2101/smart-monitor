@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCamera } from "@/composables/native/useCamera.ts";
+import { useCamera } from "@/composables/native/use-camera.ts";
 import { useRouter } from "vue-router";
 
 const router = useRouter();

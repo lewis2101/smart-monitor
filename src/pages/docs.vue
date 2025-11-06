@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonPage, IonContent } from "@ionic/vue";
+import { IonPage, IonContent, IonHeader, IonToolbar } from "@ionic/vue";
 import DocsLayoutHeader from "@/components/layout/docs-layout-header.vue";
 </script>
 

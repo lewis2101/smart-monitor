@@ -3,7 +3,7 @@ import FooterItem from "./item.vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { computed, ref, watch } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store.ts";
-import { RouteNames } from "@/router/router-list.ts";
+import { MainTabRoutes } from "@/router/router-list.ts";
 import { IonTabBar, IonTabButton } from "@ionic/vue";
 import { useRoute } from "vue-router";
 
@@ -13,28 +13,28 @@ const route = useRoute();
 
 const currentRouteName = computed(() => route.name);
 
-const currentActiveMenu = ref<RouteNames>((currentRouteName.value as RouteNames) || "main");
+const currentActiveMenu = ref<MainTabRoutes>((currentRouteName.value as MainTabRoutes) || "main");
 
-const getActiveClass = (item: RouteNames) => (currentActiveMenu.value === item ? "active animate" : "");
+const getActiveClass = (item: MainTabRoutes) => (currentActiveMenu.value === item ? "active animate" : "");
 
 const handleClickCamera = () => {
   globalBackdropStore.push("camera");
 };
 
 watch(currentRouteName, (value) => {
-  currentActiveMenu.value = value as RouteNames;
+  currentActiveMenu.value = value as MainTabRoutes;
 });
 </script>
 
 <template>
   <ion-tab-bar slot="bottom" class="main-footer">
     <ion-tab-button tab="home" href="/home">
-      <footer-item :class="['main-footer__item', getActiveClass(RouteNames.home)]" title="Главная">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]" title="Главная">
         <base-icon name="home" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="docs" href="/docs">
-      <footer-item :class="['main-footer__item', getActiveClass(RouteNames.docs)]" title="Документы">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" title="Документы">
         <base-icon name="docs" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
@@ -46,12 +46,12 @@ watch(currentRouteName, (value) => {
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="application" href="/application">
-      <footer-item :class="['main-footer__item', getActiveClass(RouteNames.application)]" title="Заявки">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]" title="Заявки">
         <base-icon name="application" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="service" href="/service">
-      <footer-item :class="['main-footer__item', getActiveClass(RouteNames.service)]" title="Сервисы">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]" title="Сервисы">
         <base-icon name="service" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
@@ -92,7 +92,7 @@ watch(currentRouteName, (value) => {
       transform: scale(1);
     }
     50% {
-      transform: scale(1.1);
+      transform: scale(1.3);
     }
     100% {
       transform: scale(1);

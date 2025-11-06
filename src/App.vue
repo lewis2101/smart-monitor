@@ -8,7 +8,6 @@ import { IonApp, IonRouterOutlet } from "@ionic/vue";
     <ion-router-outlet />
     <global-backdrops />
   </ion-app>
-  <!--  <router-view />-->
 </template>
 
 <style scoped></style>

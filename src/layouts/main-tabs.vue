@@ -4,23 +4,21 @@ import { IonRouterOutlet, IonTabs, IonPage } from "@ionic/vue";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
 import { useRoute } from "vue-router";
 import { computed, watch } from "vue";
+import type { MainTabRoutes } from "@/router/router-list.ts";
 
 const { setSecondaryColor, setMainColor } = useStatusBarColor();
 
-const tabsStatusBarColors = {
+const tabsStatusBarColors: Record<MainTabRoutes, () => Promise<void>> = {
   home: () => setMainColor(),
   docs: () => setSecondaryColor(),
+  application: () => setSecondaryColor(),
+  service: () => setSecondaryColor(),
 };
 
 const route = useRoute();
-const currentRoute = computed(() => route.name);
+const currentRoute = computed(() => route.name as MainTabRoutes);
 
-watch(currentRoute, (value) => {
-  if (value) {
-    // @ts-ignore
-    tabsStatusBarColors[value]?.();
-  }
-}, {
+watch(currentRoute, (value) => tabsStatusBarColors[value](), {
   immediate: true,
 });
 </script>
