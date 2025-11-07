@@ -10,13 +10,18 @@ withDefaults(
     close: false,
   },
 );
+
+defineEmits<{
+  (e: "clickClose"): void;
+  (e: "clickBack"): void;
+}>();
 </script>
 
 <template>
   <div class="default-layout-header">
-    <base-icon class="default-layout-header__icon" name="arrow-back" />
+    <base-icon class="default-layout-header__icon" name="arrow-back" @click="$emit('clickBack')" />
     <div class="default-layout-header__title">{{ title }}</div>
-    <base-icon v-if="close" class="default-layout-header__icon" name="close" />
+    <base-icon v-if="close" class="default-layout-header__icon" name="close" @click="$emit('clickClose')" />
     <div v-else class="default-layout-header__help">
       <base-icon name="help" />
     </div>

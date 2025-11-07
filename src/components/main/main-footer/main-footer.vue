@@ -2,23 +2,34 @@
 import FooterItem from "./item.vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { computed, ref, watch } from "vue";
-import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store.ts";
-import { MainTabRoutes } from "@/router/router-list.ts";
-import { IonTabBar, IonTabButton } from "@ionic/vue";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
+import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
 import { useRoute } from "vue-router";
+import { useGlobalImageStore } from "@/stores/use-global-image-store.ts";
 
 const globalBackdropStore = useGlobalBackdropStore();
+const { setImage } = useGlobalImageStore();
 
+const router = useIonRouter();
 const route = useRoute();
 
 const currentRouteName = computed(() => route.name);
-
 const currentActiveMenu = ref<MainTabRoutes>((currentRouteName.value as MainTabRoutes) || "main");
-
 const getActiveClass = (item: MainTabRoutes) => (currentActiveMenu.value === item ? "active animate" : "");
 
 const handleClickCamera = () => {
-  globalBackdropStore.push("camera");
+  globalBackdropStore.push("camera", {
+    args: {
+      selectPhoto: (photo) => {
+        if (photo) {
+          setImage(photo);
+          const id = Math.round(Math.random() * 10000) + 500;
+          router.push({ name: OrderRoutes.newOrder, params: { uuid: id } });
+        }
+      },
+    },
+  });
 };
 
 watch(currentRouteName, (value) => {

@@ -1,18 +1,34 @@
 <script setup lang="ts">
-import { IonHeader, IonPage, IonToolbar } from "@ionic/vue";
+import { IonHeader, IonPage, IonToolbar, useIonRouter } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
+import BaseGalleryBlock from "@/components/base/base-gallery-block/base-gallery-block.vue";
+
+const router = useIonRouter();
+
+const handleClickClose = () => {
+  if (router.canGoBack()) {
+    router.back();
+  }
+};
 </script>
 
 <template>
   <ion-page>
     <ion-header>
       <ion-toolbar class="new-order-page__toolbar">
-        <default-layout-header title="Новая заявка" close />
+        <default-layout-header
+          title="Новая заявка"
+          close
+          @click-close="handleClickClose"
+          @click-back="handleClickClose"
+        />
       </ion-toolbar>
     </ion-header>
     <base-content-with-refresher>
-      Hello world
+      <div class="new-order-page__body">
+        <base-gallery-block title="Фотографии" />
+      </div>
     </base-content-with-refresher>
   </ion-page>
 </template>

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
-import { MainTabRoutes } from "@/router/router-list.ts";
+import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,7 +36,7 @@ const router = createRouter({
     },
     {
       path: "/new-order/:uuid",
-      name: "new-order",
+      name: OrderRoutes.newOrder,
       component: () => import("@/pages/new-order.vue"),
     },
   ],

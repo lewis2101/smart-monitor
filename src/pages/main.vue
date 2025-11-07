@@ -2,9 +2,10 @@
 import MainDocsBlock from "@/components/main/main-docs-block/main-docs-block.vue";
 import MainMenuBlock from "@/components/main/main-menu-block/main-menu-block.vue";
 import MainReports from "@/components/main/main-reports/main-reports.vue";
-import { IonPage, IonHeader, IonToolbar, type RefresherCustomEvent } from "@ionic/vue";
+import { IonPage, IonHeader, type RefresherCustomEvent } from "@ionic/vue";
 import MainLayoutHeader from "@/components/layout/main-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
+import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 
 const handleRefresh = (event: RefresherCustomEvent) => {
   setTimeout(() => {
@@ -16,9 +17,9 @@ const handleRefresh = (event: RefresherCustomEvent) => {
 <template>
   <ion-page class="main-page">
     <ion-header>
-      <ion-toolbar class="main-page__toolbar">
+      <base-toolbar>
         <main-layout-header />
-      </ion-toolbar>
+      </base-toolbar>
     </ion-header>
     <base-content-with-refresher class="main-page__content" @refresh="handleRefresh">
       <div class="main-page__body">
@@ -33,11 +34,6 @@ const handleRefresh = (event: RefresherCustomEvent) => {
 <style lang="scss" scoped>
 .main-page {
   padding-top: env(safe-area-inset-top);
-
-  &__toolbar {
-    --padding-top: 0;
-    --padding-bottom: 0;
-  }
 
   &__content {
     --background: linear-gradient(180deg, #041a4b 22.12%, #143b88 61.06%, #ffffff 100%);

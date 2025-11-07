@@ -4,3 +4,7 @@ export enum MainTabRoutes {
   application = "application",
   service = "service",
 }
+
+export enum OrderRoutes {
+  newOrder = "new-order",
+}

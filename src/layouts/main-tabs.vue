@@ -18,7 +18,7 @@ const tabsStatusBarColors: Record<MainTabRoutes, () => Promise<void>> = {
 const route = useRoute();
 const currentRoute = computed(() => route.name as MainTabRoutes);
 
-watch(currentRoute, (value) => tabsStatusBarColors[value](), {
+watch(currentRoute, (value) => tabsStatusBarColors[value]?.(), {
   immediate: true,
 });
 </script>

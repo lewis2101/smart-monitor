@@ -1,9 +1,6 @@
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-import { ref } from "vue";
 
 export const useCamera = () => {
-  const currentPhoto = ref();
-
   const execute = async (source: CameraSource) => {
     // const perm = await Camera.requestPermissions();
     // if (perm.camera !== "granted") {
@@ -18,7 +15,7 @@ export const useCamera = () => {
         saveToGallery: false,
         source,
       });
-      currentPhoto.value = image.dataUrl;
+      return image.dataUrl;
     } catch (err) {
       console.error("Ошибка при получении фото:", err);
       throw err;
@@ -26,8 +23,9 @@ export const useCamera = () => {
   };
 
   return {
-    currentPhoto,
-    takePhoto: () => execute(CameraSource.Camera),
-    pickGallery: () => execute(CameraSource.Photos),
+    takePhoto: (getter: (photo: string | undefined) => void) =>
+      execute(CameraSource.Camera).then((photo) => getter(photo)),
+    pickGallery: (getter: (photo: string | undefined) => void) =>
+      execute(CameraSource.Photos).then((photo) => getter(photo)),
   };
 };

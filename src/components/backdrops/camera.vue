@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useCamera } from "@/composables/native/use-camera.ts";
-import { useRouter } from "vue-router";
 
-const router = useRouter();
 const { takePhoto, pickGallery } = useCamera();
+
+const props = defineProps<{
+  selectPhoto: (photo: string | undefined) => void;
+}>();
 
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
@@ -11,17 +13,12 @@ const emit = defineEmits<{
 
 const handleClickCamera = () => {
   emit("closeBackdrop");
-  takePhoto().then(toOrder);
+  takePhoto(props.selectPhoto);
 };
 
 const handleClickGallery = () => {
   emit("closeBackdrop");
-  pickGallery().then(toOrder);
-};
-
-const toOrder = () => {
-  const id = Math.round(Math.random() * 150000) + 10000;
-  router.push({ path: `/order/${id}` });
+  pickGallery(props.selectPhoto);
 };
 </script>
 

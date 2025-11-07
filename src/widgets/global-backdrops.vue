@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseBackdrop from "@/components/base/base-backdrop/base-backdrop.vue";
-import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store.ts";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import { storeToRefs } from "pinia";
 import { useTemplateRef } from "vue";
 
@@ -18,7 +18,12 @@ const backdropRefs = useTemplateRef("backdropRefs");
     v-model="backdrop.model"
     :title="backdrop.title"
   >
-    <component :is="backdrop.component" :args="backdrop?.args" @closeBackdrop="backdropRefs?.[idx]?.close" />
+    <component
+      :is="backdrop.component"
+      v-bind="backdrop?.args"
+      v-on="backdrop?.emits"
+      @closeBackdrop="backdropRefs?.[idx]?.close"
+    />
   </base-backdrop>
 </template>
 

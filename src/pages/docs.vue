@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, type RefresherCustomEvent } from "@ionic/vue";
+import { IonPage, IonHeader, type RefresherCustomEvent } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import DocsLinkedInfoBlock from "@/components/docs/docs-linked-info-block/docs-linked-info-block.vue";
+import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 
 const handleRefresh = (event: RefresherCustomEvent) => {
   setTimeout(() => {
@@ -14,9 +15,9 @@ const handleRefresh = (event: RefresherCustomEvent) => {
 <template>
   <ion-page class="docs-page">
     <ion-header>
-      <ion-toolbar class="docs-page__toolbar">
+      <base-toolbar>
         <default-layout-header title="Ваши документы" />
-      </ion-toolbar>
+      </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="handleRefresh">
       <div class="docs-page__body">
@@ -29,11 +30,6 @@ const handleRefresh = (event: RefresherCustomEvent) => {
 <style scoped lang="scss">
 .docs-page {
   padding-top: env(safe-area-inset-top);
-
-  &__toolbar {
-    --padding-top: 0;
-    --padding-bottom: 0;
-  }
 
   &__body {
     padding: 16px 24px;

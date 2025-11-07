@@ -9,7 +9,7 @@
 
 <style scoped lang="scss">
 .base-list-item {
-  color: #1B1F3BA6;
+  color: $txt-description;
   font-weight: 400;
   font-size: 11px;
   line-height: 100%;
