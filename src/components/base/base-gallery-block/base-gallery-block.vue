@@ -17,7 +17,7 @@ const globalImageStore = useGlobalImageStore();
 const { currentImage } = storeToRefs(globalImageStore);
 
 const removeImage = (idx: number) => {
-  images.splice(idx, 1);
+  images.value.splice(idx, 1);
 };
 
 const handleAddPhoto = () => {
