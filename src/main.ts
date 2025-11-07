@@ -6,9 +6,9 @@ import router from "./router";
 import { registerPrimeVue } from "@/plugins/register-prime-vue.ts";
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import { IonicVue } from "@ionic/vue";
+import { useKeyboard } from "@/composables/native/use-keyboard.ts";
 import "@ionic/vue/css/core.css";
 import "@/assets/main.scss";
-import { useKeyboard } from "@/composables/native/use-keyboard.ts";
 
 const { disableScroll } = useKeyboard();
 
@@ -22,7 +22,9 @@ const app = createApp(App);
 registerPrimeVue(app);
 
 app.use(createPinia());
-app.use(IonicVue);
+app.use(IonicVue, {
+  mode: "ios",
+});
 app.use(router);
 app.use(VueQueryPlugin);
 

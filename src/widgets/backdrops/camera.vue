@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useCamera } from "@/composables/native/use-camera.ts";
+import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 
 const { takePhoto, pickGallery } = useCamera();
+const globalSpinner = useGlobalSpinner();
 
 const props = defineProps<{
   selectPhoto: (photo: string | undefined) => void;
@@ -11,14 +13,14 @@ const emit = defineEmits<{
   (e: "closeBackdrop"): void;
 }>();
 
-const handleClickCamera = () => {
+const handleClickCamera = async () => {
   emit("closeBackdrop");
-  takePhoto(props.selectPhoto);
+  await globalSpinner.execute(() => takePhoto(props.selectPhoto));
 };
 
-const handleClickGallery = () => {
+const handleClickGallery = async () => {
   emit("closeBackdrop");
-  pickGallery(props.selectPhoto);
+  await globalSpinner.execute(() => pickGallery(props.selectPhoto));
 };
 </script>
 

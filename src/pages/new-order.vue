@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { IonHeader, IonPage, IonToolbar, useIonRouter, IonButton } from "@ionic/vue";
+import {
+  IonHeader,
+  IonPage,
+  IonToolbar,
+  useIonRouter,
+  IonButton,
+  IonFooter,
+  IonSpinner,
+  type RefresherCustomEvent,
+} from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import BaseGalleryBlock from "@/components/base/base-gallery-block/base-gallery-block.vue";
@@ -25,6 +34,12 @@ const handleClickClose = () => {
   }
 };
 
+const handleRefresh = (event: RefresherCustomEvent) => {
+  setTimeout(() => {
+    event.target.complete();
+  }, 2000);
+};
+
 const validate = computed(() => {
   if (!images.length) {
     return false;
@@ -48,25 +63,31 @@ const validate = computed(() => {
         />
       </ion-toolbar>
     </ion-header>
-    <base-content-with-refresher>
+    <base-content-with-refresher @refresh="handleRefresh">
       <div class="new-order-page__body">
         <base-gallery-block v-model="images" title="Фотографии" class="new-order-page__gallery" />
-        <img class="new-order-page__gallery" src="@/assets/map-test.png" />
+        <img class="new-order-page__gallery" src="@/assets/map-test.png" style="width: 100%" />
         <ifta-label>
-          <label class="new-order-page__textarea-label" for="description">Подробности</label>
           <Textarea
             v-model="description"
             id="description"
             class="new-order-page__textarea"
             placeholder="Укажите, что именно не так на фотографии"
           />
+          <label class="new-order-page__textarea-label" for="description">Подробности</label>
         </ifta-label>
       </div>
-      <div class="new-order-page__buttons">
-        <ion-button class="new-order-page__button" :disabled="!validate" @click="handleClickClose">Отправить</ion-button>
-        <ion-button class="new-order-page__button" fill="clear" color="danger" @click="handleClickClose">Отменить заявку</ion-button>
-      </div>
     </base-content-with-refresher>
+    <ion-footer class="new-order-page__footer">
+      <ion-toolbar class="new-order-page__buttons">
+        <ion-button class="new-order-page__button" :disabled="!validate" @click="handleClickClose"
+          >Отправить</ion-button
+        >
+        <ion-button class="new-order-page__button" fill="clear" color="danger" @click="handleClickClose"
+          >Отменить заявку</ion-button
+        >
+      </ion-toolbar>
+    </ion-footer>
   </ion-page>
 </template>
 
@@ -115,10 +136,13 @@ const validate = computed(() => {
     --p-iftalabel-focus-color: $txt-description;
   }
 
+  &__footer {
+  }
+
   &__buttons {
-    position: absolute;
-    bottom: env(safe-area-inset-bottom);
-    left: 0;
+    --background: $white;
+    background: $white;
+    --border-width: 0 !important;
     width: 100%;
     padding: 0 24px;
   }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { useGlobalImageStore } from "@/stores/use-global-image-store.ts";
+import { useGlobalImageStore } from "@/stores/use-global-image-store/use-global-image-store.ts";
 import { storeToRefs } from "pinia";
 import { onMounted, watch } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
@@ -97,7 +97,7 @@ watch(currentImage, (value) => {
       width: 100%;
       height: 100%;
       border-radius: 8px;
-      object-fit: contain;
+      object-fit: cover;
     }
   }
 

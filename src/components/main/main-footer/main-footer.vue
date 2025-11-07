@@ -6,7 +6,7 @@ import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-g
 import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
 import { useRoute } from "vue-router";
-import { useGlobalImageStore } from "@/stores/use-global-image-store.ts";
+import { useGlobalImageStore } from "@/stores/use-global-image-store/use-global-image-store.ts";
 
 const globalBackdropStore = useGlobalBackdropStore();
 const { setImage } = useGlobalImageStore();

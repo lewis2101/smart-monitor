@@ -1,5 +1,5 @@
 import { type Component, markRaw } from "vue";
-import Camera from "@/components/backdrops/camera.vue";
+import Camera from "@/widgets/backdrops/camera.vue";
 
 type BackdropArgs = Record<string, unknown>;
 type BackdropEmits = Record<string, (...args: any[]) => unknown>;
