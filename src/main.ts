@@ -8,8 +8,14 @@ import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import { IonicVue } from "@ionic/vue";
 import "@ionic/vue/css/core.css";
 import "@/assets/main.scss";
+import { useKeyboard } from "@/composables/native/use-keyboard.ts";
 
-defineCustomElements(window);
+const { disableScroll } = useKeyboard();
+
+const pwaElements = defineCustomElements(window);
+const capacitorKeyboard = disableScroll();
+
+await Promise.all([pwaElements, capacitorKeyboard]);
 
 const app = createApp(App);
 

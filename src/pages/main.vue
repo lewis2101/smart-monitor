@@ -36,7 +36,7 @@ const handleRefresh = (event: RefresherCustomEvent) => {
   padding-top: env(safe-area-inset-top);
 
   &__content {
-    --background: linear-gradient(180deg, #041a4b 22.12%, #143b88 61.06%, #ffffff 100%);
+    --background: linear-gradient(180deg, #041a4b 15%, #143b88 30%, #ffffff 100%);
   }
 
   &__body {

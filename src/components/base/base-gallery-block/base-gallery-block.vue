@@ -23,7 +23,7 @@ const removeImage = (idx: number) => {
 const handleAddPhoto = () => {
   globalBackdropStore.push("camera", {
     args: {
-      selectPhoto: (photo) => photo && images.push(photo),
+      selectPhoto: (photo) => photo && images.value.push(photo),
     },
   });
 };

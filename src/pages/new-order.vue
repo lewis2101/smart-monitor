@@ -51,6 +51,7 @@ const validate = computed(() => {
     <base-content-with-refresher>
       <div class="new-order-page__body">
         <base-gallery-block v-model="images" title="Фотографии" class="new-order-page__gallery" />
+        <img class="new-order-page__gallery" src="@/assets/map-test.png" />
         <ifta-label>
           <label class="new-order-page__textarea-label" for="description">Подробности</label>
           <Textarea
@@ -62,8 +63,8 @@ const validate = computed(() => {
         </ifta-label>
       </div>
       <div class="new-order-page__buttons">
-        <ion-button class="new-order-page__button" :disabled="!validate">Отправить</ion-button>
-        <ion-button class="new-order-page__button" fill="clear" color="danger">Отменить заявку</ion-button>
+        <ion-button class="new-order-page__button" :disabled="!validate" @click="handleClickClose">Отправить</ion-button>
+        <ion-button class="new-order-page__button" fill="clear" color="danger" @click="handleClickClose">Отменить заявку</ion-button>
       </div>
     </base-content-with-refresher>
   </ion-page>
