@@ -3,12 +3,15 @@ import { IonHeader, IonPage, IonToolbar, useIonRouter } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import BaseGalleryBlock from "@/components/base/base-gallery-block/base-gallery-block.vue";
+import { MainTabRoutes } from "@/router/router-list.ts";
 
 const router = useIonRouter();
 
 const handleClickClose = () => {
   if (router.canGoBack()) {
     router.back();
+  } else {
+    router.replace({ name: MainTabRoutes.home });
   }
 };
 </script>
