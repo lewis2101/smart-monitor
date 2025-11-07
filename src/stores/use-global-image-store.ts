@@ -5,7 +5,7 @@ export const useGlobalImageStore = defineStore("global-image-store", () => {
   const currentImage = ref<string>();
 
   const setImage = (image: string) => (currentImage.value = image);
-  const removeImage = () => (currentImage.value = "");
+  const removeImage = () => (currentImage.value = undefined);
 
   return {
     currentImage: readonly(currentImage),

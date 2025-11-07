@@ -23,9 +23,13 @@ export const useCamera = () => {
   };
 
   return {
-    takePhoto: (getter: (photo: string | undefined) => void) =>
-      execute(CameraSource.Camera).then((photo) => getter(photo)),
-    pickGallery: (getter: (photo: string | undefined) => void) =>
-      execute(CameraSource.Photos).then((photo) => getter(photo)),
+    takePhoto: async (getter: (photo: string | undefined) => void) => {
+      const photo = await execute(CameraSource.Camera);
+      getter(photo);
+    },
+    pickGallery: async (getter: (photo: string | undefined) => void) => {
+      const photo = await execute(CameraSource.Photos);
+      getter(photo);
+    },
   };
 };

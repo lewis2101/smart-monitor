@@ -2,14 +2,14 @@
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { useGlobalImageStore } from "@/stores/use-global-image-store.ts";
 import { storeToRefs } from "pinia";
-import { onMounted, reactive, watch } from "vue";
+import { onMounted, watch } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
 defineProps<{
   title?: string;
 }>();
 
-const images = reactive<string[]>([]);
+const images = defineModel<string[]>({ default: () => [], required: true });
 
 const globalBackdropStore = useGlobalBackdropStore();
 
@@ -30,14 +30,14 @@ const handleAddPhoto = () => {
 
 onMounted(() => {
   if (currentImage.value) {
-    images.push(currentImage.value);
+    images.value.push(currentImage.value);
     globalImageStore.removeImage();
   }
 });
 
 watch(currentImage, (value) => {
   if (value) {
-    images.push(value);
+    images.value.push(value);
   }
 });
 </script>
