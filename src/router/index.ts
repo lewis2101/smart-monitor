@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
-import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
+import { CommonRoutes, MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import MainTabs from "@/layouts/main-tabs.vue";
 import Main from "@/pages/main.vue";
 import Docs from "@/pages/docs.vue";
@@ -7,6 +7,7 @@ import Briefing from "@/pages/briefing.vue";
 import Application from "@/pages/application.vue";
 import Service from "@/pages/service.vue";
 import NewOrder from "@/pages/new-order.vue";
+import Learning from "@/pages/learning.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,11 @@ const router = createRouter({
           component: Service,
         },
       ],
+    },
+    {
+      path: "/learning",
+      name: CommonRoutes.learning,
+      component: Learning,
     },
     {
       path: "/new-order/:uuid",

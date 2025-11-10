@@ -12,7 +12,7 @@ const router = useIonRouter();
     <base-rect-item title="Черновики" rect-color="dark" />
     <base-rect-item title="Отправлено" rect-color="dark" />
     <base-rect-item title="Закрытые" rect-color="dark" />
-    <base-rect-item title="Все" rect-color="dark" @click="router.replace('/application')" />
+    <base-rect-item title="Все" rect-color="dark" @click="router.push('/application')" />
   </base-island-block>
 </template>
 

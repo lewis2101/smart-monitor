@@ -21,6 +21,7 @@ const mainList: listType = [
     description: "Курс «Работа на высоте»",
     rectColor: "dark",
     orientation: "horizontal",
+    to: "/learning",
   },
   {
     title: "Молнии",

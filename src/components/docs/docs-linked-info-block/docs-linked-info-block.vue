@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import BaseListItem from "@/components/base/base-list-item/base-list-item.vue";
-import BaseLinkedInfo from "@/components/base/base-linked-info/base-linked-info.vue";
-import BaseList from "@/components/base/base-list/base-list.vue";
-import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
+import LinkedInfoBlock from "@/widgets/linked-info-block.vue";
 
-const infoList = [
+type ListType = InstanceType<typeof LinkedInfoBlock>["$props"]["list"];
+
+const infoList: ListType = [
   {
     title: "Сертификат подрядчика",
     icon: "article-person",
@@ -28,6 +27,7 @@ const infoList = [
   {
     title: "Обучения",
     icon: "article-person",
+    to: "/learning",
     list: [
       {
         text: "Адрес установки оборудования подтвержден",
@@ -69,42 +69,8 @@ const infoList = [
 </script>
 
 <template>
-  <base-island-block v-for="item in infoList" :key="item.title" rounded="S" class="docs-linked-info">
-    <base-linked-info :title="item.title" :icon="item.icon" />
-    <base-list class="docs-linked-info__list">
-      <base-list-item
-        v-for="list in item.list"
-        :key="list.text"
-        :class="['docs-linked-info__list-item', list.marked && 'docs-linked-info_marked']"
-      >
-        {{ list.text }}
-      </base-list-item>
-    </base-list>
-  </base-island-block>
+  <linked-info-block :list="infoList" />
 </template>
 
 <style scoped lang="scss">
-.docs-linked-info {
-  padding: 16px;
-  margin-bottom: 8px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  &__list {
-    padding: 0 clamp(32px, 10vw, 48px);
-  }
-
-  &__list-item {
-    list-style: none;
-  }
-
-  &_marked {
-    list-style: initial;
-    &::marker {
-      color: $main-red;
-    }
-  }
-}
 </style>

@@ -12,7 +12,7 @@ const router = useIonRouter();
       <base-rect-item title="Сертификаты" />
       <base-rect-item title="Техосмотры" />
       <base-rect-item title="Обучения" />
-      <base-rect-item title="Все" @click="router.replace('/docs')" />
+      <base-rect-item title="Все" @click="router.push('/docs')" />
     </div>
   </base-liquid-block>
 </template>
