@@ -12,6 +12,7 @@ defineProps<{
     rectColor: BaseRectItemProps["rectColor"];
     orientation: BaseRectItemProps["orientation"];
     to?: string;
+    icon?: string;
   }>;
 }>();
 
@@ -29,6 +30,7 @@ const handleClick = (to?: string) => to && router.push(to);
       :description="item.description"
       :rect-color="item.rectColor"
       :orientation="item.orientation"
+      :icon="item.icon"
       @click="handleClick(item.to)"
     />
   </base-island-block>

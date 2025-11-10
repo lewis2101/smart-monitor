@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 
 type Orientation = "horizontal" | "vertical";
 type RectColor = "light" | "dark";
@@ -10,22 +11,26 @@ const props = withDefaults(
     title: string;
     description?: string;
     orientation?: Orientation;
+    icon?: string;
   }>(),
   {
     rectColor: "light",
     orientation: "vertical",
   },
 );
-
-const rectangleColor = computed(() => props.rectColor === "light" ? "#FFFFFF" : "#625B71");
+// 625B71
+const rectangleColor = computed(() => props.rectColor === "light" ? "#FFFFFF" : "#143b88");
 const direction = computed(() => (props.orientation === "horizontal" ? "row" : "column"));
 const gap = computed(() => (props.orientation === "horizontal" ? "8px" : "2px"));
+const iconColor = computed(() => (props.rectColor === "light" ? "#2A61CC" : "#FFFFFF"));
 const isHorizontal = computed(() => props.orientation === "horizontal");
 </script>
 
 <template>
   <div class="base-rect-item">
-    <div class="base-rect-item__rect"></div>
+    <div class="base-rect-item__rect">
+      <base-icon v-if="icon" :name="icon" class="base-rect-item__icon" />
+    </div>
     <div class="base-rect-item__content">
       <div :class="isHorizontal ? 'base-rect-item__horizontal-title' : 'base-rect-item__vertical-title'">{{ title }}</div>
       <div v-if="isHorizontal && description" class="base-rect-item__description">{{ description }}</div>
@@ -47,6 +52,14 @@ const isHorizontal = computed(() => props.orientation === "horizontal");
     background: v-bind("rectangleColor");
     margin-bottom: 4px;
     flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__icon {
+    color: v-bind("iconColor");
   }
 
   &__vertical-title {

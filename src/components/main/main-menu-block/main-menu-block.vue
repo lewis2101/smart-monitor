@@ -9,18 +9,21 @@ const mainList: listType = [
     description: "Что делать при обнаружении утечки газа",
     rectColor: "dark",
     orientation: "horizontal",
+    icon: "security",
   },
   {
     title: "Заявки на согласование",
     description: "Электронные заявки на проведение опасных работ, наряды-допуски и согласование инструктажей",
     rectColor: "dark",
     orientation: "horizontal",
+    icon: "decision",
   },
   {
     title: "Обучения",
     description: "Курс «Работа на высоте»",
     rectColor: "dark",
     orientation: "horizontal",
+    icon: "puzzle",
     to: "/learning",
   },
   {
@@ -28,12 +31,14 @@ const mainList: listType = [
     description: "Внимание!!! Эвакуация с объекта!!!",
     rectColor: "dark",
     orientation: "horizontal",
+    icon: "warning",
   },
   {
     title: "Ещё",
     description: "Локальные инструкции предприятия",
     rectColor: "dark",
     orientation: "horizontal",
+    icon: "more",
     to: "/docs/briefing",
   },
 ];
