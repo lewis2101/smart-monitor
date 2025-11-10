@@ -26,16 +26,13 @@ const handleClickGallery = async () => {
 
 <template>
   <div class="camera-backdrop">
-    <ion-item class="camera-backdrop__item" @click="handleClickCamera">Камера</ion-item>
-    <ion-item class="camera-backdrop__item" @click="handleClickGallery">Галерея</ion-item>
+    <div class="camera-backdrop__item" @click="handleClickCamera">Камера</div>
+    <div class="camera-backdrop__item" @click="handleClickGallery">Галерея</div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .camera-backdrop {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding-bottom: 16px;
 
   &__item {
@@ -44,6 +41,10 @@ const handleClickGallery = async () => {
     font-size: 14px;
     line-height: 100%;
     letter-spacing: 0;
+
+    padding: 16px;
+    border-radius: 8px;
+    border-bottom: 1px solid $gray-light;
   }
 }
 </style>
