@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FooterItem from "./item.vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { computed, ref, watch } from "vue";
+import { computed } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
@@ -14,9 +14,8 @@ const { setImage } = useGlobalImageStore();
 const router = useIonRouter();
 const route = useRoute();
 
-const currentRouteName = computed(() => route.name);
-const currentActiveMenu = ref<MainTabRoutes>((currentRouteName.value as MainTabRoutes) || "main");
-const getActiveClass = (item: MainTabRoutes) => (currentActiveMenu.value === item ? "active animate" : "");
+const currentPathName = computed(() => route.name as MainTabRoutes);
+const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWith(name) ? "active animate" : "");
 
 const handleClickCamera = () => {
   globalBackdropStore.push("camera", {
@@ -31,10 +30,6 @@ const handleClickCamera = () => {
     },
   });
 };
-
-watch(currentRouteName, (value) => {
-  currentActiveMenu.value = value as MainTabRoutes;
-});
 </script>
 
 <template>

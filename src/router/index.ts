@@ -1,5 +1,12 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
+import MainTabs from "@/layouts/main-tabs.vue";
+import Main from "@/pages/main.vue";
+import Docs from "@/pages/docs.vue";
+import Briefing from "@/pages/briefing.vue";
+import Application from "@/pages/application.vue";
+import Service from "@/pages/service.vue";
+import NewOrder from "@/pages/new-order.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,34 +17,39 @@ const router = createRouter({
     },
     {
       path: "/",
-      component: () => import("@/layouts/main-tabs.vue"),
+      component: MainTabs,
       children: [
         {
           path: "home",
           name: MainTabRoutes.home,
-          component: () => import("@/pages/main.vue"),
+          component: Main,
         },
         {
           path: "docs",
           name: MainTabRoutes.docs,
-          component: () => import("@/pages/docs.vue"),
+          component: Docs,
+        },
+        {
+          path: "docs/briefing",
+          name: MainTabRoutes.briefing,
+          component: Briefing,
         },
         {
           path: "application",
           name: MainTabRoutes.application,
-          component: () => import("@/pages/application.vue"),
+          component: Application,
         },
         {
           path: "service",
           name: MainTabRoutes.service,
-          component: () => import("@/pages/service.vue"),
+          component: Service,
         },
       ],
     },
     {
       path: "/new-order/:uuid",
       name: OrderRoutes.newOrder,
-      component: () => import("@/pages/new-order.vue"),
+      component: NewOrder,
     },
   ],
 });
