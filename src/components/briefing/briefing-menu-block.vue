@@ -3,7 +3,7 @@ import MenuBlock from "@/widgets/menu-block.vue";
 
 type listType = InstanceType<typeof MenuBlock>["$props"]["list"];
 
-const mainList: listType = [
+const briefingList: listType = [
   {
     title: "Минутки безопасности",
     description: "Что делать при обнаружении утечки газа",
@@ -29,17 +29,30 @@ const mainList: listType = [
     orientation: "horizontal",
   },
   {
-    title: "Ещё",
-    description: "Локальные инструкции предприятия",
+    title: "Локальные инструкции предприятия",
+    description: "Все внутренние регламенты и правила компании в одном месте",
     rectColor: "dark",
     orientation: "horizontal",
-    to: "/docs/briefing",
+  },
+  {
+    title: "Журнал прохождения инструктажей",
+    description: "История ваших инструктажей, экзаменов и обучения",
+    rectColor: "dark",
+    orientation: "horizontal",
+  },
+  {
+    title: "Контакты служб безопасности и охраны труда",
+    description: "Телефоны и e-mail ответственных специалистов",
+    rectColor: "dark",
+    orientation: "horizontal",
   },
 ];
 </script>
 
 <template>
-  <menu-block :list="mainList" />
+  <menu-block :list="briefingList" />
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>
