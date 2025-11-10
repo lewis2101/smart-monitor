@@ -13,6 +13,7 @@ const tabsStatusBarColors: Record<MainTabRoutes, () => Promise<void>> = {
   docs: () => setSecondaryColor(),
   application: () => setSecondaryColor(),
   service: () => setSecondaryColor(),
+  "docs-briefing": () => setSecondaryColor(),
 };
 
 const route = useRoute();

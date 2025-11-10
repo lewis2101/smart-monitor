@@ -4,6 +4,10 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import { MainTabRoutes } from "@/router/router-list.ts";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import LearningLinkedInfoBlock from "@/components/learning/learning-linked-info-block/learning-linked-info-block.vue";
+import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
+
+const { setSecondaryColor } = useStatusBarColor();
+setSecondaryColor();
 
 const router = useIonRouter();
 
