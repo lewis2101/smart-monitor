@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import BaseLiquidBlock from "@/components/base/base-liquid-block/base-liquid-block.vue";
 import BaseRectItem from "@/components/base/base-rect-item/base-rect-item.vue";
+import { useIonRouter } from "@ionic/vue";
+
+const router = useIonRouter();
 </script>
 
 <template>
@@ -9,7 +12,7 @@ import BaseRectItem from "@/components/base/base-rect-item/base-rect-item.vue";
       <base-rect-item title="Сертификаты" />
       <base-rect-item title="Техосмотры" />
       <base-rect-item title="Обучения" />
-      <base-rect-item title="Все" />
+      <base-rect-item title="Все" @click="router.replace('/docs')" />
     </div>
   </base-liquid-block>
 </template>

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import BaseRectItem from "@/components/base/base-rect-item/base-rect-item.vue";
+import { useIonRouter } from "@ionic/vue";
+
+const router = useIonRouter();
+
 </script>
 
 <template>
@@ -8,7 +12,7 @@ import BaseRectItem from "@/components/base/base-rect-item/base-rect-item.vue";
     <base-rect-item title="Черновики" rect-color="dark" />
     <base-rect-item title="Отправлено" rect-color="dark" />
     <base-rect-item title="Закрытые" rect-color="dark" />
-    <base-rect-item title="Все" rect-color="dark" />
+    <base-rect-item title="Все" rect-color="dark" @click="router.replace('/application')" />
   </base-island-block>
 </template>
 
