@@ -33,6 +33,9 @@ const handleClickGallery = async () => {
 
 <style scoped lang="scss">
 .camera-backdrop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding-bottom: 16px;
 
   &__item {
