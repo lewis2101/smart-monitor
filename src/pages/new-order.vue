@@ -6,7 +6,6 @@ import {
   useIonRouter,
   IonButton,
   IonFooter,
-  IonSpinner,
   type RefresherCustomEvent,
 } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
@@ -17,11 +16,13 @@ import Textarea from "primevue/textarea";
 import IftaLabel from "primevue/iftalabel";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
 import { computed, reactive, ref } from "vue";
+import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 
 const { setSecondaryColor } = useStatusBarColor();
 setSecondaryColor();
 
 const router = useIonRouter();
+const keyboardStore = useKeyboardStore();
 
 const images = reactive<string[]>([]);
 const description = ref("");
@@ -78,7 +79,7 @@ const validate = computed(() => {
         </ifta-label>
       </div>
     </base-content-with-refresher>
-    <ion-footer class="new-order-page__footer">
+    <ion-footer v-if="!keyboardStore.isVisibleKeyboard" class="new-order-page__footer">
       <ion-toolbar class="new-order-page__buttons">
         <ion-button class="new-order-page__button" :disabled="!validate" @click="handleClickClose"
           >Отправить</ion-button
