@@ -10,8 +10,13 @@ export const useGlobalSpinner = defineStore("global-spinner", () => {
 
   const execute = async (callback: () => Promise<unknown>, ms = 300) => {
     show();
-    await executeWithWaitAtLeast(callback, ms);
-    hide();
+    try {
+      await executeWithWaitAtLeast(callback, ms);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      hide();
+    }
   };
 
   return {
