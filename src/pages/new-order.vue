@@ -6,6 +6,7 @@ import {
   useIonRouter,
   IonButton,
   IonFooter,
+  IonTextarea,
   type RefresherCustomEvent,
 } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
@@ -15,7 +16,7 @@ import { MainTabRoutes } from "@/router/router-list.ts";
 import Textarea from "primevue/textarea";
 import IftaLabel from "primevue/iftalabel";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
-import { computed, reactive, ref } from "vue";
+import { computed, nextTick, reactive, ref } from "vue";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
 
@@ -70,15 +71,28 @@ const validate = computed(() => {
       <div class="new-order-page__body">
         <base-gallery-block v-model="images" title="Фотографии" class="new-order-page__gallery" />
         <img class="new-order-page__gallery" src="@/assets/map-test.png" style="width: 100%" />
-        <ifta-label>
-          <Textarea
-            v-model="description"
-            id="description"
-            class="new-order-page__textarea"
-            placeholder="Укажите, что именно не так на фотографии"
-          />
-          <label class="new-order-page__textarea-label" for="description">Подробности</label>
-        </ifta-label>
+        <ion-textarea
+          label="Подробности"
+          class="new-order-page__textarea"
+          label-placement="stacked"
+          placeholder="Укажите, что именно не так на фотографии"
+        />
+        <!--        <ifta-label>-->
+        <!--          <Textarea-->
+        <!--            v-model="description"-->
+        <!--            id="description"-->
+        <!--            class="new-order-page__textarea"-->
+        <!--            placeholder="Укажите, что именно не так на фотографии"-->
+        <!--            @focus="-->
+        <!--              () => {-->
+        <!--                nextTick().then(() => {-->
+        <!--                  $el.scrollIntoView()-->
+        <!--                });-->
+        <!--              }-->
+        <!--            "-->
+        <!--          />-->
+        <!--          <label class="new-order-page__textarea-label" for="description">Подробности</label>-->
+        <!--        </ifta-label>-->
       </div>
     </base-content-with-refresher>
     <ion-footer v-if="!isVisibleKeyboard" class="new-order-page__footer">
@@ -114,10 +128,12 @@ const validate = computed(() => {
   &__textarea {
     --p-textarea-focus-border-color: $gray-light;
     border: 1px solid $gray-light;
+    border-radius: 12px;
     box-shadow: 0 2px 3px 0 #0000001a;
     width: 100%;
     height: 100%;
     min-height: 150px;
+    padding: 0 16px;
 
     &::placeholder {
       color: $txt-description;

@@ -7,14 +7,15 @@ const config: CapacitorConfig = {
   webDir: "dist",
   server: {
     // url: "http://localhost:5173",
+    url: "http://192.168.100.144:5173",
     cleartext: true,
   },
   plugins: {
-    Keyboard: {
-      resize: KeyboardResize.Body,
-      style: KeyboardStyle.Light,
-      resizeOnFullScreen: true,
-    },
+    // Keyboard: {
+    //   resize: KeyboardResize.Body,
+    //   style: KeyboardStyle.Light,
+    //   resizeOnFullScreen: true,
+    // },
     SplashScreen: {
       launchShowDuration: 2000,
       launchAutoHide: true,
@@ -22,9 +23,6 @@ const config: CapacitorConfig = {
       backgroundColor: "#ffffffff",
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
-      showSpinner: true,
-      androidSpinnerStyle: "large",
-      iosSpinnerStyle: "small",
       spinnerColor: "#999999",
       splashFullScreen: true,
       splashImmersive: true,

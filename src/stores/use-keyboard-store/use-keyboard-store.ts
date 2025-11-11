@@ -1,6 +1,6 @@
 import { useIsSupport } from "@/composables/native/use-is-support.ts";
-import { Keyboard } from "@capacitor/keyboard";
-import { onBeforeUnmount, onMounted, readonly, ref } from "vue";
+import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
+import { onBeforeUnmount, readonly, ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useKeyboardStore = defineStore("keyboard-store", () => {
@@ -14,6 +14,12 @@ export const useKeyboardStore = defineStore("keyboard-store", () => {
       await Promise.resolve();
     }
 
+    const accessoryBar = Keyboard.setAccessoryBarVisible({ isVisible: true });
+
+    const resizeMode = Keyboard.setResizeMode({
+      mode: KeyboardResize.Ionic,
+    });
+
     const show = Keyboard.addListener("keyboardWillShow", (info) => {
       keyboardHeight.value = info.keyboardHeight;
       isVisibleKeyboard.value = true;
@@ -22,7 +28,7 @@ export const useKeyboardStore = defineStore("keyboard-store", () => {
     const hide = Keyboard.addListener("keyboardDidHide", () => {
       isVisibleKeyboard.value = false;
     });
-    await Promise.all([show, hide]);
+    await Promise.all([accessoryBar, resizeMode, show, hide]);
   };
 
   const disableScroll = async () => {
@@ -33,9 +39,7 @@ export const useKeyboardStore = defineStore("keyboard-store", () => {
     }
   };
 
-  onMounted(async () => {
-    await initListeners();
-  });
+  initListeners();
 
   onBeforeUnmount(async () => {
     await Keyboard.removeAllListeners();
