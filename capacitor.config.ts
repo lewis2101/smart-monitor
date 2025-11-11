@@ -1,5 +1,4 @@
 import type { CapacitorConfig } from "@capacitor/cli";
-import { KeyboardResize, KeyboardStyle } from "@capacitor/keyboard";
 
 const config: CapacitorConfig = {
   appId: "com.smartfleet.app",
@@ -11,19 +10,13 @@ const config: CapacitorConfig = {
     cleartext: true,
   },
   plugins: {
-    // Keyboard: {
-    //   resize: KeyboardResize.Body,
-    //   style: KeyboardStyle.Light,
-    //   resizeOnFullScreen: true,
-    // },
     SplashScreen: {
-      launchShowDuration: 2000,
-      launchAutoHide: true,
+      // launchShowDuration: 2000,
+      // launchAutoHide: true,
       launchFadeOutDuration: 3000,
       backgroundColor: "#ffffffff",
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
-      spinnerColor: "#999999",
       splashFullScreen: true,
       splashImmersive: true,
       layoutName: "launch_screen",

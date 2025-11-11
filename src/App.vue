@@ -2,6 +2,13 @@
 import GlobalBackdrops from "@/widgets/global-backdrops.vue";
 import { IonApp, IonRouterOutlet } from "@ionic/vue";
 import GlobalSpinner from "@/widgets/global-spinner.vue";
+import { nextTick, onMounted } from "vue";
+import { SplashScreen } from "@capacitor/splash-screen";
+
+onMounted(async () => {
+  await nextTick();
+  await SplashScreen.hide();
+});
 </script>
 
 <template>
