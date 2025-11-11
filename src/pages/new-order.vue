@@ -13,12 +13,11 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import BaseGalleryBlock from "@/components/base/base-gallery-block/base-gallery-block.vue";
 import { MainTabRoutes } from "@/router/router-list.ts";
-import Textarea from "primevue/textarea";
-import IftaLabel from "primevue/iftalabel";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
-import { computed, nextTick, reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
+import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 
 const { setSecondaryColor } = useStatusBarColor();
 setSecondaryColor();
@@ -56,16 +55,16 @@ const validate = computed(() => {
 </script>
 
 <template>
-  <ion-page>
+  <ion-page class="new-order-page">
     <ion-header>
-      <ion-toolbar class="new-order-page__toolbar">
+      <base-toolbar>
         <default-layout-header
           title="Новая заявка"
           close
           @click-close="handleClickClose"
           @click-back="handleClickClose"
         />
-      </ion-toolbar>
+      </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="handleRefresh">
       <div class="new-order-page__body">
@@ -77,22 +76,6 @@ const validate = computed(() => {
           label-placement="stacked"
           placeholder="Укажите, что именно не так на фотографии"
         />
-        <!--        <ifta-label>-->
-        <!--          <Textarea-->
-        <!--            v-model="description"-->
-        <!--            id="description"-->
-        <!--            class="new-order-page__textarea"-->
-        <!--            placeholder="Укажите, что именно не так на фотографии"-->
-        <!--            @focus="-->
-        <!--              () => {-->
-        <!--                nextTick().then(() => {-->
-        <!--                  $el.scrollIntoView()-->
-        <!--                });-->
-        <!--              }-->
-        <!--            "-->
-        <!--          />-->
-        <!--          <label class="new-order-page__textarea-label" for="description">Подробности</label>-->
-        <!--        </ifta-label>-->
       </div>
     </base-content-with-refresher>
     <ion-footer v-if="!isVisibleKeyboard" class="new-order-page__footer">
@@ -111,11 +94,6 @@ const validate = computed(() => {
 <style scoped lang="scss">
 .new-order-page {
   padding-top: env(safe-area-inset-top);
-
-  &__toolbar {
-    --padding-top: 0;
-    --padding-bottom: 0;
-  }
 
   &__body {
     padding: 16px 24px;

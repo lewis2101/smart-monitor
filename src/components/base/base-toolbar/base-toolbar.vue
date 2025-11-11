@@ -11,6 +11,8 @@ import { IonToolbar } from "@ionic/vue";
 <style scoped lang="scss">
 .base-toolbar {
   padding: 0;
+  --padding-start: 0;
+  --padding-end: 0;
   --padding-bottom: 0;
   --padding-top: 0;
 }
