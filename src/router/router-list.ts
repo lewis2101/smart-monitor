@@ -16,5 +16,6 @@ export enum OrderRoutes {
 }
 
 export enum CommonRoutes {
+  login = "login",
   learning = "learning",
 }

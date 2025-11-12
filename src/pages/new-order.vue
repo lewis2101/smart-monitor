@@ -1,14 +1,5 @@
 <script setup lang="ts">
-import {
-  IonHeader,
-  IonPage,
-  IonToolbar,
-  useIonRouter,
-  IonButton,
-  IonFooter,
-  IonTextarea,
-  type RefresherCustomEvent,
-} from "@ionic/vue";
+import { IonHeader, IonPage, IonToolbar, useIonRouter, IonButton, IonFooter, IonTextarea } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import BaseGalleryBlock from "@/components/base/base-gallery-block/base-gallery-block.vue";
@@ -18,6 +9,7 @@ import { computed, reactive, ref } from "vue";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
+import { mockRefresh } from "@/utils/mockRefresh.ts";
 
 const { setSecondaryColor } = useStatusBarColor();
 setSecondaryColor();
@@ -35,12 +27,6 @@ const handleClickClose = () => {
   } else {
     router.replace({ name: MainTabRoutes.home });
   }
-};
-
-const handleRefresh = (event: RefresherCustomEvent) => {
-  setTimeout(() => {
-    event.target.complete();
-  }, 2000);
 };
 
 const validate = computed(() => {
@@ -66,11 +52,12 @@ const validate = computed(() => {
         />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="handleRefresh">
+    <base-content-with-refresher @refresh="mockRefresh">
       <div class="new-order-page__body">
         <base-gallery-block v-model="images" title="Фотографии" class="new-order-page__gallery" />
         <img class="new-order-page__gallery" src="@/assets/map-test.png" style="width: 100%" />
         <ion-textarea
+          v-model="description"
           label="Подробности"
           class="new-order-page__textarea"
           label-placement="stacked"

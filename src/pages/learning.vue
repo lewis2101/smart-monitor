@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { IonHeader, IonPage, type RefresherCustomEvent, useIonRouter } from "@ionic/vue";
+import { IonHeader, IonPage, useIonRouter } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import { MainTabRoutes } from "@/router/router-list.ts";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import LearningLinkedInfoBlock from "@/components/learning/learning-linked-info-block/learning-linked-info-block.vue";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
+import { mockRefresh } from "@/utils/mockRefresh.ts";
 
 const { setSecondaryColor } = useStatusBarColor();
 setSecondaryColor();
@@ -19,12 +20,6 @@ const handleClickClose = () => {
     router.replace({ name: MainTabRoutes.home });
   }
 };
-
-const handleRefresh = (event: RefresherCustomEvent) => {
-  setTimeout(() => {
-    event.target.complete();
-  }, 2000);
-};
 </script>
 
 <template>
@@ -34,7 +29,7 @@ const handleRefresh = (event: RefresherCustomEvent) => {
         <default-layout-header title="Обучение" close @click-close="handleClickClose" @click-back="handleClickClose" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="handleRefresh">
+    <base-content-with-refresher @refresh="mockRefresh">
       <div class="learning-page__body">
         <learning-linked-info-block />
       </div>

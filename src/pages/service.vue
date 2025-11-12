@@ -3,6 +3,7 @@ import { IonPage, IonHeader } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
+import { mockRefresh } from "@/utils/mockRefresh.ts";
 </script>
 
 <template>
@@ -12,7 +13,7 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
         <default-layout-header title="Сервисы" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher>
+    <base-content-with-refresher @refresh="mockRefresh">
       Service
     </base-content-with-refresher>
   </ion-page>

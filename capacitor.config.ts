@@ -5,14 +5,12 @@ const config: CapacitorConfig = {
   appName: "SmartFleet",
   webDir: "dist",
   server: {
-    // url: "http://localhost:5173",
-    url: "http://192.168.100.144:5173",
+    url: "http://localhost:5173",
+    // url: "http://192.168.100.144:5173",
     cleartext: true,
   },
   plugins: {
     SplashScreen: {
-      // launchShowDuration: 2000,
-      // launchAutoHide: true,
       launchFadeOutDuration: 3000,
       backgroundColor: "#ffffffff",
       androidSplashResourceName: "splash",

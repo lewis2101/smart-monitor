@@ -11,24 +11,26 @@ export const useKeyboardStore = defineStore("keyboard-store", () => {
     const isSupport = useIsSupport();
 
     if (!isSupport.value) {
-      await Promise.resolve();
+      return Promise.resolve();
     }
 
     const accessoryBar = Keyboard.setAccessoryBarVisible({ isVisible: true });
-
     const resizeMode = Keyboard.setResizeMode({
       mode: KeyboardResize.Ionic,
     });
-
     const show = Keyboard.addListener("keyboardWillShow", (info) => {
       keyboardHeight.value = info.keyboardHeight;
       isVisibleKeyboard.value = true;
     });
-
     const hide = Keyboard.addListener("keyboardDidHide", () => {
       isVisibleKeyboard.value = false;
     });
+
     await Promise.all([accessoryBar, resizeMode, show, hide]);
+
+    onBeforeUnmount(async () => {
+      await Keyboard.removeAllListeners();
+    });
   };
 
   const disableScroll = async () => {
@@ -40,10 +42,6 @@ export const useKeyboardStore = defineStore("keyboard-store", () => {
   };
 
   initListeners();
-
-  onBeforeUnmount(async () => {
-    await Keyboard.removeAllListeners();
-  });
 
   return {
     isVisibleKeyboard: readonly(isVisibleKeyboard),

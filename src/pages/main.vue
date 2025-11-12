@@ -2,16 +2,11 @@
 import MainDocsBlock from "@/components/main/main-docs-block/main-docs-block.vue";
 import MainMenuBlock from "@/components/main/main-menu-block/main-menu-block.vue";
 import MainReports from "@/components/main/main-reports/main-reports.vue";
-import { IonPage, IonHeader, type RefresherCustomEvent } from "@ionic/vue";
+import { IonPage, IonHeader } from "@ionic/vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import MainHeader from "@/components/main/main-header/main-header.vue";
-
-const handleRefresh = (event: RefresherCustomEvent) => {
-  setTimeout(() => {
-    event.target.complete();
-  }, 2000);
-};
+import { mockRefresh } from "@/utils/mockRefresh.ts";
 </script>
 
 <template>
@@ -21,7 +16,7 @@ const handleRefresh = (event: RefresherCustomEvent) => {
         <main-header />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher class="main-page__content" @refresh="handleRefresh">
+    <base-content-with-refresher class="main-page__content" @refresh="mockRefresh">
       <div class="main-page__decor"></div>
       <div class="main-page__body">
         <main-docs-block class="main-docs-block" />

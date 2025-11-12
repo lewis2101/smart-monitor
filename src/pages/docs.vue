@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, type RefresherCustomEvent } from "@ionic/vue";
+import { IonPage, IonHeader } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import DocsLinkedInfoBlock from "@/components/docs/docs-linked-info-block/docs-linked-info-block.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
-
-const handleRefresh = (event: RefresherCustomEvent) => {
-  setTimeout(() => {
-    event.target.complete();
-  }, 2000);
-};
+import { mockRefresh } from "@/utils/mockRefresh.ts";
 </script>
 
 <template>
@@ -19,7 +14,7 @@ const handleRefresh = (event: RefresherCustomEvent) => {
         <default-layout-header title="Ваши документы" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="handleRefresh">
+    <base-content-with-refresher @refresh="mockRefresh">
       <div class="docs-page__body">
         <docs-linked-info-block />
       </div>
