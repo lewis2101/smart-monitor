@@ -65,7 +65,7 @@ const validate = computed(() => {
         />
       </div>
     </base-content-with-refresher>
-    <ion-footer v-if="!isVisibleKeyboard" class="new-order-page__footer">
+    <ion-footer v-if="!isVisibleKeyboard">
       <ion-toolbar class="new-order-page__buttons">
         <ion-button class="new-order-page__button" :disabled="!validate" @click="handleClickClose"
           >Отправить</ion-button
@@ -118,9 +118,6 @@ const validate = computed(() => {
     top: 1px;
     padding: 5px 0;
     --p-iftalabel-focus-color: $txt-description;
-  }
-
-  &__footer {
   }
 
   &__buttons {

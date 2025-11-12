@@ -9,6 +9,7 @@ import Service from "@/pages/service.vue";
 import NewOrder from "@/pages/new-order.vue";
 import Learning from "@/pages/learning.vue";
 import Login from "@/pages/login.vue";
+import Registration from "@/pages/registration.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,11 @@ const router = createRouter({
       path: "/login",
       name: CommonRoutes.login,
       component: Login,
+    },
+    {
+      path: "/registration",
+      name: CommonRoutes.registration,
+      component: Registration,
     },
     {
       path: "/learning",
