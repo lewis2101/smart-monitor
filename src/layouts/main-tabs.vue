@@ -2,11 +2,9 @@
 import MainFooter from "@/components/main/main-footer/main-footer.vue";
 import { IonRouterOutlet, IonTabs, IonPage } from "@ionic/vue";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
-import { useRoute } from "vue-router";
-import { computed, watch } from "vue";
 import type { MainTabRoutes } from "@/router/router-list.ts";
 
-const { setSecondaryColor, setMainColor } = useStatusBarColor();
+const { setSecondaryColor, setMainColor, initRouteWatch } = useStatusBarColor();
 
 const tabsStatusBarColors: Record<MainTabRoutes, () => Promise<void>> = {
   home: () => setMainColor(),
@@ -16,12 +14,7 @@ const tabsStatusBarColors: Record<MainTabRoutes, () => Promise<void>> = {
   "docs-briefing": () => setSecondaryColor(),
 };
 
-const route = useRoute();
-const currentRoute = computed(() => route.name as MainTabRoutes);
-
-watch(currentRoute, (value) => tabsStatusBarColors[value]?.(), {
-  immediate: true,
-});
+initRouteWatch<MainTabRoutes>((value) => tabsStatusBarColors[value]?.());
 </script>
 
 <template>

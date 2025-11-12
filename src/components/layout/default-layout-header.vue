@@ -5,9 +5,13 @@ withDefaults(
   defineProps<{
     title: string;
     close?: boolean;
+    back?: boolean;
+    info?: boolean;
   }>(),
   {
     close: false,
+    back: false,
+    info: false,
   },
 );
 
@@ -19,10 +23,10 @@ defineEmits<{
 
 <template>
   <div class="default-layout-header">
-    <base-icon class="default-layout-header__icon" name="arrow-back" @click="$emit('clickBack')" />
+    <base-icon v-if="back" class="default-layout-header__icon" name="arrow-back" @click="$emit('clickBack')" />
     <div class="default-layout-header__title">{{ title }}</div>
-    <base-icon v-if="close" class="default-layout-header__icon" name="close" @click="$emit('clickClose')" />
-    <div v-else class="default-layout-header__help">
+    <base-icon v-if="close" class="default-layout-header__close" name="close" @click="$emit('clickClose')" />
+    <div v-else-if="info" class="default-layout-header__help">
       <base-icon name="help" />
     </div>
   </div>
@@ -30,15 +34,22 @@ defineEmits<{
 
 <style scoped lang="scss">
 .default-layout-header {
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   background: $white;
 
-  padding: 12px 16px;
+  padding: 20px 16px;
 
   &__icon {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+
     flex-shrink: 0;
     height: 32px;
   }
@@ -50,6 +61,13 @@ defineEmits<{
     font-size: 16px;
     line-height: 100%;
     letter-spacing: 0;
+  }
+
+  &__close, &__help {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
   }
 
   &__help {

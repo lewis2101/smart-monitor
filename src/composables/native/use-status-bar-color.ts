@@ -1,5 +1,7 @@
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { useIsSupport } from "@/composables/native/use-is-support.ts";
+import { computed, onBeforeUnmount, watch, type WatchOptions } from "vue";
+import { useRoute } from "vue-router";
 
 enum Color {
   main = "main",
@@ -43,8 +45,27 @@ async function setNativeColors(key: Color) {
 }
 
 export function useStatusBarColor() {
+  function initRouteWatch<T>(callback: (value: T) => void) {
+    const route = useRoute();
+    const currentRouteName = computed(() => route.name as T);
+
+    const unwatch = watch(currentRouteName, callback, {
+      immediate: true,
+    });
+    onBeforeUnmount(() => unwatch());
+  }
+
+  function setMainColor() {
+    return setNativeColors(Color.main);
+  }
+
+  function setSecondaryColor() {
+    return setNativeColors(Color.secondary);
+  }
+
   return {
-    setMainColor: () => setNativeColors(Color.main),
-    setSecondaryColor: () => setNativeColors(Color.secondary),
+    setMainColor,
+    setSecondaryColor,
+    initRouteWatch,
   };
 }

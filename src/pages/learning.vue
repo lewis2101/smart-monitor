@@ -8,8 +8,8 @@ import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts"
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 
-const { setSecondaryColor } = useStatusBarColor();
-setSecondaryColor();
+const { setSecondaryColor, initRouteWatch } = useStatusBarColor();
+initRouteWatch(() => setSecondaryColor());
 
 const router = useIonRouter();
 
@@ -26,7 +26,7 @@ const handleClickClose = () => {
   <ion-page class="learning-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Обучение" close @click-close="handleClickClose" @click-back="handleClickClose" />
+        <default-layout-header title="Обучение" back @click-close="handleClickClose" @click-back="handleClickClose" />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">

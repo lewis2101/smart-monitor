@@ -16,8 +16,8 @@ const router = useIonRouter();
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
 
-const { setSecondaryColor } = useStatusBarColor();
-setSecondaryColor();
+const { setSecondaryColor, initRouteWatch } = useStatusBarColor();
+initRouteWatch(() => setSecondaryColor());
 
 const model = reactive({
   login: "",
@@ -42,7 +42,7 @@ const model = reactive({
         <ion-button fill="clear" class="login-page__button" @click="router.push({ name: CommonRoutes.registration })"
           >Зарегистрироваться</ion-button
         >
-        <ion-button class="login-page__button" @click="router.push({ name: MainTabRoutes.home })">Войти</ion-button>
+        <ion-button class="login-page__button" @click="router.replace({ name: MainTabRoutes.home })">Войти</ion-button>
       </ion-toolbar>
     </ion-footer>
   </ion-page>

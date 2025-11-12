@@ -46,6 +46,7 @@ const validate = computed(() => {
       <base-toolbar>
         <default-layout-header
           title="Новая заявка"
+          back
           close
           @click-close="handleClickClose"
           @click-back="handleClickClose"
