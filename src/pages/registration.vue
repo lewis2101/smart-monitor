@@ -1,27 +1,55 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, useIonRouter } from "@ionic/vue";
+import { IonPage, IonHeader, useIonRouter, IonFooter, IonButton, IonToolbar } from "@ionic/vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
+import RegistrationForm from "@/components/registration/registration-form/registration-form.vue";
+import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
+import { storeToRefs } from "pinia";
+import { reactive } from "vue";
+
+const keyboardStore = useKeyboardStore();
+const { isVisibleKeyboard } = storeToRefs(keyboardStore);
 
 const router = useIonRouter();
 
 const { setSecondaryColor, initRouteWatch } = useStatusBarColor();
 initRouteWatch(() => setSecondaryColor());
+
+const model = reactive({
+  fio: "",
+  job: "",
+  phone: "",
+  email: "",
+  filial: "",
+});
 </script>
 
 <template>
   <ion-page class="registration-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Авторизация" back @click-back="router.back" />
+        <default-layout-header title="Регистрация" back @click-back="router.back" />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      <div class="registration-page__body">REGIS</div>
+      <div class="registration-page__body">
+        <registration-form
+          v-model:fio="model.fio"
+          v-model:job="model.job"
+          v-model:phone="model.phone"
+          v-model:email="model.email"
+          v-model:filial="model.filial"
+        />
+      </div>
     </base-content-with-refresher>
+    <ion-footer v-if="!isVisibleKeyboard">
+      <ion-toolbar>
+        <ion-button class="registration-page__button">Зарегистрироваться</ion-button>
+      </ion-toolbar>
+    </ion-footer>
   </ion-page>
 </template>
 
@@ -31,6 +59,15 @@ initRouteWatch(() => setSecondaryColor());
 
   &__body {
     padding: 16px;
+  }
+
+  &__button {
+    width: 100%;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 </style>

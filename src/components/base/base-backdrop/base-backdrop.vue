@@ -2,7 +2,7 @@
 import BottomSheet from "@douxcode/vue-spring-bottom-sheet";
 import "@douxcode/vue-spring-bottom-sheet/dist/style.css";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { useTemplateRef } from "vue";
+import { useTemplateRef, watch } from "vue";
 
 defineProps<{
   title: string;
@@ -14,6 +14,12 @@ const bottomSheetRef = useTemplateRef("bottomSheetRef");
 
 defineExpose({
   close: () => bottomSheetRef.value?.close(),
+});
+
+watch(model, (value) => {
+  if (!value) {
+    bottomSheetRef.value?.close();
+  }
 });
 </script>
 

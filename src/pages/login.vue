@@ -4,7 +4,7 @@ import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import LoginForm from "@/components/login/login-form.vue";
+import LoginForm from "@/components/login/login-form/login-form.vue";
 import { reactive } from "vue";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
 import { CommonRoutes, MainTabRoutes } from "@/router/router-list.ts";
@@ -66,6 +66,11 @@ const model = reactive({
 
   &__button {
     width: 100%;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 </style>
