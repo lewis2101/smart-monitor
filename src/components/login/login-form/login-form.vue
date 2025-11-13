@@ -12,7 +12,7 @@ const password = defineModel<string>("password", { required: true });
 <template>
   <form class="login-form" @submit="$emit('submit')">
     <base-input v-model="login" class="login-form__field" placeholder="Логин" />
-    <base-input v-model="password" class="login-form__field" placeholder="Пароль" />
+    <base-input v-model="password" type="password" class="login-form__field" placeholder="Пароль" />
   </form>
 </template>
 

@@ -28,7 +28,7 @@ const model = reactive({
 });
 
 const handleAuth = async () => {
-  await execute(() => new Promise((resolve) => setTimeout(resolve, 2000)));
+  await execute(() => new Promise((resolve) => setTimeout(resolve, 1000)));
   router.replace({ name: MainTabRoutes.home });
 };
 </script>
