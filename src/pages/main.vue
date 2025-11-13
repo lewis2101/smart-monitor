@@ -29,8 +29,6 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 
 <style lang="scss" scoped>
 .main-page {
-  padding-top: env(safe-area-inset-top);
-
   &__content {
     --background: linear-gradient(180deg, #041a4b 15%, #ffffff 100%);
   }

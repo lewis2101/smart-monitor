@@ -28,7 +28,7 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 .main-header {
   background: #041a4b;
   color: $white;
-  padding: 16px;
+  padding: calc(16px + env(safe-area-inset-top)) 16px 16px 16px;
   width: 100%;
   display: flex;
   align-items: center;

@@ -5,8 +5,11 @@ import GlobalSpinner from "@/widgets/global-spinner.vue";
 import { nextTick, onMounted } from "vue";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { CommonRoutes } from "@/router/router-list.ts";
+import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
 
 const router = useIonRouter();
+const { initRouteWatch } = useStatusBarColor();
+initRouteWatch();
 
 onMounted(async () => {
   router.replace({

@@ -4,15 +4,11 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import BaseGalleryBlock from "@/components/base/base-gallery-block/base-gallery-block.vue";
 import { MainTabRoutes } from "@/router/router-list.ts";
-import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
 import { computed, reactive, ref } from "vue";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-
-const { setSecondaryColor } = useStatusBarColor();
-setSecondaryColor();
 
 const router = useIonRouter();
 const keyboardStore = useKeyboardStore();
@@ -81,8 +77,6 @@ const validate = computed(() => {
 
 <style scoped lang="scss">
 .new-order-page {
-  padding-top: env(safe-area-inset-top);
-
   &__body {
     padding: 16px 24px;
   }

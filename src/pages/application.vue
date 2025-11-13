@@ -24,8 +24,6 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 
 <style scoped lang="scss">
 .application-page {
-  padding-top: env(safe-area-inset-top);
-
   &__body {
     padding: 16px 8px;
   }

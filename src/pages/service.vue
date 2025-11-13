@@ -21,6 +21,6 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 
 <style scoped lang="scss">
 .service-page {
-  padding-top: env(safe-area-inset-top);
+
 }
 </style>

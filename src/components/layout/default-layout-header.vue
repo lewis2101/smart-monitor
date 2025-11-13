@@ -23,26 +23,33 @@ defineEmits<{
 
 <template>
   <div class="default-layout-header">
-    <base-icon v-if="back" class="default-layout-header__icon" name="arrow-back" @click="$emit('clickBack')" />
-    <div class="default-layout-header__title">{{ title }}</div>
-    <base-icon v-if="close" class="default-layout-header__close" name="close" @click="$emit('clickClose')" />
-    <div v-else-if="info" class="default-layout-header__help">
-      <base-icon name="help" />
+    <div class="default-layout-header__content">
+      <base-icon v-if="back" class="default-layout-header__icon" name="arrow-back" @click="$emit('clickBack')" />
+      <div class="default-layout-header__title">{{ title }}</div>
+      <base-icon v-if="close" class="default-layout-header__close" name="close" @click="$emit('clickClose')" />
+      <div v-else-if="info" class="default-layout-header__help">
+        <base-icon name="help" />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .default-layout-header {
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
   background: $white;
+  padding-top: env(safe-area-inset-top);
 
-  padding: 20px 16px;
+  &__content {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: $white;
+
+    padding: 20px 16px;
+  }
 
   &__icon {
     position: absolute;

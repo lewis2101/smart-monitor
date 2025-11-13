@@ -35,8 +35,6 @@ const handleClickClose = () => {
 
 <style scoped lang="scss">
 .briefing-page {
-  padding-top: env(safe-area-inset-top);
-
   &__body {
     padding: 16px 8px;
   }

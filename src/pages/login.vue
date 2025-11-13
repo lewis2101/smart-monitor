@@ -6,7 +6,6 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import LoginForm from "@/components/login/login-form/login-form.vue";
 import { reactive } from "vue";
-import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
 import { CommonRoutes, MainTabRoutes } from "@/router/router-list.ts";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
@@ -18,9 +17,6 @@ const { execute } = useGlobalSpinner();
 
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
-
-const { setSecondaryColor, initRouteWatch } = useStatusBarColor();
-initRouteWatch(() => setSecondaryColor());
 
 const model = reactive({
   login: "",
@@ -58,8 +54,6 @@ const handleAuth = async () => {
 
 <style scoped lang="scss">
 .login-page {
-  padding-top: env(safe-area-inset-top);
-
   &__body {
     padding: 16px;
   }
