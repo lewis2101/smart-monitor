@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: "SmartFleet",
   webDir: "dist",
   server: {
-    // url: "http://localhost:5173",
+    url: "http://localhost:5173",
     // url: "http://192.168.100.144:5173",
     cleartext: true,
   },

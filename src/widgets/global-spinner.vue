@@ -7,14 +7,25 @@ const { isVisible } = storeToRefs(useGlobalSpinner());
 </script>
 
 <template>
-  <div v-if="isVisible" class="global-spinner">
-    <div class="global-spinner__item">
-      <ion-spinner name="circular" color="light" />
+  <transition name="fade">
+    <div v-if="isVisible" class="global-spinner">
+      <div class="global-spinner__item">
+        <ion-spinner name="circular" color="light" />
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <style scoped lang="scss">
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
+}
 .global-spinner {
   position: fixed;
   inset: 0;

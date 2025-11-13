@@ -10,8 +10,11 @@ import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts"
 import { CommonRoutes, MainTabRoutes } from "@/router/router-list.ts";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
+import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 
 const router = useIonRouter();
+
+const { execute } = useGlobalSpinner();
 
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
@@ -23,6 +26,11 @@ const model = reactive({
   login: "",
   password: "",
 });
+
+const handleAuth = async () => {
+  await execute(() => new Promise((resolve) => setTimeout(resolve, 2000)));
+  router.replace({ name: MainTabRoutes.home });
+};
 </script>
 
 <template>
@@ -42,7 +50,7 @@ const model = reactive({
         <ion-button fill="clear" class="login-page__button" @click="router.push({ name: CommonRoutes.registration })"
           >Зарегистрироваться</ion-button
         >
-        <ion-button class="login-page__button" @click="router.replace({ name: MainTabRoutes.home })">Войти</ion-button>
+        <ion-button class="login-page__button" @click="handleAuth">Войти</ion-button>
       </ion-toolbar>
     </ion-footer>
   </ion-page>

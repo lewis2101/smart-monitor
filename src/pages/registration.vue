@@ -46,7 +46,7 @@ const model = reactive({
       </div>
     </base-content-with-refresher>
     <ion-footer v-if="!isVisibleKeyboard">
-      <ion-toolbar>
+      <ion-toolbar class="registration-page__buttons">
         <ion-button class="registration-page__button">Зарегистрироваться</ion-button>
       </ion-toolbar>
     </ion-footer>
@@ -59,6 +59,14 @@ const model = reactive({
 
   &__body {
     padding: 16px;
+  }
+
+  &__buttons {
+    --background: $white;
+    background: $white;
+    --border-width: 0 !important;
+    width: 100%;
+    padding: 0 24px;
   }
 
   &__button {
