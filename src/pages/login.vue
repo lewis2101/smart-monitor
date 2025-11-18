@@ -6,7 +6,7 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import LoginForm from "@/components/login/login-form/login-form.vue";
 import { reactive } from "vue";
-import { CommonRoutes, MainTabRoutes } from "@/router/router-list.ts";
+import { MainTabRoutes } from "@/router/router-list.ts";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
@@ -43,9 +43,9 @@ const handleAuth = async () => {
     </base-content-with-refresher>
     <ion-footer v-if="!isVisibleKeyboard">
       <ion-toolbar class="login-page__buttons">
-        <ion-button fill="clear" class="login-page__button" @click="router.push({ name: CommonRoutes.registration })"
-          >Зарегистрироваться</ion-button
-        >
+        <!--        <ion-button fill="clear" class="login-page__button" @click="router.push({ name: CommonRoutes.registration })"-->
+        <!--          >Зарегистрироваться</ion-button-->
+        <!--        >-->
         <ion-button class="login-page__button" @click="handleAuth">Войти</ion-button>
       </ion-toolbar>
     </ion-footer>

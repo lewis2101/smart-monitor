@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "vite --host",
+    "dev-ios": "npm run build && cap sync ios && cap run ios",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -31,6 +32,7 @@
     "@primeuix/themes": "^1.2.5",
     "@tanstack/vue-query": "^5.90.5",
     "@vueuse/core": "^14.0.0",
+    "maplibre-gl": "^5.13.0",
     "pinia": "^3.0.3",
     "primevue": "^4.4.1",
     "vue": "^3.5.22",

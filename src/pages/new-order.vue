@@ -9,6 +9,8 @@ import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store
 import { storeToRefs } from "pinia";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
+import BaseMap from "@/components/map/base-map.vue";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
 const router = useIonRouter();
 const keyboardStore = useKeyboardStore();
@@ -17,12 +19,18 @@ const { isVisibleKeyboard } = storeToRefs(keyboardStore);
 const images = reactive<string[]>([]);
 const description = ref("");
 
+const globalBackdropStore = useGlobalBackdropStore();
+
 const handleClickClose = () => {
   if (router.canGoBack()) {
     router.back();
   } else {
     router.replace({ name: MainTabRoutes.home });
   }
+};
+
+const openMapBackdrop = () => {
+  globalBackdropStore.push("map");
 };
 
 const validate = computed(() => {
@@ -52,7 +60,10 @@ const validate = computed(() => {
     <base-content-with-refresher @refresh="mockRefresh">
       <div class="new-order-page__body">
         <base-gallery-block v-model="images" title="Фотографии" class="new-order-page__gallery" />
-        <img class="new-order-page__gallery" src="@/assets/map-test.png" style="width: 100%" />
+        <div class="new-order-page__map" @click="openMapBackdrop">
+          <base-map />
+          <div class="new-order-page__map-content"></div>
+        </div>
         <ion-textarea
           v-model="description"
           label="Подробности"
@@ -83,6 +94,28 @@ const validate = computed(() => {
 
   &__gallery {
     margin-bottom: 16px;
+  }
+
+  &__map {
+    position: relative;
+
+    width: 100%;
+    height: 160px;
+    margin-bottom: 16px;
+    div {
+      border-radius: 12px;
+    }
+
+    &-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ececf0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   &__textarea {

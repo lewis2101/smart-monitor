@@ -6,7 +6,6 @@ const config: CapacitorConfig = {
   webDir: "dist",
   server: {
     url: "http://localhost:5173",
-    // url: "http://192.168.100.144:5173",
     cleartext: true,
   },
   plugins: {
@@ -22,5 +21,11 @@ const config: CapacitorConfig = {
     },
   },
 };
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+if (process.env.NODE_ENV === "development") {
+  config.server.url = "http://localhost:5173";
+}
 
 export default config;
