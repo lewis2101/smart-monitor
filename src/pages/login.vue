@@ -47,9 +47,9 @@ const handleAuth = async () => {
   const { valid } = await validate();
   if (!valid) return;
 
-  await globalSpinner.execute(() => mutateLogin(values));
-  // await execute(() => new Promise((resolve) => setTimeout(resolve, 1000)));
-  // router.replace({ name: MainTabRoutes.home });
+  // await globalSpinner.execute(() => mutateLogin(values));
+  await globalSpinner.execute(() => new Promise((resolve) => setTimeout(resolve, 1000)));
+  router.replace({ name: MainTabRoutes.home });
 };
 </script>
 
