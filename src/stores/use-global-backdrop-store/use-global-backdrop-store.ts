@@ -4,7 +4,7 @@ import {
   type BackdropItem,
   type BackdropsKey,
   configBackdropItems,
-} from "@/stores/use-global-backdrop-store/config.ts";
+} from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
 import type { ExtractProps } from "@/utils/extractProps.ts";
 import type { ExtractEmit } from "@/utils/extractEmits.ts";
 
