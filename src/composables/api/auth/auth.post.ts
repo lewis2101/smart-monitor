@@ -1,6 +1,7 @@
 import { inject } from "vue";
 import { httpClientProviderKey } from "@/composables/http-client/http-provider-keys.ts";
 import { useMutation } from "@tanstack/vue-query";
+import type { AxiosError } from "axios";
 
 type RawData = undefined;
 
@@ -41,11 +42,12 @@ export const useAuthUseMutation = (hooks: { onSuccess: () => Promise<void> | voi
     throw new Error("Http Client is not provided");
   }
 
-  return useMutation({
-    mutationFn: ({ login, password }: { login: string; password: string }) => {
-      return httpClient.post("/auth/login", {
-        data: { login, password },
+  return useMutation<Response, AxiosError, Payload>({
+    mutationFn: async ({ username, password }: Payload) => {
+      const { data } = await httpClient.post<Response>("/auth/login", {
+        data: { username, password },
       });
+      return data;
     },
     onSuccess: hooks.onSuccess,
   });

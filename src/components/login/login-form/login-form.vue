@@ -1,18 +1,44 @@
 <script setup lang="ts">
 import BaseInput from "@/components/base/base-input/base-input.vue";
+import { useField } from "vee-validate";
+
+defineProps<{
+  errors: {
+    username?: string;
+    password?: string;
+  };
+  loading?: boolean;
+}>();
 
 defineEmits<{
   (e: "submit"): void;
 }>();
 
-const login = defineModel<string>("login", { required: true });
-const password = defineModel<string>("password", { required: true });
+const { value: username } = useField<string>("username");
+const { value: password } = useField<string>("password");
 </script>
 
 <template>
   <form class="login-form" @submit="$emit('submit')">
-    <base-input v-model="login" class="login-form__field" placeholder="Логин" />
-    <base-input v-model="password" type="password" class="login-form__field" placeholder="Пароль" />
+    <base-input
+      v-model="username"
+      class="login-form__field"
+      placeholder="Логин"
+      name="login"
+      :error-text="errors.username"
+      :disabled="loading"
+      @keyup.enter="$emit('submit')"
+    />
+    <base-input
+      v-model="password"
+      type="password"
+      class="login-form__field"
+      placeholder="Пароль"
+      name="password"
+      :error-text="errors.password"
+      :disabled="loading"
+      @keyup.enter="$emit('submit')"
+    />
   </form>
 </template>
 

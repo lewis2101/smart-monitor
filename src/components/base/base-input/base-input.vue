@@ -16,27 +16,31 @@ const isFocused = ref(false);
 
 <template>
   <div class="base-input">
-    <div
-      v-if="placeholder"
-      :class="['base-input__placeholder', (isFocused || model) && 'base-input__placeholder_focus']"
-    >
-      {{ placeholder }}
+    <div class="base-input__wrapper">
+      <div
+        v-if="placeholder"
+        :class="['base-input__placeholder', (isFocused || model) && 'base-input__placeholder_focus']"
+      >
+        {{ placeholder }}
+      </div>
+      <ion-input
+        v-model="model"
+        v-bind="$attrs"
+        v-on="emits"
+        class="base-input__native"
+        @ion-focus="isFocused = true"
+        @ion-blur="isFocused = false"
+      />
     </div>
-    <ion-input
-      v-model="model"
-      v-bind="$attrs"
-      v-on="emits"
-      class="base-input__native"
-      @ion-focus="isFocused = true"
-      @ion-blur="isFocused = false"
-    />
     <div v-if="errorText" class="base-input__error">{{ errorText }}</div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .base-input {
-  position: relative;
+  &__wrapper {
+    position: relative;
+  }
 
   &__native {
     --padding-start: 16px;
