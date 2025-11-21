@@ -10,6 +10,7 @@ import { MainTabRoutes } from "@/router/router-list.ts";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
+import { useAuthUseMutation } from "@/composables/api/auth/auth.post.ts";
 
 const router = useIonRouter();
 
@@ -17,6 +18,13 @@ const { execute } = useGlobalSpinner();
 
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
+
+const mutation = useAuthUseMutation({
+  onSuccess: async () => {
+    await execute(() => new Promise((resolve) => setTimeout(resolve, 1000)));
+    router.replace({ name: MainTabRoutes.home });
+  },
+});
 
 const model = reactive({
   login: "",
@@ -26,6 +34,10 @@ const model = reactive({
 const handleAuth = async () => {
   await execute(() => new Promise((resolve) => setTimeout(resolve, 1000)));
   router.replace({ name: MainTabRoutes.home });
+  // mutation.mutate({
+  //   login: model.login,
+  //   password: model.password,
+  // });
 };
 </script>
 
@@ -43,9 +55,6 @@ const handleAuth = async () => {
     </base-content-with-refresher>
     <ion-footer v-if="!isVisibleKeyboard">
       <ion-toolbar class="login-page__buttons">
-        <!--        <ion-button fill="clear" class="login-page__button" @click="router.push({ name: CommonRoutes.registration })"-->
-        <!--          >Зарегистрироваться</ion-button-->
-        <!--        >-->
         <ion-button class="login-page__button" @click="handleAuth">Войти</ion-button>
       </ion-toolbar>
     </ion-footer>
