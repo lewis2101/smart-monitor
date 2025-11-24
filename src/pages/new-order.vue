@@ -11,6 +11,9 @@ import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import BaseMap from "@/components/map/base-map.vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import BaseSelect from "@/components/base/base-select/base-select.vue";
+
+type SelectList = InstanceType<typeof BaseSelect>["$props"]["list"];
 
 const router = useIonRouter();
 const keyboardStore = useKeyboardStore();
@@ -42,6 +45,28 @@ const validate = computed(() => {
   }
   return true;
 });
+
+const selectModel = ref("");
+
+const jobs: SelectList = [
+  {
+    label: "Рабочий",
+    value: "shared",
+  },
+  {
+    label: "Мастер",
+    value: "master",
+  },
+  {
+    label: "Инженер по ТБ",
+    value: "tb",
+  },
+  {
+    label: "Администратор",
+    value: "admin",
+  },
+];
+
 </script>
 
 <template>
@@ -70,6 +95,13 @@ const validate = computed(() => {
           class="new-order-page__textarea"
           label-placement="stacked"
           placeholder="Укажите, что именно не так на фотографии"
+        />
+        <base-select
+          v-model="selectModel"
+          class="registration-form__field"
+          placeholder="Должность"
+          select-title="Выберите должность"
+          :list="jobs"
         />
       </div>
     </base-content-with-refresher>

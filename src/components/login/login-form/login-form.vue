@@ -19,7 +19,7 @@ const { value: password } = useField<string>("password");
 </script>
 
 <template>
-  <form class="login-form" @submit="$emit('submit')">
+  <form class="login-form" @submit="$emit('submit')" @keyup.enter.passive="$emit('submit')">
     <base-input
       v-model="username"
       class="login-form__field"
@@ -27,7 +27,6 @@ const { value: password } = useField<string>("password");
       name="login"
       :error-text="errors.username"
       :disabled="loading"
-      @keyup.enter="$emit('submit')"
     />
     <base-input
       v-model="password"
@@ -37,7 +36,6 @@ const { value: password } = useField<string>("password");
       name="password"
       :error-text="errors.password"
       :disabled="loading"
-      @keyup.enter="$emit('submit')"
     />
   </form>
 </template>

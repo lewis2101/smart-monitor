@@ -9,10 +9,13 @@ import { MainTabRoutes } from "@/router/router-list.ts";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
-import { useAuthUseMutation } from "@/composables/api/auth/auth.post.ts";
+import { useAuthMutation } from "@/composables/api/auth/login.post.ts";
 import { toTypedSchema } from "@vee-validate/zod";
 import { object, string } from "zod";
-import { useField, useForm } from "vee-validate";
+import { useForm } from "vee-validate";
+import { useAuthChallengeMutation } from "@/composables/api/auth/challenge.post.ts";
+import DeviceDetector from "device-detector-js";
+import { computed } from "vue";
 
 const loginSchema = toTypedSchema(
   object({
@@ -28,8 +31,14 @@ const globalSpinner = useGlobalSpinner();
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
 
-const { mutateAsync: mutateLogin, isPending } = useAuthUseMutation({
+const { mutateAsync: mutateLogin, isPending } = useAuthMutation({
   onSuccess: () => router.replace({ name: MainTabRoutes.home }),
+});
+
+const { mutateAsync: mutateLoginChallenge } = useAuthChallengeMutation({
+  onError: (error: Error) => {
+    throw error;
+  },
 });
 
 const { values, validate, errors } = useForm<{
@@ -43,13 +52,27 @@ const { values, validate, errors } = useForm<{
   },
 });
 
+const device = computed(() => {
+  const deviceDetector = new DeviceDetector();
+  return deviceDetector.parse(navigator.userAgent);
+});
+
 const handleAuth = async () => {
   const { valid } = await validate();
-  if (!valid) return;
+  if (!valid && isPending.value) return;
 
-  // await globalSpinner.execute(() => mutateLogin(values));
-  await globalSpinner.execute(() => new Promise((resolve) => setTimeout(resolve, 1000)));
-  router.replace({ name: MainTabRoutes.home });
+  await globalSpinner.execute(async () => {
+    await mutateLoginChallenge({
+      userName: values.username,
+      device: device.value,
+    });
+    await globalSpinner.execute(() =>
+      mutateLogin({
+        ...values,
+        device: device.value,
+      }),
+    );
+  });
 };
 </script>
 

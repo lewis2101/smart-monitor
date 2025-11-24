@@ -25,11 +25,11 @@ export class HttpClient {
   }
 
   public post<T>(url: string, config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.axiosInstance.post(url, config);
+    return this.axiosInstance.post(url, config.data, config);
   }
 
   public patch<T>(url: string, config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.axiosInstance.patch(url, config);
+    return this.axiosInstance.patch(url, config.data, config);
   }
 
   public delete<T>(url: string, config: AxiosRequestConfig): Promise<AxiosResponse<T>> {

@@ -4,7 +4,7 @@ import BaseMap from "@/components/map/base-map.vue";
 
 <template>
   <div class="map-backdrop">
-    <base-map />
+    <base-map @pointerdown.stop @pointerup.prevent.stop />
   </div>
 </template>
 

@@ -24,4 +24,12 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      "^/api/auth": {
+        target: "https://test.smartfleet.kz",
+        changeOrigin: true,
+      },
+    },
+  },
 });

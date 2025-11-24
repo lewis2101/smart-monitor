@@ -5,7 +5,7 @@ import { httpClientProviderKey } from "@/composables/http-client/http-provider-k
 export default {
   install: (app: App) => {
     const httpClient = new HttpClient({
-      baseURL: import.meta.env.VITE_BASE_URL,
+      baseURL: "/api",
     });
 
     app.provide(httpClientProviderKey, httpClient);
