@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import { VueQueryPlugin } from "@tanstack/vue-query";
+import { VueQueryPlugin, QueryClient } from "@tanstack/vue-query";
 import App from "./App.vue";
 import router from "./router";
 import { registerPrimeVue } from "@/plugins/register-prime-vue.ts";
@@ -23,10 +23,19 @@ const pwaElements = defineCustomElements(window);
 const capacitorKeyboard = disableScroll();
 await Promise.all([pwaElements, capacitorKeyboard]);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 app.use(IonicVue, {
   mode: "ios",
 });
 app.use(router);
-app.use(VueQueryPlugin);
+app.use(VueQueryPlugin, { queryClient });
 
 app.mount("#app");

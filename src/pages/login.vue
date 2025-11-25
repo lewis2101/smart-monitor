@@ -1,79 +1,18 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, IonFooter, useIonRouter, IonButton, IonToolbar } from "@ionic/vue";
+import { IonPage, IonHeader, IonFooter, IonButton, IonToolbar } from "@ionic/vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import LoginForm from "@/components/login/login-form/login-form.vue";
-import { MainTabRoutes } from "@/router/router-list.ts";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
-import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
-import { useAuthMutation } from "@/composables/api/auth/login.post.ts";
-import { toTypedSchema } from "@vee-validate/zod";
-import { object, string } from "zod";
-import { useForm } from "vee-validate";
-import { useAuthChallengeMutation } from "@/composables/api/auth/challenge.post.ts";
-import DeviceDetector from "device-detector-js";
-import { computed } from "vue";
-
-const loginSchema = toTypedSchema(
-  object({
-    username: string().min(1, "Введите Логин").uppercase("Логин должен быть в верхнем регистре"),
-    password: string().min(1, "Введите пароль"),
-  }),
-);
-
-const router = useIonRouter();
-
-const globalSpinner = useGlobalSpinner();
+import { useLogin } from "@/composables/login/use-login.ts";
 
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
 
-const { mutateAsync: mutateLogin, isPending } = useAuthMutation({
-  onSuccess: () => router.replace({ name: MainTabRoutes.home }),
-});
-
-const { mutateAsync: mutateLoginChallenge } = useAuthChallengeMutation({
-  onError: (error: Error) => {
-    throw error;
-  },
-});
-
-const { values, validate, errors } = useForm<{
-  username: string;
-  password: string;
-}>({
-  validationSchema: loginSchema,
-  initialValues: {
-    username: "",
-    password: "",
-  },
-});
-
-const device = computed(() => {
-  const deviceDetector = new DeviceDetector();
-  return deviceDetector.parse(navigator.userAgent);
-});
-
-const handleAuth = async () => {
-  const { valid } = await validate();
-  if (!valid && isPending.value) return;
-
-  await globalSpinner.execute(async () => {
-    await mutateLoginChallenge({
-      userName: values.username,
-      device: device.value,
-    });
-    await globalSpinner.execute(() =>
-      mutateLogin({
-        ...values,
-        device: device.value,
-      }),
-    );
-  });
-};
+const { auth, errors, isPending } = useLogin();
 </script>
 
 <template>
@@ -85,12 +24,12 @@ const handleAuth = async () => {
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
       <div class="login-page__body">
-        <login-form :errors="errors" :loading="isPending" @submit="handleAuth" />
+        <login-form :errors="errors" :loading="isPending" @submit="auth" />
       </div>
     </base-content-with-refresher>
     <ion-footer v-if="!isVisibleKeyboard">
       <ion-toolbar class="login-page__buttons">
-        <ion-button class="login-page__button" @click="handleAuth" :disabled="isPending">Войти</ion-button>
+        <ion-button class="login-page__button" @click="auth" :disabled="isPending">Войти</ion-button>
       </ion-toolbar>
     </ion-footer>
   </ion-page>

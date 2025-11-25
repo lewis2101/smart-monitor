@@ -5,11 +5,7 @@ type HttpClientConfig = {
 };
 
 export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE";
-export type HttpClientCallOptions<RawData, Payload> = {
-  params?: RawData;
-  body?: Payload;
-};
-export type HttpCallOption = AxiosRequestConfig & { url: string; method: HttpClientMethod };
+export type HttpCallOption<D = undefined> = AxiosRequestConfig<D> & { url: string; method: HttpClientMethod };
 
 export class HttpClient {
   private axiosInstance: AxiosInstance;
@@ -37,24 +33,18 @@ export class HttpClient {
   }
 
   public call<RawData, Payload, Response>(
-    config: HttpCallOption,
-    executeConfig: HttpClientCallOptions<RawData, Payload>,
+    config: HttpCallOption<Payload>,
+    data?: Payload,
   ): Promise<AxiosResponse<Response>> {
-    const requestConfig: AxiosRequestConfig = {
-      ...config,
-      params: executeConfig.params,
-      data: executeConfig.body,
-    };
-
     switch (config.method) {
       case "GET":
-        return this.axiosInstance.get(config.url, requestConfig);
+        return this.axiosInstance.get<Response>(config.url, config);
       case "POST":
-        return this.axiosInstance.post(config.url, requestConfig);
+        return this.axiosInstance.post<Response>(config.url, data, config);
       case "PATCH":
-        return this.axiosInstance.patch(config.url, requestConfig);
+        return this.axiosInstance.patch<Response>(config.url, data, config);
       case "DELETE":
-        return this.axiosInstance.delete(config.url, requestConfig);
+        return this.axiosInstance.delete<Response>(config.url, config);
     }
   }
 }

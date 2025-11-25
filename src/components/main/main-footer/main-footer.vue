@@ -20,7 +20,7 @@ const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWit
 const handleClickCamera = () => {
   globalBackdropStore.push("camera", {
     args: {
-      selectPhoto: (photo) => {
+      selectPhoto: (photo: string) => {
         if (photo) {
           setImage(photo);
           const id = Math.round(Math.random() * 10000) + 500;
