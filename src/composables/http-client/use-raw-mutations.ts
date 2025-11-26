@@ -1,15 +1,11 @@
-import { type MutationOptions, useMutation } from "@tanstack/vue-query";
 import { inject } from "vue";
 import { httpClientProviderKey } from "@/composables/http-client/http-provider-keys.ts";
 import { type HttpCallOption, HttpClient } from "@/composables/http-client/HttpClient.ts";
 import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-builder.ts";
 
-export function useVueQueryMutations<RawData, Payload, Response, Err>(options: {
-  httpClientOptions: HttpCallOption<Payload>;
-  mutationOptions?: () => MutationOptions<Response, Err, Payload>;
-}) {
+export function useRawMutations<RawData, Payload, Response>(options: { httpClientOptions: HttpCallOption<Payload> }) {
   return (client?: HttpClient) => {
-    const { httpClientOptions, mutationOptions } = options;
+    const { httpClientOptions } = options;
     const httpClient = client || inject(httpClientProviderKey);
 
     if (!httpClient) {
@@ -18,12 +14,11 @@ export function useVueQueryMutations<RawData, Payload, Response, Err>(options: {
 
     const config = useEndpointBuilder<Payload>(httpClientOptions);
 
-    return useMutation<Response, Err, Payload>({
-      mutationFn: async (data) => {
+    return {
+      mutateAsync: async (data: Payload): Promise<Response> => {
         const response = await httpClient.call<RawData, Payload, Response>(config, data);
         return response.data;
       },
-      ...mutationOptions?.(),
-    });
+    };
   };
 }

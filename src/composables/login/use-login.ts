@@ -10,10 +10,8 @@ import { useDevice } from "@/composables/useDevice.ts";
 import { useLocalStorage } from "@vueuse/core";
 import { useRefreshTokenMutation } from "@/api/auth/refresh-token.post.ts";
 import { computed } from "vue";
-
-const accessTokenKey = "accessToken";
-const refreshTokenKey = "refreshToken";
-const tokenExpires = "tokenExpires";
+import { accessTokenKey, refreshTokenKey, tokenExpires } from "@/composables/login/auth-storage-keys.ts";
+import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 
 const loginSchema = toTypedSchema(
   object({
@@ -31,22 +29,7 @@ export const useLogin = () => {
   const globalSpinner = useGlobalSpinner();
   const { device } = useDevice();
 
-  const accessTokenStorage = useLocalStorage(accessTokenKey, "");
-  const refreshTokenStorage = useLocalStorage(refreshTokenKey, "");
-  const expiresTokenStorage = useLocalStorage(tokenExpires, "");
-
-  const checkIsExpiredToken = () => {
-    if (!accessTokenStorage.value) {
-      return true;
-    }
-
-    const expired = Number(expiresTokenStorage.value || 0);
-
-    if (Number.isNaN(expired)) {
-      return true;
-    }
-    return Date.now() >= expired;
-  };
+  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage } = useAuthStorage();
 
   const { values, validate, errors } = useForm<{
     username: string;
@@ -93,6 +76,5 @@ export const useLogin = () => {
     auth,
     isPending,
     errors,
-    checkIsExpiredToken,
   };
 };

@@ -10,6 +10,7 @@ import NewOrder from "@/pages/new-order.vue";
 import Learning from "@/pages/learning.vue";
 import Login from "@/pages/login.vue";
 import Registration from "@/pages/registration.vue";
+import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,25 @@ const router = createRouter({
       component: NewOrder,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const { checkIsExpiredToken, checkHasTokens } = useAuthStorage();
+  const isExpired = checkIsExpiredToken();
+
+  if (to.name !== CommonRoutes.login && !checkHasTokens()) {
+    next({
+      name: CommonRoutes.login,
+    });
+  }
+
+  if (to.name === CommonRoutes.login && !isExpired) {
+    next({
+      name: MainTabRoutes.home,
+    });
+  }
+
+  next();
 });
 
 export default router;

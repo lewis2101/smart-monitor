@@ -1,21 +1,10 @@
 import type { App } from "vue";
-import { HttpClient } from "@/composables/http-client/HttpClient.ts";
 import { httpClientProviderKey } from "@/composables/http-client/http-provider-keys.ts";
-import { useRefreshTokenMutation } from "@/api/auth/refresh-token.post.ts";
+import { httpProvider } from "@/plugins/providers/httpProvider.ts";
 
 export default {
   install: (app: App) => {
-    // const { mutateAsync: mutateRefreshToken } = useRefreshTokenMutation();
-
-    const httpClient = new HttpClient({
-      baseURL: "/api",
-    });
-
-    httpClient.registerResponseInterceptor((err) => {
-      if (err.status === 401) {
-        console.log("REFRESH INTERCEPTOR");
-      }
-    });
+    const httpClient = httpProvider();
 
     app.provide(httpClientProviderKey, httpClient);
   },

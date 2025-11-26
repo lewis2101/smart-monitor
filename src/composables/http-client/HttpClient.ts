@@ -7,7 +7,7 @@ type HttpClientConfig = {
 export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE";
 export type HttpCallOption<D = undefined> = AxiosRequestConfig<D> & { url: string; method: HttpClientMethod };
 
-type ResponseInterceptorCallback = (err: AxiosError) => AxiosRequestConfig | void;
+type ResponseInterceptorCallback = (err: AxiosError) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
 
 export class HttpClient {
   private interceptorsResponse: ResponseInterceptorCallback[] = [];
@@ -22,7 +22,7 @@ export class HttpClient {
       (response) => response,
       async (err: AxiosError) => {
         for (const callback of this.interceptorsResponse) {
-          const config = callback(err);
+          const config = await callback(err);
           if (config) {
             return this.axiosInstance(config);
           }
