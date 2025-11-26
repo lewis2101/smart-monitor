@@ -13,7 +13,7 @@ declare module "axios" {
 }
 
 const refreshTokenInterceptor = (httpClient: HttpClient) => {
-  const { mutateAsync: mutateRefreshToken } = useRefreshTokenRawMutation(httpClient);
+  const { mutateAsync: mutateRefreshToken } = useRefreshTokenRawMutation(undefined, httpClient);
 
   return async (err: AxiosError) => {
     const config = err.config;

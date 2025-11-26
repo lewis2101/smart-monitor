@@ -26,7 +26,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "^/api/auth": {
+      "^/api": {
         target: "https://test.smartfleet.kz",
         changeOrigin: true,
       },

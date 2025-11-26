@@ -7,10 +7,8 @@ import { useAuthChallengeMutation } from "@/api/auth/challenge.post.ts";
 import { useIonRouter } from "@ionic/vue";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 import { useDevice } from "@/composables/useDevice.ts";
-import { useLocalStorage } from "@vueuse/core";
 import { useRefreshTokenMutation } from "@/api/auth/refresh-token.post.ts";
 import { computed } from "vue";
-import { accessTokenKey, refreshTokenKey, tokenExpires } from "@/composables/login/auth-storage-keys.ts";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 
 const loginSchema = toTypedSchema(

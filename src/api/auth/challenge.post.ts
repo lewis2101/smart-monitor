@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import { useVueQueryMutations } from "@/composables/http-client/use-vue-query-mutations.ts";
+import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
 import type { HttpCallOption } from "@/composables/http-client/HttpClient.ts";
 import { AuthEndpoints } from "@/api/endpoints.ts";
 
@@ -22,6 +22,6 @@ const httpClientOptions: HttpCallOption<Payload> = {
   method: "POST",
 };
 
-export const useAuthChallengeMutation = useVueQueryMutations<RawData, Payload, Response, AxiosError>({
+export const useAuthChallengeMutation = createVueQueryMutations<RawData, Payload, Response, AxiosError>({
   httpClientOptions,
 });

@@ -16,6 +16,7 @@ export class HttpClient {
   constructor(config: HttpClientConfig) {
     this.axiosInstance = axios.create({
       baseURL: config.baseURL,
+      paramsSerializer: (params) => this.serializeParams(params),
     });
 
     this.axiosInstance.interceptors.response.use(
@@ -30,6 +31,39 @@ export class HttpClient {
         throw err;
       },
     );
+  }
+
+  private serializeParams(params: Record<string, any>, prefix?: string): string {
+    const parts: string[] = [];
+
+    console.log({ params });
+
+    for (const key in params) {
+      const value = params[key];
+      if (value == null) continue;
+
+      const paramKey = prefix ? `${prefix}[${key}]` : key;
+
+      if (typeof value === "object" && !Array.isArray(value)) {
+        parts.push(this.serializeParams(value, paramKey));
+        continue;
+      }
+
+      if (Array.isArray(value)) {
+        value.forEach((v) => {
+          parts.push(`${paramKey}[]=${v}`);
+        });
+        continue;
+      }
+
+      parts.push(`${paramKey}=${value}`);
+    }
+
+    return parts.join("&");
+  }
+
+  public setAuthorization(token: string) {
+    this.axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + token;
   }
 
   public registerResponseInterceptor = (callback: ResponseInterceptorCallback) => {
@@ -52,10 +86,7 @@ export class HttpClient {
     return this.axiosInstance.delete(url, config);
   }
 
-  public call<RawData, Payload, Response>(
-    config: HttpCallOption<Payload>,
-    data?: Payload,
-  ): Promise<AxiosResponse<Response>> {
+  public call<Payload, Response>(config: HttpCallOption<Payload>, data?: Payload): Promise<AxiosResponse<Response>> {
     switch (config.method) {
       case "GET":
         return this.axiosInstance.get<Response>(config.url, config);

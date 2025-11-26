@@ -1,14 +1,11 @@
-import type { AxiosError } from "axios";
-import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
 import type { HttpCallOption } from "@/composables/http-client/HttpClient.ts";
-import { AuthEndpoints } from "@/api/endpoints.ts";
+import { OrdersEndpoints } from "@/api/endpoints.ts";
+import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
 
-type RawData = undefined;
-
-type Payload = {
-  username: string;
-  password: string;
-  device: any;
+type RawData = {
+  paranoid: boolean;
+  lang: string;
+  sort: Record<string, any>;
 };
 
 type Response = {
@@ -37,11 +34,11 @@ type Response = {
   };
 };
 
-const httpClientOptions: HttpCallOption<Payload> = {
-  url: AuthEndpoints.login,
-  method: "POST",
+const httpClientOptions: HttpCallOption = {
+  url: OrdersEndpoints.ordersMineView,
+  method: "GET",
 };
 
-export const useAuthMutation = createVueQueryMutations<RawData, Payload, Response, AxiosError>({
+export const useOrdersMineViewQuery = createVueQueryOptions<RawData, Response>({
   httpClientOptions,
 });
