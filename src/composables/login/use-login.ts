@@ -63,24 +63,28 @@ export const useLogin = () => {
     const { valid } = await validate();
     if (!valid && isPending.value) return;
 
-    const data = await globalSpinner.execute(async () => {
-      await mutateLoginChallenge({
-        userName: values.username,
-        device: device.value,
+    try {
+      const data = await globalSpinner.execute(async () => {
+        await mutateLoginChallenge({
+          userName: values.username,
+          device: device.value,
+        });
+        return mutateLogin({
+          ...values,
+          device: device.value,
+        });
       });
-      return mutateLogin({
-        ...values,
-        device: device.value,
-      });
-    });
 
-    if (data) {
-      accessTokenStorage.value = data.accessToken;
-      refreshTokenStorage.value = data.refreshToken;
-      expiresTokenStorage.value = String(data.expiry);
+      if (data) {
+        accessTokenStorage.value = data.accessToken;
+        refreshTokenStorage.value = data.refreshToken;
+        expiresTokenStorage.value = String(data.expiry);
+      }
+
+      router.replace({ name: MainTabRoutes.home });
+    } catch (e) {
+      console.log(e);
     }
-
-    router.replace({ name: MainTabRoutes.home });
   };
 
   const isPending = computed(() => loginPending.value || challengePending.value);

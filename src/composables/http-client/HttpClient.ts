@@ -1,4 +1,4 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
+import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
 
 type HttpClientConfig = {
   baseURL: string;
@@ -7,14 +7,34 @@ type HttpClientConfig = {
 export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE";
 export type HttpCallOption<D = undefined> = AxiosRequestConfig<D> & { url: string; method: HttpClientMethod };
 
+type ResponseInterceptorCallback = (err: AxiosError) => AxiosRequestConfig | void;
+
 export class HttpClient {
-  private axiosInstance: AxiosInstance;
+  private interceptorsResponse: ResponseInterceptorCallback[] = [];
+  private readonly axiosInstance: AxiosInstance;
 
   constructor(config: HttpClientConfig) {
     this.axiosInstance = axios.create({
       baseURL: config.baseURL,
     });
+
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      async (err: AxiosError) => {
+        for (const callback of this.interceptorsResponse) {
+          const config = callback(err);
+          if (config) {
+            return this.axiosInstance(config);
+          }
+        }
+        throw err;
+      },
+    );
   }
+
+  public registerResponseInterceptor = (callback: ResponseInterceptorCallback) => {
+    this.interceptorsResponse.push(callback);
+  };
 
   public get<T>(url: string, config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.axiosInstance.get(url, config);
