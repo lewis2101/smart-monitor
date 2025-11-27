@@ -1,7 +1,7 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import { object, string } from "zod";
 import { useForm } from "vee-validate";
-import { MainTabRoutes } from "@/router/router-list.ts";
+import { CommonRoutes, MainTabRoutes } from "@/router/router-list.ts";
 import { useAuthMutation } from "@/api/auth/login.post.ts";
 import { useAuthChallengeMutation } from "@/api/auth/challenge.post.ts";
 import { useIonRouter } from "@ionic/vue";
@@ -25,7 +25,7 @@ export const useLogin = () => {
   const globalSpinner = useGlobalSpinner();
   const { device } = useDevice();
 
-  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo } = useAuthStorage();
+  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo, clearStorage } = useAuthStorage();
 
   const { values, validate, errors } = useForm<{
     username: string;
@@ -68,11 +68,17 @@ export const useLogin = () => {
     }
   };
 
+  const logout = () => {
+    clearStorage();
+    location.href = CommonRoutes.login;
+  };
+
   const isPending = computed(() => loginPending.value || challengePending.value);
 
   return {
     auth,
     isPending,
     errors,
+    logout,
   };
 };

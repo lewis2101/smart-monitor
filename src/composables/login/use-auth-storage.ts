@@ -34,6 +34,18 @@ export const useAuthStorage = () => {
     userInfoStorage.value = user;
   };
 
+  const clearStorage = () => {
+    accessTokenStorage.value = "";
+    refreshTokenStorage.value = "";
+    expiresTokenStorage.value = "";
+    userInfoStorage.value = {
+      id: "",
+      firstName: "",
+      lastName: "",
+      role: "",
+    };
+  };
+
   return {
     checkIsExpiredToken,
     checkHasTokens,
@@ -42,5 +54,6 @@ export const useAuthStorage = () => {
     expiresTokenStorage,
     setUserInfo,
     userInfoStorage,
+    clearStorage,
   };
 };

@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
+import { useIonRouter } from "@ionic/vue";
+import { CommonRoutes } from "@/router/router-list.ts";
+
+const router = useIonRouter();
 
 const { userInfoStorage } = useAuthStorage();
 </script>
 
 <template>
   <header class="main-header">
-    <div class="main-header__user">
+    <div class="main-header__user" @click="router.push({ name: CommonRoutes.profile })">
       <button class="main-header__button">
         <base-icon name="user" color="white" />
       </button>
