@@ -1,10 +1,23 @@
 import { useLocalStorage } from "@vueuse/core";
-import { accessTokenKey, refreshTokenKey, tokenExpires } from "@/composables/login/auth-storage-keys.ts";
+import {
+  accessTokenKey,
+  refreshTokenKey,
+  tokenExpiresKey,
+  userInfoKey,
+} from "@/composables/login/auth-storage-keys.ts";
+import type { UserInfo } from "@/api/auth/types.ts";
 
 export const useAuthStorage = () => {
   const accessTokenStorage = useLocalStorage(accessTokenKey, "");
   const refreshTokenStorage = useLocalStorage(refreshTokenKey, "");
-  const expiresTokenStorage = useLocalStorage(tokenExpires, "");
+  const expiresTokenStorage = useLocalStorage(tokenExpiresKey, "");
+
+  const userInfoStorage = useLocalStorage<UserInfo>(userInfoKey, {
+    id: "",
+    firstName: "",
+    lastName: "",
+    role: "",
+  });
 
   const checkHasTokens = () => accessTokenStorage.value && refreshTokenStorage.value;
 
@@ -17,11 +30,17 @@ export const useAuthStorage = () => {
     return Date.now() >= expired;
   };
 
+  const setUserInfo = (user: UserInfo) => {
+    userInfoStorage.value = user;
+  };
+
   return {
     checkIsExpiredToken,
     checkHasTokens,
     accessTokenStorage,
     refreshTokenStorage,
     expiresTokenStorage,
+    setUserInfo,
+    userInfoStorage,
   };
 };

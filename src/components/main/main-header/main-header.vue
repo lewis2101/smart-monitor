@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
+
+const { userInfoStorage } = useAuthStorage();
 </script>
 
 <template>
@@ -8,7 +11,7 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
       <button class="main-header__button">
         <base-icon name="user" color="white" />
       </button>
-      <span>Нурлан С.</span>
+      <span>{{ userInfoStorage.firstName }} {{ userInfoStorage.lastName }}</span>
       <button class="main-header__button">
         <base-icon name="chevron" color="white" />
       </button>

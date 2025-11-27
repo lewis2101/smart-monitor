@@ -7,7 +7,6 @@ import { useAuthChallengeMutation } from "@/api/auth/challenge.post.ts";
 import { useIonRouter } from "@ionic/vue";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 import { useDevice } from "@/composables/useDevice.ts";
-import { useRefreshTokenMutation } from "@/api/auth/refresh-token.post.ts";
 import { computed } from "vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 
@@ -21,13 +20,12 @@ const loginSchema = toTypedSchema(
 export const useLogin = () => {
   const { mutateAsync: mutateLogin, isPending: loginPending } = useAuthMutation();
   const { mutateAsync: mutateLoginChallenge, isPending: challengePending } = useAuthChallengeMutation();
-  const { mutateAsync: mutateRefreshToken } = useRefreshTokenMutation();
 
   const router = useIonRouter();
   const globalSpinner = useGlobalSpinner();
   const { device } = useDevice();
 
-  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage } = useAuthStorage();
+  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo } = useAuthStorage();
 
   const { values, validate, errors } = useForm<{
     username: string;
@@ -60,6 +58,8 @@ export const useLogin = () => {
         accessTokenStorage.value = data.accessToken;
         refreshTokenStorage.value = data.refreshToken;
         expiresTokenStorage.value = String(data.expiry);
+
+        setUserInfo(data.userInfo);
       }
 
       router.replace({ name: MainTabRoutes.home });

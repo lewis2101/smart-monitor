@@ -2,6 +2,7 @@ import type { AxiosError } from "axios";
 import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
 import type { HttpCallOption } from "@/composables/http-client/HttpClient.ts";
 import { AuthEndpoints } from "@/api/endpoints.ts";
+import type { UserInfo } from "@/api/auth/types.ts";
 
 type RawData = undefined;
 
@@ -20,12 +21,7 @@ type Response = {
   isDeviceRegistered: boolean;
   partners: null;
   permissions: string[];
-  userInfo: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-  };
+  userInfo: UserInfo;
   userOptions: {
     isOrderOnFullScreen: false;
     lang: string;
