@@ -6,14 +6,13 @@ import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-build
 
 export function createVueQueryOptions<RawData, Response>(options: {
   httpClientOptions: HttpCallOption;
-  keys?: MaybeRefOrGetter<string>[];
+  scope?: string;
 }) {
   return (params?: MaybeRefOrGetter<RawData>, client?: HttpClient) => {
-    const { httpClientOptions, keys } = options;
+    const { httpClientOptions, scope } = options;
     const httpClient = client || inject(httpClientProviderKey);
 
     const p = computed(() => toValue(params));
-    const k = computed(() => toValue(keys));
 
     if (!httpClient) {
       throw new Error("Http client is not provided");
@@ -24,7 +23,7 @@ export function createVueQueryOptions<RawData, Response>(options: {
     return queryOptions({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
-      queryKey: [p, k],
+      queryKey: [scope, p],
       queryFn: () =>
         httpClient.call<RawData, Response>({
           ...config,

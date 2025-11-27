@@ -1,6 +1,6 @@
-import type { HttpCallOption } from "@/composables/http-client/HttpClient.ts";
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
+import { OrdersScope } from "@/api/orders/orders-scope.ts";
 
 type RawData = {
   tabName?: string;
@@ -33,11 +33,10 @@ type Response = {
   };
 };
 
-const httpClientOptions: HttpCallOption = {
-  url: OrdersEndpoints.ordersMineHeader,
-  method: "GET",
-};
-
 export const useOrdersMineHeaderQuery = createVueQueryOptions<RawData, Response>({
-  httpClientOptions,
+  httpClientOptions: {
+    url: OrdersEndpoints.ordersMineHeader,
+    method: "GET",
+  },
+  scope: OrdersScope.ordersMineHeader,
 });

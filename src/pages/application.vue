@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonPage, IonHeader } from "@ionic/vue";
+import { IonPage, IonHeader, type RefresherCustomEvent } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
@@ -7,8 +7,22 @@ import ApplicationMenuBlock from "@/components/application/application-menu-bloc
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { reactive } from "vue";
 import { useOrdersMineHeaderQuery } from "@/api/orders/order-mine-header.ts";
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import { useOrdersMineViewQuery } from "@/api/orders/orders-mine-view.ts";
+import { OrdersScope } from "@/api/orders/orders-scope.ts";
+
+const queryClient = useQueryClient();
+
+const refreshPage = async (event: RefresherCustomEvent) => {
+  const suspenseHeaders = queryClient.invalidateQueries({
+    queryKey: [OrdersScope.ordersMineHeader],
+  });
+  const suspenseView = queryClient.invalidateQueries({
+    queryKey: [OrdersScope.ordersMineView],
+  });
+  await Promise.all([suspenseHeaders, suspenseView]);
+  mockRefresh(event);
+};
 
 const headerParams = reactive({
   tabName: "!OrdersMine",
@@ -39,7 +53,7 @@ useQuery(contentOptions);
         <default-layout-header title="Мои заявки" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="refreshPage">
       <div class="application-page__body">
         <application-menu-block />
       </div>
