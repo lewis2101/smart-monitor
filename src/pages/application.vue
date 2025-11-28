@@ -4,22 +4,13 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import { useQueryClient } from "@tanstack/vue-query";
 import { OrdersScope } from "@/api/orders/orders-scope.ts";
 import { ApplicationOrdersBlock } from "@/components/application/application-orders-block";
+import { useRefreshPage } from "@/composables/refresh-page.ts";
 
-const queryClient = useQueryClient();
+const { pageId, refresh } = useRefreshPage([OrdersScope.ordersMineHeader, OrdersScope.ordersMineView]);
 
-const refreshPage = async (event: RefresherCustomEvent) => {
-  const suspenseHeaders = queryClient.invalidateQueries({
-    queryKey: [OrdersScope.ordersMineHeader],
-  });
-  const suspenseView = queryClient.invalidateQueries({
-    queryKey: [OrdersScope.ordersMineView],
-  });
-  await Promise.all([suspenseHeaders, suspenseView]);
-  mockRefresh(event);
-};
+const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRefresh(event));
 </script>
 
 <template>
@@ -30,7 +21,7 @@ const refreshPage = async (event: RefresherCustomEvent) => {
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="refreshPage">
-      <div class="application-page__body">
+      <div class="application-page__body" :key="pageId">
         <application-orders-block />
       </div>
     </base-content-with-refresher>

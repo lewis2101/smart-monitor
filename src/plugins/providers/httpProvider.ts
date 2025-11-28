@@ -12,6 +12,7 @@ declare module "axios" {
   }
 }
 
+// Сделать нормально рефреш токен (либо перед запросом проверять либо еще как то)
 const refreshTokenInterceptor = (httpClient: HttpClient) => {
   const { mutateAsync: mutateRefreshToken } = useRefreshTokenRawMutation(undefined, httpClient);
 
@@ -29,15 +30,20 @@ const refreshTokenInterceptor = (httpClient: HttpClient) => {
       config._tokenRetried = true;
 
       const { refreshTokenStorage, accessTokenStorage, expiresTokenStorage } = useAuthStorage();
-      const data = await mutateRefreshToken({
-        refresh: refreshTokenStorage.value,
-      });
+      try {
+        const data = await mutateRefreshToken({
+          refresh: refreshTokenStorage.value,
+        });
 
-      accessTokenStorage.value = data.accessToken;
-      refreshTokenStorage.value = data.refreshToken;
-      expiresTokenStorage.value = data.expiry;
+        accessTokenStorage.value = data.accessToken;
+        refreshTokenStorage.value = data.refreshToken;
+        expiresTokenStorage.value = data.expiry;
 
-      return err.config;
+        return err.config;
+      } catch (e) {
+        location.href = CommonRoutes.login;
+        throw e;
+      }
     }
 
     const hasTokenRetried = config && config._tokenRetried;
