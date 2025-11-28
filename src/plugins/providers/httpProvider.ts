@@ -22,7 +22,8 @@ const refreshTokenInterceptor = (httpClient: HttpClient) => {
       err.status === HttpStatus.Unauthorized &&
       config &&
       !config?._tokenRetried &&
-      !config.url?.includes(AuthEndpoints.login);
+      !config.url?.includes(AuthEndpoints.login) &&
+      !config.url?.includes(AuthEndpoints.refreshToken);
 
     if (isUnAuthorized) {
       config._tokenRetried = true;

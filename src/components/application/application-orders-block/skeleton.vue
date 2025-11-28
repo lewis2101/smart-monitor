@@ -4,7 +4,7 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
 </script>
 
 <template>
-  <base-island-block v-for="item in 5" :key="item" rounded="S" class="order-block-skeleton">
+  <base-island-block v-for="item in 5" :key="item" rounded="S" class="order-block-skeleton" :clickable="false">
     <ion-skeleton-text class="order-block-skeleton__item" animated style="width: 80%" />
     <ion-skeleton-text class="order-block-skeleton__item" animated style="width: 40%" />
     <ion-skeleton-text class="order-block-skeleton__item" animated style="width: 50%" />

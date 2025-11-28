@@ -12,9 +12,11 @@ const props = withDefaults(
   defineProps<{
     title?: string;
     rounded?: Radius;
+    clickable?: boolean;
   }>(),
   {
     rounded: "M",
+    clickable: true,
   },
 );
 
@@ -22,7 +24,7 @@ const radius = computed(() => `${radiusMapper[props.rounded]}px`);
 </script>
 
 <template>
-  <div class="base-island-block">
+  <div :class="['base-island-block', clickable && 'base-island-block-clickable']">
     <span v-if="title" class="base-island-block__title">{{ title }}</span>
     <div class="base-island-block__content">
       <slot />
@@ -36,6 +38,7 @@ const radius = computed(() => `${radiusMapper[props.rounded]}px`);
   border-radius: v-bind("radius");
   background: $white;
   box-shadow: 0 8px 16px 0 #00000014;
+  transition: background-color 0.2s ease-in-out;
 
   display: flex;
   flex-direction: column;
@@ -55,6 +58,12 @@ const radius = computed(() => `${radiusMapper[props.rounded]}px`);
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+
+  &-clickable {
+    &:active {
+      background: #f4f4f4;
+    }
   }
 }
 </style>
