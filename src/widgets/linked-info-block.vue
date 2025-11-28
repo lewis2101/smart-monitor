@@ -8,11 +8,11 @@ import { useIonRouter } from "@ionic/vue";
 defineProps<{
   list: Array<{
     title: string;
-    icon: string;
+    icon?: string;
     to?: string;
     list: Array<{
       text: string;
-      marked: boolean;
+      marked?: boolean;
     }>;
   }>;
 }>();
@@ -35,7 +35,7 @@ const handleClick = (to?: string) => {
     @click="handleClick(item.to)"
   >
     <base-linked-info :title="item.title" :icon="item.icon" />
-    <base-list class="linked-info__list">
+    <base-list :class="[item.icon && 'linked-info__list-icon']">
       <base-list-item
         v-for="list in item.list"
         :key="list.text"
@@ -56,7 +56,7 @@ const handleClick = (to?: string) => {
     margin-bottom: 0;
   }
 
-  &__list {
+  &__list-icon {
     padding: 0 clamp(32px, 10vw, 48px);
   }
 

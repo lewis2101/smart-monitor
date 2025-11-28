@@ -33,7 +33,7 @@ const handleClickGallery = async () => {
 
 <style scoped lang="scss">
 .camera-backdrop {
-  padding-bottom: 16px;
+  padding: 0 8px 16px 8px;
 
   &__item {
     color: $black;

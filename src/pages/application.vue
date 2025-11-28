@@ -40,7 +40,7 @@ const refreshPage = async (event: RefresherCustomEvent) => {
 <style scoped lang="scss">
 .application-page {
   &__body {
-    padding: 16px 8px;
+    padding: 16px 24px;
   }
 }
 </style>

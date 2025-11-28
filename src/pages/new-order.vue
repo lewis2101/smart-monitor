@@ -159,6 +159,7 @@ const jobs: SelectList = [
     height: 100%;
     min-height: 150px;
     padding: 0 16px;
+    margin-bottom: 16px;
 
     &::placeholder {
       color: $txt-description;

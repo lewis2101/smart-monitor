@@ -68,7 +68,9 @@ watch(isVisibleBackdrop, (value) => {
           />
           <label :for="`${item.value}-${idx}`">{{ item.label }}</label>
         </label>
-        <ion-button class="base-select-backdrop__button" @click="submit">Подтвердить</ion-button>
+        <div class="base-select-backdrop__button-wrapper">
+          <ion-button class="base-select-backdrop__button" @click="submit">Подтвердить</ion-button>
+        </div>
       </div>
     </base-backdrop>
   </div>
@@ -129,6 +131,10 @@ watch(isVisibleBackdrop, (value) => {
     --p-radiobutton-checked-hover-background: #{$main-color};
     --p-radiobutton-checked-border-color: #{$main-color};
     --p-radiobutton-checked-background: #{$main-color};
+  }
+
+  &__button-wrapper {
+    padding: 0 20px;
   }
 
   &__button {

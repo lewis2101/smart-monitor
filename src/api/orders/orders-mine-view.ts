@@ -9,29 +9,33 @@ type RawData = {
 };
 
 type Response = {
-  accessToken: string;
-  refreshToken: string;
-  changePass: boolean;
-  clientInfo: null;
-  expiry: number;
-  isDeviceRegistered: boolean;
-  partners: null;
-  permissions: string[];
-  userInfo: {
+  content: {
     id: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-  };
-  userOptions: {
-    isOrderOnFullScreen: false;
-    lang: string;
-    sfChartsSubpages: string[];
-    sideBarColor: string;
-    sideBarDark: boolean;
-    sideBarNav: boolean;
-    sideBarType: boolean;
-  };
+    orderNumber: string;
+    taskName: {
+      eng: string;
+      kaz: string;
+      rus: string;
+    };
+    creator: string;
+    createdAt: Date;
+    updatedAt: Date;
+    supplierBin: string;
+    supplierName: string;
+    clientBin: string;
+    clientName: string;
+    vinNumber: string;
+    registrationNumber: string;
+    totalAmount: string;
+    creatorId: string;
+    assignId: string[];
+    clientId: string;
+    supplierId: string;
+    departmentId: string;
+    documentNumber: string | null;
+  }[];
+  modelName: string;
+  size: number;
 };
 
 export const useOrdersMineViewQuery = createVueQueryOptions<RawData, Response>({

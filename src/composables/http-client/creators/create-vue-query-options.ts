@@ -24,11 +24,13 @@ export function createVueQueryOptions<RawData, Response>(options: {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       queryKey: [scope, p],
-      queryFn: () =>
-        httpClient.call<RawData, Response>({
+      queryFn: async () => {
+        const { data } = await httpClient.call<RawData, Response>({
           ...config,
           params: p.value,
-        }),
+        });
+        return data;
+      },
     });
   };
 }
