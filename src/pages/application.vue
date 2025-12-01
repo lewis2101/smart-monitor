@@ -7,6 +7,7 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { OrdersScope } from "@/api/orders/orders-scope.ts";
 import { ApplicationOrdersBlock } from "@/components/application/application-orders-block";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
+import BaseFilterHeader from "@/components/base/base-filter/base-filter-header.vue";
 
 const { pageId, refresh } = useRefreshPage([OrdersScope.ordersMineHeader, OrdersScope.ordersMineView]);
 
@@ -21,6 +22,7 @@ const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRef
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="refreshPage">
+      <base-filter-header class="application-page__filter" />
       <div class="application-page__body" :key="pageId">
         <application-orders-block />
       </div>
@@ -30,6 +32,14 @@ const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRef
 
 <style scoped lang="scss">
 .application-page {
+  &__filter {
+    position: sticky;
+    top: 0;
+    left: 0;
+
+    padding: 4px 24px;
+  }
+
   &__body {
     padding: 16px 24px;
   }
