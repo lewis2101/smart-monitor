@@ -1,60 +1,65 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, reactive } from "vue";
-import { useOrdersMineHeaderQuery } from "@/api/orders/order-mine-header.ts";
+import { computed, type ComputedRef, watchEffect } from "vue";
 import { useOrdersMineViewQuery } from "@/api/orders/orders-mine-view.ts";
 import { useQuery } from "@tanstack/vue-query";
 import LinkedInfoBlock from "@/widgets/linked-info-block.vue";
+import Skeleton from "./skeleton.vue";
 
 type ListType = InstanceType<typeof LinkedInfoBlock>["$props"]["list"];
 
-const headerParams = reactive({
-  tabName: "!OrdersMine",
-  lng: "rus",
-});
+const props = defineProps<{
+  params: {
+    paranoid: boolean;
+    lang: string;
+    sort: Record<string, any>;
+  };
+}>();
 
-const contentParams = reactive({
-  paranoid: false,
-  lang: "rus",
-  sort: {
-    descending: false,
-    rowsPerPage: 100,
-    page: 1,
-  },
-});
+const contentOptions = useOrdersMineViewQuery(props.params);
 
-const headerOptions = useOrdersMineHeaderQuery(headerParams);
-const contentOptions = useOrdersMineViewQuery(contentParams);
+const { suspense, data, isPending, error } = useQuery(contentOptions);
 
-const { suspense: headersSuspense } = useQuery(headerOptions);
-const { suspense: contentSuspense, data } = useQuery(contentOptions);
-
-const linkedInfoList: ComputedRef<ListType> = computed(() =>
-  data.value.content.map((item) => ({
-    title: `${item.orderNumber}`,
-    list: [
-      {
-        text: `Создатель: ${item.creator}`,
-      },
-      {
-        text: `Статус: ${item.taskName.rus}`,
-      },
-      {
-        text: `Дата создания: ${item.createdAt}`,
-      },
-    ],
-  })),
+const linkedInfoList: ComputedRef<ListType> = computed(
+  () =>
+    data.value?.content.map((item) => ({
+      title: `${item.orderNumber}`,
+      list: [
+        {
+          text: `Создатель: ${item.creator}`,
+        },
+        {
+          text: `Статус: ${item.taskName.rus}`,
+        },
+        {
+          text: `Дата создания: ${item.createdAt}`,
+        },
+      ],
+    })) || [],
 );
 
-await Promise.all([headersSuspense(), contentSuspense()]);
+watchEffect(() => {
+  if (error.value) {
+    throw error;
+  }
+});
+
+await suspense();
 </script>
 
 <template>
   <div class="application-orders-block">
-    <linked-info-block :list="linkedInfoList" />
+    <linked-info-block v-if="data?.content.length" :list="linkedInfoList" />
+    <skeleton v-else-if="isPending" />
+    <div v-else class="application-orders-block__not-found">Ничего не найдено</div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .application-orders-block {
+  &__not-found {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+  }
 }
 </style>

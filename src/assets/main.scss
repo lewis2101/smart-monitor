@@ -16,4 +16,5 @@ body {
 }
 [data-vsbs-content] {
   padding: 0!important;
+  max-height: calc(100vh - (env(safe-area-inset-top) + 150px)) !important;
 }

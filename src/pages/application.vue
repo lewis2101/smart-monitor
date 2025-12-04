@@ -7,9 +7,29 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { OrdersScope } from "@/api/orders/orders-scope.ts";
 import { ApplicationOrdersBlock } from "@/components/application/application-orders-block";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
-import BaseFilterHeader from "@/components/base/base-filter/base-filter-header.vue";
+import { reactive, ref } from "vue";
+import { ApplicationFilter } from "@/components/application/application-filter";
+import type { FilterType } from "../../types/FilterType.ts";
 
 const { pageId, refresh } = useRefreshPage([OrdersScope.ordersMineHeader, OrdersScope.ordersMineView]);
+
+const headerParams = reactive({
+  tabName: "!OrdersMine",
+  lng: "rus",
+});
+
+const filter = reactive<FilterType[]>([]);
+
+const contentParams = reactive({
+  paranoid: false,
+  lang: "rus",
+  sort: {
+    descending: false,
+    rowsPerPage: 100,
+    page: 1,
+  },
+  where: filter,
+});
 
 const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRefresh(event));
 </script>
@@ -22,9 +42,11 @@ const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRef
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="refreshPage">
-      <base-filter-header class="application-page__filter" />
+      <div class="application-page__filter">
+        <application-filter v-model="filter" :params="headerParams" />
+      </div>
       <div class="application-page__body" :key="pageId">
-        <application-orders-block />
+        <application-orders-block :params="contentParams" />
       </div>
     </base-content-with-refresher>
   </ion-page>

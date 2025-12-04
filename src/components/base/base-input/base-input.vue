@@ -8,7 +8,7 @@ defineProps<{
   errorText?: string;
 }>();
 
-const model = defineModel<string>({ required: true });
+const model = defineModel<string>();
 const { emits } = useEmits();
 
 const isFocused = ref(false);
@@ -49,7 +49,7 @@ const isFocused = ref(false);
     --padding-bottom: 12px;
 
     box-shadow: 0px 2px 3px 0px #0000001a;
-    border: 1px solid var(--System-Gray-Light, #f2f2f7);
+    border: 1px solid #f2f2f7;
     border-radius: 12px;
 
     &:has(.has-focus) {

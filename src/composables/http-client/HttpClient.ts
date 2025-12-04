@@ -33,26 +33,19 @@ export class HttpClient {
     );
   }
 
-  private serializeParams(params: Record<string, any>, prefix?: string): string {
+  private serializeParams(params: Record<string, any> | Array<any>, prefix?: string): string {
     const parts: string[] = [];
 
-    console.log({ params });
-
     for (const key in params) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       const value = params[key];
       if (value == null) continue;
 
       const paramKey = prefix ? `${prefix}[${key}]` : key;
 
-      if (typeof value === "object" && !Array.isArray(value)) {
+      if (typeof value === "object" || Array.isArray(value)) {
         parts.push(this.serializeParams(value, paramKey));
-        continue;
-      }
-
-      if (Array.isArray(value)) {
-        value.forEach((v) => {
-          parts.push(`${paramKey}[]=${v}`);
-        });
         continue;
       }
 

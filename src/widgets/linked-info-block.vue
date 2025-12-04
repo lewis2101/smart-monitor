@@ -62,6 +62,7 @@ const handleClick = (to?: string) => {
 
   &__list-item {
     list-style: none;
+    margin-bottom: 4px;
   }
 
   &_marked {

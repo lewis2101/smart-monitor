@@ -1,11 +1,13 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
 import { OrdersScope } from "@/api/orders/orders-scope.ts";
+import type { FilterType } from "../../../types/FilterType.ts";
 
-type RawData = {
+export type RawData = {
   paranoid: boolean;
   lang: string;
   sort: Record<string, any>;
+  where?: FilterType[];
 };
 
 type Response = {

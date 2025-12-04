@@ -3,12 +3,18 @@ import ApplicationOrdersBlock from "@/components/application/application-orders-
 import Skeleton from "./skeleton.vue";
 import ErrorBoundary from "@/components/error-boundary.vue";
 import ErrorBlock from "@/components/error-block.vue";
+
+type Params = InstanceType<typeof ApplicationOrdersBlock>["$props"]["params"];
+
+defineProps<{
+  params: Params;
+}>();
 </script>
 
 <template>
   <error-boundary>
     <suspense>
-      <application-orders-block />
+      <application-orders-block v-bind="$attrs" :params />
       <template #fallback>
         <skeleton />
       </template>
