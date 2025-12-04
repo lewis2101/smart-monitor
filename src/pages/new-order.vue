@@ -33,7 +33,10 @@ const handleClickClose = () => {
 };
 
 const openMapBackdrop = () => {
-  globalBackdropStore.push("map");
+  globalBackdropStore.push("map", {
+    title: "Выберите точку на карте",
+    props: {},
+  });
 };
 
 const validate = computed(() => {
@@ -66,7 +69,6 @@ const jobs: SelectList = [
     value: "admin",
   },
 ];
-
 </script>
 
 <template>

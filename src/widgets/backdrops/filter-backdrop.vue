@@ -54,7 +54,7 @@ const reset = () => {
   <div class="base-filter">
     <base-input
       v-for="field in fields"
-      v-model="temporaryModel[field.value].text"
+      v-model="temporaryModel[field.value]!.text"
       :key="field.value"
       class="base-filter__item"
       :placeholder="field.local?.rus || field.value"

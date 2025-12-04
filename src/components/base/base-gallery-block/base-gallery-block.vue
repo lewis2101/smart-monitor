@@ -20,12 +20,12 @@ const removeImage = (idx: number) => {
   images.value.splice(idx, 1);
 };
 
-const handleAddPhoto = () => {
-  globalBackdropStore.push("camera", {
-    args: {
-      selectPhoto: (photo: string) => photo && images.value.push(photo),
-    },
-  });
+const handleAddPhoto = async () => {
+  const photo = (await globalBackdropStore.push("camera", {
+    title: "Прикрепите",
+    props: {},
+  })) as string;
+  images.value.push(photo);
 };
 
 onMounted(() => {
