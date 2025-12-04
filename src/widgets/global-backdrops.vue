@@ -20,8 +20,7 @@ const backdropRefs = useTemplateRef("backdropRefs");
   >
     <component
       :is="backdrop.component"
-      v-bind="backdrop?.args"
-      v-on="backdrop?.emits"
+      v-bind="backdrop.props"
       @closeBackdrop="backdropRefs?.[idx]?.close"
     />
   </base-backdrop>

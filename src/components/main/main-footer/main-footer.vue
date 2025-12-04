@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FooterItem from "./item.vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
@@ -17,18 +17,17 @@ const route = useRoute();
 const currentPathName = computed(() => route.name as MainTabRoutes);
 const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWith(name) ? "active animate" : "");
 
-const handleClickCamera = () => {
-  globalBackdropStore.push("camera", {
-    args: {
-      selectPhoto: (photo: string) => {
-        if (photo) {
-          setImage(photo);
-          const id = Math.round(Math.random() * 10000) + 500;
-          router.push({ name: OrderRoutes.newOrder, params: { uuid: id } });
-        }
-      },
-    },
+const handleClickCamera = async () => {
+  const photo = await globalBackdropStore.push("camera", {
+    title: "Прикрепить",
+    props: {},
   });
+
+  if (photo) {
+    setImage(photo as string);
+    const id = Math.round(Math.random() * 10000) + 500;
+    router.push({ name: OrderRoutes.newOrder, params: { uuid: id } });
+  }
 };
 </script>
 

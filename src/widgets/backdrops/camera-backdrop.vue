@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useCamera } from "@/composables/native/use-camera.ts";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
+import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
 
 const { takePhoto, pickGallery } = useCamera();
 const globalSpinner = useGlobalSpinner();
 
-const props = defineProps<{
-  selectPhoto: (photo: string | undefined) => void;
-}>();
+const props = defineProps<BackdropComponentProps<(photo: string) => void, (error: Error) => void>>();
 
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
@@ -15,12 +14,22 @@ const emit = defineEmits<{
 
 const handleClickCamera = async () => {
   emit("closeBackdrop");
-  await globalSpinner.execute(() => takePhoto(props.selectPhoto));
+  const photo = await globalSpinner.execute(() => takePhoto());
+  if (photo) {
+    props.onSuccess?.(photo);
+  } else {
+    props.onFailure?.(new Error("Failed to load photo"));
+  }
 };
 
 const handleClickGallery = async () => {
   emit("closeBackdrop");
-  await globalSpinner.execute(() => pickGallery(props.selectPhoto));
+  const photo = await globalSpinner.execute(() => pickGallery());
+  if (photo) {
+    props.onSuccess?.(photo);
+  } else {
+    props.onFailure?.(new Error("Failed to load photo"));
+  }
 };
 </script>
 

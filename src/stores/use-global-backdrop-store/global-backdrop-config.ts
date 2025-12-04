@@ -1,33 +1,27 @@
-import { type Component, markRaw } from "vue";
+import { type Component, markRaw, type Raw } from "vue";
 import CameraBackdrop from "@/widgets/backdrops/camera-backdrop.vue";
 import MapBackdrop from "@/widgets/backdrops/map-backdrop.vue";
+import FilterBackdrop from "@/widgets/backdrops/filter-backdrop.vue";
+import SortBackdrop from "@/widgets/backdrops/sort-backdrop.vue";
+import type { ExtractProps } from "@/utils/extractProps.ts";
 
-type BackdropArgs = Record<string, unknown>;
-type BackdropEmits = Record<string, (...args: any[]) => unknown>;
-export type BackdropsKey = "camera" | "map";
+export type BackdropComponentProps<S = (...args: any[]) => Promise<any>, F = (...args: any[]) => Promise<any>> = {
+  onSuccess?: S;
+  onFailure?: F;
+};
+export type BackdropKeys = keyof typeof backdropComponents;
+export type BackdropProps<K extends BackdropKeys> = ExtractProps<(typeof backdropComponents)[K]> &
+  BackdropComponentProps;
 
-export type BackdropItem<C = Component> = {
+export type BackdropItem<C extends BackdropKeys> = {
+  component: Raw<Component>;
   title: string;
-  component: C;
-  args: BackdropArgs;
-  emits: BackdropEmits;
+  props: BackdropProps<C>;
 };
 
-function defineBackdropItem<C extends Component>(item: BackdropItem<C>) {
-  return item;
-}
-
-export const configBackdropItems: Record<BackdropsKey, ReturnType<typeof defineBackdropItem>> = {
-  camera: defineBackdropItem<typeof CameraBackdrop>({
-    title: "Прикрепить",
-    component: markRaw(CameraBackdrop),
-    args: {},
-    emits: {},
-  }),
-  map: defineBackdropItem<typeof MapBackdrop>({
-    title: "Выберите точку на карте",
-    component: markRaw(MapBackdrop),
-    args: {},
-    emits: {},
-  }),
-};
+export const backdropComponents = {
+  camera: markRaw(CameraBackdrop),
+  map: markRaw(MapBackdrop),
+  filter: markRaw(FilterBackdrop),
+  sort: markRaw(SortBackdrop),
+} as const;

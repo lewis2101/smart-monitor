@@ -1,37 +1,43 @@
 import { defineStore } from "pinia";
-import { type Component, reactive } from "vue";
+import { reactive } from "vue";
 import {
   type BackdropItem,
-  type BackdropsKey,
-  configBackdropItems,
+  type BackdropKeys,
+  type BackdropProps,
+  backdropComponents,
 } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
-import type { ExtractProps } from "@/utils/extractProps.ts";
-import type { ExtractEmit } from "@/utils/extractEmits.ts";
 
 export const useGlobalBackdropStore = defineStore("global-backdrop-store", () => {
-  const backdrops = reactive<
-    Array<
-      BackdropItem & {
-        model: boolean;
-        args: ExtractProps<Component>;
-        emits: ExtractEmit<Component>;
-      }
-    >
-  >([]);
+  const backdrops = reactive<Array<BackdropItem<BackdropKeys> & { model: boolean }>>([]);
 
-  function push<K extends BackdropsKey>(
+  // Нужно исправить типизацию промис резолва
+  function push<K extends BackdropKeys>(
     key: K,
-    options?: {
-      args?: ExtractProps<(typeof configBackdropItems)[K]["component"]>;
-      emits?: ExtractEmit<(typeof configBackdropItems)[K]["component"]>;
+    options: {
+      title: string;
+      props: BackdropProps<K>;
     },
   ) {
-    backdrops.push({
-      ...configBackdropItems[key],
-      model: true,
-      args: options?.args || {},
-      emits: options?.emits || {},
+    let promiseResolve = undefined;
+    let promiseReject = undefined;
+
+    const promise = new Promise((resolve, reject) => {
+      promiseResolve = resolve;
+      promiseReject = reject;
     });
+
+    backdrops.push({
+      component: backdropComponents[key],
+      title: options.title,
+      props: {
+        ...options.props,
+        onSuccess: promiseResolve,
+        onFailure: promiseReject,
+      },
+      model: true,
+    });
+
+    return promise;
   }
 
   return {
