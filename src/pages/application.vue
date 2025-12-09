@@ -10,6 +10,7 @@ import { useRefreshPage } from "@/composables/refresh-page.ts";
 import { reactive, ref } from "vue";
 import { ApplicationFilter } from "@/components/application/application-filter";
 import type { FilterType } from "../../types/FilterType.ts";
+import type { SortType } from "../../types/SortType.ts";
 
 const { pageId, refresh } = useRefreshPage([OrdersScope.ordersMineHeader, OrdersScope.ordersMineView]);
 
@@ -18,16 +19,18 @@ const headerParams = reactive({
   lng: "rus",
 });
 
-const filter = reactive<FilterType[]>([]);
+const filter = ref<FilterType[]>([]);
+const sort = ref<SortType>({
+  sortBy: undefined,
+  descending: false,
+  rowsPerPage: 100,
+  page: 1,
+});
 
 const contentParams = reactive({
   paranoid: false,
   lang: "rus",
-  sort: {
-    descending: false,
-    rowsPerPage: 100,
-    page: 1,
-  },
+  sort,
   where: filter,
 });
 
@@ -43,7 +46,7 @@ const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRef
     </ion-header>
     <base-content-with-refresher @refresh="refreshPage">
       <div class="application-page__filter">
-        <application-filter v-model="filter" :params="headerParams" />
+        <application-filter v-model:filter="filter" v-model:sort="sort" :params="headerParams" />
       </div>
       <div class="application-page__body" :key="pageId">
         <application-orders-block :params="contentParams" />

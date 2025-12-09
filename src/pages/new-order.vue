@@ -11,9 +11,9 @@ import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import BaseMap from "@/components/map/base-map.vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
-import BaseSelect from "@/components/base/base-select/base-select.vue";
+import SelectInput from "@/widgets/select-input.vue";
 
-type SelectList = InstanceType<typeof BaseSelect>["$props"]["list"];
+type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
 const router = useIonRouter();
 const keyboardStore = useKeyboardStore();
@@ -98,7 +98,7 @@ const jobs: SelectList = [
           label-placement="stacked"
           placeholder="Укажите, что именно не так на фотографии"
         />
-        <base-select
+        <select-input
           v-model="selectModel"
           class="registration-form__field"
           placeholder="Должность"

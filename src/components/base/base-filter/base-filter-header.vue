@@ -8,11 +8,16 @@ import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-g
 
 const props = defineProps<{
   fields: FieldType[];
+  sortValues: {
+    label: string;
+    value: string;
+  }[];
 }>();
 
 const globalBackdropStore = useGlobalBackdropStore();
 
 const filterModel = defineModel<FilterType[]>("filter", { required: true });
+const sortModel = defineModel<string>("sort", { required: true });
 
 const filterBackdropModel = ref(false);
 
@@ -25,18 +30,20 @@ const handleFilterClick = async () => {
     },
   })) as FilterType[];
 
-  filterModel.value.splice(0, filterModel.value.length);
-  values.forEach((value) => {
-    filterModel.value.push(value);
-  });
+  filterModel.value = values;
   filterBackdropModel.value = true;
 };
 
 const handleSortClick = async () => {
-  const values = await globalBackdropStore.push("sort", {
+  const value = (await globalBackdropStore.push("select", {
     title: "Сортировка",
-    props: {},
-  });
+    props: {
+      list: props.sortValues,
+      initialValue: sortModel.value,
+    },
+  })) as string;
+
+  sortModel.value = value;
 };
 
 const isActiveFilter = computed(() => filterModel.value.length > 0);

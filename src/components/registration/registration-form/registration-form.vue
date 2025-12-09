@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import BaseInput from "@/components/base/base-input/base-input.vue";
-import BaseSelect from "@/components/base/base-select/base-select.vue";
+import SelectInput from "@/widgets/select-input.vue";
 
-type SelectList = InstanceType<typeof BaseSelect>["$props"]["list"];
+type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
 const fio = defineModel<string>("fio", { required: true });
 const job = defineModel<string>("job", { required: true });
@@ -33,7 +32,7 @@ const jobs: SelectList = [
 <template>
   <div class="registration-form">
     <base-input v-model="fio" class="registration-form__field" placeholder="ФИО" />
-    <base-select
+    <select-input
       v-model="job"
       class="registration-form__field"
       placeholder="Должность"
@@ -42,7 +41,7 @@ const jobs: SelectList = [
     />
     <base-input v-model="phone" class="registration-form__field" placeholder="Номер телефона" />
     <base-input v-model="email" class="registration-form__field" placeholder="Email" />
-    <base-select
+    <select-input
       v-model="filial"
       class="registration-form__field"
       placeholder="Цех/Отдел"
