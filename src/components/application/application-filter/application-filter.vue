@@ -32,17 +32,28 @@ const sortModel = defineModel<SortType>("sort", { required: true });
 
 const sortValue = ref("");
 
-watch(sortValue, (value) => {
-  if (value) {
-    const value = sortValue.value.split("#")[0];
-    const operator = sortValue.value.split("#")[1];
+const extractSortValue = (value: string) => {
+  const sortBy = value.split("#")[0];
+  const operator = value.split("#")[1];
 
-    sortModel.value = {
-      ...sortModel.value,
-      descending: operator === "new",
-      sortBy: value,
-    };
-  }
+  return {
+    descending: operator === "new",
+    sortBy,
+  };
+};
+
+watch(sortValue, (value) => {
+  const newValue = value
+    ? extractSortValue(sortValue.value)
+    : {
+        descending: false,
+        sortBy: undefined,
+      };
+
+  sortModel.value = {
+    ...sortModel.value,
+    ...newValue,
+  };
 });
 
 await suspense();

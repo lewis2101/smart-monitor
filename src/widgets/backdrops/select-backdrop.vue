@@ -11,6 +11,7 @@ const props = defineProps<
       value: string;
     }>;
     initialValue: string;
+    showReset?: boolean;
   } & BackdropComponentProps<(value: string) => any>
 >();
 
@@ -25,6 +26,11 @@ const submit = () => {
     props.onSuccess?.(temporaryModel.value);
     emit("closeBackdrop");
   }
+};
+
+const reset = () => {
+  props.onSuccess?.("");
+  emit("closeBackdrop");
 };
 </script>
 
@@ -46,6 +52,9 @@ const submit = () => {
       <label :for="`${item.value}-${idx}`">{{ item.label }}</label>
     </label>
     <div class="select-input-backdrop__button-wrapper">
+      <ion-button v-if="showReset" fill="outline" class="select-input-backdrop__button" @click="reset"
+        >Сбросить</ion-button
+      >
       <ion-button class="select-input-backdrop__button" @click="submit">Подтвердить</ion-button>
     </div>
   </div>
@@ -70,7 +79,17 @@ const submit = () => {
   }
 
   &__button-wrapper {
-    padding: 0 20px;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    padding: 8px 0;
+    background: $white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
   }
 
   &__button {

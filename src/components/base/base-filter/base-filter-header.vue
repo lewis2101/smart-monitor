@@ -40,6 +40,7 @@ const handleSortClick = async () => {
     props: {
       list: props.sortValues,
       initialValue: sortModel.value,
+      showReset: true,
     },
   })) as string;
 
