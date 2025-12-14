@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import DatePicker from "primevue/datepicker";
-import { ref } from "vue";
+import DatePicker, { type DatePickerState } from "primevue/datepicker";
+import { ref, useTemplateRef, watch } from "vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 
 defineProps<{
@@ -9,12 +9,22 @@ defineProps<{
   clearable?: boolean;
 }>();
 
-const model = defineModel<Date | null>();
+const datePickerRef = useTemplateRef<DatePickerState>("datePickerRef");
+
+const model = defineModel<Date | Date[] | null>();
 
 const isFocused = ref(false);
 
 const handleClear = () => {
   model.value = null;
+};
+
+const handleFocus = () => {
+  isFocused.value = true;
+};
+
+const handleBlur = () => {
+  isFocused.value = false;
 };
 </script>
 
@@ -30,6 +40,7 @@ const handleClear = () => {
       <date-picker
         v-model="model"
         class="base-date-picker__native"
+        ref="datePickerRef"
         :pt="{
           day: $style.day,
           month: $style.month,
@@ -39,8 +50,8 @@ const handleClear = () => {
         v-bind="$attrs"
         date-format="dd.mm.yy"
         appendTo="self"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       />
       <div v-if="clearable && model" class="base-date-picker__clear" @click.stop="handleClear">
         <base-icon name="close" />
@@ -53,6 +64,8 @@ const handleClear = () => {
 <style lang="scss" module>
 .day {
   --p-datepicker-date-selected-background: #2a61cc;
+  --p-datepicker-date-range-selected-background: #2a61cc;
+  --p-datepicker-date-range-selected-color: #ffffff;
 }
 .month {
   --p-datepicker-date-selected-background: #2a61cc;

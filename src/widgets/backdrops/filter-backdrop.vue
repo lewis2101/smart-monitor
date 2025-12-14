@@ -5,7 +5,7 @@ import type { FieldInputType, FieldType } from "../../../types/FieldType.ts";
 import type { FilterType } from "../../../types/FilterType.ts";
 import { ref } from "vue";
 import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
-import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
+import FilterDatePicker from "@/components/filter-fields/filter-date-picker.vue";
 
 const props = defineProps<
   {
@@ -23,7 +23,7 @@ const getInitialValues = (sync = false): Record<string, FilterType> =>
     (acc, curr) => ({
       ...acc,
       [curr.value]: {
-        operator: "like",
+        operator: curr.type === "DATE_TIME" ? "=" : "like",
         value: curr.value,
         text: sync ? props.initialValue.find((v) => v.value === curr.value)?.text || "" : "",
       },
@@ -52,7 +52,7 @@ const reset = () => {
 
 const getComponent = (type: FieldInputType) => {
   if (type === "DATE_TIME") {
-    return BaseDatePicker;
+    return FilterDatePicker;
   }
   return BaseInput;
 };
@@ -66,7 +66,6 @@ const getComponent = (type: FieldInputType) => {
       v-model="temporaryModel[field.value]!.text"
       :key="field.value"
       class="base-filter__item"
-      fluid
       :placeholder="field.local?.rus || field.value"
     />
     <div class="base-filter__buttons">

@@ -1,5 +1,5 @@
 export type FilterType = {
   value: string;
-  text: string;
-  operator: "like";
-}
+  text: string | string[];
+  operator: "like" | "=";
+};
