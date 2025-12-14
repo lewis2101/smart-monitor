@@ -4,6 +4,8 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
+import BaseInput from "@/components/base/base-input/base-input.vue";
+import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
 </script>
 
 <template>
@@ -14,7 +16,8 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      Service
+      <base-date-picker placeholder="Дата создания" clearable fluid error-text="asdfasd" />
+      <base-input placeholder="asd" clearable error-text="asdfasdf" />
     </base-content-with-refresher>
   </ion-page>
 </template>
