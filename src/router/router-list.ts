@@ -13,6 +13,7 @@ export enum MainTabRoutes {
 
 export enum OrderRoutes {
   newOrder = "new-order",
+  order = "order",
 }
 
 export enum CommonRoutes {

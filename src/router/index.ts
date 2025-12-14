@@ -12,6 +12,7 @@ import Login from "@/pages/login.vue";
 import Registration from "@/pages/registration.vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import Profile from "@/pages/profile.vue";
+import Order from "@/pages/order.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,11 @@ const router = createRouter({
       path: "/new-order/:uuid",
       name: OrderRoutes.newOrder,
       component: NewOrder,
+    },
+    {
+      path: "/order/:uuid",
+      name: OrderRoutes.order,
+      component: Order,
     },
     {
       path: "/profile",

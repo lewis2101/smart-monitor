@@ -4,6 +4,7 @@ import { useOrdersMineViewQuery } from "@/api/orders/orders-mine-view.ts";
 import { useQuery } from "@tanstack/vue-query";
 import LinkedInfoBlock from "@/widgets/linked-info-block.vue";
 import Skeleton from "./skeleton.vue";
+import { formatDateString } from "@/utils/formatDate.ts";
 
 type ListType = InstanceType<typeof LinkedInfoBlock>["$props"]["list"];
 
@@ -23,6 +24,7 @@ const linkedInfoList: ComputedRef<ListType> = computed(
   () =>
     data.value?.content.map((item) => ({
       title: `${item.orderNumber}`,
+      to: `/order/${item.id}`,
       list: [
         {
           text: `Создатель: ${item.creator}`,
@@ -31,7 +33,7 @@ const linkedInfoList: ComputedRef<ListType> = computed(
           text: `Статус: ${item.taskName.rus}`,
         },
         {
-          text: `Дата создания: ${item.createdAt}`,
+          text: `Дата создания: ${formatDateString(new Date(item.createdAt))}`,
         },
       ],
     })) || [],
