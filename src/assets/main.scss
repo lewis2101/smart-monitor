@@ -18,3 +18,6 @@ body {
   padding: 0!important;
   max-height: calc(100vh - (env(safe-area-inset-top) + 150px)) !important;
 }
+[data-vsbs-container] {
+  z-index: 300 !important;
+}

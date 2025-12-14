@@ -16,8 +16,7 @@ import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      <base-date-picker placeholder="Дата создания" clearable fluid error-text="asdfasd" />
-      <base-input placeholder="asd" clearable error-text="asdfasdf" />
+      Service
     </base-content-with-refresher>
   </ion-page>
 </template>

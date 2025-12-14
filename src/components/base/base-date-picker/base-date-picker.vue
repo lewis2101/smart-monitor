@@ -38,6 +38,7 @@ const handleClear = () => {
         }"
         v-bind="$attrs"
         date-format="dd.mm.yy"
+        appendTo="self"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -67,6 +68,8 @@ const handleClear = () => {
 
 <style scoped lang="scss">
 .base-date-picker {
+  display: block;
+
   --p-inputtext-focus-ring-shadow: none;
   --p-inputtext-hover-border-color: #f2f2f7;
   --p-inputtext-focus-border-color: #f2f2f7;

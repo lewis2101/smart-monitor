@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import { IonButton } from "@ionic/vue";
-import type { FieldType } from "../../../types/FieldType.ts";
+import type { FieldInputType, FieldType } from "../../../types/FieldType.ts";
 import type { FilterType } from "../../../types/FilterType.ts";
 import { ref } from "vue";
 import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
+import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
 
 const props = defineProps<
   {
@@ -48,15 +49,24 @@ const submit = () => {
 const reset = () => {
   temporaryModel.value = getInitialValues();
 };
+
+const getComponent = (type: FieldInputType) => {
+  if (type === "DATE_TIME") {
+    return BaseDatePicker;
+  }
+  return BaseInput;
+};
 </script>
 
 <template>
   <div class="base-filter">
-    <base-input
+    <component
       v-for="field in fields"
+      :is="getComponent(field.type)"
       v-model="temporaryModel[field.value]!.text"
       :key="field.value"
       class="base-filter__item"
+      fluid
       :placeholder="field.local?.rus || field.value"
     />
     <div class="base-filter__buttons">

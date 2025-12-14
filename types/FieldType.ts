@@ -1,13 +1,15 @@
+export type FieldInputType = "STRING" | "INTEGER" | "ARRAY" | "LOCAL" | "DATE_TIME" | "NUMBER";
+
 export type FieldType = {
   changable: boolean;
   disabled: boolean;
   field: string;
-  filterType: "STRING" | "INTEGER" | "ARRAY";
+  filterType: FieldInputType;
   init: "supplierName";
   order: number;
   required: boolean;
   text: string;
-  type: "STRING" | "INTEGER" | "ARRAY";
+  type: FieldInputType;
   value: string;
   visible: boolean;
   local?: {
