@@ -8,6 +8,7 @@ import dependencyInjectionProvider from "@/plugins/dependency-injection-provider
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import { IonicVue } from "@ionic/vue";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
+import { vIntersect } from "@/plugins/intersection-observer.ts";
 import "@ionic/vue/css/core.css";
 import "@/assets/main.scss";
 
@@ -27,6 +28,7 @@ app.use(IonicVue, {
   mode: "ios",
 });
 app.use(router);
+app.directive("intersect", vIntersect);
 app.use(VueQueryPlugin, {
   queryClientConfig: {
     defaultOptions: {

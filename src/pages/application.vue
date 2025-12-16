@@ -23,7 +23,7 @@ const filter = ref<FilterType[]>([]);
 const sort = ref<SortType>({
   sortBy: undefined,
   descending: false,
-  rowsPerPage: 100,
+  rowsPerPage: 10,
   page: 1,
 });
 
@@ -34,7 +34,10 @@ const contentParams = reactive({
   where: filter,
 });
 
-const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRefresh(event));
+const refreshPage = async (event: RefresherCustomEvent) => {
+  sort.value.page = 1;
+  await refresh(() => mockRefresh(event));
+};
 </script>
 
 <template>
@@ -49,7 +52,7 @@ const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRef
         <application-filter v-model:filter="filter" v-model:sort="sort" :params="headerParams" />
       </div>
       <div class="application-page__body" :key="pageId">
-        <application-orders-block :params="contentParams" />
+        <application-orders-block v-model:params="contentParams" />
       </div>
     </base-content-with-refresher>
   </ion-page>

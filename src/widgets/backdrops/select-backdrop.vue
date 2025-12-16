@@ -62,7 +62,7 @@ const reset = () => {
 
 <style scoped lang="scss">
 .select-input-backdrop {
-  padding: 4px;
+  padding: 8px 16px 0 16px;
 
   &__item {
     display: flex;

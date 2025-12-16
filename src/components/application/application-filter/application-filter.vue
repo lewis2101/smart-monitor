@@ -53,6 +53,14 @@ watch(sortValue, (value) => {
   sortModel.value = {
     ...sortModel.value,
     ...newValue,
+    page: 1,
+  };
+});
+
+watch(filterModel, () => {
+  sortModel.value = {
+    ...sortModel.value,
+    page: 1,
   };
 });
 
