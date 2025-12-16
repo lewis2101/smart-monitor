@@ -71,12 +71,14 @@ watch(currentImage, (value) => {
 
   &__images {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 
   .block-image {
+    flex-shrink: 0;
     position: relative;
     width: 96px;
     height: 96px;
@@ -102,6 +104,7 @@ watch(currentImage, (value) => {
   }
 
   .add-photo {
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
