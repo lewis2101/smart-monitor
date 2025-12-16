@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 type Radius = "S" | "M";
 
@@ -20,35 +21,17 @@ const props = withDefaults(
   },
 );
 
-const pressed = ref(false);
+const islandBlockRef = ref<HTMLDivElement | null>(null);
 
-const press = () => {
-  if (props.clickable) {
-    pressed.value = true;
-  }
-};
-
-const release = () => {
-  if (props.clickable) {
-    pressed.value = false;
-  }
-};
+onMounted(() => {
+  useBubbleAnimate(islandBlockRef);
+});
 
 const radius = computed(() => `${radiusMapper[props.rounded]}px`);
 </script>
 
 <template>
-  <div
-    :class="[
-      'base-island-block',
-      'base-island-block_pressable',
-      'base-island-block_pressed',
-      { 'base-island-block_release': !pressed },
-    ]"
-    @touchstart="press"
-    @touchend="release"
-    @touchcancel="release"
-  >
+  <div :class="['base-island-block']" ref="islandBlockRef">
     <span v-if="title" class="base-island-block__title">{{ title }}</span>
     <div class="base-island-block__content">
       <slot />
@@ -63,19 +46,6 @@ const radius = computed(() => `${radiusMapper[props.rounded]}px`);
   background: $white;
   box-shadow: 0 8px 16px 0 #00000014;
   transition: all 0.2s ease-in-out;
-
-  &_pressable {
-    transform: scale(1);
-    transition:
-      transform 120ms cubic-bezier(0.2, 0, 0.2, 1),
-      box-shadow 120ms ease;
-    will-change: transform;
-  }
-
-  &_pressable:active,
-  &_pressable.pressed {
-    transform: scale(0.96);
-  }
 
   display: flex;
   flex-direction: column;

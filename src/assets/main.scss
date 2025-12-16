@@ -21,3 +21,20 @@ body {
 [data-vsbs-container] {
   z-index: 300 !important;
 }
+
+.animate-pressable {
+  transform: scale(1);
+  transition:
+    transform 120ms cubic-bezier(0.2, 0, 0.2, 1),
+    box-shadow 120ms ease;
+  will-change: transform;
+}
+
+.animate-pressable:active,
+.animate-pressable .animate-pressable_pressed {
+  transform: scale(0.94);
+}
+
+.animate-pressable .animate-pressable_release {
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}

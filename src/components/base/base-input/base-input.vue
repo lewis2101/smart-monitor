@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useEmits } from "@/composables/useEmits.ts";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { IonInput } from "@ionic/vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 defineProps<{
   placeholder?: string;
@@ -13,6 +14,12 @@ defineProps<{
 const model = defineModel<string>();
 const { emits } = useEmits();
 
+const baseInputRef = ref<HTMLDivElement | null>(null);
+
+onMounted(() => {
+  useBubbleAnimate(baseInputRef);
+});
+
 const isFocused = ref(false);
 
 const handleClear = () => {
@@ -21,7 +28,7 @@ const handleClear = () => {
 </script>
 
 <template>
-  <div class="base-input">
+  <div class="base-input" ref="baseInputRef">
     <div class="base-input__wrapper">
       <div
         v-if="placeholder"
@@ -75,6 +82,7 @@ const handleClear = () => {
     color: $txt-description;
 
     transition: all 0.2s ease;
+    will-change: transform;
 
     &_focus {
       font-size: 12px;

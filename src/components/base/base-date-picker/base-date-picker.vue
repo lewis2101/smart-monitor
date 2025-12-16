@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DatePicker, { type DatePickerState } from "primevue/datepicker";
-import { ref, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 defineProps<{
   placeholder?: string;
@@ -9,6 +10,11 @@ defineProps<{
 }>();
 
 const datePickerRef = useTemplateRef<DatePickerState>("datePickerRef");
+const baseDatePickerRef = ref<HTMLDivElement | null>(null);
+
+onMounted(() => {
+  useBubbleAnimate(baseDatePickerRef);
+});
 
 const model = defineModel<Date | Date[] | null>();
 
@@ -25,7 +31,7 @@ const handleBlur = () => {
 
 <template>
   <label class="base-date-picker">
-    <div class="base-date-picker__wrapper">
+    <div class="base-date-picker__wrapper" ref="baseDatePickerRef">
       <div
         v-if="placeholder"
         :class="['base-date-picker__placeholder', (isFocused || model) && 'base-date-picker__placeholder_focus']"
@@ -89,6 +95,7 @@ const handleBlur = () => {
 
   &__wrapper {
     position: relative;
+    z-index: 1;
   }
 
   &__native {
