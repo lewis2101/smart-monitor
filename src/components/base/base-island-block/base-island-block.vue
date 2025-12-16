@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 type Radius = "S" | "M";
 
@@ -20,11 +20,14 @@ const props = withDefaults(
   },
 );
 
+const isTouch = ref(false);
+
 const radius = computed(() => `${radiusMapper[props.rounded]}px`);
+const scaleRate = computed(() => (props.clickable && isTouch.value ? "1.04" : "1"));
 </script>
 
 <template>
-  <div :class="['base-island-block', clickable && 'base-island-block-clickable']">
+  <div :class="['base-island-block']" @pointerdown="isTouch = true" @pointerleave="isTouch = false">
     <span v-if="title" class="base-island-block__title">{{ title }}</span>
     <div class="base-island-block__content">
       <slot />
@@ -38,7 +41,8 @@ const radius = computed(() => `${radiusMapper[props.rounded]}px`);
   border-radius: v-bind("radius");
   background: $white;
   box-shadow: 0 8px 16px 0 #00000014;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  transform: scale(v-bind(scaleRate));
 
   display: flex;
   flex-direction: column;
