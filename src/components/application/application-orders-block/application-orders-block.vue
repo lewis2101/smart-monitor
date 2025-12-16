@@ -18,8 +18,9 @@ const contentOptions = useOrdersMineViewQuery(paramsModel);
 
 const { suspense, data, isPending, error } = useQuery(contentOptions);
 
-const linkedInfoList: ComputedRef<ListType> = computed(
-  () =>
+const linkedInfoList: ComputedRef<ListType> = computed(() => {
+  if (isPending.value && !paginationLoading.value) return [];
+  return (
     list.value?.map((item) => ({
       title: `${item.orderNumber}`,
       to: `/order/${item.id}`,
@@ -34,8 +35,9 @@ const linkedInfoList: ComputedRef<ListType> = computed(
           text: `Дата создания: ${formatDateString(new Date(item.createdAt))}`,
         },
       ],
-    })) || [],
-);
+    })) || []
+  );
+});
 
 watchEffect(() => {
   if (error.value) {
@@ -62,7 +64,7 @@ const isPaginationLoadable = computed(
 );
 
 const loadMore = () => {
-  if (paginationLoading.value) {
+  if (paginationLoading.value || !isPaginationLoadable.value || isPending.value) {
     return;
   }
 
@@ -77,18 +79,17 @@ await suspense();
 
 <template>
   <div class="application-orders-block">
-    <linked-info-block v-if="list.length" :list="linkedInfoList" />
-    <skeleton v-else-if="isPending && !paginationLoading" />
+    <skeleton v-if="isPending && !paginationLoading" />
+    <linked-info-block v-else-if="list.length" :list="linkedInfoList" />
     <div v-else class="application-orders-block__not-found">Ничего не найдено</div>
     <div
-      v-if="isPaginationLoadable"
       class="application-orders-block__spinner"
       v-intersect="{
         callback: loadMore,
         options: { threshold: 0.7 },
       }"
     >
-      <ion-spinner />
+      <ion-spinner v-if="paginationLoading" />
     </div>
   </div>
 </template>

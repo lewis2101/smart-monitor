@@ -67,6 +67,7 @@ const getComponent = (type: FieldInputType) => {
       :key="field.value"
       class="base-filter__item"
       :placeholder="field.local?.rus || field.value"
+      clearable
     />
     <div class="base-filter__buttons">
       <ion-button fill="outline" class="base-filter__button" @click="reset">Сбросить</ion-button>

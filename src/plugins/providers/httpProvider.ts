@@ -61,7 +61,7 @@ const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback =>
 
 export const httpProvider = () => {
   const httpClient = new HttpClient({
-    baseURL: "/api",
+    baseURL: import.meta.env.VITE_BASE_URL,
   });
   httpClient.registerResponseInterceptor(refreshTokenInterceptor(httpClient));
 
