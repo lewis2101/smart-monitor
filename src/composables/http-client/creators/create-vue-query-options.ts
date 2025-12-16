@@ -8,11 +8,22 @@ export function createVueQueryOptions<RawData, Response>(options: {
   httpClientOptions: CapacitorHttpOptions;
   scope?: string;
 }) {
-  return (params?: MaybeRefOrGetter<RawData>, client?: HttpClient) => {
+  return ({
+    params,
+    client,
+    getUrl,
+    keys,
+  }: {
+    params?: MaybeRefOrGetter<RawData>;
+    client?: HttpClient;
+    getUrl?: (url: string) => string;
+    keys?: MaybeRefOrGetter[];
+  }) => {
     const { httpClientOptions, scope } = options;
     const httpClient = client || inject(httpClientProviderKey);
 
     const p = computed(() => toValue(params));
+    const k = computed(() => toValue(keys || []));
 
     if (!httpClient) {
       throw new Error("Http client is not provided");
@@ -21,10 +32,12 @@ export function createVueQueryOptions<RawData, Response>(options: {
     return queryOptions({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
-      queryKey: [scope, p],
+      queryKey: [scope, p, k],
       queryFn: async () => {
         const config = useEndpointBuilder(httpClientOptions);
-        const { data } = await httpClient.call<Response>(httpClientOptions.url, {
+        const url = getUrl?.(httpClientOptions.url) || httpClientOptions.url;
+
+        const { data } = await httpClient.call<Response>(url, {
           ...config,
           params: p.value!,
         });

@@ -5,6 +5,6 @@ export enum AuthEndpoints {
 }
 
 export enum OrdersEndpoints {
-  ordersMineHeader = "/resource/header/!OrdersMine",
-  ordersMineView = "/resource/view/!OrdersMine",
+  ordersMineHeader = "/resource/header",
+  ordersMineView = "/resource/view",
 }

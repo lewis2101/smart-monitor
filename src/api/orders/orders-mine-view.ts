@@ -15,7 +15,7 @@ export type Response = {
   content: {
     id: string;
     orderNumber: string;
-    taskName: {
+    taskName?: {
       eng: string;
       kaz: string;
       rus: string;

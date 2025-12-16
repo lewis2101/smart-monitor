@@ -14,7 +14,10 @@ const paginationLoading = ref(false);
 const list = ref<Response["content"]>([]);
 const sizeOfList = ref(0);
 
-const contentOptions = useOrdersMineViewQuery(paramsModel);
+const contentOptions = useOrdersMineViewQuery({
+  params: paramsModel,
+  getUrl: (url) => url + "/!OrdersMine",
+});
 
 const { suspense, data, isPending, error } = useQuery(contentOptions);
 
@@ -29,7 +32,7 @@ const linkedInfoList: ComputedRef<ListType> = computed(() => {
           text: `Создатель: ${item.creator}`,
         },
         {
-          text: `Статус: ${item.taskName.rus}`,
+          text: `Статус: ${item.taskName?.rus}`,
         },
         {
           text: `Дата создания: ${formatDateString(new Date(item.createdAt))}`,

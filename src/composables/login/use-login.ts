@@ -18,8 +18,8 @@ const loginSchema = toTypedSchema(
 );
 
 export const useLogin = () => {
-  const { mutateAsync: mutateLogin, isPending: loginPending } = useAuthMutation();
-  const { mutateAsync: mutateLoginChallenge, isPending: challengePending } = useAuthChallengeMutation();
+  const { mutateAsync: mutateLogin, isPending: loginPending } = useAuthMutation({});
+  const { mutateAsync: mutateLoginChallenge, isPending: challengePending } = useAuthChallengeMutation({});
 
   const router = useIonRouter();
   const globalSpinner = useGlobalSpinner();

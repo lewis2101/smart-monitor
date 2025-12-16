@@ -24,7 +24,10 @@ const sortValues = [
   },
 ];
 
-const headerOptions = useOrdersMineHeaderQuery(props.params);
+const headerOptions = useOrdersMineHeaderQuery({
+  params: props.params,
+  getUrl: (url) => url + "/!OrdersMine",
+});
 const { data, suspense } = useQuery(headerOptions);
 
 const filterModel = defineModel<FilterType[]>("filter", { required: true });

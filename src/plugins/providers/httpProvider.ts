@@ -6,9 +6,10 @@ import { CommonRoutes } from "@/router/router-list.ts";
 import { HttpStatus } from "@/composables/http-client/HttpStatuses.ts";
 import type { HttpResponse } from "@capacitor/core";
 
-// Сделать нормально рефреш токен (либо перед запросом проверять либо еще как то)
 const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback => {
-  const { mutateAsync: mutateRefreshToken } = useRefreshTokenRawMutation(undefined, httpClient);
+  const { mutateAsync: mutateRefreshToken } = useRefreshTokenRawMutation({
+    client: httpClient,
+  });
   let refreshPromise: Promise<void> | null = null;
 
   return async (option: HttpResponse) => {
