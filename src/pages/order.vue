@@ -6,6 +6,8 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { useRoute } from "vue-router";
 import { MainTabRoutes } from "@/router/router-list.ts";
+import { useOrderActionQuery } from "@/api/orders/order-action.ts";
+import { useQuery } from "@tanstack/vue-query";
 
 const route = useRoute();
 const router = useIonRouter();
@@ -17,6 +19,16 @@ const handleClickClose = () => {
     router.replace({ name: MainTabRoutes.home });
   }
 };
+
+const orderActionQuery = useOrderActionQuery({
+  getUrl: (url) => url + "/" + route.params.uuid,
+  keys: [() => route.params.uuid],
+});
+
+const { data } = useQuery({
+  ...orderActionQuery,
+  enabled: () => !!route.params.uuid,
+});
 </script>
 
 <template>
@@ -26,7 +38,14 @@ const handleClickClose = () => {
         <default-layout-header :title="`Заявка - ${route.params.uuid}`" close @click-close="handleClickClose" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh"> ORDER </base-content-with-refresher>
+    <base-content-with-refresher @refresh="mockRefresh">
+      <div>ORDER</div>
+      <pre>
+        <code>
+          {{ data }}
+        </code>
+      </pre>
+    </base-content-with-refresher>
   </ion-page>
 </template>
 
