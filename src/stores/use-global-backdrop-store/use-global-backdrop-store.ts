@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
+import { nextTick, reactive, watch } from "vue";
 import {
   type BackdropItem,
   type BackdropKeys,
@@ -39,6 +39,14 @@ export const useGlobalBackdropStore = defineStore("global-backdrop-store", () =>
 
     return promise;
   }
+
+  watch(backdrops, (value) => {
+    setTimeout(async () => {
+      await nextTick();
+      const filtered = value.filter((b) => b.model);
+      backdrops.splice(0, backdrops.length, ...filtered);
+    }, 150); // Дожидаемся закрытия бэкдропа и после очищаем его из списка
+  });
 
   return {
     backdrops,

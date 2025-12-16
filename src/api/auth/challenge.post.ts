@@ -1,6 +1,6 @@
 import type { AxiosError } from "axios";
 import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
-import type { HttpCallOption } from "@/composables/http-client/HttpClient.ts";
+import type { CapacitorHttpOptions } from "@/composables/http-client/HttpClient.ts";
 import { AuthEndpoints } from "@/api/endpoints.ts";
 
 type RawData = undefined;
@@ -17,7 +17,7 @@ type Response = {
   };
 };
 
-const httpClientOptions: HttpCallOption<Payload> = {
+const httpClientOptions: CapacitorHttpOptions<Payload> = {
   url: AuthEndpoints.challenge,
   method: "POST",
 };

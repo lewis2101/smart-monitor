@@ -7,7 +7,7 @@ const router = useIonRouter();
 </script>
 
 <template>
-  <base-island-block title="Мои заявки" class="main-reports">
+  <base-island-block title="Мои заявки" class="main-reports" :clickable="false">
     <base-rect-item title="Черновики" rect-color="dark" icon="layer" />
     <base-rect-item title="Отправлено" rect-color="dark" icon="check" />
     <base-rect-item title="Закрытые" rect-color="dark" icon="check-all" />

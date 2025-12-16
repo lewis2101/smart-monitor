@@ -24,7 +24,13 @@ watch(model, (value) => {
 </script>
 
 <template>
-  <bottom-sheet v-model="model" ref="bottomSheetRef" class="base-backdrop" :expand-on-content-drag="false">
+  <bottom-sheet
+    v-model="model"
+    ref="bottomSheetRef"
+    class="base-backdrop"
+    :expand-on-content-drag="false"
+    swipe-close-threshold="10%"
+  >
     <template #header>
       <div class="base-backdrop__header">
         <div class="base-backdrop__title">
