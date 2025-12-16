@@ -7,6 +7,7 @@ import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
 import { useRoute } from "vue-router";
 import { useGlobalImageStore } from "@/stores/use-global-image-store/use-global-image-store.ts";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 const globalBackdropStore = useGlobalBackdropStore();
 const { setImage } = useGlobalImageStore();
@@ -18,6 +19,7 @@ const currentPathName = computed(() => route.name as MainTabRoutes);
 const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWith(name) ? "active animate" : "");
 
 const handleClickCamera = async () => {
+  await hapticEffect();
   const photo = await globalBackdropStore.push("camera", {
     title: "Прикрепить",
     props: {},
@@ -29,16 +31,21 @@ const handleClickCamera = async () => {
     router.push({ name: OrderRoutes.newOrder, params: { uuid: id } });
   }
 };
+
+const hapticEffect = () =>
+  Haptics.impact({
+    style: ImpactStyle.Medium,
+  });
 </script>
 
 <template>
   <ion-tab-bar slot="bottom" class="main-footer">
-    <ion-tab-button tab="home" href="/home">
+    <ion-tab-button tab="home" href="/home" @click="hapticEffect">
       <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]" title="Главная">
         <base-icon name="home" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="docs" href="/docs">
+    <ion-tab-button tab="docs" href="/docs" @click="hapticEffect">
       <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" title="Документы">
         <base-icon name="docs" class="main-footer__icon" />
       </footer-item>
@@ -50,12 +57,12 @@ const handleClickCamera = async () => {
         </div>
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="application" href="/application">
+    <ion-tab-button tab="application" href="/application" @click="hapticEffect">
       <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]" title="Заявки">
         <base-icon name="application" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="service" href="/service">
+    <ion-tab-button tab="service" href="/service" @click="hapticEffect">
       <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]" title="Сервисы">
         <base-icon name="service" class="main-footer__icon" />
       </footer-item>
