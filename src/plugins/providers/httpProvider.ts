@@ -1,56 +1,61 @@
-import { HttpClient } from "@/composables/http-client/HttpClient.ts";
+import { HttpClient, type InterceptorCallback } from "@/composables/http-client/HttpClient.ts";
 import { useRefreshTokenRawMutation } from "@/api/auth/refresh-token.post.ts";
-import type { AxiosError } from "axios";
 import { AuthEndpoints } from "@/api/endpoints.ts";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { CommonRoutes } from "@/router/router-list.ts";
 import { HttpStatus } from "@/composables/http-client/HttpStatuses.ts";
-
-declare module "axios" {
-  interface InternalAxiosRequestConfig {
-    _tokenRetried?: boolean;
-  }
-}
+import type { HttpResponse } from "@capacitor/core";
 
 // Сделать нормально рефреш токен (либо перед запросом проверять либо еще как то)
-const refreshTokenInterceptor = (httpClient: HttpClient) => {
+const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback => {
   const { mutateAsync: mutateRefreshToken } = useRefreshTokenRawMutation(undefined, httpClient);
+  let refreshPromise: Promise<void> | null = null;
 
-  return async (err: AxiosError) => {
-    const config = err.config;
-
+  return async (option: HttpResponse) => {
     const isUnAuthorized =
-      err.status === HttpStatus.Unauthorized &&
-      config &&
-      !config?._tokenRetried &&
-      !config.url?.includes(AuthEndpoints.login) &&
-      !config.url?.includes(AuthEndpoints.refreshToken);
+      option.status === HttpStatus.Unauthorized &&
+      !option.url?.includes(AuthEndpoints.login) &&
+      !option.url?.includes(AuthEndpoints.refreshToken);
 
     if (isUnAuthorized) {
-      config._tokenRetried = true;
-
       const { refreshTokenStorage, accessTokenStorage, expiresTokenStorage } = useAuthStorage();
+
       try {
-        const data = await mutateRefreshToken({
-          refresh: refreshTokenStorage.value,
-        });
+        if (!refreshPromise) {
+          refreshPromise = (async () => {
+            const data = await mutateRefreshToken({
+              refresh: refreshTokenStorage.value,
+            });
 
-        accessTokenStorage.value = data.accessToken;
-        refreshTokenStorage.value = data.refreshToken;
-        expiresTokenStorage.value = data.expiry;
+            accessTokenStorage.value = data.accessToken;
+            refreshTokenStorage.value = data.refreshToken;
+            expiresTokenStorage.value = data.expiry;
+          })()
+            .catch((e) => {
+              location.href = CommonRoutes.login;
+              throw e;
+            })
+            .finally(() => {
+              refreshPromise = null;
+            });
+        }
 
-        return err.config;
+        await refreshPromise;
+
+        return {
+          refetch: true,
+          headers: {
+            Authorization: `Bearer ${accessTokenStorage.value}`,
+          },
+        };
       } catch (e) {
-        location.href = CommonRoutes.login;
         throw e;
       }
     }
 
-    const hasTokenRetried = config && config._tokenRetried;
-
-    if (hasTokenRetried) {
-      location.href = CommonRoutes.login;
-    }
+    return {
+      refetch: false,
+    };
   };
 };
 

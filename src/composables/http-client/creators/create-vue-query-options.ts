@@ -1,11 +1,11 @@
 import { queryOptions } from "@tanstack/vue-query";
 import { computed, inject, type MaybeRefOrGetter, toValue } from "vue";
 import { httpClientProviderKey } from "@/composables/http-client/http-provider-keys.ts";
-import { type HttpCallOption, HttpClient } from "@/composables/http-client/HttpClient.ts";
+import { type CapacitorHttpOptions, HttpClient } from "@/composables/http-client/HttpClient.ts";
 import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-builder.ts";
 
 export function createVueQueryOptions<RawData, Response>(options: {
-  httpClientOptions: HttpCallOption;
+  httpClientOptions: CapacitorHttpOptions;
   scope?: string;
 }) {
   return (params?: MaybeRefOrGetter<RawData>, client?: HttpClient) => {
@@ -18,16 +18,15 @@ export function createVueQueryOptions<RawData, Response>(options: {
       throw new Error("Http client is not provided");
     }
 
-    const config = useEndpointBuilder(httpClientOptions);
-
     return queryOptions({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       queryKey: [scope, p],
       queryFn: async () => {
-        const { data } = await httpClient.call<RawData, Response>({
+        const config = useEndpointBuilder(httpClientOptions);
+        const { data } = await httpClient.call<Response>(httpClientOptions.url, {
           ...config,
-          params: p.value,
+          params: p.value!,
         });
         return data;
       },

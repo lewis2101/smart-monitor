@@ -1,10 +1,10 @@
 import { computed, inject, type MaybeRefOrGetter, toValue } from "vue";
 import { httpClientProviderKey } from "@/composables/http-client/http-provider-keys.ts";
-import { type HttpCallOption, HttpClient } from "@/composables/http-client/HttpClient.ts";
+import { type CapacitorHttpOptions, HttpClient } from "@/composables/http-client/HttpClient.ts";
 import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-builder.ts";
 
 export function createRawMutations<RawData, Payload, Response>(options: {
-  httpClientOptions: HttpCallOption<Payload>;
+  httpClientOptions: CapacitorHttpOptions<Payload>;
 }) {
   return (params?: MaybeRefOrGetter<RawData>, client?: HttpClient) => {
     const { httpClientOptions } = options;
@@ -15,17 +15,15 @@ export function createRawMutations<RawData, Payload, Response>(options: {
     }
 
     const p = computed(() => toValue(params));
-    const config = useEndpointBuilder<Payload>(httpClientOptions);
 
     return {
       mutateAsync: async (data: Payload): Promise<Response> => {
-        const response = await httpClient.call<Payload, Response>(
-          {
-            ...config,
-            params: p.value,
-          },
+        const config = useEndpointBuilder<Payload>(httpClientOptions);
+        const response = await httpClient.call<Response, Payload>(config.url, {
+          ...config,
           data,
-        );
+          params: p.value!,
+        });
         return response.data;
       },
     };
