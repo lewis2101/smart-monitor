@@ -48,6 +48,7 @@ const handleSortClick = async () => {
 };
 
 const isActiveFilter = computed(() => filterModel.value.length > 0);
+const isActiveSort = computed(() => sortModel.value.length > 0);
 </script>
 
 <template>
@@ -62,9 +63,13 @@ const isActiveFilter = computed(() => filterModel.value.length > 0);
         <div>Фильтр</div>
       </div>
     </base-island-block>
-    <base-island-block class="base-filter-header__filter" clickable @click="handleSortClick">
+    <base-island-block
+      :class="['base-filter-header__filter', isActiveSort && 'active']"
+      clickable
+      @click="handleSortClick"
+    >
       <div class="base-filter-header__filter-item">
-        <base-icon name="sort" color="#2A61CC" />
+        <base-icon name="sort" :color="isActiveSort ? '#FFFFFF' : '#2A61CC'" />
         <div>Сортировка</div>
       </div>
     </base-island-block>

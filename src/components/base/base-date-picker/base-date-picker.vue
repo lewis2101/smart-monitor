@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import DatePicker, { type DatePickerState } from "primevue/datepicker";
-import { ref, useTemplateRef, watch } from "vue";
-import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import { ref, useTemplateRef } from "vue";
 
 defineProps<{
   placeholder?: string;
@@ -14,10 +13,6 @@ const datePickerRef = useTemplateRef<DatePickerState>("datePickerRef");
 const model = defineModel<Date | Date[] | null>();
 
 const isFocused = ref(false);
-
-const handleClear = () => {
-  model.value = null;
-};
 
 const handleFocus = () => {
   isFocused.value = true;
@@ -50,12 +45,12 @@ const handleBlur = () => {
         v-bind="$attrs"
         date-format="dd.mm.yy"
         appendTo="self"
+        :show-on-focus="false"
+        :show-icon="true"
+        :show-clear="clearable"
         @focus="handleFocus"
         @blur="handleBlur"
       />
-      <div v-if="clearable && model" class="base-date-picker__clear" @click.stop="handleClear">
-        <base-icon name="close" />
-      </div>
     </div>
     <div v-if="errorText" class="base-date-picker__error">{{ errorText }}</div>
   </label>
@@ -89,11 +84,18 @@ const handleBlur = () => {
   --p-inputtext-border-color: #f2f2f7;
   --p-inputtext-border-radius: 12px;
 
+  --p-datepicker-dropdown-background: #ffffff;
+  --p-datepicker-dropdown-border-color: #f2f2f7;
+
   &__wrapper {
     position: relative;
   }
 
   &__native {
+    &:deep(.p-datepicker-dropdown) {
+      box-shadow: 0px 2px 3px 0px #0000001a !important;
+    }
+
     &:deep(input) {
       width: 100%;
       padding-inline-start: 16px;

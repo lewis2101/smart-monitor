@@ -61,6 +61,7 @@ const refreshPage = async (event: RefresherCustomEvent) => refresh(() => mockRef
     position: sticky;
     top: 0;
     left: 0;
+    z-index: 1;
 
     padding: 4px 24px;
   }

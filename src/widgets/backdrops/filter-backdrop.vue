@@ -63,7 +63,7 @@ const getComponent = (type: FieldInputType) => {
     <component
       v-for="field in fields"
       :is="getComponent(field.type)"
-      v-model="temporaryModel[field.value]!.text"
+      v-model="temporaryModel[field.value]!.text as any"
       :key="field.value"
       class="base-filter__item"
       :placeholder="field.local?.rus || field.value"

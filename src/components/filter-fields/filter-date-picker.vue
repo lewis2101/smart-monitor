@@ -23,7 +23,7 @@ const modelProxy = computed({
 </script>
 
 <template>
-  <base-date-picker v-model="modelProxy" fluid selection-mode="range" clearable />
+  <base-date-picker v-model="modelProxy" fluid selection-mode="range" clearable hide-on-range-selection />
 </template>
 
 <style scoped></style>
