@@ -57,13 +57,14 @@ export class HttpClient {
   }
 
   private async executeInterceptors<Response>(
+    url: string,
     options: CapacitorHttpOptions,
     response: HttpResponse,
   ): Promise<CapacitorHttpResponse<Response> | Promise<void>> {
     for (const interceptor of this.interceptors) {
       const data = await interceptor(response);
       if (data.refetch) {
-        return this.call<Response>(options.url, {
+        return this.call<Response>(url, {
           ...options,
           headers: {
             ...options.headers,
@@ -91,7 +92,7 @@ export class HttpClient {
       return data;
     }
 
-    const interceptorResult = await this.executeInterceptors<Response>(option, data);
+    const interceptorResult = await this.executeInterceptors<Response>(url, option, data);
     if (interceptorResult) {
       return interceptorResult;
     }
@@ -118,7 +119,7 @@ export class HttpClient {
       return data;
     }
 
-    const interceptorResult = await this.executeInterceptors<Response>(option, data);
+    const interceptorResult = await this.executeInterceptors<Response>(url, option, data);
     if (interceptorResult) {
       return interceptorResult;
     }

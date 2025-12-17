@@ -4,6 +4,7 @@ import ApplicationFilter from "@/components/application/application-filter/appli
 import Skeleton from "./skeleton.vue";
 import type { FilterType } from "../../../../types/FilterType.ts";
 import type { SortType } from "../../../../types/SortType.ts";
+import ErrorBlockSmall from "@/components/error-block-small.vue";
 
 type Params = InstanceType<typeof ApplicationFilter>["$props"]["params"];
 
@@ -25,7 +26,9 @@ const sortModel = defineModel<SortType>("sort", { required: true });
       </template>
     </suspense>
 
-    <template #error> Произошла ошибка </template>
+    <template #error="{ error, clearError }">
+      <error-block-small :error="error" @refresh="clearError" />
+    </template>
   </error-boundary>
 </template>
 

@@ -18,7 +18,7 @@ const paramsModel = defineModel<Params>("params", { required: true });
       </template>
     </suspense>
     <template #error="{ error, clearError }">
-      <error-block :error-text="error" @refresh="clearError" />
+      <error-block :error="error" @refresh="clearError" />
     </template>
   </error-boundary>
 </template>
