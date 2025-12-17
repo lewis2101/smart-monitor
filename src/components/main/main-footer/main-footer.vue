@@ -26,7 +26,7 @@ const handleClickCamera = async () => {
   if (photo) {
     setImage(photo as string);
     const id = Math.round(Math.random() * 10000) + 500;
-    router.push({ name: OrderRoutes.newOrder, params: { uuid: id } });
+    router.push({ name: OrderRoutes.newOrder, params: { orderId: id } });
   }
 };
 </script>

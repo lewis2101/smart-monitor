@@ -7,5 +7,7 @@ export enum AuthEndpoints {
 export enum OrdersEndpoints {
   ordersMineHeader = "/resource/header",
   ordersMineView = "/resource/view",
-  orderAction = "/lenkrad/v1/order/action"
+  orderAction = "/lenkrad/v1/order/action",
+  orderMain = "/order/main",
+  orderNext = "/order/next",
 }

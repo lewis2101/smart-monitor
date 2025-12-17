@@ -7,18 +7,20 @@ import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-build
 export function createVueQueryMutations<RawData, Payload, Response, Err>(options: {
   httpClientOptions: CapacitorHttpOptions<Payload>;
   mutationOptions?: () => MutationOptions<Response, Err, Payload>;
+  scope?: string;
 }) {
   return ({
     params,
     client,
     getUrl,
+    keys,
   }: {
     params?: MaybeRefOrGetter<RawData>;
     client?: HttpClient;
     getUrl?: (url: string) => string;
     keys?: MaybeRefOrGetter[];
   }) => {
-    const { httpClientOptions, mutationOptions } = options;
+    const { httpClientOptions, mutationOptions, scope } = options;
     const httpClient = client || inject(httpClientProviderKey);
 
     if (!httpClient) {
@@ -26,8 +28,10 @@ export function createVueQueryMutations<RawData, Payload, Response, Err>(options
     }
 
     const p = computed(() => toValue(params));
+    const k = computed(() => toValue(keys || []));
 
     return useMutation<Response, Err, Payload>({
+      mutationKey: [scope, p, k],
       mutationFn: async (data) => {
         const config = useEndpointBuilder<Payload>(httpClientOptions);
         const url = getUrl?.(httpClientOptions.url) || httpClientOptions.url;

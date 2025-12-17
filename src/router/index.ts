@@ -68,12 +68,12 @@ const router = createRouter({
       component: Learning,
     },
     {
-      path: "/new-order/:uuid",
+      path: "/new-order/:orderId",
       name: OrderRoutes.newOrder,
       component: NewOrder,
     },
     {
-      path: "/order/:uuid",
+      path: "/order/:orderId",
       name: OrderRoutes.order,
       component: Order,
     },
