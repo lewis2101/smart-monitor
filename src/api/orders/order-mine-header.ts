@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
-import { OrdersScope } from "@/api/orders/orders-scope.ts";
+import { OrdersScope } from "@/api/orders-scope.ts";
 import type { FieldType } from "../../../types/FieldType.ts";
 
 type RawData = {

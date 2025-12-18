@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useEmits } from "@/composables/useEmits.ts";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { IonInput } from "@ionic/vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 defineProps<{
   placeholder?: string;
@@ -15,10 +14,6 @@ const model = defineModel<string>();
 const { emits } = useEmits();
 
 const baseInputRef = ref<HTMLDivElement | null>(null);
-
-onMounted(() => {
-  useBubbleAnimate(baseInputRef);
-});
 
 const isFocused = ref(false);
 

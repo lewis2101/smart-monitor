@@ -4,7 +4,7 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import { OrdersScope } from "@/api/orders/orders-scope.ts";
+import { OrdersScope } from "@/api/orders-scope.ts";
 import { ApplicationOrdersBlock } from "@/components/application/application-orders-block";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
 import { reactive, ref } from "vue";

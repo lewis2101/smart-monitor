@@ -3,7 +3,7 @@ import { useOrderActionQuery } from "@/api/orders/order-action.ts";
 import { useOrderMainMutation } from "@/api/orders/order-main.ts";
 import { useOrderNextMutation } from "@/api/orders/order-next.ts";
 import { useQuery } from "@tanstack/vue-query";
-import BaseInput from "@/components/base/base-input/base-input.vue";
+import FieldInput from "@/components/step-generator/Fieldinput/FieldInput.vue";
 
 const props = defineProps<{
   orderId: string;
@@ -41,18 +41,12 @@ const orderNextData = await orderNextMutate({
       {{ orderNextData.name }}
     </div>
     <div class="order-main-block__fields">
-      <base-input
+      <field-input
         v-for="field in orderNextData.attributes"
         :key="field.value"
-        :placeholder="field.value"
+        :field="field"
         class="order-main-block__field"
       />
-
-      <pre>
-        <code>
-          {{ orderNextData }}
-        </code>
-      </pre>
     </div>
   </div>
 </template>

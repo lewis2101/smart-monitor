@@ -1,23 +1,12 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
-import type { FieldType } from "../../../types/FieldType.ts";
 import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
-import { OrdersScope } from "@/api/orders/orders-scope.ts";
+import { OrdersScope } from "@/api/orders-scope.ts";
+import type { StepField } from "@/components/step-generator/types.ts";
 
 type RawData = undefined;
 
 type Response = {
-  attributes: {
-    value: string;
-    type: string;
-    show: boolean;
-    calc: null;
-    calcRestrictions: boolean;
-    default: string;
-    virtual: boolean;
-    fontSize: string;
-    fontColor: string;
-    clientType: string;
-  }[];
+  attributes: StepField[];
   routeStepList: string[];
   creatorName: string;
   createdDate: Date;

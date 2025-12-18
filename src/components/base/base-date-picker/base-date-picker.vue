@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import DatePicker, { type DatePickerState } from "primevue/datepicker";
-import { onMounted, ref, useTemplateRef } from "vue";
-import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+import { ref, useTemplateRef } from "vue";
 
 defineProps<{
   placeholder?: string;
@@ -11,10 +10,6 @@ defineProps<{
 
 const datePickerRef = useTemplateRef<DatePickerState>("datePickerRef");
 const baseDatePickerRef = ref<HTMLDivElement | null>(null);
-
-onMounted(() => {
-  useBubbleAnimate(baseDatePickerRef);
-});
 
 const model = defineModel<Date | Date[] | null>();
 
