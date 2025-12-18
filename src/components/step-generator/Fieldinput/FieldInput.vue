@@ -37,13 +37,17 @@ const { data, isPending } = useQuery({
   enabled: isHasTableProperty.value,
 });
 
-console.log("FIELD", !!props.field.table);
-
-watch(data, (value) => {
-  if (value && value.content && value.content[0]) {
-    model.value = value.content[0].value;
-  }
-});
+watch(
+  data,
+  (value) => {
+    if (value && value.content && value.content[0]) {
+      model.value = value.content[0].value;
+    }
+  },
+  {
+    immediate: true,
+  },
+);
 </script>
 
 <template>
