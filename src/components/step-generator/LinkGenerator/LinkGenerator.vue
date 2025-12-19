@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { computed, onMounted, ref } from "vue";
-import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+import { computed } from "vue";
 import type { StepField } from "@/components/step-generator/types.ts";
+import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
 
 const props = defineProps<{
   field: StepField;
 }>();
-
-const copyButtonRef = ref<HTMLDivElement | null>(null);
 
 const link = computed(() => {
   if (typeof props.field.default === "object") {
@@ -18,15 +18,22 @@ const link = computed(() => {
   return "";
 });
 
-onMounted(() => {
-  useBubbleAnimate(copyButtonRef);
-});
+const handleCopy = async () => {
+  await navigator.clipboard.writeText(link.value);
+  toast.add({
+    severity: "info",
+    summary: "Ссылка скопирована",
+    detail: "Ссылка на заявку сохранен в буфере",
+    life: 3000,
+    closable: false,
+  });
+};
 </script>
 
 <template>
   <div class="link-generator">
     <base-input :model-value="link" placeholder="Ссылка на заявку" disabled class="link-generator__input" />
-    <div ref="copyButtonRef" class="link-generator__copy-button">
+    <div class="link-generator__copy-button" @click="handleCopy">
       <base-icon name="copy" class="link-generator__copy-button_icon" />
     </div>
   </div>
@@ -41,7 +48,7 @@ onMounted(() => {
     right: 8px;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1;
+    z-index: 2;
     padding: 8px;
 
     &_icon {

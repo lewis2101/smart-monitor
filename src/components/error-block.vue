@@ -16,7 +16,16 @@ defineEmits<{
 }>();
 
 // @ts-ignore
-const errorText = computed(() => (props.error && props.error instanceof Error ? props.error?.data?.message || props.error.message : props.error));
+const errorText = computed(() => {
+  if (!props.error) {
+    return "";
+  }
+  if (props.error instanceof Error) {
+    return props.error?.data?.message || props.error.message;
+  } else {
+    return props.error;
+  }
+});
 </script>
 
 <template>

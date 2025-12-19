@@ -18,9 +18,22 @@ onMounted(async () => {
 <template>
   <ion-app>
     <ion-router-outlet />
+    <prime-toast
+      position="bottom-center"
+      :pt="{
+        message: $style.message,
+      }"
+    />
     <global-spinner />
     <global-backdrops />
   </ion-app>
 </template>
+
+<style module lang="scss">
+.message {
+  margin: 0 auto !important;
+  max-width: 320px;
+}
+</style>
 
 <style scoped></style>
