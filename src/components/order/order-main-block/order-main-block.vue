@@ -8,6 +8,7 @@ import LinkGenerator from "@/components/step-generator/LinkGenerator/LinkGenerat
 import DateTimeField from "@/components/step-generator/DateTimeField/DateTimeField.vue";
 import type { FieldInputType } from "../../../../types/FieldType.ts";
 import { type Component, markRaw, type Raw } from "vue";
+import AddressSelector from "@/components/step-generator/AddressSelector/AddressSelector.vue";
 
 const props = defineProps<{
   orderId: string;
@@ -42,12 +43,12 @@ const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
   REF: markRaw(FieldInput),
   LINK_GENERATOR: markRaw(LinkGenerator),
   DATE_TIME: markRaw(DateTimeField),
+  AddressSelector: markRaw(AddressSelector),
   STRING: null,
   INTEGER: null,
   ARRAY: null,
   LOCAL: null,
   NUMBER: null,
-  AddressSelector: null,
   TEXT: null,
 };
 </script>
