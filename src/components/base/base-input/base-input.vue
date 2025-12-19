@@ -8,6 +8,7 @@ defineProps<{
   placeholder?: string;
   errorText?: string;
   clearable?: boolean;
+  disabled?: boolean;
 }>();
 
 const model = defineModel<string>();
@@ -24,7 +25,7 @@ const handleClear = () => {
 
 <template>
   <div class="base-input" ref="baseInputRef">
-    <div class="base-input__wrapper">
+    <div :class="['base-input__wrapper', disabled && 'base-input-disabled']">
       <div
         v-if="placeholder"
         :class="['base-input__placeholder', (isFocused || model) && 'base-input__placeholder_focus']"
@@ -36,6 +37,7 @@ const handleClear = () => {
         v-bind="$attrs"
         v-on="emits"
         class="base-input__native"
+        :disabled="disabled"
         @ion-focus="isFocused = true"
         @ion-blur="isFocused = false"
       />
@@ -53,6 +55,14 @@ const handleClear = () => {
     position: relative;
   }
 
+  &-disabled {
+    color: $txt-description;
+  }
+
+  &:deep(.input-disabled) {
+    opacity: 1 !important;
+  }
+
   &__native {
     --padding-start: 16px;
     --padding-end: 16px;
@@ -66,6 +76,10 @@ const handleClear = () => {
     &:has(.has-focus) {
       background: red;
     }
+
+    .disabled {
+      opacity: 1;
+    }
   }
 
   &__placeholder {
@@ -74,7 +88,7 @@ const handleClear = () => {
     left: 16px;
     transform: translateY(-50%);
 
-    color: $txt-description;
+    color: inherit;
 
     transition: all 0.2s ease;
     will-change: transform;
