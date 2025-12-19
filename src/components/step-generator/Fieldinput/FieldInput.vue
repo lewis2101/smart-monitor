@@ -23,6 +23,8 @@ const isShow = computed(() => (typeof props.field.show === "boolean" ? props.fie
 const fieldDefaultId = computed(() => (typeof props.field.default === "object" ? props.field.default.id : ""));
 const isHasTableProperty = computed(() => !!props.field.table);
 
+const queryKeys = props.field.table ? [props.field.table] : [];
+
 const resourceDependencyQuery = useResourceDependencyQuery({
   getUrl: (url) => `${url}/${props.field.table}`,
   params: {
@@ -30,6 +32,7 @@ const resourceDependencyQuery = useResourceDependencyQuery({
     selectedId: fieldDefaultId.value,
     disabled: props.field.disabled,
   },
+  keys: queryKeys,
 });
 
 const { data, isPending } = useQuery({
