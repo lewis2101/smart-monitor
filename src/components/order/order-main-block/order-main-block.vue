@@ -49,7 +49,7 @@ const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
   ARRAY: null,
   LOCAL: null,
   NUMBER: null,
-  TEXT: null,
+  TEXT: markRaw(FieldInput),
 };
 </script>
 

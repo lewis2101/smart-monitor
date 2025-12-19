@@ -18,8 +18,7 @@ const model = ref(new Date(getInitialValue()));
 </script>
 
 <template>
-  <base-date-picker v-model="model" :placeholder="field.text" fluid />
+  <base-date-picker v-model="model" :placeholder="field.text" :disabled="field.disabled" fluid />
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
