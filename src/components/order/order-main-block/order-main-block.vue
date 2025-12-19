@@ -4,6 +4,9 @@ import { useOrderMainMutation } from "@/api/orders/order-main.ts";
 import { useOrderNextMutation } from "@/api/orders/order-next.ts";
 import { useQuery } from "@tanstack/vue-query";
 import FieldInput from "@/components/step-generator/Fieldinput/FieldInput.vue";
+import LinkGenerator from "@/components/step-generator/LinkGenerator/LinkGenerator.vue";
+import type { FieldInputType } from "../../../../types/FieldType.ts";
+import { type Component, markRaw, type Raw } from "vue";
 
 const props = defineProps<{
   orderId: string;
@@ -33,6 +36,19 @@ const orderNextData = await orderNextMutate({
   orderId: props.orderId,
   currentUserTask: data.value.currentTask,
 });
+
+const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
+  REF: markRaw(FieldInput),
+  LINK_GENERATOR: markRaw(LinkGenerator),
+  STRING: null,
+  INTEGER: null,
+  ARRAY: null,
+  LOCAL: null,
+  DATE_TIME: null,
+  NUMBER: null,
+  AddressSelector: null,
+  TEXT: null,
+};
 </script>
 
 <template>
@@ -41,12 +57,16 @@ const orderNextData = await orderNextMutate({
       {{ orderNextData.name }}
     </div>
     <div class="order-main-block__fields">
-      <field-input
-        v-for="field in orderNextData.attributes"
-        :key="field.value"
-        :field="field"
-        class="order-main-block__field"
-      />
+      <template v-for="field in orderNextData.attributes" :key="field.value">
+        <component :is="fieldsMap[field.clientType]" class="order-main-block__field" :field="field" />
+      </template>
+      <!--      <link-generator link="https://smartlfleet.kz/asdf/asdf" class="order-main-block__field" />-->
+      <!--      <field-input-->
+      <!--        v-for="field in orderNextData.attributes"-->
+      <!--        :key="field.value"-->
+      <!--        :field="field"-->
+      <!--        class="order-main-block__field"-->
+      <!--      />-->
     </div>
   </div>
 </template>

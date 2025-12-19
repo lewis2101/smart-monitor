@@ -1,4 +1,14 @@
-export type FieldInputType = "STRING" | "INTEGER" | "ARRAY" | "LOCAL" | "DATE_TIME" | "NUMBER";
+export type FieldInputType =
+  | "STRING"
+  | "INTEGER"
+  | "ARRAY"
+  | "LOCAL"
+  | "DATE_TIME"
+  | "NUMBER"
+  | "REF"
+  | "LINK_GENERATOR"
+  | "AddressSelector"
+  | "TEXT";
 
 export type FieldType = {
   changable: boolean;
