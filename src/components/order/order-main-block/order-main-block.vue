@@ -5,6 +5,7 @@ import { useOrderNextMutation } from "@/api/orders/order-next.ts";
 import { useQuery } from "@tanstack/vue-query";
 import FieldInput from "@/components/step-generator/Fieldinput/FieldInput.vue";
 import LinkGenerator from "@/components/step-generator/LinkGenerator/LinkGenerator.vue";
+import DateTimeField from "@/components/step-generator/DateTimeField/DateTimeField.vue";
 import type { FieldInputType } from "../../../../types/FieldType.ts";
 import { type Component, markRaw, type Raw } from "vue";
 
@@ -40,11 +41,11 @@ const orderNextData = await orderNextMutate({
 const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
   REF: markRaw(FieldInput),
   LINK_GENERATOR: markRaw(LinkGenerator),
+  DATE_TIME: markRaw(DateTimeField),
   STRING: null,
   INTEGER: null,
   ARRAY: null,
   LOCAL: null,
-  DATE_TIME: null,
   NUMBER: null,
   AddressSelector: null,
   TEXT: null,

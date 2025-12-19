@@ -88,9 +88,10 @@ const handleBlur = () => {
   --p-datepicker-dropdown-background: #ffffff;
   --p-datepicker-dropdown-border-color: #f2f2f7;
 
+  --p-inputtext-disabled-background: #ffffff;
+
   &__wrapper {
     position: relative;
-    z-index: 1;
   }
 
   &__native {
