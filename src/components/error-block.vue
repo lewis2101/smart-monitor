@@ -15,7 +15,8 @@ defineEmits<{
   (e: "refresh"): void;
 }>();
 
-const errorText = computed(() => (props.error && props.error instanceof Error ? props.error.message : props.error));
+// @ts-ignore
+const errorText = computed(() => (props.error && props.error instanceof Error ? props.error?.data?.message || props.error.message : props.error));
 </script>
 
 <template>
