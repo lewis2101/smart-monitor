@@ -66,7 +66,7 @@ const getComponent = (type: FieldInputType) => {
       v-model="temporaryModel[field.value]!.text as any"
       :key="field.value"
       class="base-filter__item"
-      :placeholder="field.local?.rus || field.value"
+      :placeholder="field.local?.rus || $t(field.value)"
       clearable
     />
     <div class="base-filter__buttons">

@@ -13,6 +13,7 @@ import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
 import "@ionic/vue/css/core.css";
 import "@/assets/main.scss";
+import i18n from "./i18n";
 
 const app = createApp(App);
 
@@ -32,6 +33,7 @@ app.use(IonicVue, {
 app.use(router);
 app.directive("intersect", vIntersect);
 app.use(ToastService);
+app.use(i18n);
 app.component("PrimeToast", Toast);
 app.use(VueQueryPlugin, {
   queryClientConfig: {

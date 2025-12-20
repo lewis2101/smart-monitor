@@ -56,7 +56,7 @@ watch(
 
 <template>
   <div class="field-input">
-    <base-input v-if="isShow" v-model="model" :placeholder="field.text" :disabled="field.disabled" />
+    <base-input v-if="isShow" v-model="model" :placeholder="$t(field.value)" :disabled="field.disabled" />
     <div v-if="isPending && isHasTableProperty" class="field-input__spinner">
       <ion-spinner name="circular" class="field-input__spinner-icon" />
     </div>
