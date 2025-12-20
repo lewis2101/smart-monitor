@@ -6,6 +6,7 @@ import LinkGenerator from "@/components/step-generator/LinkGenerator/LinkGenerat
 import DateTimeField from "@/components/step-generator/DateTimeField/DateTimeField.vue";
 import AddressSelector from "@/components/step-generator/AddressSelector/AddressSelector.vue";
 import type { StepField } from "@/components/step-generator/types.ts";
+import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
 
 defineProps<{
   fields: StepField[];
@@ -24,6 +25,7 @@ const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
   LOCAL: null,
   NUMBER: null,
   TEXT: markRaw(FieldInput),
+  RATING: markRaw(RatingField),
 };
 
 defineExpose({ fieldsModel });

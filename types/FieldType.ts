@@ -8,7 +8,8 @@ export type FieldInputType =
   | "REF"
   | "LINK_GENERATOR"
   | "AddressSelector"
-  | "TEXT";
+  | "TEXT"
+  | "RATING";
 
 export type FieldType = {
   changable: boolean;
