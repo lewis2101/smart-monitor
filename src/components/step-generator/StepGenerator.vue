@@ -7,6 +7,7 @@ import DateTimeField from "@/components/step-generator/DateTimeField/DateTimeFie
 import AddressSelector from "@/components/step-generator/AddressSelector/AddressSelector.vue";
 import type { StepField } from "@/components/step-generator/types.ts";
 import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
+import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
 
 defineProps<{
   fields: StepField[];
@@ -19,12 +20,12 @@ const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
   LINK_GENERATOR: markRaw(LinkGenerator),
   DATE_TIME: markRaw(DateTimeField),
   AddressSelector: markRaw(AddressSelector),
-  STRING: null,
+  STRING: markRaw(FieldInput),
   INTEGER: null,
   ARRAY: null,
   LOCAL: null,
   NUMBER: null,
-  TEXT: markRaw(FieldInput),
+  TEXT: markRaw(FieldText),
   RATING: markRaw(RatingField),
 };
 
