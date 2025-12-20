@@ -16,8 +16,24 @@ defineEmits<{
   (e: "refresh"): void;
 }>();
 
-// @ts-ignore
-const errorText = computed(() => (props.error && props.error instanceof Error ? props.error?.data?.message || props.error.message : props.error));
+const errorText = computed(() => {
+  if (!props.error) {
+    return "";
+  }
+  if (props.error instanceof Error) {
+    return props.error.message;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  if (props.error?.data) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return props.error.data?.fullMessage || props.errpr;
+  }
+
+  return props.error;
+});
 </script>
 
 <template>

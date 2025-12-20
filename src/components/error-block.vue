@@ -20,12 +20,18 @@ const errorText = computed(() => {
     return "";
   }
   if (props.error instanceof Error) {
+    return props.error.message;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  if (props.error?.data) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    return props.error?.data?.message || props.error.message;
-  } else {
-    return props.error;
+    return props.error.data?.fullMessage || props.errpr;
   }
+
+  return props.error;
 });
 </script>
 
@@ -48,6 +54,7 @@ const errorText = computed(() => {
 
   &__title {
     font-size: 16px;
+    text-align: center;
   }
 }
 </style>
