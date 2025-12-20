@@ -56,7 +56,7 @@ const handleClear = () => {
   }
 
   &-disabled {
-    color: $txt-description;
+    color: #64748b !important;
   }
 
   &:deep(.input-disabled) {

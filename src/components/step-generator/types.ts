@@ -20,3 +20,5 @@ export type StepField = {
   table?: string;
   expand?: boolean;
 };
+
+export type OrderActions = "RATE_THE_TRIP" | "CONFIRM" | "CANCEL" | "TO_REWORK";

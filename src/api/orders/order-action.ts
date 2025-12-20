@@ -1,6 +1,7 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
 import { OrdersScope } from "@/api/orders-scope.ts";
+import type { OrderActions } from "@/components/step-generator/types.ts";
 
 type RawData = undefined;
 
@@ -79,7 +80,7 @@ type Response = {
   currentTask: string;
   currentTaskType: string;
   state: string;
-  actions: string[];
+  actions: OrderActions[];
   processCompleted: boolean;
 };
 

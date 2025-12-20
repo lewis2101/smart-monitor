@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { StepField } from "@/components/step-generator/types.ts";
 import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
-import { ref } from "vue";
 
 const props = defineProps<{
   field: StepField;
@@ -9,12 +8,13 @@ const props = defineProps<{
 
 const getInitialValue = () => {
   if (typeof props.field.default === "string") {
-    return props.field.default;
+    return new Date(props.field.default);
   }
-  return "";
+  return null;
 };
 
-const model = ref(new Date(getInitialValue()));
+const model = defineModel<Date | null>({ required: true });
+model.value = getInitialValue();
 </script>
 
 <template>

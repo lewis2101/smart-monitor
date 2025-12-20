@@ -17,7 +17,8 @@ const getInitialValue = () => {
   return "";
 };
 
-const model = ref(getInitialValue());
+const model = defineModel<string>({ required: true });
+model.value = getInitialValue();
 
 const isShow = computed(() => (typeof props.field.show === "boolean" ? props.field.show : true));
 const fieldDefaultId = computed(() => (typeof props.field.default === "object" ? props.field.default.id : ""));
