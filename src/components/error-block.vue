@@ -15,12 +15,13 @@ defineEmits<{
   (e: "refresh"): void;
 }>();
 
-// @ts-ignore
 const errorText = computed(() => {
   if (!props.error) {
     return "";
   }
   if (props.error instanceof Error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     return props.error?.data?.message || props.error.message;
   } else {
     return props.error;

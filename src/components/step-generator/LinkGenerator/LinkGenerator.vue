@@ -13,6 +13,8 @@ const props = defineProps<{
 
 const link = computed(() => {
   if (typeof props.field.default === "object") {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     return `${import.meta.env.VITE_BASE_ORIGIN}/${props.field.default?.url}`;
   }
   return "";
