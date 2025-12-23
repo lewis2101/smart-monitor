@@ -37,7 +37,7 @@ const orderNextData = await orderNextMutate({
   currentUserTask: orderData.value.currentTask,
 });
 
-const orderActions: Record<OrderActions, { label: string; fill?: string; color?: string; action: () => void }> = {
+const orderActions: Record<OrderActions, { label: string; fill?: "outline"; color?: string; action: () => void }> = {
   RATE_THE_TRIP: {
     label: "Оценить поездку",
     action: () => {

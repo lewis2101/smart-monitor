@@ -6,6 +6,7 @@ import type { FilterType } from "../../../types/FilterType.ts";
 import { ref } from "vue";
 import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
 import FilterDatePicker from "@/components/filter-fields/filter-date-picker.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps<
   {
@@ -17,6 +18,8 @@ const props = defineProps<
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
 }>();
+
+const { t } = useI18n();
 
 const getInitialValues = (sync = false): Record<string, FilterType> =>
   props.fields.reduce(
@@ -66,7 +69,7 @@ const getComponent = (type: FieldInputType) => {
       v-model="temporaryModel[field.value]!.text as any"
       :key="field.value"
       class="base-filter__item"
-      :placeholder="field.local?.rus || $t(field.value)"
+      :placeholder="field.local?.rus || t(field.value)"
       clearable
     />
     <div class="base-filter__buttons">
