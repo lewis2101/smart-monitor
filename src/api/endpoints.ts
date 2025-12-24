@@ -10,6 +10,7 @@ export enum OrdersEndpoints {
   orderAction = "/lenkrad/v1/order/action",
   orderMain = "/order/main",
   orderNext = "/order/next",
+  orderSave = "/order/save",
 }
 
 export enum DependencyEndpoints {

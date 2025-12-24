@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FieldInputType } from "../../../types/FieldType.ts";
 import { type Component, markRaw, type Raw, reactive } from "vue";
+import FieldRef from "@/components/step-generator/FieldRef/FieldRef.vue";
 import FieldInput from "@/components/step-generator/Fieldinput/FieldInput.vue";
 import LinkGenerator from "@/components/step-generator/LinkGenerator/LinkGenerator.vue";
 import DateTimeField from "@/components/step-generator/DateTimeField/DateTimeField.vue";
@@ -16,7 +17,7 @@ defineProps<{
 const fieldsModel = reactive<Record<string, unknown>>({});
 
 const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
-  REF: markRaw(FieldInput),
+  REF: markRaw(FieldRef),
   LINK_GENERATOR: markRaw(LinkGenerator),
   DATE_TIME: markRaw(DateTimeField),
   AddressSelector: markRaw(AddressSelector),

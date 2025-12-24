@@ -11,7 +11,7 @@ export type StepField = {
   default:
     | string
     | {
-        id: string;
+        id: number;
       };
   virtual: boolean;
   fontSize: string;

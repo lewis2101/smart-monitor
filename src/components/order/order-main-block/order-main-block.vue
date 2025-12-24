@@ -6,11 +6,13 @@ import { useOrderNextMutation } from "@/api/orders/order-next.ts";
 import { useQuery } from "@tanstack/vue-query";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
 import type { OrderActions } from "@/components/step-generator/types.ts";
-import { computed } from "vue";
+import { computed, useTemplateRef } from "vue";
 
 const props = defineProps<{
   orderId: string;
 }>();
+
+const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 
 const orderActionQuery = useOrderActionQuery({
   getUrl: (url) => url + "/" + props.orderId,
@@ -41,7 +43,8 @@ const orderActions: Record<OrderActions, { label: string; fill?: "outline"; colo
   RATE_THE_TRIP: {
     label: "Оценить поездку",
     action: () => {
-      console.log("RATE THE TRIP");
+      console.log("FIELDS MODEL: ", stepGeneratorRef.value?.fieldsModel);
+      console.log("DATA MODEL: ", orderNextData.attributes);
     },
   },
   CONFIRM: {
@@ -82,7 +85,7 @@ const orderActionButtons = computed(() => {
       {{ orderNextData.name }}
     </div>
     <div class="order-main-block__fields">
-      <step-generator :fields="orderNextData.attributes" />
+      <step-generator ref="stepGeneratorRef" :fields="orderNextData.attributes" />
     </div>
     <div class="order-main-block__actions">
       <ion-button

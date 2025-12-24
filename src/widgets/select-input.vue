@@ -3,23 +3,33 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { computed } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
-const props = defineProps<{
-  placeholder?: string;
-  selectTitle?: string;
-  list: Array<{
-    label: string;
-    value: string;
-  }>;
-}>();
+const props = withDefaults(
+  defineProps<{
+    placeholder?: string;
+    selectTitle?: string;
+    disabled?: boolean;
+    list: Array<{
+      label: string;
+      value: string | number;
+    }>;
+  }>(),
+  {
+    disabled: false,
+  },
+);
 
 const globalBackdropStore = useGlobalBackdropStore();
-const model = defineModel<string>({ required: true });
+const model = defineModel<string | number>({ required: true });
 
-const currentValueLabel = computed(() => props.list.find((l) => l.value === model.value)?.label || "");
+const currentValueLabel = computed(() => props.list?.find((l) => l.value === model.value)?.label || "");
 
 const handleClick = async () => {
+  if (props.disabled) {
+    return;
+  }
+
   const value = (await globalBackdropStore.push("select", {
-    title: props.selectTitle || "",
+    title: props.selectTitle || props.placeholder || "",
     props: {
       list: props.list,
       initialValue: model.value,
@@ -32,7 +42,7 @@ const handleClick = async () => {
 
 <template>
   <div class="select-input" @click="handleClick">
-    <div class="select-input__native">
+    <div :class="['select-input__native', disabled && 'select-input-disabled']">
       <div
         v-if="placeholder"
         :class="['select-input__placeholder', currentValueLabel && 'select-input__placeholder_focus']"
@@ -50,6 +60,11 @@ const handleClick = async () => {
 <style scoped lang="scss">
 .select-input {
   position: relative;
+  color: $txt-black;
+
+  &-disabled {
+    color: #64748b !important;
+  }
 
   &__native {
     padding: 20px 16px 12px 16px;
@@ -76,7 +91,7 @@ const handleClick = async () => {
   }
 
   &__value {
-    color: $txt-black;
+    color: inherit;
   }
 
   &__icon {
