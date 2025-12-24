@@ -8,21 +8,24 @@ import SelectInput from "@/widgets/select-input.vue";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
-const props = defineProps<{
-  field: StepField;
-}>();
+const props = withDefaults(
+  defineProps<{
+    field: StepField;
+    disabled?: boolean;
+  }>(),
+  {
+    disabled: false,
+  },
+);
 
 const getInitialValue = () => {
-  if (typeof props.field.default === "string") {
-    return props.field.default;
+  if (typeof props.field.default === "object" && props.field.default.id) {
+    return Number(props.field.default.id);
   }
-  if (props.field.default.id) {
-    return props.field.default.id;
-  }
-  return "";
+  return null;
 };
 
-const model = defineModel<string | number>({ required: true });
+const model = defineModel<number | null>({ required: true });
 model.value = getInitialValue();
 
 const fieldDefaultId = computed(() => (typeof props.field.default === "object" ? props.field.default.id : ""));
@@ -55,7 +58,7 @@ const list: ComputedRef<SelectList> = computed(() =>
 
 <template>
   <div class="field-input">
-    <select-input v-model="model" :list="list" :placeholder="$t(field.value)" :disabled="field.disabled" />
+    <select-input v-model="model" :list="list" :placeholder="$t(field.value)" :disabled="disabled || field.disabled" />
     <div v-if="isPending && isHasTableProperty" class="field-input__spinner">
       <ion-spinner name="circular" class="field-input__spinner-icon" />
     </div>

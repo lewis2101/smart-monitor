@@ -8,9 +8,9 @@ const props = defineProps<
   {
     list: Array<{
       label: string;
-      value: string;
+      value: number;
     }>;
-    initialValue: string;
+    initialValue: number | null;
     showReset?: boolean;
   } & BackdropComponentProps<(value: string) => any>
 >();

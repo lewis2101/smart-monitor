@@ -10,6 +10,13 @@ const openMap = () => {
     props: {},
   });
 };
+
+const getInitialValue = () => {
+  return [];
+};
+
+const model = defineModel<any[]>();
+model.value = getInitialValue();
 </script>
 
 <template>

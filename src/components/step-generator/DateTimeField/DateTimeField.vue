@@ -2,9 +2,15 @@
 import type { StepField } from "@/components/step-generator/types.ts";
 import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
 
-const props = defineProps<{
-  field: StepField;
-}>();
+const props = withDefaults(
+  defineProps<{
+    field: StepField;
+    disabled?: boolean;
+  }>(),
+  {
+    disabled: false,
+  },
+);
 
 const getInitialValue = () => {
   if (typeof props.field.default === "string") {
@@ -18,7 +24,7 @@ model.value = getInitialValue();
 </script>
 
 <template>
-  <base-date-picker v-model="model" :placeholder="field.text" :disabled="field.disabled" fluid />
+  <base-date-picker v-model="model" :placeholder="field.text" :disabled="disabled || field.disabled" fluid />
 </template>
 
 <style scoped lang="scss"></style>

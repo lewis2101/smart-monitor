@@ -8,6 +8,8 @@ import StepGenerator from "@/components/step-generator/StepGenerator.vue";
 import type { OrderActions } from "@/components/step-generator/types.ts";
 import { computed, useTemplateRef } from "vue";
 
+const COMPLETE_TASK_NAME = "COMPLETE";
+
 const props = defineProps<{
   orderId: string;
 }>();
@@ -36,7 +38,7 @@ await Promise.all([
 
 const orderNextData = await orderNextMutate({
   orderId: props.orderId,
-  currentUserTask: orderData.value.currentTask,
+  currentUserTask: orderData.value.processCompleted ? COMPLETE_TASK_NAME : orderData.value.currentTask,
 });
 
 const orderActions: Record<OrderActions, { label: string; fill?: "outline"; color?: string; action: () => void }> = {
@@ -70,6 +72,8 @@ const orderActions: Record<OrderActions, { label: string; fill?: "outline"; colo
   },
 };
 
+const orderDisabled = computed(() => !orderData.value.permissions.canComplete);
+
 const orderActionButtons = computed(() => {
   const orderActionsKeys = Object.keys(orderActions);
 
@@ -85,7 +89,7 @@ const orderActionButtons = computed(() => {
       {{ orderNextData.name }}
     </div>
     <div class="order-main-block__fields">
-      <step-generator ref="stepGeneratorRef" :fields="orderNextData.attributes" />
+      <step-generator ref="stepGeneratorRef" :fields="orderNextData.attributes" :disabled="orderDisabled" />
     </div>
     <div class="order-main-block__actions">
       <ion-button

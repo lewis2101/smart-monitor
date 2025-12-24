@@ -1,5 +1,6 @@
 import type { FieldInputType } from "../../../types/FieldType.ts";
 
+// TODO Сделать типизацию привязанный к clientType и отталкиваясь от него будет нужный тип у default и так же наличия table ключа так же через clientType
 export type StepField = {
   value: string;
   type: FieldInputType;

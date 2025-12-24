@@ -25,7 +25,7 @@ model.value = getInitialValue();
 </script>
 
 <template>
-  <base-textarea v-model="model" :placeholder="$t(field.value)" :disabled="field.disabled" />
+  <base-textarea v-model="model" :placeholder="$t(field.value)" :disabled="disabled || field.disabled" />
 </template>
 
 <style scoped lang="scss"></style>

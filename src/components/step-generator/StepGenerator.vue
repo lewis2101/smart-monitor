@@ -10,9 +10,15 @@ import type { StepField } from "@/components/step-generator/types.ts";
 import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
 import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
 
-defineProps<{
-  fields: StepField[];
-}>();
+withDefaults(
+  defineProps<{
+    fields: StepField[];
+    disabled?: boolean;
+  }>(),
+  {
+    disabled: false,
+  },
+);
 
 const fieldsModel = reactive<Record<string, unknown>>({});
 
@@ -40,6 +46,7 @@ defineExpose({ fieldsModel });
       :key="field.value"
       :is="fieldsMap[field.clientType]"
       v-model="fieldsModel[field.value]"
+      :disabled="disabled"
       class="step-generator__field"
       :field="field"
     />

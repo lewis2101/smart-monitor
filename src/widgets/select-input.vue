@@ -10,7 +10,7 @@ const props = withDefaults(
     disabled?: boolean;
     list: Array<{
       label: string;
-      value: string | number;
+      value: number;
     }>;
   }>(),
   {
@@ -19,7 +19,7 @@ const props = withDefaults(
 );
 
 const globalBackdropStore = useGlobalBackdropStore();
-const model = defineModel<string | number>({ required: true });
+const model = defineModel<number | null>({ required: true });
 
 const currentValueLabel = computed(() => props.list?.find((l) => l.value === model.value)?.label || "");
 
@@ -34,7 +34,7 @@ const handleClick = async () => {
       list: props.list,
       initialValue: model.value,
     },
-  })) as string;
+  })) as number;
 
   model.value = value;
 };
