@@ -19,7 +19,7 @@ onMounted(async () => {
   <ion-app>
     <ion-router-outlet />
     <prime-toast
-      position="bottom-center"
+      position="top-center"
       :pt="{
         message: $style.message,
       }"
