@@ -6,7 +6,9 @@ import { useOrderNextMutation } from "@/api/orders/order-next.ts";
 import { useQuery } from "@tanstack/vue-query";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
 import type { OrderActions } from "@/components/step-generator/types.ts";
-import { computed, useTemplateRef } from "vue";
+import { computed, useTemplateRef, watch } from "vue";
+import { useOrderSaveMutation } from "@/api/orders/order-save.ts";
+import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 
 const COMPLETE_TASK_NAME = "COMPLETE";
 
@@ -23,6 +25,9 @@ const orderActionQuery = useOrderActionQuery({
 
 const { mutateAsync: orderMainMutate } = useOrderMainMutation({});
 const { mutateAsync: orderNextMutate } = useOrderNextMutation({});
+const { mutate: orderSaveMutate, isPending: savePending, error: saveError } = useOrderSaveMutation({});
+
+const globalSpinner = useGlobalSpinner();
 
 const { data: orderData, suspense } = useQuery({
   ...orderActionQuery,
@@ -36,17 +41,28 @@ await Promise.all([
   }),
 ]);
 
+const currentUserTask = computed(() =>
+  orderData.value?.processCompleted ? COMPLETE_TASK_NAME : orderData.value?.currentTask,
+);
+
 const orderNextData = await orderNextMutate({
   orderId: props.orderId,
-  currentUserTask: orderData.value.processCompleted ? COMPLETE_TASK_NAME : orderData.value.currentTask,
+  currentUserTask: currentUserTask.value,
 });
 
 const orderActions: Record<OrderActions, { label: string; fill?: "outline"; color?: string; action: () => void }> = {
   RATE_THE_TRIP: {
     label: "Оценить поездку",
     action: () => {
-      console.log("FIELDS MODEL: ", stepGeneratorRef.value?.fieldsModel);
-      console.log("DATA MODEL: ", orderNextData.attributes);
+      if (stepGeneratorRef.value?.fieldsModel) {
+        orderSaveMutate({
+          ...stepGeneratorRef.value.fieldsModel,
+          currentUserTask: currentUserTask.value,
+          userTaskCompleteEvent: "RATE_THE_TRIP",
+          orderId: props.orderId,
+        });
+        console.log("FIELDS MODEL: ", stepGeneratorRef.value?.fieldsModel);
+      }
     },
   },
   CONFIRM: {
@@ -72,14 +88,32 @@ const orderActions: Record<OrderActions, { label: string; fill?: "outline"; colo
   },
 };
 
-const orderDisabled = computed(() => !orderData.value.permissions.canComplete);
+const orderDisabled = computed(() => !orderData.value?.permissions.canComplete);
 
 const orderActionButtons = computed(() => {
+  if (!orderData.value) {
+    return [];
+  }
+
   const orderActionsKeys = Object.keys(orderActions);
 
   return orderData.value.actions
     .filter((action) => orderActionsKeys.includes(action))
     .map((action) => orderActions[action]);
+});
+
+watch(savePending, (value) => {
+  if (value) {
+    globalSpinner.show();
+  } else {
+    globalSpinner.hide();
+  }
+});
+
+watch(saveError, (value) => {
+  if (value) {
+    console.log(value);
+  }
 });
 </script>
 

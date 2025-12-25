@@ -11,11 +11,19 @@ const props = defineProps<{
   field: StepField;
 }>();
 
+const getInitialValue = () => {
+  if (props.field.default) {
+    return props.field.default;
+  }
+  return null;
+};
+
+const model = defineModel<any>();
+model.value = getInitialValue();
+
 const link = computed(() => {
-  if (typeof props.field.default === "object") {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return `${import.meta.env.VITE_BASE_ORIGIN}/${props.field.default?.url}`;
+  if (typeof model.value === "object") {
+    return `${import.meta.env.VITE_BASE_ORIGIN}/${model.value?.url}`;
   }
   return "";
 });

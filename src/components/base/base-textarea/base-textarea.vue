@@ -13,7 +13,7 @@ withDefaults(
 );
 
 const isFocused = ref(false);
-const model = defineModel<string>({ required: true });
+const model = defineModel<string | null>({ required: true });
 </script>
 
 <template>

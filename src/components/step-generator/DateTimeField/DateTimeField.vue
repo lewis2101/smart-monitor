@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { StepField } from "@/components/step-generator/types.ts";
 import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
+import { computed } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -14,17 +15,31 @@ const props = withDefaults(
 
 const getInitialValue = () => {
   if (typeof props.field.default === "string") {
-    return new Date(props.field.default);
+    return new Date(props.field.default).toISOString();
   }
   return null;
 };
 
-const model = defineModel<Date | null>({ required: true });
+const model = defineModel<string | null>({ required: true });
 model.value = getInitialValue();
+
+const proxyModel = computed({
+  get: () => {
+    if (model.value) {
+      return new Date(model.value);
+    }
+    return null;
+  },
+  set: (value: Date) => {
+    if (value) {
+      model.value = value.toISOString();
+    }
+  },
+});
 </script>
 
 <template>
-  <base-date-picker v-model="model" :placeholder="field.text" :disabled="disabled || field.disabled" fluid />
+  <base-date-picker v-model="proxyModel" :placeholder="field.text" :disabled="disabled || field.disabled" fluid />
 </template>
 
 <style scoped lang="scss"></style>

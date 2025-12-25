@@ -6,7 +6,11 @@ type RawData = undefined;
 
 type Response = any;
 
-type Payload = Record<string, unknown>;
+type Payload = Record<string, unknown> & {
+  currentUserTask: string;
+  userTaskCompleteEvent: string;
+  orderId: string;
+};
 
 export const useOrderSaveMutation = createVueQueryMutations<RawData, Payload, Response, Error>({
   httpClientOptions: {
