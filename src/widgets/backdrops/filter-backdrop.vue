@@ -98,10 +98,10 @@ const getComponent = (type: FieldInputType) => {
 
   &__buttons {
     position: sticky;
-    bottom: env(safe-area-inset-bottom);
+    bottom: 0;
     left: 0;
     z-index: 10;
-    padding: 8px 0;
+    padding: 8px 0 calc(env(safe-area-inset-bottom) + 8px) 0;
     background: $white;
 
     margin-top: 16px;

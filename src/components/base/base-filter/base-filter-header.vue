@@ -17,38 +17,46 @@ const props = defineProps<{
 const globalBackdropStore = useGlobalBackdropStore();
 
 const filterModel = defineModel<FilterType[]>("filter", { required: true });
-const sortModel = defineModel<string>("sort", { required: true });
+const sortModel = defineModel<string | null>("sort", { required: true });
 
 const filterBackdropModel = ref(false);
 
 const handleFilterClick = async () => {
-  const values = (await globalBackdropStore.push("filter", {
-    title: "Фильтр",
-    props: {
-      fields: props.fields,
-      initialValue: filterModel.value,
-    },
-  })) as FilterType[];
+  try {
+    const values = (await globalBackdropStore.push("filter", {
+      title: "Фильтр",
+      props: {
+        fields: props.fields,
+        initialValue: filterModel.value,
+      },
+    })) as FilterType[];
 
-  filterModel.value = values;
-  filterBackdropModel.value = true;
+    filterModel.value = values;
+    filterBackdropModel.value = true;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const handleSortClick = async () => {
-  const value = (await globalBackdropStore.push("select", {
-    title: "Сортировка",
-    props: {
-      list: props.sortValues,
-      initialValue: sortModel.value,
-      showReset: true,
-    },
-  })) as string;
+  try {
+    const value = (await globalBackdropStore.push("select", {
+      title: "Сортировка",
+      props: {
+        list: props.sortValues,
+        initialValue: sortModel.value,
+        showReset: true,
+      },
+    })) as string;
 
-  sortModel.value = value;
+    sortModel.value = value;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const isActiveFilter = computed(() => filterModel.value.length > 0);
-const isActiveSort = computed(() => sortModel.value.length > 0);
+const isActiveSort = computed(() => sortModel.value && sortModel.value.length > 0);
 </script>
 
 <template>

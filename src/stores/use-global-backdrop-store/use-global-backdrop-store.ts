@@ -43,7 +43,12 @@ export const useGlobalBackdropStore = defineStore("global-backdrop-store", () =>
   watch(backdrops, (value) => {
     setTimeout(async () => {
       await nextTick();
-      const filtered = value.filter((b) => b.model);
+      const filtered = value.filter((b) => {
+        if (!b.model) {
+          b.props.onFailure?.(`Close backdrop: ${b.title}`);
+        }
+        return b.model;
+      });
       backdrops.splice(0, backdrops.length, ...filtered);
     }, 150); // Дожидаемся закрытия бэкдропа и после очищаем его из списка
   });

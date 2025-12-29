@@ -37,6 +37,8 @@ const routeNamesStatusBarColors: Record<AllRoutesType, Color> = {
   [CommonRoutes.login]: Color.secondary,
   [CommonRoutes.registration]: Color.secondary,
   [CommonRoutes.learning]: Color.secondary,
+  [CommonRoutes.profile]: Color.secondary,
+  [CommonRoutes.notifications]: Color.secondary,
 };
 
 async function setNativeColors(key: Color) {

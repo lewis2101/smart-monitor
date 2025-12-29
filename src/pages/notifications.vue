@@ -32,7 +32,7 @@ const handleClickClose = () => {
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      <default-page> NOTIF </default-page>
+      <default-page> <div style="text-align: center">Страница в разработке</div> </default-page>
     </base-content-with-refresher>
   </ion-page>
 </template>

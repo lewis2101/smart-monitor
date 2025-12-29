@@ -52,6 +52,7 @@ const handleClear = () => {
 <style scoped lang="scss">
 .base-input {
   color: $txt-black;
+  opacity: 1 !important;
 
   &__wrapper {
     position: relative;
@@ -74,6 +75,8 @@ const handleClear = () => {
     box-shadow: 0px 2px 3px 0px #0000001a;
     border: 1px solid #f2f2f7;
     border-radius: 12px;
+
+    opacity: 1 !important;
 
     &:has(.has-focus) {
       background: red;

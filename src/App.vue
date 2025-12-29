@@ -19,10 +19,12 @@ onMounted(async () => {
   <ion-app>
     <ion-router-outlet />
     <prime-toast
-      position="top-center"
+      position="bottom-center"
       :pt="{
+        root: $style['global-toast'],
         message: $style.message,
       }"
+      class="global-toast"
     />
     <global-spinner />
     <global-backdrops />
@@ -30,10 +32,17 @@ onMounted(async () => {
 </template>
 
 <style module lang="scss">
+.global-toast {
+  margin-bottom: calc(env(safe-area-inset-bottom) + 42px);
+}
 .message {
   margin: 0 auto !important;
   max-width: 320px;
+  background: #ffffff !important;
+  box-shadow: 0 8px 16px 0 #00000014 !important;
+  border: 1px solid #f2f2f7 !important;
+  border-radius: 12px !important;
 }
 </style>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

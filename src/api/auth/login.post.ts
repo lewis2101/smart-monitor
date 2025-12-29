@@ -1,8 +1,8 @@
-import type { AxiosError } from "axios";
 import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
 import type { CapacitorHttpOptions } from "@/composables/http-client/HttpClient.ts";
 import { AuthEndpoints } from "@/api/endpoints.ts";
 import type { UserInfo } from "@/api/auth/types.ts";
+import type { CapacitorHttpError, HttpRequestError } from "@/api/error-data.ts";
 
 type RawData = undefined;
 
@@ -38,6 +38,6 @@ const httpClientOptions: CapacitorHttpOptions<Payload> = {
   method: "POST",
 };
 
-export const useAuthMutation = createVueQueryMutations<RawData, Payload, Response, AxiosError>({
+export const useAuthMutation = createVueQueryMutations<RawData, Payload, Response, CapacitorHttpError<HttpRequestError>>({
   httpClientOptions,
 });

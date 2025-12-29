@@ -7,8 +7,9 @@ import { useAuthChallengeMutation } from "@/api/auth/challenge.post.ts";
 import { useIonRouter } from "@ionic/vue";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 import { useDevice } from "@/composables/useDevice.ts";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
+import { useToast } from "primevue/usetoast";
 
 const loginSchema = toTypedSchema(
   object({
@@ -18,12 +19,13 @@ const loginSchema = toTypedSchema(
 );
 
 export const useLogin = () => {
-  const { mutateAsync: mutateLogin, isPending: loginPending } = useAuthMutation({});
+  const { mutateAsync: mutateLogin, isPending: loginPending, error: loginError } = useAuthMutation({});
   const { mutateAsync: mutateLoginChallenge, isPending: challengePending } = useAuthChallengeMutation({});
 
   const router = useIonRouter();
   const globalSpinner = useGlobalSpinner();
   const { device } = useDevice();
+  const toast = useToast();
 
   const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo, clearStorage } = useAuthStorage();
 
@@ -72,6 +74,18 @@ export const useLogin = () => {
     clearStorage();
     location.href = CommonRoutes.login;
   };
+
+  watch(loginError, (value) => {
+    if (value) {
+      toast.add({
+        severity: "error",
+        summary: "Ошибка",
+        detail: value?.data?.extension || "Непредвиденная ошибка",
+        life: 3000,
+        closable: false,
+      });
+    }
+  });
 
   const isPending = computed(() => loginPending.value || challengePending.value);
 
