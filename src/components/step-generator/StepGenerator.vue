@@ -9,6 +9,7 @@ import AddressSelector from "@/components/step-generator/AddressSelector/Address
 import type { StepField } from "@/components/step-generator/types.ts";
 import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
 import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
+import FieldBoolean from "@/components/step-generator/FieldInput/FieldBoolean.vue";
 
 withDefaults(
   defineProps<{
@@ -29,6 +30,7 @@ const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
   DATE: markRaw(DateTimeField),
   AddressSelector: markRaw(AddressSelector),
   STRING: markRaw(FieldInput),
+  BOOLEAN: markRaw(FieldBoolean),
   INTEGER: null,
   ARRAY: null,
   LOCAL: null,

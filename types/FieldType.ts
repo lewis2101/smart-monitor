@@ -10,6 +10,7 @@ export type FieldInputType =
   | "LINK_GENERATOR"
   | "AddressSelector"
   | "TEXT"
+  | "BOOLEAN"
   | "RATING";
 
 export type FieldType = {

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import FooterItem from "./item.vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { computed } from "vue";
+import { computed, onMounted, useTemplateRef } from "vue";
 import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
 import { useRoute } from "vue-router";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 const router = useIonRouter();
 const route = useRoute();
@@ -21,6 +22,12 @@ const processList = [
     value: "KT_TAXI_PROCESS",
   },
 ];
+
+const createRef = useTemplateRef("createRef");
+
+onMounted(() => {
+  useBubbleAnimate(createRef);
+});
 
 const handleClickCreate = async () => {
   const processKey = (await globalBackdropStore.push("pick", {
@@ -47,7 +54,7 @@ const handleClickCreate = async () => {
     </ion-tab-button>
     <ion-tab-button tab="camera" @click="handleClickCreate">
       <footer-item>
-        <div class="main-footer__create-item">
+        <div ref="createRef" class="main-footer__create-item">
           <base-icon name="plus" class="main-footer__camera-icon" />
         </div>
       </footer-item>

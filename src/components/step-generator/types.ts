@@ -9,11 +9,7 @@ export type StepField = {
   show?: boolean;
   calc: null;
   calcRestrictions: boolean;
-  default:
-    | string
-    | {
-        id: number;
-      };
+  default: any;
   virtual: boolean;
   fontSize: string;
   fontColor: string;
