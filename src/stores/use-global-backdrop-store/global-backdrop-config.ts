@@ -1,5 +1,5 @@
 import { type Component, markRaw, type Raw } from "vue";
-import CameraBackdrop from "@/widgets/backdrops/camera-backdrop.vue";
+import PickBackdrop from "@/widgets/backdrops/pick-backdrop.vue";
 import MapBackdrop from "@/widgets/backdrops/map-backdrop.vue";
 import FilterBackdrop from "@/widgets/backdrops/filter-backdrop.vue";
 import SelectBackdrop from "@/widgets/backdrops/select-backdrop.vue";
@@ -20,7 +20,7 @@ export type BackdropItem<C extends BackdropKeys> = {
 };
 
 export const backdropComponents = {
-  camera: markRaw(CameraBackdrop),
+  pick: markRaw(PickBackdrop),
   map: markRaw(MapBackdrop),
   filter: markRaw(FilterBackdrop),
   select: markRaw(SelectBackdrop),

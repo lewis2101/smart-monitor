@@ -3,7 +3,7 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { useGlobalImageStore } from "@/stores/use-global-image-store/use-global-image-store.ts";
 import { storeToRefs } from "pinia";
 import { onMounted, watch } from "vue";
-import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { useCameraPick } from "@/composables/useCameraPick.ts";
 
 defineProps<{
   title?: string;
@@ -11,7 +11,7 @@ defineProps<{
 
 const images = defineModel<string[]>({ default: () => [], required: true });
 
-const globalBackdropStore = useGlobalBackdropStore();
+const { getPhoto } = useCameraPick();
 
 const globalImageStore = useGlobalImageStore();
 const { currentImage } = storeToRefs(globalImageStore);
@@ -21,11 +21,11 @@ const removeImage = (idx: number) => {
 };
 
 const handleAddPhoto = async () => {
-  const photo = (await globalBackdropStore.push("camera", {
-    title: "Прикрепите",
-    props: {},
-  })) as string;
-  images.value.push(photo);
+  const photo = await getPhoto();
+
+  if (photo) {
+    images.value.push(photo);
+  }
 };
 
 onMounted(() => {
