@@ -3,15 +3,17 @@ import { IonHeader, IonPage, useIonRouter } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { MainTabRoutes } from "@/router/router-list.ts";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { useRoute } from "vue-router";
 import DefaultPage from "@/layouts/default-page.vue";
-import NewOrderMainBlock from "@/components/order/new-order-main-block/new-order-main-block.vue";
+import { NewOrderMainBlock } from "@/components/order/new-order-main-block";
 
 const router = useIonRouter();
 const route = useRoute();
+
+const orderTitle = ref("");
 
 const handleClickClose = () => {
   if (router.canGoBack()) {
@@ -20,6 +22,12 @@ const handleClickClose = () => {
     router.replace({ name: MainTabRoutes.home });
   }
 };
+
+const handleChangeTitle = (value: string) => {
+  orderTitle.value = value;
+};
+
+const orderTitleLoading = computed(() => !orderTitle.value);
 const processKey = computed(() => route.params.processKey as string);
 </script>
 
@@ -28,7 +36,8 @@ const processKey = computed(() => route.params.processKey as string);
     <ion-header>
       <base-toolbar>
         <default-layout-header
-          title="Новая заявка"
+          :title="orderTitle"
+          :loading="orderTitleLoading"
           back
           close
           @click-close="handleClickClose"
@@ -38,7 +47,7 @@ const processKey = computed(() => route.params.processKey as string);
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
       <default-page>
-        <new-order-main-block :process-key="processKey" />
+        <new-order-main-block :process-key="processKey" @get-label="handleChangeTitle" />
       </default-page>
     </base-content-with-refresher>
   </ion-page>

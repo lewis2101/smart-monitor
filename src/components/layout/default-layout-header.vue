@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import { IonSkeletonText } from "@ionic/vue";
 
 withDefaults(
   defineProps<{
@@ -7,11 +8,13 @@ withDefaults(
     close?: boolean;
     back?: boolean;
     info?: boolean;
+    loading?: boolean;
   }>(),
   {
     close: false,
     back: false,
     info: false,
+    loading: false,
   },
 );
 
@@ -25,7 +28,12 @@ defineEmits<{
   <div class="default-layout-header">
     <div class="default-layout-header__content">
       <base-icon v-if="back" class="default-layout-header__icon" name="arrow-back" @click="$emit('clickBack')" />
-      <div class="default-layout-header__title">{{ title }}</div>
+      <div v-if="loading" class="default-layout-header__skeleton">
+        <ion-skeleton-text class="default-layout-header__skeleton_item" />
+      </div>
+      <div v-else class="default-layout-header__title">
+        {{ title }}
+      </div>
       <base-icon v-if="close" class="default-layout-header__close" name="close" @click="$emit('clickClose')" />
       <div v-else-if="info" class="default-layout-header__help">
         <base-icon name="help" />
@@ -45,6 +53,7 @@ defineEmits<{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 56px;
 
     background: $white;
 
@@ -70,7 +79,21 @@ defineEmits<{
     letter-spacing: 0;
   }
 
-  &__close, &__help {
+  &__skeleton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    &_item {
+      width: 50%;
+      height: 16px;
+      border-radius: 12px;
+    }
+  }
+
+  &__close,
+  &__help {
     position: absolute;
     top: 50%;
     right: 16px;
