@@ -69,7 +69,7 @@ const router = createRouter({
       component: Briefing,
     },
     {
-      path: "/new-order/:orderId",
+      path: "/new-order/:processKey",
       name: OrderRoutes.newOrder,
       component: NewOrder,
     },

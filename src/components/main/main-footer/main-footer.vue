@@ -5,26 +5,31 @@ import { computed } from "vue";
 import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
 import { useRoute } from "vue-router";
-import { useCameraPick } from "@/composables/useCameraPick.ts";
-import { useGlobalImageStore } from "@/stores/use-global-image-store/use-global-image-store.ts";
-
-const { getPhoto } = useCameraPick();
-const { setImage } = useGlobalImageStore();
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
 const router = useIonRouter();
 const route = useRoute();
 
+const globalBackdropStore = useGlobalBackdropStore();
+
 const currentPathName = computed(() => route.name as MainTabRoutes);
 const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWith(name) ? "active animate" : "");
 
-const handleClickCamera = async () => {
-  const photo = await getPhoto();
+const processList = [
+  {
+    label: "Заявка на авто",
+    value: "KT_TAXI_PROCESS",
+  },
+];
 
-  if (photo) {
-    setImage(photo);
-    const id = Math.round(Math.random() * 10000) + 500;
-    router.push({ name: OrderRoutes.newOrder, params: { orderId: id } });
-  }
+const handleClickCreate = async () => {
+  const processKey = (await globalBackdropStore.push("pick", {
+    title: "Выберите тип заявки",
+    props: {
+      list: processList,
+    },
+  })) as string;
+  router.push({ name: OrderRoutes.newOrder, params: { processKey } });
 };
 </script>
 
@@ -40,10 +45,10 @@ const handleClickCamera = async () => {
         <base-icon name="docs" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="camera" @click="handleClickCamera">
+    <ion-tab-button tab="camera" @click="handleClickCreate">
       <footer-item>
-        <div class="main-footer__camera-item">
-          <base-icon name="camera" class="main-footer__camera-icon" />
+        <div class="main-footer__create-item">
+          <base-icon name="plus" class="main-footer__camera-icon" />
         </div>
       </footer-item>
     </ion-tab-button>
@@ -105,7 +110,7 @@ const handleClickCamera = async () => {
     margin-bottom: 12px;
   }
 
-  &__camera-item {
+  &__create-item {
     width: 48px;
     height: 48px;
     display: grid;

@@ -35,11 +35,11 @@ const handleClick = (value: string) => {
   &__item {
     color: $black;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 100%;
     letter-spacing: 0;
 
-    padding: 16px;
+    padding: 24px 16px;
     border-radius: 8px;
     border-bottom: 1px solid $gray-light;
   }
