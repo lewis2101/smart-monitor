@@ -39,7 +39,7 @@ const mainList: listType = [
     rectColor: "dark",
     orientation: "horizontal",
     icon: "more",
-    to: "/docs/briefing",
+    to: "/briefing",
   },
 ];
 </script>

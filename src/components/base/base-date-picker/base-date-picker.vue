@@ -2,11 +2,18 @@
 import DatePicker, { type DatePickerState } from "primevue/datepicker";
 import { ref, useTemplateRef } from "vue";
 
-defineProps<{
-  placeholder?: string;
-  errorText?: string;
-  clearable?: boolean;
-}>();
+withDefaults(
+  defineProps<{
+    placeholder?: string;
+    errorText?: string;
+    clearable?: boolean;
+    disabled?: boolean;
+  }>(),
+  {
+    clearable: false,
+    disabled: false,
+  },
+);
 
 const datePickerRef = useTemplateRef<DatePickerState>("datePickerRef");
 const baseDatePickerRef = ref<HTMLDivElement | null>(null);
@@ -26,7 +33,7 @@ const handleBlur = () => {
 
 <template>
   <label class="base-date-picker">
-    <div class="base-date-picker__wrapper" ref="baseDatePickerRef">
+    <div :class="['base-date-picker__wrapper', disabled && 'base-date-picker-disabled']" ref="baseDatePickerRef">
       <div
         v-if="placeholder"
         :class="['base-date-picker__placeholder', (isFocused || model) && 'base-date-picker__placeholder_focus']"
@@ -42,6 +49,7 @@ const handleBlur = () => {
           month: $style.month,
           year: $style.year,
           panel: $style.panel,
+          pcInputText: $style.inputText,
         }"
         v-bind="$attrs"
         date-format="dd.mm.yy"
@@ -49,6 +57,7 @@ const handleBlur = () => {
         :show-on-focus="false"
         :show-icon="true"
         :show-clear="clearable"
+        :disabled="disabled"
         @focus="handleFocus"
         @blur="handleBlur"
       />
@@ -73,11 +82,16 @@ const handleBlur = () => {
   //min-width: auto !important;
   //width: auto !important;
 }
+.inputText {
+  color: #151515;
+}
 </style>
 
 <style scoped lang="scss">
 .base-date-picker {
   display: block;
+
+  color: $txt-black;
 
   --p-inputtext-focus-ring-shadow: none;
   --p-inputtext-hover-border-color: #f2f2f7;
@@ -92,6 +106,10 @@ const handleBlur = () => {
 
   &__wrapper {
     position: relative;
+  }
+
+  &-disabled {
+    color: #64748b !important;
   }
 
   &__native {
@@ -118,7 +136,7 @@ const handleBlur = () => {
     transform: translateY(-50%);
     z-index: 1;
 
-    color: $txt-description;
+    color: inherit;
 
     transition: all 0.2s ease;
 

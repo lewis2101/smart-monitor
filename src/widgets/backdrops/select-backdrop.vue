@@ -8,11 +8,11 @@ const props = defineProps<
   {
     list: Array<{
       label: string;
-      value: number;
+      value: number | string;
     }>;
-    initialValue: number | null;
+    initialValue: number | string | null;
     showReset?: boolean;
-  } & BackdropComponentProps<(value: string) => any>
+  } & BackdropComponentProps<(value: number | string | null) => any>
 >();
 
 const emit = defineEmits<{
@@ -29,7 +29,7 @@ const submit = () => {
 };
 
 const reset = () => {
-  props.onSuccess?.("");
+  props.onSuccess?.(null);
   emit("closeBackdrop");
 };
 </script>

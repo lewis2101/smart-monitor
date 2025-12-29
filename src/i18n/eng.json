@@ -1,4 +1,12 @@
 {
+  "profile": {
+    "title": "User info",
+    "login": "Login",
+    "role": "Role",
+    "name": "User name",
+    "password": "Change password",
+    "logout": "Logout"
+  },
   "PATRONYMIC": "Patronymic",
   "DATEBIRTH": "Birthday",
   "MOBILEPHONE": "Mobile number",

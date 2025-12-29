@@ -4,6 +4,7 @@ export type FieldInputType =
   | "ARRAY"
   | "LOCAL"
   | "DATE_TIME"
+  | "DATE"
   | "NUMBER"
   | "REF"
   | "LINK_GENERATOR"

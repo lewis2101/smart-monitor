@@ -22,7 +22,7 @@ const handleClick = (to?: string) => to && router.push(to);
 </script>
 
 <template>
-  <base-island-block :clickable="false">
+  <base-island-block>
     <base-rect-item
       v-for="item in list"
       :key="item.title"

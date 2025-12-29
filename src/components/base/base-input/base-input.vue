@@ -11,7 +11,7 @@ defineProps<{
   disabled?: boolean;
 }>();
 
-const model = defineModel<string>();
+const model = defineModel<string | null>();
 const { emits } = useEmits();
 
 const baseInputRef = ref<HTMLDivElement | null>(null);
@@ -51,6 +51,8 @@ const handleClear = () => {
 
 <style scoped lang="scss">
 .base-input {
+  color: $txt-black;
+
   &__wrapper {
     position: relative;
   }

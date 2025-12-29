@@ -16,7 +16,8 @@ export const useAuthStorage = () => {
     id: "",
     firstName: "",
     lastName: "",
-    role: "",
+    role: null,
+    username: "",
   });
 
   const checkHasTokens = () => accessTokenStorage.value && refreshTokenStorage.value;
@@ -42,7 +43,8 @@ export const useAuthStorage = () => {
       id: "",
       firstName: "",
       lastName: "",
-      role: "",
+      role: null,
+      username: "",
     };
   };
 

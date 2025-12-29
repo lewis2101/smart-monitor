@@ -32,9 +32,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="ratingRef" title="Оцените" class="rating-field">
+  <div title="Оцените" class="rating-field">
     <div class="rating-field__title">Оцените</div>
-    <Rating v-model="model as number" :disabled="disabled || field.disabled" />
+    <div ref="ratingRef" class="rating-field__stars">
+      <Rating v-model="model as number" :disabled="disabled || field.disabled" />
+    </div>
   </div>
 </template>
 

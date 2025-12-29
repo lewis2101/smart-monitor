@@ -36,11 +36,6 @@ const router = createRouter({
           component: Docs,
         },
         {
-          path: "docs/briefing",
-          name: MainTabRoutes.briefing,
-          component: Briefing,
-        },
-        {
           path: "application",
           name: MainTabRoutes.application,
           component: Application,
@@ -66,6 +61,11 @@ const router = createRouter({
       path: "/learning",
       name: CommonRoutes.learning,
       component: Learning,
+    },
+    {
+      path: "/briefing",
+      name: MainTabRoutes.briefing,
+      component: Briefing,
     },
     {
       path: "/new-order/:orderId",

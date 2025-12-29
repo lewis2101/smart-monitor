@@ -8,6 +8,11 @@ import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/
 import FilterDatePicker from "@/components/filter-fields/filter-date-picker.vue";
 import { useI18n } from "vue-i18n";
 
+const operatorMap: Record<string, string> = {
+  DATE_TIME: "=",
+  DATE: "=",
+};
+
 const props = defineProps<
   {
     fields: FieldType[];
@@ -26,7 +31,7 @@ const getInitialValues = (sync = false): Record<string, FilterType> =>
     (acc, curr) => ({
       ...acc,
       [curr.value]: {
-        operator: curr.type === "DATE_TIME" ? "=" : "like",
+        operator: operatorMap?.[curr.filterType] || "like",
         value: curr.value,
         text: sync ? props.initialValue.find((v) => v.value === curr.value)?.text || "" : "",
       },
@@ -54,7 +59,7 @@ const reset = () => {
 };
 
 const getComponent = (type: FieldInputType) => {
-  if (type === "DATE_TIME") {
+  if (type === "DATE_TIME" || type === "DATE") {
     return FilterDatePicker;
   }
   return BaseInput;
@@ -93,7 +98,7 @@ const getComponent = (type: FieldInputType) => {
 
   &__buttons {
     position: sticky;
-    bottom: 0;
+    bottom: env(safe-area-inset-bottom);
     left: 0;
     z-index: 10;
     padding: 8px 0;

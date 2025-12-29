@@ -24,7 +24,9 @@ const props = withDefaults(
 const islandBlockRef = ref<HTMLDivElement | null>(null);
 
 onMounted(() => {
-  useBubbleAnimate(islandBlockRef);
+  if (props.clickable) {
+    useBubbleAnimate(islandBlockRef);
+  }
 });
 
 const radius = computed(() => `${radiusMapper[props.rounded]}px`);

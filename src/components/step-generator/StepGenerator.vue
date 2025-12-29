@@ -26,6 +26,7 @@ const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
   REF: markRaw(FieldRef),
   LINK_GENERATOR: markRaw(LinkGenerator),
   DATE_TIME: markRaw(DateTimeField),
+  DATE: markRaw(DateTimeField),
   AddressSelector: markRaw(AddressSelector),
   STRING: markRaw(FieldInput),
   INTEGER: null,

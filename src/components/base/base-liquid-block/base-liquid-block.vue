@@ -1,11 +1,28 @@
 <script setup lang="ts">
-defineProps<{
-  title?: string;
-}>();
+import { onMounted, useTemplateRef } from "vue";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    clickable?: boolean;
+  }>(),
+  {
+    clickable: true,
+  },
+);
+
+const liquidBlockRef = useTemplateRef("liquidBlockRef");
+
+onMounted(() => {
+  if (props.clickable) {
+    useBubbleAnimate(liquidBlockRef);
+  }
+});
 </script>
 
 <template>
-  <div class="main-liquid-block">
+  <div ref="liquidBlockRef" class="main-liquid-block">
     <div v-if="title" class="main-liquid-block__title">{{ title }}</div>
     <slot />
   </div>

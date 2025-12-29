@@ -3,15 +3,23 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useIonRouter } from "@ionic/vue";
 import { CommonRoutes } from "@/router/router-list.ts";
+import { onMounted, useTemplateRef } from "vue";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 const router = useIonRouter();
 
 const { userInfoStorage } = useAuthStorage();
+
+const userInfoRef = useTemplateRef("userInfoRef");
+
+onMounted(() => {
+  useBubbleAnimate(userInfoRef);
+});
 </script>
 
 <template>
   <header class="main-header">
-    <div class="main-header__user" @click="router.push({ name: CommonRoutes.profile })">
+    <div ref="userInfoRef" class="main-header__user" @click="router.push({ name: CommonRoutes.profile })">
       <button class="main-header__button">
         <base-icon name="user" color="white" />
       </button>

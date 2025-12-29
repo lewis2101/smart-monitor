@@ -10,7 +10,7 @@ const props = withDefaults(
     disabled?: boolean;
     list: Array<{
       label: string;
-      value: number;
+      value: number | string;
     }>;
   }>(),
   {
@@ -19,7 +19,7 @@ const props = withDefaults(
 );
 
 const globalBackdropStore = useGlobalBackdropStore();
-const model = defineModel<number | null>({ required: true });
+const model = defineModel<number | string | null>({ required: true });
 
 const currentValueLabel = computed(() => props.list?.find((l) => l.value === model.value)?.label || "");
 
@@ -81,6 +81,8 @@ const handleClick = async () => {
 
     transition: all 0.2s ease;
 
+    padding-right: 24px;
+
     &_focus {
       position: absolute;
 
@@ -92,6 +94,7 @@ const handleClick = async () => {
 
   &__value {
     color: inherit;
+    padding-right: 24px;
   }
 
   &__icon {

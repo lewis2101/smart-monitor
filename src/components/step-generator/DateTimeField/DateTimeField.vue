@@ -39,7 +39,7 @@ const proxyModel = computed({
 </script>
 
 <template>
-  <base-date-picker v-model="proxyModel" :placeholder="field.text" :disabled="disabled || field.disabled" fluid />
+  <base-date-picker v-model="proxyModel" :placeholder="$t(field.value)" :disabled="disabled || field.disabled" fluid />
 </template>
 
 <style scoped lang="scss"></style>

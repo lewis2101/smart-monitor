@@ -1,31 +1,35 @@
 <script setup lang="ts">
-import { IonHeader, IonPage } from "@ionic/vue";
+import { IonHeader, IonPage, useIonRouter } from "@ionic/vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
-import { useLogin } from "@/composables/login/use-login.ts";
+import DefaultPage from "@/layouts/default-page.vue";
+import { MainTabRoutes } from "@/router/router-list.ts";
+import ProfileData from "@/components/profile/profile-data.vue";
 
-const { userInfoStorage } = useAuthStorage();
-const { logout } = useLogin();
+const router = useIonRouter();
+
+const handleClickClose = () => {
+  if (router.canGoBack()) {
+    router.back();
+  } else {
+    router.replace({ name: MainTabRoutes.home });
+  }
+};
 </script>
 
 <template>
   <ion-page class="profile-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Мои заявки" />
+        <default-layout-header title="Профиль" back @click-back="handleClickClose" />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      <div class="profile-page__body">
-        <div>FIRST NAME: {{ userInfoStorage.firstName }}</div>
-        <div>LAST NAME: {{ userInfoStorage.lastName }}</div>
-        <div>ID: {{ userInfoStorage.id }}</div>
-        <div>ROLE: {{ userInfoStorage.role }}</div>
-        <ion-button @click="logout">logout</ion-button>
-      </div>
+      <default-page>
+        <profile-data />
+      </default-page>
     </base-content-with-refresher>
   </ion-page>
 </template>
