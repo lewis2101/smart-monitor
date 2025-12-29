@@ -5,6 +5,7 @@ import { useResourceDependencyQuery } from "@/api/dependency/resource-dependency
 import { useQuery } from "@tanstack/vue-query";
 import { IonSpinner } from "@ionic/vue";
 import SelectInput from "@/widgets/select-input.vue";
+import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
@@ -20,12 +21,12 @@ const props = withDefaults(
 
 const getInitialValue = () => {
   if (typeof props.field.default === "object" && props.field.default.id) {
-    return Number(props.field.default.id);
+    return tryToParseNumber(props.field.default.id);
   }
   return null;
 };
 
-const model = defineModel<number | null>({ required: true });
+const model = defineModel<string | number | null>({ required: true });
 model.value = getInitialValue();
 
 const fieldDefaultId = computed(() => (typeof props.field.default === "object" ? props.field.default.id : ""));
@@ -51,15 +52,22 @@ const { data, isPending } = useQuery({
 const list: ComputedRef<SelectList> = computed(() =>
   data.value?.content.map((item) => ({
     label: item.value,
-    value: Number(item.id),
+    value: tryToParseNumber(item.id),
   })),
 );
+
+const loadingData = computed(() => isPending.value && isHasTableProperty.value);
 </script>
 
 <template>
   <div class="field-input">
-    <select-input v-model="model" :list="list" :placeholder="$t(field.value)" :disabled="disabled || field.disabled" />
-    <div v-if="isPending && isHasTableProperty" class="field-input__spinner">
+    <select-input
+      v-model="model"
+      :list="list"
+      :placeholder="$t(field.value)"
+      :disabled="disabled || field.disabled || loadingData"
+    />
+    <div v-if="loadingData" class="field-input__spinner">
       <ion-spinner name="circular" class="field-input__spinner-icon" />
     </div>
   </div>

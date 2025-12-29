@@ -28,15 +28,19 @@ const handleClick = async () => {
     return;
   }
 
-  const value = (await globalBackdropStore.push("select", {
-    title: props.selectTitle || props.placeholder || "",
-    props: {
-      list: props.list,
-      initialValue: model.value,
-    },
-  })) as number;
+  try {
+    const value = (await globalBackdropStore.push("select", {
+      title: props.selectTitle || props.placeholder || "",
+      props: {
+        list: props.list,
+        initialValue: model.value,
+      },
+    })) as number;
 
-  model.value = value;
+    model.value = value;
+  } catch (e) {
+    console.log(e);
+  }
 };
 </script>
 
@@ -77,7 +81,7 @@ const handleClick = async () => {
   &__placeholder {
     position: relative;
     bottom: 4px;
-    color: $txt-description;
+    color: inherit;
 
     transition: all 0.2s ease;
 

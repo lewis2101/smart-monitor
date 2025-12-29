@@ -11,6 +11,7 @@ export enum OrdersEndpoints {
   orderMain = "/order/main",
   orderNext = "/order/next",
   orderSave = "/order/save",
+  orderInitial = "/order/initial",
 }
 
 export enum DependencyEndpoints {

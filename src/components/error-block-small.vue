@@ -2,6 +2,7 @@
 import { refresh } from "ionicons/icons";
 import { IonButton, IonIcon } from "@ionic/vue";
 import { computed } from "vue";
+import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -16,23 +17,14 @@ defineEmits<{
   (e: "refresh"): void;
 }>();
 
+const { extractError } = useExtractErrorData();
+
 const errorText = computed(() => {
   if (!props.error) {
     return "";
   }
-  if (props.error instanceof Error) {
-    return props.error.message;
-  }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  if (props.error?.data) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return props.error.data?.fullMessage || props.errpr;
-  }
-
-  return props.error;
+  return extractError(props.error);
 });
 </script>
 

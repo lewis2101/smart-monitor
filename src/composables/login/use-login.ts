@@ -10,6 +10,7 @@ import { useDevice } from "@/composables/useDevice.ts";
 import { computed, watch } from "vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useToast } from "primevue/usetoast";
+import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 
 const loginSchema = toTypedSchema(
   object({
@@ -26,6 +27,7 @@ export const useLogin = () => {
   const globalSpinner = useGlobalSpinner();
   const { device } = useDevice();
   const toast = useToast();
+  const { getErrorForToast } = useExtractErrorData();
 
   const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo, clearStorage } = useAuthStorage();
 
@@ -77,13 +79,7 @@ export const useLogin = () => {
 
   watch(loginError, (value) => {
     if (value) {
-      toast.add({
-        severity: "error",
-        summary: "Ошибка",
-        detail: value?.data?.extension || "Непредвиденная ошибка",
-        life: 3000,
-        closable: false,
-      });
+      toast.add(getErrorForToast(value));
     }
   });
 

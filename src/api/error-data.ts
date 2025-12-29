@@ -8,8 +8,8 @@ export type HttpRequestError = {
 };
 
 export type CapacitorHttpError<T> = {
-  data: T;
-  headers: Record<string, string>;
-  status: number;
-  url: string;
+  data?: T;
+  headers?: Record<string, string>;
+  status?: number;
+  url?: string;
 };

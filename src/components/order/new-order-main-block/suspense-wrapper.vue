@@ -3,7 +3,6 @@ import ErrorBoundary from "@/components/error-boundary.vue";
 import ErrorBlock from "@/components/error-block.vue";
 import NewOrderMainBlock from "@/components/order/new-order-main-block/new-order-main-block.vue";
 import Skeleton from "./skeleton.vue";
-import { useEmits } from "@/composables/useEmits.ts";
 
 defineProps<{
   processKey: string;
@@ -12,8 +11,6 @@ defineProps<{
 defineEmits<{
   (e: "getLabel", value: string): void;
 }>();
-
-const emits = useEmits();
 </script>
 
 <template>

@@ -5,4 +5,5 @@ export enum OrdersScope {
   orderMain = "order-main",
   orderNext = "order-next",
   orderSave = "order-save",
+  orderInitial = "order-initial",
 }
