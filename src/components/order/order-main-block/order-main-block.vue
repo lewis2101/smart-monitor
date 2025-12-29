@@ -10,6 +10,8 @@ import { computed, useTemplateRef, watch } from "vue";
 import { useOrderSaveMutation } from "@/api/orders/order-save.ts";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 import { useToast } from "primevue/usetoast";
+import { getOrderErrorMessage } from "@/api/orders/getOrderErrorMessage.ts";
+import { useI18n } from "vue-i18n";
 
 const COMPLETE_TASK_NAME = "COMPLETE";
 
@@ -19,6 +21,7 @@ const props = defineProps<{
 
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 const toast = useToast();
+const { t } = useI18n();
 
 const orderActionQuery = useOrderActionQuery({
   getUrl: (url) => url + "/" + props.orderId,
@@ -117,7 +120,7 @@ watch(saveError, (value) => {
     toast.add({
       severity: "error",
       summary: "Ошибка",
-      detail: value?.data?.extension || "Непредвиденная ошибка",
+      detail: getOrderErrorMessage(value?.data?.extension || "Непредвиденная ошибка", t(value?.data?.attr)),
       life: 3000,
       closable: false,
     });
