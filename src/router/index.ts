@@ -13,6 +13,7 @@ import Registration from "@/pages/registration.vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import Profile from "@/pages/profile.vue";
 import Order from "@/pages/order.vue";
+import Notifications from "@/pages/notifications.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -81,6 +82,11 @@ const router = createRouter({
       path: "/profile",
       name: CommonRoutes.profile,
       component: Profile,
+    },
+    {
+      path: "/notifications",
+      name: CommonRoutes.notifications,
+      component: Notifications,
     },
   ],
 });

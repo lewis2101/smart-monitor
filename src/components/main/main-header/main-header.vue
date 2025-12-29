@@ -10,10 +10,12 @@ const router = useIonRouter();
 
 const { userInfoStorage } = useAuthStorage();
 
-const userInfoRef = useTemplateRef("userInfoRef");
+const userInfoRef = useTemplateRef<HTMLDivElement | null>("userInfoRef");
+const notificationRef = useTemplateRef<HTMLDivElement | null>("notificationRef");
 
 onMounted(() => {
   useBubbleAnimate(userInfoRef);
+  useBubbleAnimate(notificationRef);
 });
 </script>
 
@@ -32,7 +34,11 @@ onMounted(() => {
       <button class="main-header__button">
         <base-icon name="search" color="white" />
       </button>
-      <button class="main-header__button">
+      <button
+        ref="notificationRef"
+        class="main-header__button"
+        @click="router.push({ name: CommonRoutes.notifications })"
+      >
         <base-icon name="notification" color="white" />
       </button>
     </div>

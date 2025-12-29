@@ -21,4 +21,5 @@ export enum CommonRoutes {
   registration = "registration",
   learning = "learning",
   profile = "profile",
+  notifications = "notifications",
 }
