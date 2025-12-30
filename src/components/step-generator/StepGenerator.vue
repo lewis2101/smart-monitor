@@ -10,6 +10,7 @@ import type { StepField } from "@/components/step-generator/types.ts";
 import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
 import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
 import FieldBoolean from "@/components/step-generator/FieldInput/FieldBoolean.vue";
+import FieldTitle from "@/components/step-generator/FieldTitle/FieldTitle.vue";
 
 withDefaults(
   defineProps<{
@@ -26,11 +27,13 @@ const fieldsModel = reactive<Record<string, unknown>>({});
 const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
   REF: markRaw(FieldRef),
   LINK_GENERATOR: markRaw(LinkGenerator),
+  DATE_TIME_PICKER: markRaw(DateTimeField),
   DATE_TIME: markRaw(DateTimeField),
   DATE: markRaw(DateTimeField),
   AddressSelector: markRaw(AddressSelector),
   STRING: markRaw(FieldInput),
   BOOLEAN: markRaw(FieldBoolean),
+  TITLE: markRaw(FieldTitle),
   INTEGER: null,
   ARRAY: null,
   LOCAL: null,

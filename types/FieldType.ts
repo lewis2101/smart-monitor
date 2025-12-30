@@ -11,6 +11,8 @@ export type FieldInputType =
   | "AddressSelector"
   | "TEXT"
   | "BOOLEAN"
+  | "TITLE"
+  | "DATE_TIME_PICKER"
   | "RATING";
 
 export type FieldType = {

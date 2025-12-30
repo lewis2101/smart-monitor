@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
-const props = defineProps<{
-  name: string;
-  color?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    name: string;
+    color?: string;
+    width?: number;
+    height?: number;
+  }>(),
+  {
+    width: 24,
+  },
+);
 
 const iconsImport = import.meta.glob("@/assets/icons/**/**.svg", { as: "raw" });
 const icon = ref<string | null>(null);
@@ -24,6 +31,8 @@ const getIcon = async () => {
 onMounted(async () => {
   await getIcon();
 });
+
+const getWidth = computed(() => `${props.width}px`);
 </script>
 
 <template>
@@ -36,5 +45,6 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   color: v-bind("props.color");
+  width: v-bind(getWidth);
 }
 </style>
