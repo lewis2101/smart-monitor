@@ -11,6 +11,19 @@ const backdropRefs = useTemplateRef("backdropRefs");
 </script>
 
 <template>
+<!--  <base-ion-backdrop-->
+<!--    v-for="(backdrop, idx) in backdrops"-->
+<!--    :key="backdrop.title"-->
+<!--    ref="backdropRefs"-->
+<!--    v-model="backdrop.model"-->
+<!--    :title="backdrop.title"-->
+<!--  >-->
+<!--    <component-->
+<!--      :is="backdrop.component"-->
+<!--      v-bind="backdrop.props"-->
+<!--      @closeBackdrop="backdropRefs?.[idx]?.close"-->
+<!--    />-->
+<!--  </base-ion-backdrop>-->
   <base-backdrop
     v-for="(backdrop, idx) in backdrops"
     :key="backdrop.title"
