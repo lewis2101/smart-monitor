@@ -7,6 +7,9 @@
     "password": "Пароль өзгерту",
     "logout": "Аккаунттан шығу"
   },
+  "new-order": {
+    "create": "Құру"
+  },
   "PATRONYMIC": "Әкесінің аты",
   "DATEBIRTH": "Туылған күні",
   "MOBILEPHONE": "Ұялы телефон нөмірі",

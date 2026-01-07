@@ -7,6 +7,9 @@
     "password": "Изменить пароль",
     "logout": "Выйти из аккаунта"
   },
+  "new-order": {
+    "create": "Создать"
+  },
   "PATRONYMIC": "Отчество",
   "DATEBIRTH": "Дата рождения",
   "MOBILEPHONE": "Мобильный номер",

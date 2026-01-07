@@ -7,6 +7,9 @@
     "password": "Change password",
     "logout": "Logout"
   },
+  "new-order": {
+    "create": "Create"
+  },
   "PATRONYMIC": "Patronymic",
   "DATEBIRTH": "Birthday",
   "MOBILEPHONE": "Mobile number",

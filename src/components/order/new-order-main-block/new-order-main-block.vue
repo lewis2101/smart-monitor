@@ -2,7 +2,11 @@
 import {IonButton} from "@ionic/vue"
 import {useOrderInitialMutation} from "@/api/orders/initial-order.ts";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
-import {useTemplateRef} from "vue";
+import {onMounted, useTemplateRef, watch} from "vue";
+import {useValidateInitialMutation} from "@/api/orders/validate-initial.ts";
+import {useToast} from "primevue/usetoast";
+import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
+import {useCalcRestriction} from "@/composables/order/use-calc-restriction.ts";
 
 const props = defineProps<{
   processKey: string;
@@ -14,17 +18,34 @@ const emit = defineEmits<{
 
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 
+const toast = useToast();
+const {getErrorForToast} = useExtractErrorData();
+const {executeCalcRestriction} = useCalcRestriction(props.processKey);
+
 const {mutateAsync: orderInitialMutate} = useOrderInitialMutation({});
+const {mutateAsync: orderValidateMutate, error: validateError} = useValidateInitialMutation({})
 
 const orderData = await orderInitialMutate({
   processKey: props.processKey,
 });
 
-const createOrder = () => {
+const createOrder = async () => {
   if (stepGeneratorRef.value) {
-    console.log("DATA: ", stepGeneratorRef.value.fieldsModel)
+    await orderValidateMutate(stepGeneratorRef.value.fieldsModel);
   }
 }
+
+onMounted(async () => {
+  if (stepGeneratorRef.value) {
+    await executeCalcRestriction(orderData.attributes, stepGeneratorRef.value.fieldsModel);
+  }
+})
+
+watch(validateError, (value) => {
+  if (value) {
+    toast.add(getErrorForToast(value));
+  }
+});
 
 emit("getLabel", orderData.name);
 </script>
@@ -40,7 +61,7 @@ emit("getLabel", orderData.name);
         class="new-order-main-block__action-button"
         @click="createOrder"
       >
-        Создать
+        {{ $t('new-order.create') }}
       </ion-button>
     </div>
   </div>
