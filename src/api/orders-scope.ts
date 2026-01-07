@@ -6,4 +6,5 @@ export enum OrdersScope {
   orderNext = "order-next",
   orderSave = "order-save",
   orderInitial = "order-initial",
+  validateInitial = "validate-initial"
 }

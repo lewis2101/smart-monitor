@@ -12,6 +12,7 @@ export enum OrdersEndpoints {
   orderNext = "/order/next",
   orderSave = "/order/save",
   orderInitial = "/order/initial",
+  validateInitial = "/order/validateInitial"
 }
 
 export enum DependencyEndpoints {

@@ -1,4 +1,4 @@
-import { getOrderErrorMessage } from "@/api/orders/getOrderErrorMessage.ts";
+import { getOrderErrorMessage } from "@/api/getOrderErrorMessage.ts";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 

@@ -10,8 +10,6 @@ import { computed, useTemplateRef, watch } from "vue";
 import { useOrderSaveMutation } from "@/api/orders/order-save.ts";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 import { useToast } from "primevue/usetoast";
-import { getOrderErrorMessage } from "@/api/orders/getOrderErrorMessage.ts";
-import { useI18n } from "vue-i18n";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 
 const COMPLETE_TASK_NAME = "COMPLETE";
