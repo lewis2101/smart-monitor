@@ -1,48 +1,22 @@
 <script setup lang="ts">
-import type { FieldInputType } from "../../../types/FieldType.ts";
-import { type Component, markRaw, type Raw, reactive } from "vue";
-import FieldRef from "@/components/step-generator/FieldRef/FieldRef.vue";
-import FieldInput from "@/components/step-generator/Fieldinput/FieldInput.vue";
-import LinkGenerator from "@/components/step-generator/LinkGenerator/LinkGenerator.vue";
-import DateTimeField from "@/components/step-generator/DateTimeField/DateTimeField.vue";
-import AddressSelector from "@/components/step-generator/AddressSelector/AddressSelector.vue";
-import type { StepField } from "@/components/step-generator/types.ts";
-import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
-import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
-import FieldBoolean from "@/components/step-generator/FieldInput/FieldBoolean.vue";
-import FieldTitle from "@/components/step-generator/FieldTitle/FieldTitle.vue";
+import {type Component} from "vue";
+import type {StepField} from "@/components/step-generator/types.ts";
+import {useStepGenerator} from "@/composables/order/useStepGenerator.ts";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     fields: StepField[];
     disabled?: boolean;
+    processKey: string;
   }>(),
   {
     disabled: false,
   },
 );
 
-const fieldsModel = reactive<Record<string, unknown>>({});
+const {fieldsModel, fieldsMap} = useStepGenerator(props.processKey);
 
-const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
-  REF: markRaw(FieldRef),
-  LINK_GENERATOR: markRaw(LinkGenerator),
-  DATE_TIME_PICKER: markRaw(DateTimeField),
-  DATE_TIME: markRaw(DateTimeField),
-  DATE: markRaw(DateTimeField),
-  AddressSelector: markRaw(AddressSelector),
-  STRING: markRaw(FieldInput),
-  BOOLEAN: markRaw(FieldBoolean),
-  TITLE: markRaw(FieldTitle),
-  INTEGER: null,
-  ARRAY: null,
-  LOCAL: null,
-  NUMBER: null,
-  TEXT: markRaw(FieldText),
-  RATING: markRaw(RatingField),
-};
-
-defineExpose({ fieldsModel });
+defineExpose({fieldsModel});
 </script>
 
 <template>

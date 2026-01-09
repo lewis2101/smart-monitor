@@ -1,22 +1,32 @@
-import type {StepField} from "@/components/step-generator/types.ts";
 import {useCalcRestrictionMutation} from "@/api/orders/calc-restriction.ts";
+import {inject, type MaybeRefOrGetter, toValue, watch} from "vue";
+import {
+  ProcessKeyInjectionKey,
+  StepGeneratorFieldsModelInjectionKey
+} from "@/composables/order/useStepGenerator.ts";
 
-export const useCalcRestriction = (processKey: string, fieldKey: string) => {
-  // const fieldModels = inject(fieldModelsProvideKey)
+
+export const useCalcRestriction = <T>(fieldKey: string, watchModel: MaybeRefOrGetter<unknown>, hooks: {
+  getValueOfCalcRestriction: (data: T) => void
+}) => {
+  const processKey = inject(ProcessKeyInjectionKey);
+  const stepGeneratorFieldsModel = inject(StepGeneratorFieldsModelInjectionKey);
 
   const {mutateAsync: calcRestrictionMutate} = useCalcRestrictionMutation({
     getUrl: (url) => url.replace(":processKey", processKey).replace(":field", fieldKey)
   })
 
-  const executeCalcRestriction = async (fields: StepField) => {
-    if (field.calcRestrictions) {
-      console.log("FIELD MODELS: ", fieldModels)
-      // await calcRestrictionMutate(fieldModels);
-    }
-    // TODO EXECUTE ALL RESTRIONS FIELD
+  const getCalcRestriction = async (): Promise<T> => {
+    const fieldModels = toValue(stepGeneratorFieldsModel);
+    return calcRestrictionMutate(fieldModels);
   }
 
+  watch(watchModel, async () => {
+    const data = await getCalcRestriction();
+    hooks.getValueOfCalcRestriction(data);
+  })
+
   return {
-    executeCalcRestriction
+    getCalcRestriction
   }
 }

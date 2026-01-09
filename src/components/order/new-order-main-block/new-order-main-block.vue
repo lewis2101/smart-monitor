@@ -45,7 +45,8 @@ emit("getLabel", orderData.name);
 <template>
   <div class="new-order-main-block">
     <div class="new-order-main-block__fields">
-      <step-generator ref="stepGeneratorRef" :fields="orderData.attributes"/>
+      <step-generator ref="stepGeneratorRef" :process-key="processKey"
+                      :fields="orderData.attributes"/>
     </div>
     <div class="new-order-main-block__actions">
       <ion-button
