@@ -1,16 +1,27 @@
 <script setup lang="ts">
-import type { StepField } from "@/components/step-generator/types.ts";
+import type {StepField} from "@/components/step-generator/types.ts";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 
-defineProps<{
+const props = defineProps<{
   field: StepField;
 }>();
+
+const getInitialValue = () => {
+  if (props.field.default) {
+    return props.field.default
+  }
+  return null
+}
+
+const model = defineModel<string>()
+model.value = getInitialValue();
+
 </script>
 
 <template>
-  <div v-if="field.default" class="field-title">
-    <base-icon name="help" :width="42" class="field-title__icon" />
-    {{ field.default }}
+  <div v-if="model" class="field-title">
+    <base-icon name="help" :width="42" class="field-title__icon"/>
+    {{ model }}
   </div>
 </template>
 

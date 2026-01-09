@@ -2,11 +2,10 @@
 import {IonButton} from "@ionic/vue"
 import {useOrderInitialMutation} from "@/api/orders/initial-order.ts";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
-import {onMounted, useTemplateRef, watch} from "vue";
+import {useTemplateRef, watch} from "vue";
 import {useValidateInitialMutation} from "@/api/orders/validate-initial.ts";
 import {useToast} from "primevue/usetoast";
 import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
-import {useCalcRestriction} from "@/composables/order/use-calc-restriction.ts";
 
 const props = defineProps<{
   processKey: string;
@@ -20,7 +19,6 @@ const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 
 const toast = useToast();
 const {getErrorForToast} = useExtractErrorData();
-const {executeCalcRestriction} = useCalcRestriction(props.processKey);
 
 const {mutateAsync: orderInitialMutate} = useOrderInitialMutation({});
 const {mutateAsync: orderValidateMutate, error: validateError} = useValidateInitialMutation({})
@@ -34,12 +32,6 @@ const createOrder = async () => {
     await orderValidateMutate(stepGeneratorRef.value.fieldsModel);
   }
 }
-
-onMounted(async () => {
-  if (stepGeneratorRef.value) {
-    await executeCalcRestriction(orderData.attributes, stepGeneratorRef.value.fieldsModel);
-  }
-})
 
 watch(validateError, (value) => {
   if (value) {
