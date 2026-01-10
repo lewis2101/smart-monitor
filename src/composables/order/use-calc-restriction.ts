@@ -16,7 +16,7 @@ export const useCalcRestriction = (processKey: MaybeRefOrGetter<string>, fieldsM
 
   const {mutateAsync: calcRestrictionMutate} = useCalcRestrictionMutation({})
 
-  const executeCalcRestriction = async (fieldKey: string) => {
+  const executeCalcRestriction = async (fieldKey: string, fieldType: string) => {
     restrictionsLoading[fieldKey] = true;
 
     try {
@@ -27,7 +27,7 @@ export const useCalcRestriction = (processKey: MaybeRefOrGetter<string>, fieldsM
           processKey: toValue(processKey),
         }
       });
-      updateFieldRestriction(fieldKey, data);
+      updateFieldRestriction(fieldKey, fieldType, data);
     } catch (e) {
       console.log(e)
     } finally {
@@ -35,11 +35,11 @@ export const useCalcRestriction = (processKey: MaybeRefOrGetter<string>, fieldsM
     }
   }
 
-  const updateFieldRestriction = (fieldKey: string, restrictionData: unknown) => {
-    const result = restrictionHandlers[fieldKey]?.(restrictionData);
+  const updateFieldRestriction = (fieldKey: string, fieldType: string, restrictionData: unknown) => {
+    const result = restrictionHandlers[fieldType]?.(restrictionData);
 
     if (result) {
-      restriction[fieldKey] = result;
+      restrictions[fieldKey] = result;
     }
   }
 

@@ -8,6 +8,7 @@ const props = withDefaults(defineProps<{
   showTime?: boolean;
   minDate?: Date;
   maxDate?: Date;
+  initialDate?: Date;
 } & BackdropComponentProps<(value: string | Date) => void, (error: Error) => void>>(), {
   showTime: false,
 });
@@ -16,7 +17,7 @@ const emit = defineEmits<{
   (e: "closeBackdrop"): void;
 }>()
 
-const model = ref(new Date());
+const model = ref(props.initialDate ? new Date(props.initialDate) : new Date());
 
 const submit = () => {
   if (!model) return;

@@ -1,34 +1,39 @@
 <script setup lang="ts">
 import type {StepField} from "@/components/step-generator/types.ts";
-import {computed, onMounted, ref, useTemplateRef} from "vue";
+import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
 import {
   useGlobalBackdropStore
 } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import {formatDateString} from "@/utils/formatDate.ts";
 import {useBubbleAnimate} from "@/composables/useBubbleAnimate.ts";
+import type {
+  DateCalcRestrictionResponse
+} from "@/composables/apply-restrictions/date-time-picker-restiction.ts";
 
 const props = withDefaults(
   defineProps<{
     field: StepField;
     disabled?: boolean;
+    restriction?: DateCalcRestrictionResponse;
   }>(),
   {
     disabled: false,
   },
 );
 
+const emit = defineEmits<{
+  (e: "change"): void;
+}>()
+
 const getInitialValue = () => {
   if (typeof props.field.default === "string") {
     return new Date(props.field.default).toISOString();
   }
-  return new Date();
+  return new Date().toISOString();
 };
 
 const model = defineModel<string | null>({required: true});
 model.value = getInitialValue();
-
-const minDate = ref<Date>();
-const maxDate = ref<Date>();
 
 const proxyModel = computed({
   get: () => {
@@ -49,18 +54,21 @@ const dateTimeFieldRef = useTemplateRef("dateTimeFieldRef");
 const globalBackdropStore = useGlobalBackdropStore();
 
 const showModal = async () => {
+  if (props.disabled || props.field.disabled) return;
 
   try {
     const date = (await globalBackdropStore.push("date-picker", {
       title: "Выберите дату",
       props: {
         showTime: true,
-        minDate: minDate.value,
-        maxDate: maxDate.value
+        minDate: props.restriction?.min && new Date(props.restriction?.min),
+        maxDate: props.restriction?.max && new Date(props.restriction?.max),
+        initialDate: proxyModel.value
       },
     })) as Date;
 
     proxyModel.value = date;
+    emit("change");
   } catch (e) {
     console.log(e)
   }
@@ -73,6 +81,18 @@ const getFormattedDate = computed(() => {
 
 onMounted(() => {
   useBubbleAnimate(dateTimeFieldRef);
+})
+
+watch(() => props.restriction, (value) => {
+  if (!value) return;
+
+  const minDate = new Date(value.min).getTime();
+  const maxDate = new Date(value.max).getTime();
+  const currentDate = new Date(model.value).getTime();
+
+  if (currentDate < minDate || currentDate > maxDate) {
+    model.value = new Date(minDate).toISOString();
+  }
 })
 
 </script>

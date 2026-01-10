@@ -38,13 +38,13 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     const affectedFields = fields.filter((field) => (field.calcRestrictions && field.limitation?.includes(fieldKey)));
     console.log({ affectedFields })
 
-    await Promise.all(affectedFields.map((field) => executeCalcRestriction(field.value)));
+    await Promise.all(affectedFields.map((field) => executeCalcRestriction(field.value, field.clientType)));
   }
 
   const initStepGenerator = async () => {
     const hasRestrictionFields = fields.filter((field) => field.calcRestrictions);
 
-    await Promise.all(hasRestrictionFields.map((field) => executeCalcRestriction(field.value)));
+    await Promise.all(hasRestrictionFields.map((field) => executeCalcRestriction(field.value, field.clientType)));
     await Promise.all(hasRestrictionFields.map((field) => calcAffectedFieldsRestriction(field.value)));
   }
 
@@ -55,5 +55,6 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     fieldsMap,
     restrictions,
     executeCalcRestriction,
+    calcAffectedFieldsRestriction,
   }
 }
