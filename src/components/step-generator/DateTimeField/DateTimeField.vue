@@ -9,15 +9,18 @@ import {useBubbleAnimate} from "@/composables/useBubbleAnimate.ts";
 import type {
   DateCalcRestrictionResponse
 } from "@/composables/apply-restrictions/date-time-picker-restiction.ts";
+import {IonSpinner} from "@ionic/vue";
 
 const props = withDefaults(
   defineProps<{
     field: StepField;
     disabled?: boolean;
     restriction?: DateCalcRestrictionResponse;
+    loading?: boolean;
   }>(),
   {
     disabled: false,
+    loading: false,
   },
 );
 
@@ -54,7 +57,7 @@ const dateTimeFieldRef = useTemplateRef("dateTimeFieldRef");
 const globalBackdropStore = useGlobalBackdropStore();
 
 const showModal = async () => {
-  if (props.disabled || props.field.disabled) return;
+  if (isDisabled.value) return;
 
   try {
     const date = (await globalBackdropStore.push("date-picker", {
@@ -83,6 +86,8 @@ onMounted(() => {
   useBubbleAnimate(dateTimeFieldRef);
 })
 
+const isDisabled = computed(() => props.disabled || props.field.disabled || props.loading);
+
 watch(() => props.restriction, (value) => {
   if (!value) return;
 
@@ -99,7 +104,7 @@ watch(() => props.restriction, (value) => {
 
 <template>
   <div ref="dateTimeFieldRef"
-       :class="['date-time-field', (disabled || field.disabled) && 'disabled']" @click="showModal">
+       :class="['date-time-field', isDisabled && 'disabled']" @click="showModal">
     <div
       v-if="field.value"
       :class="['date-time-field__placeholder', (isFocused || model) && 'date-time-field__placeholder_focus']"
@@ -108,6 +113,9 @@ watch(() => props.restriction, (value) => {
     </div>
     <div v-if="model" class="date-time-field__value">
       {{ getFormattedDate }}
+    </div>
+    <div v-if="loading" class="date-time-field__spinner">
+      <ion-spinner name="circular" class="date-time-field__spinner-icon"/>
     </div>
   </div>
 </template>
@@ -145,6 +153,18 @@ watch(() => props.restriction, (value) => {
 
   &__value {
     padding: 20px 16px 12px 16px;
+  }
+
+  &__spinner {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #ffffff;
+
+    &-icon {
+      color: $main-color;
+    }
   }
 }
 

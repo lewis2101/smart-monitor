@@ -14,7 +14,13 @@ const props = withDefaults(
   },
 );
 
-const {fieldsMap, fieldsModel, restrictions, calcAffectedFieldsRestriction} = useStepGenerator(props.processKey, props.fields)
+const {
+  fieldsMap,
+  fieldsModel,
+  restrictions,
+  restrictionsLoading,
+  calcAffectedFieldsRestriction
+} = useStepGenerator(props.processKey, props.fields)
 
 defineExpose({fieldsModel});
 </script>
@@ -30,6 +36,7 @@ defineExpose({fieldsModel});
       class="step-generator__field"
       :field="field"
       :restriction="restrictions[field.value]"
+      :loading="restrictionsLoading[field.value]"
       @change="calcAffectedFieldsRestriction(field.value)"
     />
   </div>

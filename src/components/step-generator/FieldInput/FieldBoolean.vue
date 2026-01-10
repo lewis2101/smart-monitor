@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ToggleSwitch from "primevue/toggleswitch";
-import type { StepField } from "@/components/step-generator/types.ts";
+import type {StepField} from "@/components/step-generator/types.ts";
+import {watch} from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -11,6 +12,10 @@ const props = withDefaults(
     disabled: false,
   },
 );
+
+const emit = defineEmits<{
+  (e: "change"): void;
+}>()
 
 const getInitialValue = () => {
   if (props.field.default) {
@@ -24,6 +29,10 @@ const getInitialValue = () => {
 
 const model = defineModel<boolean | null>();
 model.value = getInitialValue();
+
+watch(model, () => {
+  emit("change");
+})
 </script>
 
 <template>
@@ -31,7 +40,8 @@ model.value = getInitialValue();
     <div class="field-boolean__title">
       {{ $t(field.value) }}
     </div>
-    <toggle-switch :input-id="field.value" :disabled="disabled" class="field-boolean__switch" />
+    <toggle-switch v-model="model" :input-id="field.value" :disabled="disabled"
+                   class="field-boolean__switch"/>
   </label>
 </template>
 

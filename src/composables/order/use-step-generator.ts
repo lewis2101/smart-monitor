@@ -32,11 +32,15 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     RATING: markRaw(RatingField),
   };
 
-  const {executeCalcRestriction, restrictions} = useCalcRestriction(processKey, fieldsModel);
+  const {
+    executeCalcRestriction,
+    restrictions,
+    restrictionsLoading
+  } = useCalcRestriction(processKey, fieldsModel);
 
   const calcAffectedFieldsRestriction = async (fieldKey: string) => {
     const affectedFields = fields.filter((field) => (field.calcRestrictions && field.limitation?.includes(fieldKey)));
-    console.log({ affectedFields })
+    console.log({affectedFields})
 
     await Promise.all(affectedFields.map((field) => executeCalcRestriction(field.value, field.clientType)));
   }
@@ -56,5 +60,6 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     restrictions,
     executeCalcRestriction,
     calcAffectedFieldsRestriction,
+    restrictionsLoading,
   }
 }
