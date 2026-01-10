@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {type Component} from "vue";
 import type {StepField} from "@/components/step-generator/types.ts";
-import {useStepGenerator} from "@/composables/order/useStepGenerator.ts";
+import {useStepGenerator} from "@/composables/order/use-step-generator.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -14,7 +14,7 @@ const props = withDefaults(
   },
 );
 
-const {fieldsModel, fieldsMap} = useStepGenerator(props.processKey);
+const {fieldsMap, fieldsModel, restrictions, executeCalcRestriction} = useStepGenerator(props.processKey, props.fields)
 
 defineExpose({fieldsModel});
 </script>
@@ -29,6 +29,7 @@ defineExpose({fieldsModel});
       :disabled="disabled"
       class="step-generator__field"
       :field="field"
+      :restriction="restrictions[field.value]"
     />
   </div>
 </template>

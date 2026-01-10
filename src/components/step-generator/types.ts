@@ -16,13 +16,8 @@ export type StepField = {
   clientType: FieldInputType;
   table?: string;
   expand?: boolean;
+  limitation?: string[];
+  restriction?: unknown;
 };
 
 export type OrderActions = "RATE_THE_TRIP" | "CONFIRM" | "CANCEL" | "TO_REWORK";
-
-export type DateCalcRestrictionResponse = {
-  max: string | Date;
-  min: string | Date;
-  timeEnd: number;
-  timeStart: number;
-}

@@ -1,22 +1,22 @@
-import { computed, inject, type MaybeRefOrGetter, toValue } from "vue";
-import { httpClientProviderKey } from "@/composables/http-client/http-provider-keys.ts";
-import { type CapacitorHttpOptions, HttpClient } from "@/composables/http-client/HttpClient.ts";
-import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-builder.ts";
+import {computed, inject, type MaybeRefOrGetter, toValue} from "vue";
+import {httpClientProviderKey} from "@/composables/http-client/http-provider-keys.ts";
+import {type CapacitorHttpOptions, HttpClient} from "@/composables/http-client/HttpClient.ts";
+import {useEndpointBuilder} from "@/composables/http-client/use-endpoint-builder.ts";
 
 export function createRawMutations<RawData, Payload, Response>(options: {
   httpClientOptions: CapacitorHttpOptions<Payload>;
 }) {
   return ({
-    params,
-    client,
-    getUrl,
-  }: {
+      params,
+      client,
+      getUrl,
+    }: {
     params?: MaybeRefOrGetter<RawData>;
     client?: HttpClient;
     getUrl?: (url: string) => string;
     keys?: MaybeRefOrGetter[];
   }) => {
-    const { httpClientOptions } = options;
+    const {httpClientOptions} = options;
     const httpClient = client || inject(httpClientProviderKey);
 
     if (!httpClient) {
@@ -26,7 +26,7 @@ export function createRawMutations<RawData, Payload, Response>(options: {
     const p = computed(() => toValue(params));
 
     return {
-      mutateAsync: async (data: Payload): Promise<Response> => {
+      mutateAsync: async ({data}: { data: Payload }): Promise<Response> => {
         const config = useEndpointBuilder<Payload>(httpClientOptions);
         const url = getUrl?.(httpClientOptions.url) || httpClientOptions.url;
 

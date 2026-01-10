@@ -24,12 +24,16 @@ const {mutateAsync: orderInitialMutate} = useOrderInitialMutation({});
 const {mutateAsync: orderValidateMutate, error: validateError} = useValidateInitialMutation({})
 
 const orderData = await orderInitialMutate({
-  processKey: props.processKey,
+  data: {
+    processKey: props.processKey,
+  }
 });
 
 const createOrder = async () => {
   if (stepGeneratorRef.value) {
-    await orderValidateMutate(stepGeneratorRef.value.fieldsModel);
+    await orderValidateMutate({
+      data: stepGeneratorRef.value.fieldsModel
+    });
   }
 }
 

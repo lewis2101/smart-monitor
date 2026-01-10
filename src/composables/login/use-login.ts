@@ -1,16 +1,16 @@
-import { toTypedSchema } from "@vee-validate/zod";
-import { object, string } from "zod";
-import { useForm } from "vee-validate";
-import { CommonRoutes, MainTabRoutes } from "@/router/router-list.ts";
-import { useAuthMutation } from "@/api/auth/login.post.ts";
-import { useAuthChallengeMutation } from "@/api/auth/challenge.post.ts";
-import { useIonRouter } from "@ionic/vue";
-import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
-import { useDevice } from "@/composables/useDevice.ts";
-import { computed, watch } from "vue";
-import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
-import { useToast } from "primevue/usetoast";
-import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
+import {toTypedSchema} from "@vee-validate/zod";
+import {object, string} from "zod";
+import {useForm} from "vee-validate";
+import {CommonRoutes, MainTabRoutes} from "@/router/router-list.ts";
+import {useAuthMutation} from "@/api/auth/login.post.ts";
+import {useAuthChallengeMutation} from "@/api/auth/challenge.post.ts";
+import {useIonRouter} from "@ionic/vue";
+import {useGlobalSpinner} from "@/stores/use-global-spinner/use-global-spinner.ts";
+import {useDevice} from "@/composables/useDevice.ts";
+import {computed, watch} from "vue";
+import {useAuthStorage} from "@/composables/login/use-auth-storage.ts";
+import {useToast} from "primevue/usetoast";
+import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
 
 const loginSchema = toTypedSchema(
   object({
@@ -20,18 +20,31 @@ const loginSchema = toTypedSchema(
 );
 
 export const useLogin = () => {
-  const { mutateAsync: mutateLogin, isPending: loginPending, error: loginError } = useAuthMutation({});
-  const { mutateAsync: mutateLoginChallenge, isPending: challengePending } = useAuthChallengeMutation({});
+  const {
+    mutateAsync: mutateLogin,
+    isPending: loginPending,
+    error: loginError
+  } = useAuthMutation({});
+  const {
+    mutateAsync: mutateLoginChallenge,
+    isPending: challengePending
+  } = useAuthChallengeMutation({});
 
   const router = useIonRouter();
   const globalSpinner = useGlobalSpinner();
-  const { device } = useDevice();
+  const {device} = useDevice();
   const toast = useToast();
-  const { getErrorForToast } = useExtractErrorData();
+  const {getErrorForToast} = useExtractErrorData();
 
-  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo, clearStorage } = useAuthStorage();
+  const {
+    accessTokenStorage,
+    refreshTokenStorage,
+    expiresTokenStorage,
+    setUserInfo,
+    clearStorage
+  } = useAuthStorage();
 
-  const { values, validate, errors } = useForm<{
+  const {values, validate, errors} = useForm<{
     username: string;
     password: string;
   }>({
@@ -43,18 +56,22 @@ export const useLogin = () => {
   });
 
   const auth = async () => {
-    const { valid } = await validate();
+    const {valid} = await validate();
     if (!valid && isPending.value) return;
 
     try {
       const data = await globalSpinner.execute(async () => {
         await mutateLoginChallenge({
-          userName: values.username,
-          device: device.value,
+          data: {
+            userName: values.username,
+            device: device.value,
+          }
         });
         return mutateLogin({
-          ...values,
-          device: device.value,
+          data: {
+            ...values,
+            device: device.value,
+          }
         });
       });
 
@@ -66,7 +83,7 @@ export const useLogin = () => {
         setUserInfo(data.userInfo);
       }
 
-      router.replace({ name: MainTabRoutes.home });
+      router.replace({name: MainTabRoutes.home});
     } catch (e) {
       console.log(e);
     }

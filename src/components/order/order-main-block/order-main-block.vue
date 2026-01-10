@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { IonButton } from "@ionic/vue";
-import { useOrderActionQuery } from "@/api/orders/order-action.ts";
-import { useOrderMainMutation } from "@/api/orders/order-main.ts";
-import { useOrderNextMutation } from "@/api/orders/order-next.ts";
-import { useQuery } from "@tanstack/vue-query";
+import {IonButton} from "@ionic/vue";
+import {useOrderActionQuery} from "@/api/orders/order-action.ts";
+import {useOrderMainMutation} from "@/api/orders/order-main.ts";
+import {useOrderNextMutation} from "@/api/orders/order-next.ts";
+import {useQuery} from "@tanstack/vue-query";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
-import type { OrderActions } from "@/components/step-generator/types.ts";
-import { computed, useTemplateRef, watch } from "vue";
-import { useOrderSaveMutation } from "@/api/orders/order-save.ts";
-import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
-import { useToast } from "primevue/usetoast";
-import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
+import type {OrderActions} from "@/components/step-generator/types.ts";
+import {computed, useTemplateRef, watch} from "vue";
+import {useOrderSaveMutation} from "@/api/orders/order-save.ts";
+import {useGlobalSpinner} from "@/stores/use-global-spinner/use-global-spinner.ts";
+import {useToast} from "primevue/usetoast";
+import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
 
 const COMPLETE_TASK_NAME = "COMPLETE";
 
@@ -20,20 +20,24 @@ const props = defineProps<{
 
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 const toast = useToast();
-const { getErrorForToast } = useExtractErrorData();
+const {getErrorForToast} = useExtractErrorData();
 
 const orderActionQuery = useOrderActionQuery({
   getUrl: (url) => url + "/" + props.orderId,
   keys: [() => props.orderId],
 });
 
-const { mutateAsync: orderMainMutate } = useOrderMainMutation({});
-const { mutateAsync: orderNextMutate } = useOrderNextMutation({});
-const { mutate: orderSaveMutate, isPending: savePending, error: saveError } = useOrderSaveMutation({});
+const {mutateAsync: orderMainMutate} = useOrderMainMutation({});
+const {mutateAsync: orderNextMutate} = useOrderNextMutation({});
+const {
+  mutate: orderSaveMutate,
+  isPending: savePending,
+  error: saveError
+} = useOrderSaveMutation({});
 
 const globalSpinner = useGlobalSpinner();
 
-const { data: orderData, suspense } = useQuery({
+const {data: orderData, suspense} = useQuery({
   ...orderActionQuery,
   enabled: () => !!props.orderId,
 });
@@ -41,7 +45,9 @@ const { data: orderData, suspense } = useQuery({
 await Promise.all([
   suspense(),
   orderMainMutate({
-    orderId: props.orderId,
+    data: {
+      orderId: props.orderId,
+    }
   }),
 ]);
 
@@ -50,11 +56,18 @@ const currentUserTask = computed(() =>
 );
 
 const orderNextData = await orderNextMutate({
-  orderId: props.orderId,
-  currentUserTask: currentUserTask.value,
+  data: {
+    orderId: props.orderId,
+    currentUserTask: currentUserTask.value,
+  }
 });
 
-const orderActions: Record<OrderActions, { label: string; fill?: "outline"; color?: string; action: () => void }> = {
+const orderActions: Record<OrderActions, {
+  label: string;
+  fill?: "outline";
+  color?: string;
+  action: () => void
+}> = {
   RATE_THE_TRIP: {
     label: "Оценить поездку",
     action: () => {
@@ -127,7 +140,8 @@ watch(saveError, (value) => {
       {{ orderNextData.name }}
     </div>
     <div class="order-main-block__fields">
-      <step-generator ref="stepGeneratorRef" :fields="orderNextData.attributes" :disabled="orderDisabled" />
+      <step-generator ref="stepGeneratorRef" :fields="orderNextData.attributes"
+                      :disabled="orderDisabled"/>
     </div>
     <div class="order-main-block__actions">
       <ion-button

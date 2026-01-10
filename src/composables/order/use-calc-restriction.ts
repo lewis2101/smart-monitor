@@ -1,32 +1,51 @@
+import type {MaybeRefOrGetter} from "vue";
 import {useCalcRestrictionMutation} from "@/api/orders/calc-restriction.ts";
-import {inject, type MaybeRefOrGetter, toValue, watch} from "vue";
+import {reactive, ref, toValue} from "vue";
+import type {FieldInputType} from "../../../types/FieldType.ts";
 import {
-  ProcessKeyInjectionKey,
-  StepGeneratorFieldsModelInjectionKey
-} from "@/composables/order/useStepGenerator.ts";
+  applyDateTimePickerRestriction
+} from "@/composables/apply-restrictions/date-time-picker-restiction.ts";
 
+const restrictionHandlers: Record<FieldInputType, (...args: unknown) => unknown> = {
+  DATE_TIME_PICKER: applyDateTimePickerRestriction,
+}
 
-export const useCalcRestriction = <T>(fieldKey: string, watchModel: MaybeRefOrGetter<unknown>, hooks: {
-  getValueOfCalcRestriction: (data: T) => void
-}) => {
-  const processKey = inject(ProcessKeyInjectionKey);
-  const stepGeneratorFieldsModel = inject(StepGeneratorFieldsModelInjectionKey);
+export const useCalcRestriction = (processKey: MaybeRefOrGetter<string>, fieldsModel: MaybeRefOrGetter<Record<string, unknown>>) => {
+  const restrictions = reactive<Record<string, unknown>>({});
+  const restrictionsLoading = reactive<Record<string, boolean>>({});
 
-  const {mutateAsync: calcRestrictionMutate} = useCalcRestrictionMutation({
-    getUrl: (url) => url.replace(":processKey", processKey).replace(":field", fieldKey)
-  })
+  const {mutateAsync: calcRestrictionMutate} = useCalcRestrictionMutation({})
 
-  const getCalcRestriction = async (): Promise<T> => {
-    const fieldModels = toValue(stepGeneratorFieldsModel);
-    return calcRestrictionMutate(fieldModels);
+  const executeCalcRestriction = async (fieldKey: string) => {
+    restrictionsLoading[fieldKey] = true;
+
+    try {
+      const data = await calcRestrictionMutate({
+        data: toValue(fieldsModel),
+        urlParams: {
+          field: fieldKey,
+          processKey: toValue(processKey),
+        }
+      });
+      updateFieldRestriction(fieldKey, data);
+    } catch (e) {
+      console.log(e)
+    } finally {
+      restrictionsLoading[fieldKey] = false;
+    }
   }
 
-  watch(watchModel, async () => {
-    const data = await getCalcRestriction();
-    hooks.getValueOfCalcRestriction(data);
-  })
+  const updateFieldRestriction = (fieldKey: string, restrictionData: unknown) => {
+    const result = restrictionHandlers[fieldKey]?.(restrictionData);
+
+    if (result) {
+      restriction[fieldKey] = result;
+    }
+  }
 
   return {
-    getCalcRestriction
+    executeCalcRestriction,
+    restrictions,
+    restrictionsLoading
   }
 }

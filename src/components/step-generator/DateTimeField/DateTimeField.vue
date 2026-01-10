@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type {DateCalcRestrictionResponse, StepField} from "@/components/step-generator/types.ts";
+import type {StepField} from "@/components/step-generator/types.ts";
 import {computed, onMounted, ref, useTemplateRef} from "vue";
-import {useCalcRestriction} from "@/composables/order/use-calc-restriction.ts";
 import {
   useGlobalBackdropStore
 } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
@@ -22,18 +21,11 @@ const getInitialValue = () => {
   if (typeof props.field.default === "string") {
     return new Date(props.field.default).toISOString();
   }
-  return null;
+  return new Date();
 };
 
 const model = defineModel<string | null>({required: true});
 model.value = getInitialValue();
-
-useCalcRestriction<DateCalcRestrictionResponse>(props.field.value, model, {
-  getValueOfCalcRestriction: (data) => {
-    minDate.value = new Date(data.min);
-    maxDate.value = new Date(data.max);
-  }
-});
 
 const minDate = ref<Date>();
 const maxDate = ref<Date>();
@@ -86,7 +78,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="dateTimeFieldRef" :class="['date-time-field', (disabled || field.disabled) && 'disabled']" @click="showModal">
+  <div ref="dateTimeFieldRef"
+       :class="['date-time-field', (disabled || field.disabled) && 'disabled']" @click="showModal">
     <div
       v-if="field.value"
       :class="['date-time-field__placeholder', (isFocused || model) && 'date-time-field__placeholder_focus']"
