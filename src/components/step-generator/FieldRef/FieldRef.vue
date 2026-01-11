@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {StepField} from "@/components/step-generator/types.ts";
-import {computed, type ComputedRef} from "vue";
+import {computed, type ComputedRef, watch} from "vue";
 import {useResourceDependencyQuery} from "@/api/dependency/resource-dependency.ts";
 import {useQuery} from "@tanstack/vue-query";
 import {IonSpinner} from "@ionic/vue";
@@ -19,19 +19,13 @@ const props = withDefaults(
   },
 );
 
-const getInitialValue = () => {
-  if (typeof props.field.default === "object" && props.field.default.id) {
-    return {
-      id: tryToParseNumber(props.field.default.id)
-    };
-  }
-  return null;
-};
+const emit = defineEmits<{
+  (e: "change"): void;
+}>()
 
 const model = defineModel<{
   id: string | number
 } | null>({required: true});
-model.value = getInitialValue();
 
 const modelProxy = computed({
   get: () => {
@@ -77,6 +71,10 @@ const list: ComputedRef<SelectList> = computed(() =>
 );
 
 const loadingData = computed(() => isPending.value && isHasTableProperty.value);
+
+watch(model, () => {
+  emit("change");
+})
 </script>
 
 <template>

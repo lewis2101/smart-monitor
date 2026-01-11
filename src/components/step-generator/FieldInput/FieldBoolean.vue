@@ -17,18 +17,7 @@ const emit = defineEmits<{
   (e: "change"): void;
 }>()
 
-const getInitialValue = () => {
-  if (props.field.default) {
-    if (typeof props.field.default === "string") {
-      return props.field.default === "true";
-    }
-    return props.field.default;
-  }
-  return false;
-};
-
 const model = defineModel<boolean | null>();
-model.value = getInitialValue();
 
 watch(model, () => {
   emit("change");

@@ -14,17 +14,9 @@ const props = withDefaults(
   },
 );
 
-const getInitialValue = () => {
-  if (!!props.field.default) {
-    return props.field.default as unknown as number;
-  }
-  return null;
-};
-
 const ratingRef = ref<HTMLDivElement | null>(null);
 
 const model = defineModel<number | null>({ required: true });
-model.value = getInitialValue();
 
 onMounted(() => {
   useBubbleAnimate(ratingRef);

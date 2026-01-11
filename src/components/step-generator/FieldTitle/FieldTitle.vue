@@ -6,16 +6,7 @@ const props = defineProps<{
   field: StepField;
 }>();
 
-const getInitialValue = () => {
-  if (props.field.default) {
-    return props.field.default
-  }
-  return null
-}
-
 const model = defineModel<string>()
-model.value = getInitialValue();
-
 </script>
 
 <template>

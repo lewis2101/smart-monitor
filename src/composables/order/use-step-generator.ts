@@ -1,4 +1,4 @@
-import {type Component, markRaw, type Raw, reactive, ref} from "vue";
+import {type Component, markRaw, type Raw} from "vue";
 import type {StepField} from "@/components/step-generator/types.ts";
 import {type FieldInputType} from "../../../types/FieldType.ts";
 import FieldRef from "@/components/step-generator/FieldRef/FieldRef.vue";
@@ -11,9 +11,10 @@ import FieldTitle from "@/components/step-generator/FieldTitle/FieldTitle.vue";
 import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
 import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
 import {useCalcRestriction} from "@/composables/order/use-calc-restriction.ts";
+import {useFieldValueInit} from "@/composables/order/use-field-value-init.ts";
 
 export const useStepGenerator = (processKey: string, fields: StepField[]) => {
-  const fieldsModel = reactive<Record<string, unknown>>({});
+  const {fieldsModel} = useFieldValueInit(fields);
   const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
     REF: markRaw(FieldRef),
     LINK_GENERATOR: markRaw(LinkGenerator),

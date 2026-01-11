@@ -13,15 +13,7 @@ const props = withDefaults(
   },
 );
 
-const getInitialValue = () => {
-  if (typeof props.field.default === "string") {
-    return props.field.default;
-  }
-  return null;
-};
-
 const model = defineModel<string | null>({ required: true });
-model.value = getInitialValue();
 </script>
 
 <template>

@@ -28,15 +28,7 @@ const emit = defineEmits<{
   (e: "change"): void;
 }>()
 
-const getInitialValue = () => {
-  if (typeof props.field.default === "string") {
-    return new Date(props.field.default).toISOString();
-  }
-  return new Date().toISOString();
-};
-
 const model = defineModel<string | null>({required: true});
-model.value = getInitialValue();
 
 const proxyModel = computed({
   get: () => {

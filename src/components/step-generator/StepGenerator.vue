@@ -22,29 +22,23 @@ const {
   calcAffectedFieldsRestriction
 } = useStepGenerator(props.processKey, props.fields);
 
-const isValidField = (field: StepField) => !field.virtual;
-
 defineExpose({fieldsModel});
 </script>
 
 <template>
   <div class="step-generator">
-    <template
+    <component
       v-for="field in fields"
       :key="field.value"
-    >
-      <component
-        v-if="isValidField(field)"
-        :is="fieldsMap[field.clientType]"
-        v-model="fieldsModel[field.value]"
-        :disabled="disabled"
-        class="step-generator__field"
-        :field="field"
-        :restriction="restrictions[field.value]"
-        :loading="restrictionsLoading[field.value]"
-        @change="calcAffectedFieldsRestriction(field.value)"
-      />
-    </template>
+      :is="fieldsMap[field.clientType]"
+      v-model="fieldsModel[field.value]"
+      :disabled="disabled"
+      class="step-generator__field"
+      :field="field"
+      :restriction="restrictions[field.value]"
+      :loading="restrictionsLoading[field.value]"
+      @change="calcAffectedFieldsRestriction(field.value)"
+    />
   </div>
 </template>
 
