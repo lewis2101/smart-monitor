@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import {computed, onMounted, ref} from "vue";
 
 const props = withDefaults(
   defineProps<{
     name: string;
     color?: string;
     width?: number;
-    height?: number;
   }>(),
   {
     width: 24,
   },
 );
 
-const iconsImport = import.meta.glob("@/assets/icons/**/**.svg", { as: "raw" });
+const iconsImport = import.meta.glob("@/assets/icons/**/**.svg", {as: "raw"});
 const icon = ref<string | null>(null);
 const path = "/src/assets/icons/";
 

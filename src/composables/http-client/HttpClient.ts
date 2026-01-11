@@ -1,6 +1,4 @@
-// import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
-
-import { CapacitorHttp, type HttpOptions, type HttpParams, type HttpResponse } from "@capacitor/core";
+import {CapacitorHttp, type HttpOptions, type HttpParams, type HttpResponse} from "@capacitor/core";
 
 export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE";
 export type CapacitorHttpResponse<T> = Promise<Omit<HttpResponse, "data"> & { data: T }>;
@@ -26,8 +24,8 @@ export class HttpClient {
     this.baseURL = config.baseURL;
   }
 
-  private serializeParams(params: Record<string, any> | Array<any>, prefix?: string): string {
-    const parts: string[] = [];
+  private serializeParams(params: Record<string, any> | Array<any>, prefix?: string): Record<string, string> {
+    let parts: Record<string, string> = {};
 
     for (const key in params) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -38,14 +36,17 @@ export class HttpClient {
       const paramKey = prefix ? `${prefix}[${key}]` : key;
 
       if (typeof value === "object" || Array.isArray(value)) {
-        parts.push(this.serializeParams(value, paramKey));
+        parts = {
+          ...parts,
+          ...this.serializeParams(value, paramKey),
+        }
         continue;
       }
 
-      parts.push(`${paramKey}=${value}`);
+      parts[paramKey] = `${value}`;
     }
 
-    return parts.join("&");
+    return parts;
   }
 
   public registerResponseInterceptor = (callback: InterceptorCallback) => {
@@ -76,12 +77,14 @@ export class HttpClient {
   }
 
   public async get<Response>(url: string, option: CapacitorHttpOptions): CapacitorHttpResponse<Response> {
-    const params = option.params ? `?${this.serializeParams(option.params)}` : "";
+    const params = option.params ? this.serializeParams(option.params) : {};
+
+    console.log({params})
 
     const data = await CapacitorHttp.get({
       ...option,
-      url: `${this.baseURL}${url}${params}`,
-      params: undefined,
+      url: `${this.baseURL}${url}`,
+      params,
       headers: {
         ...option.headers,
         "Content-Type": "application/json; charset=utf-8",
@@ -107,8 +110,8 @@ export class HttpClient {
 
     const data = await CapacitorHttp.post({
       ...option,
-      url: `${this.baseURL}${url}${params}`,
-      params: undefined,
+      url: `${this.baseURL}${url}`,
+      params,
       headers: {
         ...option.headers,
         "Content-Type": "application/json; charset=utf-8",
@@ -134,8 +137,8 @@ export class HttpClient {
 
     return CapacitorHttp.patch({
       ...config,
-      url: `${this.baseURL}${url}${params}`,
-      params: undefined,
+      url: `${this.baseURL}${url}`,
+      params,
       headers: {
         ...config.headers,
         "Content-Type": "application/json; charset=utf-8",
@@ -148,8 +151,8 @@ export class HttpClient {
 
     return CapacitorHttp.delete({
       ...config,
-      url: `${this.baseURL}${url}${params}`,
-      params: undefined,
+      url: `${this.baseURL}${url}`,
+      params,
       headers: {
         ...config.headers,
         "Content-Type": "application/json; charset=utf-8",
