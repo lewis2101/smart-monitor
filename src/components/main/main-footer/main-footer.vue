@@ -1,72 +1,101 @@
 <script setup lang="ts">
 import FooterItem from "./item.vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { computed, onMounted, useTemplateRef } from "vue";
-import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
-import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
-import { useRoute } from "vue-router";
-import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
-import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+import {computed, onMounted, useTemplateRef} from "vue";
+import {MainTabRoutes, OrderRoutes} from "@/router/router-list.ts";
+import {IonTabBar, IonTabButton, useIonRouter} from "@ionic/vue";
+import {useRoute} from "vue-router";
+import {
+  useGlobalBackdropStore
+} from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import {useBubbleAnimate} from "@/composables/useBubbleAnimate.ts";
+import {useResourceDependencyQuery} from "@/api/dependency/resource-dependency.ts";
+import {useQuery} from "@tanstack/vue-query";
+import {useGlobalSpinner} from "@/stores/use-global-spinner/use-global-spinner.ts";
+import {useI18n} from "vue-i18n";
+
+const BPMN_PROCESS_KEY_RESOURCE = "BpmnProcessKey";
 
 const router = useIonRouter();
 const route = useRoute();
 
 const globalBackdropStore = useGlobalBackdropStore();
+const globalSpinner = useGlobalSpinner();
+const {locale} = useI18n();
 
 const currentPathName = computed(() => route.name as MainTabRoutes);
 const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWith(name) ? "active animate" : "");
 
-const processList = [
-  {
-    label: "Заявка на авто",
-    value: "KT_TAXI_PROCESS",
-  },
-];
-
 const createRef = useTemplateRef("createRef");
+
+const resourceDependencyQuery = useResourceDependencyQuery({
+  getUrl: (url) => `${url}/${BPMN_PROCESS_KEY_RESOURCE}`,
+})
+
+const {data: processList, refetch: getProcessList} = useQuery({
+  ...resourceDependencyQuery,
+  enabled: false
+});
 
 onMounted(() => {
   useBubbleAnimate(createRef);
 });
 
+const formattedProcessList = computed(() => {
+  if (processList.value) {
+    return processList.value.content.map((list) => ({
+      label: list.value,
+      value: list.code
+    }))
+  }
+})
+
 const handleClickCreate = async () => {
+  if (!processList.value) {
+    await globalSpinner.execute(() => getProcessList());
+  }
+
   const processKey = (await globalBackdropStore.push("pick", {
     title: "Выберите тип заявки",
     props: {
-      list: processList,
+      list: formattedProcessList.value,
     },
   })) as string;
-  router.push({ name: OrderRoutes.newOrder, params: { processKey } });
+  router.push({name: OrderRoutes.newOrder, params: {processKey}});
 };
 </script>
 
 <template>
   <ion-tab-bar slot="bottom" class="main-footer">
     <ion-tab-button tab="home" href="/home">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]" title="Главная">
-        <base-icon name="home" class="main-footer__icon" />
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]"
+                   title="Главная">
+        <base-icon name="home" class="main-footer__icon"/>
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="docs" href="/docs">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" title="Документы">
-        <base-icon name="docs" class="main-footer__icon" />
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]"
+                   title="Документы">
+        <base-icon name="docs" class="main-footer__icon"/>
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="camera" @click="handleClickCreate">
       <footer-item>
         <div ref="createRef" class="main-footer__create-item">
-          <base-icon name="plus" class="main-footer__camera-icon" />
+          <base-icon name="plus" class="main-footer__camera-icon"/>
         </div>
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="application" href="/application">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]" title="Заявки">
-        <base-icon name="application" class="main-footer__icon" />
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]"
+                   title="Заявки">
+        <base-icon name="application" class="main-footer__icon"/>
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="service" href="/service">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]" title="Сервисы">
-        <base-icon name="service" class="main-footer__icon" />
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]"
+                   title="Сервисы">
+        <base-icon name="service" class="main-footer__icon"/>
       </footer-item>
     </ion-tab-button>
   </ion-tab-bar>

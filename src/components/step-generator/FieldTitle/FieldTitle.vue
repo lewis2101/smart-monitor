@@ -11,7 +11,7 @@ const model = defineModel<string>()
 
 <template>
   <div v-if="model" class="field-title">
-    <base-icon name="help" :width="42" class="field-title__icon"/>
+    <base-icon name="help" class="field-title__icon"/>
     {{ model }}
   </div>
 </template>
@@ -28,17 +28,13 @@ const model = defineModel<string>()
   font-weight: 600;
   opacity: 0.8;
   display: flex;
-  align-items: start;
-  justify-content: space-between;
+  align-items: center;
   gap: 8px;
 
   text-wrap: pretty;
 
   &__icon {
-    svg {
-      width: 50px;
-      height: 50px;
-    }
+    flex-shrink: 0;
   }
 }
 </style>

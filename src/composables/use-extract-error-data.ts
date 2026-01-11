@@ -1,9 +1,9 @@
-import { getOrderErrorMessage } from "@/api/getOrderErrorMessage.ts";
-import { useI18n } from "vue-i18n";
-import { computed } from "vue";
+import {getOrderErrorMessage} from "@/api/getOrderErrorMessage.ts";
+import {useI18n} from "vue-i18n";
+import {computed} from "vue";
 
 export const useExtractErrorData = () => {
-  const { t } = useI18n();
+  const {t} = useI18n();
 
   const isShowDetailedError = String(import.meta.env.VITE_SHOW_DETAILED_ERROR) === "true";
 
@@ -12,14 +12,23 @@ export const useExtractErrorData = () => {
       return value;
     }
 
-    if (value?.data?.extension) {
-      if (value?.data?.attr) {
-        return getOrderErrorMessage(value.data.extension, t(value.data.attr));
-      }
-      return value.data.extension;
+    if (!value?.data) {
+      return "Непредвиденная ошибка";
     }
 
-    return "Непредвиденная ошибка";
+    const error = value.data;
+
+    if (error?.extension) {
+      if (error?.attr) {
+        return getOrderErrorMessage(error.extension, t(error.attr));
+      }
+      return error.extension;
+    }
+
+
+    if (error?.message) {
+      return error.message;
+    }
   };
 
   const getErrorShowTime = computed(() => {

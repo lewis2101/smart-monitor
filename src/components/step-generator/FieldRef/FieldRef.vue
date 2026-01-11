@@ -6,6 +6,8 @@ import {useQuery} from "@tanstack/vue-query";
 import {IonSpinner} from "@ionic/vue";
 import SelectInput from "@/widgets/select-input.vue";
 import {tryToParseNumber} from "@/utils/tryToParseNumber.ts";
+import {useToast} from "primevue/usetoast";
+import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
@@ -43,6 +45,9 @@ const modelProxy = computed({
   }
 })
 
+const toast = useToast();
+const {getErrorForToast} = useExtractErrorData();
+
 const fieldDefaultId = computed(() => (typeof props.field.default === "object" ? props.field.default.id : ""));
 const isHasTableProperty = computed(() => !!props.field.table);
 
@@ -58,7 +63,7 @@ const resourceDependencyQuery = useResourceDependencyQuery({
   keys: queryKeys,
 });
 
-const {data, isPending} = useQuery({
+const {data, isPending, error} = useQuery({
   ...resourceDependencyQuery,
   enabled: isHasTableProperty.value,
 });
@@ -74,6 +79,12 @@ const loadingData = computed(() => isPending.value && isHasTableProperty.value);
 
 watch(model, () => {
   emit("change");
+})
+
+watch(error, (value) => {
+  if (value) {
+    toast.add(getErrorForToast(value));
+  }
 })
 </script>
 

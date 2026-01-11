@@ -23,6 +23,7 @@ onMounted(async () => {
       :pt="{
         root: $style['global-toast'],
         message: $style.message,
+        messageContent: $style.messageContent
       }"
       class="global-toast"
     />
@@ -34,8 +35,6 @@ onMounted(async () => {
 <style module lang="scss">
 .global-toast {
   margin-bottom: calc(env(safe-area-inset-bottom) + 42px);
-  max-height: 200px;
-  overflow-x: auto;
 }
 .message {
   margin: 0 auto !important;
@@ -44,6 +43,11 @@ onMounted(async () => {
   box-shadow: 0 8px 16px 0 #00000014 !important;
   border: 1px solid #f2f2f7 !important;
   border-radius: 12px !important;
+}
+
+.messageContent {
+  max-height: 200px;
+  overflow-x: auto;
 }
 </style>
 
