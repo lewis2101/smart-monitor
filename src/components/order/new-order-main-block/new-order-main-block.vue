@@ -21,7 +21,7 @@ const toast = useToast();
 const {getErrorForToast} = useExtractErrorData();
 
 const {mutateAsync: orderInitialMutate} = useOrderInitialMutation({});
-const {mutateAsync: orderValidateMutate, error: validateError} = useValidateInitialMutation({})
+const {mutate: orderValidateMutate, error: validateError} = useValidateInitialMutation({})
 
 const orderData = await orderInitialMutate({
   data: {
@@ -31,8 +31,11 @@ const orderData = await orderInitialMutate({
 
 const createOrder = async () => {
   if (stepGeneratorRef.value) {
-    await orderValidateMutate({
-      data: stepGeneratorRef.value.fieldsModel
+    orderValidateMutate({
+      data: {
+        ...stepGeneratorRef.value.fieldsModel,
+        processKey: props.processKey,
+      }
     });
   }
 }

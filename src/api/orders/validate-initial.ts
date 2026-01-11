@@ -8,7 +8,9 @@ type RawData = undefined;
 
 type Response = any;
 
-type Payload = Record<string, unknown>;
+type Payload = Record<string, unknown> & {
+  processKey: string;
+};
 
 export const useValidateInitialMutation = createVueQueryMutations<RawData, Payload, Response, Error>({
   httpClientOptions: {
