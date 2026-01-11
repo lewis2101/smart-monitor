@@ -18,26 +18,18 @@ export const useGlobalBackdropStore = defineStore("global-backdrop-store", () =>
       props: BackdropProps<K>;
     },
   ) {
-    let promiseResolve = undefined;
-    let promiseReject = undefined;
-
-    const promise = new Promise((resolve, reject) => {
-      promiseResolve = resolve;
-      promiseReject = reject;
-    });
-
-    backdrops.push({
-      component: backdropComponents[key],
-      title: options.title,
-      props: {
-        ...options.props,
-        onSuccess: promiseResolve,
-        onFailure: promiseReject,
-      },
-      model: true,
-    });
-
-    return promise;
+    return new Promise((resolve, reject) => {
+      backdrops.push({
+        component: backdropComponents[key],
+        title: options.title,
+        props: {
+          ...options.props,
+          onSuccess: resolve,
+          onFailure: reject,
+        },
+        model: true,
+      });
+    })
   }
 
   watch(backdrops, (value) => {
