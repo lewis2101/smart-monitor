@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {StepField} from "@/components/step-generator/types.ts";
-import {computed, type ComputedRef, watch} from "vue";
+import {computed, type ComputedRef, onMounted, useTemplateRef, watch} from "vue";
 import {useResourceDependencyQuery} from "@/api/dependency/resource-dependency.ts";
 import {useQuery} from "@tanstack/vue-query";
 import {IonSpinner} from "@ionic/vue";
@@ -8,6 +8,7 @@ import SelectInput from "@/widgets/select-input.vue";
 import {tryToParseNumber} from "@/utils/tryToParseNumber.ts";
 import {useToast} from "primevue/usetoast";
 import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
+import {useBubbleAnimate} from "@/composables/useBubbleAnimate.ts";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
@@ -24,6 +25,8 @@ const props = withDefaults(
 const emit = defineEmits<{
   (e: "change"): void;
 }>()
+
+const fieldRef = useTemplateRef("fieldRef");
 
 const model = defineModel<{
   id: string | number
@@ -48,7 +51,14 @@ const modelProxy = computed({
 const toast = useToast();
 const {getErrorForToast} = useExtractErrorData();
 
-const fieldDefaultId = computed(() => (typeof props.field.default === "object" ? props.field.default.id : ""));
+const fieldDefaultId = computed(() => {
+  if (!props.field?.default) return "";
+
+  if (typeof props.field?.default === "object") {
+    return props.field?.default?.id
+  }
+  return ""
+});
 const isHasTableProperty = computed(() => !!props.field.table);
 
 const queryKeys = props.field.table ? [props.field.table] : [];
@@ -77,6 +87,10 @@ const list: ComputedRef<SelectList> = computed(() =>
 
 const loadingData = computed(() => isPending.value && isHasTableProperty.value);
 
+onMounted(() => {
+  useBubbleAnimate(fieldRef);
+})
+
 watch(model, () => {
   emit("change");
 })
@@ -89,7 +103,7 @@ watch(error, (value) => {
 </script>
 
 <template>
-  <div class="field-input">
+  <div class="field-input" ref="fieldRef">
     <select-input
       v-model="modelProxy"
       :list="list"

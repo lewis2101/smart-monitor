@@ -6,6 +6,8 @@ import {reactive} from "vue";
 type FieldValueInitFunc = (field: StepField) => unknown;
 
 const refInit: FieldValueInitFunc = (field) => {
+  if (!field.default) return null;
+
   if (typeof field.default === "object" && field.default.id) {
     return {
       id: tryToParseNumber(field.default.id)
