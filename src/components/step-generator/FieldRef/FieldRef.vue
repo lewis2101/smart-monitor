@@ -28,22 +28,22 @@ const emit = defineEmits<{
 
 const fieldRef = useTemplateRef("fieldRef");
 
-const model = defineModel<{
-  id: string | number
-} | null>({required: true});
+const model = defineModel<{ id: string } | number | null>({required: true});
 
 const modelProxy = computed({
   get: () => {
-    if (model.value && "id" in model.value) {
+    if (model.value && model.value?.id) {
       return model.value.id
     }
     return model.value;
   },
   set: (value) => {
-    if (value) {
+    if (props.field.type === "CUSTOM") {
       model.value = {
         id: value
       }
+    } else {
+      model.value = value;
     }
   }
 })

@@ -9,6 +9,9 @@ const refInit: FieldValueInitFunc = (field) => {
   if (!field.default) return null;
 
   if (typeof field.default === "object" && field.default.id) {
+    if (field.type == "CUSTOM") {
+      return tryToParseNumber(field.default.id);
+    }
     return {
       id: tryToParseNumber(field.default.id)
     };

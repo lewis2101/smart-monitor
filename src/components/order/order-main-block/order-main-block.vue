@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import {IonButton} from "@ionic/vue";
 import {useOrderActionQuery} from "@/api/orders/order-action.ts";
 import {useOrderMainMutation} from "@/api/orders/order-main.ts";
 import {useOrderNextMutation} from "@/api/orders/order-next.ts";
 import {useQuery} from "@tanstack/vue-query";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
-import type {OrderActions} from "@/components/step-generator/types.ts";
+import type {AdditionalOrderActions, OrderActions} from "@/components/step-generator/types.ts";
 import {computed, useTemplateRef, watch} from "vue";
 import {useOrderSaveMutation} from "@/api/orders/order-save.ts";
 import {useGlobalSpinner} from "@/stores/use-global-spinner/use-global-spinner.ts";
 import {useToast} from "primevue/usetoast";
 import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
+import OrderMoreButtons from "@/components/order/order-more-buttons/order-more-buttons.vue";
 
 const COMPLETE_TASK_NAME = "COMPLETE";
 
@@ -62,62 +62,56 @@ const orderNextData = await orderNextMutate({
   }
 });
 
-const orderActions: Record<OrderActions, {
-  label: string;
-  fill?: "outline";
-  color?: string;
-  action: () => void
-}> = {
-  RATE_THE_TRIP: {
-    label: "Оценить поездку",
-    action: () => {
-      if (stepGeneratorRef.value?.fieldsModel) {
-        orderSaveMutate({
-          ...stepGeneratorRef.value.fieldsModel,
-          currentUserTask: currentUserTask.value,
-          userTaskCompleteEvent: "RATE_THE_TRIP",
-          orderId: props.orderId,
-        });
-        console.log("FIELDS MODEL: ", stepGeneratorRef.value?.fieldsModel);
-      }
-    },
+const orderActions: Record<OrderActions | AdditionalOrderActions, () => void> = {
+  CONFIRM: () => {
+    console.log("CONFIRM");
   },
-  CONFIRM: {
-    label: "Подтвердить",
-    action: () => {
-      console.log("CONFIRM");
-    },
+  RATE_THE_TRIP: () => {
+    if (stepGeneratorRef.value?.fieldsModel) {
+      orderSaveMutate({
+        ...stepGeneratorRef.value.fieldsModel,
+        currentUserTask: currentUserTask.value,
+        userTaskCompleteEvent: "RATE_THE_TRIP",
+        orderId: props.orderId,
+      });
+      console.log("FIELDS MODEL: ", stepGeneratorRef.value?.fieldsModel);
+    }
   },
-  CANCEL: {
-    label: "Отменить",
-    action: () => {
-      console.log("CANCEL");
-    },
-    fill: "outline",
-    color: "danger",
+  REWORK: () => {
+    console.log("TO_REWORK");
   },
-  TO_REWORK: {
-    label: "На доработку",
-    action: () => {
-      console.log("TO_REWORK");
-    },
-    fill: "outline",
+  TO_REWORK: () => {
+    console.log("TO_REWORK");
   },
+  CANCEL: () => {
+    console.log("CANCEL");
+  },
+  duplicate: () => {
+    console.log("duplicate")
+  }
 };
 
 const orderDisabled = computed(() => !orderData.value?.permissions.canComplete);
 
-const orderActionButtons = computed(() => {
-  if (!orderData.value) {
-    return [];
-  }
-
-  const orderActionsKeys = Object.keys(orderActions);
-
-  return orderData.value.actions
-    .filter((action) => orderActionsKeys.includes(action))
-    .map((action) => orderActions[action]);
-});
+// const orderMainActionButton = computed(() => {
+//   if (!orderData.value && !orderData.value.actions) {
+//     return null;
+//   }
+//   if (!Object.keys(orderData.value.actions).length) {
+//     return null;
+//   }
+//
+//   return [...orderData.value.actions, ...orderNextData.buttons].reduce((acc, curr) => {
+//     const currentOrderAction = orderActions[curr];
+//     if (!acc) {
+//       return currentOrderAction;
+//     }
+//     if (currentOrderAction.order < acc.order) {
+//       return currentOrderAction;
+//     }
+//     return acc;
+//   }, null);
+// });
 
 watch(savePending, (value) => {
   if (value) {
@@ -135,26 +129,22 @@ watch(saveError, (value) => {
 </script>
 
 <template>
-  <div class="order-main-block">
+  <div v-if="orderData" class="order-main-block">
     <div class="order-main-block__status-title">
       {{ orderNextData.name }}
     </div>
     <div class="order-main-block__fields">
-      <step-generator ref="stepGeneratorRef" :fields="orderNextData.attributes"
-                      :disabled="orderDisabled"/>
+      <step-generator
+        ref="stepGeneratorRef"
+        :process-key="orderNextData.processKey"
+        :fields="orderNextData.attributes"
+        :disabled="orderDisabled"
+      />
     </div>
-    <div class="order-main-block__actions">
-      <ion-button
-        v-for="action in orderActionButtons"
-        :key="action.label"
-        :fill="action.fill"
-        :color="action.color"
-        class="order-main-block__action-button"
-        @click="action.action"
-      >
-        {{ action.label }}
-      </ion-button>
-    </div>
+    <order-more-buttons
+      :action-buttons="orderData.actions"
+      :additional-buttons="orderNextData.buttons"
+    />
   </div>
 </template>
 
@@ -184,7 +174,6 @@ watch(saveError, (value) => {
   &__actions {
     display: flex;
     align-items: center;
-    flex-direction: column;
     gap: 8px;
   }
 

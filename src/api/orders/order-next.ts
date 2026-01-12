@@ -30,6 +30,7 @@ type Response = {
     },
   ];
   assignee: string;
+  buttons: string[];
 };
 
 type Payload = {

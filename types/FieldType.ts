@@ -13,7 +13,8 @@ export type FieldInputType =
   | "BOOLEAN"
   | "TITLE"
   | "DATE_TIME_PICKER"
-  | "RATING";
+  | "RATING"
+  | "CUSTOM";
 
 export type FieldType = {
   changable: boolean;
