@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type {StepField} from "@/components/step-generator/types.ts";
-import {computed, type ComputedRef, onMounted, useTemplateRef, watch} from "vue";
-import {useResourceDependencyQuery} from "@/api/dependency/resource-dependency.ts";
-import {useQuery} from "@tanstack/vue-query";
-import {IonSpinner} from "@ionic/vue";
+import type { StepField } from "@/components/step-generator/types.ts";
+import { computed, type ComputedRef, onMounted, useTemplateRef, watch } from "vue";
+import { useResourceDependencyQuery } from "@/api/dependency/resource-dependency.ts";
+import { useQuery } from "@tanstack/vue-query";
+import { IonSpinner } from "@ionic/vue";
 import SelectInput from "@/widgets/select-input.vue";
-import {tryToParseNumber} from "@/utils/tryToParseNumber.ts";
-import {useToast} from "primevue/usetoast";
-import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
-import {useBubbleAnimate} from "@/composables/useBubbleAnimate.ts";
+import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
+import { useToast } from "primevue/usetoast";
+import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
@@ -24,40 +24,40 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (e: "change"): void;
-}>()
+}>();
 
 const fieldRef = useTemplateRef("fieldRef");
 
 const model = defineModel<{
-  id: string | number
-} | null>({required: true});
+  id: string | number;
+} | null>({ required: true });
 
 const modelProxy = computed({
   get: () => {
     if (typeof model.value === "object" && model.value?.id) {
-      return model.value.id
+      return model.value.id;
     }
     return model.value;
   },
   set: (value) => {
     if (value) {
       model.value = {
-        id: value
-      }
+        id: value,
+      };
     }
-  }
-})
+  },
+});
 
 const toast = useToast();
-const {getErrorForToast} = useExtractErrorData();
+const { getErrorForToast } = useExtractErrorData();
 
 const fieldDefaultId = computed(() => {
   if (!props.field?.default) return "";
 
   if (typeof props.field?.default === "object") {
-    return props.field?.default?.id
+    return props.field?.default?.id;
   }
-  return ""
+  return "";
 });
 const isHasTableProperty = computed(() => !!props.field.table);
 
@@ -73,7 +73,7 @@ const resourceDependencyQuery = useResourceDependencyQuery({
   keys: queryKeys,
 });
 
-const {data, isPending, error} = useQuery({
+const { data, isPending, error } = useQuery({
   ...resourceDependencyQuery,
   enabled: isHasTableProperty.value,
 });
@@ -89,17 +89,17 @@ const loadingData = computed(() => isPending.value && isHasTableProperty.value);
 
 onMounted(() => {
   useBubbleAnimate(fieldRef);
-})
+});
 
 watch(model, () => {
   emit("change");
-})
+});
 
 watch(error, (value) => {
   if (value) {
     toast.add(getErrorForToast(value));
   }
-})
+});
 </script>
 
 <template>
@@ -111,7 +111,7 @@ watch(error, (value) => {
       :disabled="disabled || field.disabled || loadingData"
     />
     <div v-if="loadingData" class="field-input__spinner">
-      <ion-spinner name="circular" class="field-input__spinner-icon"/>
+      <ion-spinner name="circular" class="field-input__spinner-icon" />
     </div>
   </div>
 </template>

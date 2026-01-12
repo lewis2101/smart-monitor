@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import {useOrderActionQuery} from "@/api/orders/order-action.ts";
-import {useOrderMainMutation} from "@/api/orders/order-main.ts";
-import {useOrderNextMutation} from "@/api/orders/order-next.ts";
-import {useQuery} from "@tanstack/vue-query";
+import { useOrderActionQuery } from "@/api/orders/order-action.ts";
+import { useOrderMainMutation } from "@/api/orders/order-main.ts";
+import { useOrderNextMutation } from "@/api/orders/order-next.ts";
+import { useQuery } from "@tanstack/vue-query";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
-import type {AdditionalOrderActions, OrderActions} from "@/components/step-generator/types.ts";
-import {computed, useTemplateRef, watch} from "vue";
-import {useOrderSaveMutation} from "@/api/orders/order-save.ts";
-import {useGlobalSpinner} from "@/stores/use-global-spinner/use-global-spinner.ts";
-import {useToast} from "primevue/usetoast";
-import {useExtractErrorData} from "@/composables/use-extract-error-data.ts";
+import type { AdditionalOrderActions, OrderActions } from "@/components/step-generator/types.ts";
+import { computed, useTemplateRef, watch } from "vue";
+import { useOrderSaveMutation } from "@/api/orders/order-save.ts";
+import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
+import { useToast } from "primevue/usetoast";
+import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 import OrderMoreButtons from "@/components/order/order-more-buttons/order-more-buttons.vue";
 
 const COMPLETE_TASK_NAME = "COMPLETE";
@@ -20,24 +20,20 @@ const props = defineProps<{
 
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 const toast = useToast();
-const {getErrorForToast} = useExtractErrorData();
+const { getErrorForToast } = useExtractErrorData();
 
 const orderActionQuery = useOrderActionQuery({
   getUrl: (url) => url + "/" + props.orderId,
   keys: [() => props.orderId],
 });
 
-const {mutateAsync: orderMainMutate} = useOrderMainMutation({});
-const {mutateAsync: orderNextMutate} = useOrderNextMutation({});
-const {
-  mutate: orderSaveMutate,
-  isPending: savePending,
-  error: saveError
-} = useOrderSaveMutation({});
+const { mutateAsync: orderMainMutate } = useOrderMainMutation({});
+const { mutateAsync: orderNextMutate } = useOrderNextMutation({});
+const { mutate: orderSaveMutate, isPending: savePending, error: saveError } = useOrderSaveMutation({});
 
 const globalSpinner = useGlobalSpinner();
 
-const {data: orderData, suspense} = useQuery({
+const { data: orderData, suspense } = useQuery({
   ...orderActionQuery,
   enabled: () => !!props.orderId,
 });
@@ -47,7 +43,7 @@ await Promise.all([
   orderMainMutate({
     data: {
       orderId: props.orderId,
-    }
+    },
   }),
 ]);
 
@@ -59,7 +55,7 @@ const orderNextData = await orderNextMutate({
   data: {
     orderId: props.orderId,
     currentUserTask: currentUserTask.value,
-  }
+  },
 });
 
 const orderActions: Record<OrderActions | AdditionalOrderActions, () => void> = {
@@ -87,31 +83,11 @@ const orderActions: Record<OrderActions | AdditionalOrderActions, () => void> = 
     console.log("CANCEL");
   },
   duplicate: () => {
-    console.log("duplicate")
-  }
+    console.log("duplicate");
+  },
 };
 
 const orderDisabled = computed(() => !orderData.value?.permissions.canComplete);
-
-// const orderMainActionButton = computed(() => {
-//   if (!orderData.value && !orderData.value.actions) {
-//     return null;
-//   }
-//   if (!Object.keys(orderData.value.actions).length) {
-//     return null;
-//   }
-//
-//   return [...orderData.value.actions, ...orderNextData.buttons].reduce((acc, curr) => {
-//     const currentOrderAction = orderActions[curr];
-//     if (!acc) {
-//       return currentOrderAction;
-//     }
-//     if (currentOrderAction.order < acc.order) {
-//       return currentOrderAction;
-//     }
-//     return acc;
-//   }, null);
-// });
 
 watch(savePending, (value) => {
   if (value) {
@@ -141,10 +117,7 @@ watch(saveError, (value) => {
         :disabled="orderDisabled"
       />
     </div>
-    <order-more-buttons
-      :action-buttons="orderData.actions"
-      :additional-buttons="orderNextData.buttons"
-    />
+    <order-more-buttons :action-buttons="orderData.actions" :additional-buttons="orderNextData.buttons" />
   </div>
 </template>
 

@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import {IonButton} from "@ionic/vue";
-import {
-  useGlobalBackdropStore
-} from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
-import {AdditionalOrderActions, OrderActions} from "@/components/step-generator/types.ts";
-import {computed} from "vue";
+import { IonButton } from "@ionic/vue";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import type { AdditionalOrderActions, OrderActions } from "@/components/step-generator/types.ts";
+import { computed } from "vue";
 
 const props = defineProps<{
-  actionButtons: string[];
-  additionalButtons: string[];
-}>()
+  actionButtons: OrderActions[];
+  additionalButtons: AdditionalOrderActions[];
+}>();
 
 const globalBackdropStore = useGlobalBackdropStore();
 
-const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, {
+type OrderButtonConfig = {
   label: string;
   order: number;
-}> = {
+};
+
+const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, OrderButtonConfig> = {
   CONFIRM: {
     label: "Подтвердить",
     order: 1,
@@ -41,11 +41,11 @@ const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, {
   duplicate: {
     label: "Дублировать заявку",
     order: 6,
-  }
-}
+  },
+};
 
 const orderMainButton = computed(() => {
-  return [...props.actionButtons, ...props.additionalButtons].reduce((acc, curr) => {
+  return [...props.actionButtons, ...props.additionalButtons].reduce<OrderButtonConfig | null>((acc, curr) => {
     const currentButton = orderButtonsConfig[curr];
     if (!acc) {
       return currentButton;
@@ -54,8 +54,8 @@ const orderMainButton = computed(() => {
       return currentButton;
     }
     return acc;
-  }, null)
-})
+  }, null);
+});
 
 const orderAdditionalButtons = computed(() => {
   return [...props.actionButtons, ...props.additionalButtons]
@@ -63,46 +63,43 @@ const orderAdditionalButtons = computed(() => {
       if (!orderButtonsConfig[button]) {
         return false;
       }
-      return orderMainButton.value.label !== orderButtonsConfig[button].label;
+      if (orderMainButton.value) {
+        return orderMainButton.value.label !== orderButtonsConfig[button].label;
+      }
+      return true;
     })
     .map((button) => {
       const buttonConfig = orderButtonsConfig[button];
-      if (buttonConfig) {
-        return {
-          label: buttonConfig.label,
-          value: buttonConfig.label,
-        }
-      }
-    })
-})
+      return {
+        label: buttonConfig.label,
+        value: buttonConfig.label,
+      };
+    });
+});
 
 const handleClick = async () => {
   try {
     const result = (await globalBackdropStore.push("pick", {
       title: "Управление заявкой",
       props: {
-        list: orderAdditionalButtons.value
-      }
-    }) as string);
+        list: orderAdditionalButtons.value,
+      },
+    })) as string;
 
-    console.log({result})
+    console.log({ result });
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
-
+};
 </script>
 
 <template>
   <div class="order-more-buttons">
-    <ion-button
-      v-if="orderMainButton"
-      class="order-more-buttons__action-button"
-    >
+    <ion-button v-if="orderMainButton" class="order-more-buttons__action-button">
       {{ orderMainButton.label }}
     </ion-button>
     <ion-button v-if="orderAdditionalButtons.length" fill="outline" @click="handleClick">
-      <base-icon name="more-horizontal"/>
+      <base-icon name="more-horizontal" />
     </ion-button>
   </div>
 </template>

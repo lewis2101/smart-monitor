@@ -1,6 +1,6 @@
-import {type Component, markRaw, type Raw} from "vue";
-import type {StepField} from "@/components/step-generator/types.ts";
-import {type FieldInputType} from "../../../types/FieldType.ts";
+import { type Component, markRaw, type Raw } from "vue";
+import type { StepField } from "@/components/step-generator/types.ts";
+import { type FieldInputClientType } from "../../../types/FieldType.ts";
 import FieldRef from "@/components/step-generator/FieldRef/FieldRef.vue";
 import LinkGenerator from "@/components/step-generator/LinkGenerator/LinkGenerator.vue";
 import DateTimeField from "@/components/step-generator/DateTimeField/DateTimeField.vue";
@@ -10,12 +10,12 @@ import FieldBoolean from "@/components/step-generator/FieldInput/FieldBoolean.vu
 import FieldTitle from "@/components/step-generator/FieldTitle/FieldTitle.vue";
 import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
 import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
-import {useCalcRestriction} from "@/composables/order/use-calc-restriction.ts";
-import {useFieldValueInit} from "@/composables/order/use-field-value-init.ts";
+import { useCalcRestriction } from "@/composables/order/use-calc-restriction.ts";
+import { useFieldValueInit } from "@/composables/order/use-field-value-init.ts";
 
 export const useStepGenerator = (processKey: string, fields: StepField[]) => {
-  const {fieldsModel} = useFieldValueInit(fields);
-  const fieldsMap: Record<FieldInputType, Raw<Component> | null> = {
+  const { fieldsModel } = useFieldValueInit(fields);
+  const fieldsMap: Record<FieldInputClientType, Raw<Component> | null> = {
     REF: markRaw(FieldRef),
     LINK_GENERATOR: markRaw(LinkGenerator),
     DATE_TIME_PICKER: markRaw(DateTimeField),
@@ -33,25 +33,35 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     RATING: markRaw(RatingField),
   };
 
-  const {
-    executeCalcRestriction,
-    restrictions,
-    restrictionsLoading
-  } = useCalcRestriction(processKey, fieldsModel);
+  const { executeCalcRestriction, restrictions, restrictionsLoading } = useCalcRestriction(processKey, fieldsModel);
 
   const calcAffectedFieldsRestriction = async (fieldKey: string) => {
-    const affectedFields = fields.filter((field) => (field.calcRestrictions && field.limitation?.includes(fieldKey)));
-    console.log({affectedFields})
+    const affectedFields = fields.filter((field) => field.calcRestrictions && field.limitation?.includes(fieldKey));
 
     await Promise.all(affectedFields.map((field) => executeCalcRestriction(field.value, field.clientType)));
-  }
+  };
 
   const initStepGenerator = async () => {
     const hasRestrictionFields = fields.filter((field) => field.calcRestrictions);
 
     await Promise.all(hasRestrictionFields.map((field) => executeCalcRestriction(field.value, field.clientType)));
     await Promise.all(hasRestrictionFields.map((field) => calcAffectedFieldsRestriction(field.value)));
-  }
+  };
+
+  const getPayloadOfFields = () => {
+    const payload: Record<string, unknown> = {};
+
+    fields.forEach((field) => {
+      if (field.type === "REF" && fieldsModel[field.value] && fieldsModel[field.value]?.id) {
+        payload[field.value] = fieldsModel[field.value].id;
+        return;
+      }
+
+      payload[field.value] = fieldsModel[field.value];
+    });
+
+    return payload;
+  };
 
   initStepGenerator();
 
@@ -62,5 +72,6 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     executeCalcRestriction,
     calcAffectedFieldsRestriction,
     restrictionsLoading,
-  }
-}
+    getPayloadOfFields,
+  };
+};

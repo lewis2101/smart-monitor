@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {type Component} from "vue";
-import type {StepField} from "@/components/step-generator/types.ts";
-import {useStepGenerator} from "@/composables/order/use-step-generator.ts";
+import type { StepField } from "@/components/step-generator/types.ts";
+import { useStepGenerator } from "@/composables/order/use-step-generator.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -14,15 +13,10 @@ const props = withDefaults(
   },
 );
 
-const {
-  fieldsMap,
-  fieldsModel,
-  restrictions,
-  restrictionsLoading,
-  calcAffectedFieldsRestriction
-} = useStepGenerator(props.processKey, props.fields);
+const { fieldsMap, fieldsModel, restrictions, restrictionsLoading, calcAffectedFieldsRestriction, getPayloadOfFields } =
+  useStepGenerator(props.processKey, props.fields);
 
-defineExpose({fieldsModel});
+defineExpose({ fieldsModel, getPayloadOfFields });
 </script>
 
 <template>

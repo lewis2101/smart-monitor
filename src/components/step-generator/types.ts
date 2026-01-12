@@ -1,4 +1,4 @@
-import type {FieldInputType} from "../../../types/FieldType.ts";
+import type { FieldInputClientType, FieldInputType } from "../../../types/FieldType.ts";
 
 // TODO Сделать типизацию привязанный к clientType и отталкиваясь от него будет нужный тип у default и так же наличия table ключа так же через clientType
 export type StepField = {
@@ -13,7 +13,7 @@ export type StepField = {
   virtual: boolean;
   fontSize: string;
   fontColor: string;
-  clientType: FieldInputType;
+  clientType: FieldInputClientType;
   table?: string;
   expand?: boolean;
   limitation?: string[];

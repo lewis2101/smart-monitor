@@ -1,3 +1,20 @@
+export type FieldInputClientType =
+  | "STRING"
+  | "INTEGER"
+  | "ARRAY"
+  | "LOCAL"
+  | "DATE_TIME"
+  | "DATE"
+  | "NUMBER"
+  | "REF"
+  | "LINK_GENERATOR"
+  | "AddressSelector"
+  | "TEXT"
+  | "BOOLEAN"
+  | "TITLE"
+  | "DATE_TIME_PICKER"
+  | "RATING";
+
 export type FieldInputType =
   | "STRING"
   | "INTEGER"
@@ -20,7 +37,7 @@ export type FieldType = {
   changable: boolean;
   disabled: boolean;
   field: string;
-  filterType: FieldInputType;
+  filterType: FieldInputClientType;
   init: "supplierName";
   order: number;
   required: boolean;
