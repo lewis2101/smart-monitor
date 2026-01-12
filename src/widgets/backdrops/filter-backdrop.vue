@@ -33,7 +33,7 @@ const getInitialValues = (sync = false): Record<string, FilterType> =>
       [curr.value]: {
         operator: operatorMap?.[curr.filterType] || "like",
         value: curr.value,
-        text: sync ? props.initialValue.find((v) => v.value === curr.value)?.text || "" : "",
+        text: sync ? props.initialValue.find((v) => v.value === curr.value)?.text || null : null,
       },
     }),
     {},

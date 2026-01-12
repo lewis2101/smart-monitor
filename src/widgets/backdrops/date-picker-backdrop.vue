@@ -8,16 +8,31 @@ const props = withDefaults(defineProps<{
   showTime?: boolean;
   minDate?: Date;
   maxDate?: Date;
-  initialDate?: Date;
+  initialDate?: Date | Date[] | null;
+  selectionMode?: "single" | "range";
 } & BackdropComponentProps<(value: string | Date) => void, (error: Error) => void>>(), {
   showTime: false,
+  selectionMode: "single",
 });
 
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
 }>()
 
-const model = ref(props.initialDate ? new Date(props.initialDate) : new Date());
+const getInitialValue = () => {
+  if (props.selectionMode === "range") {
+    if (Array.isArray(props.initialDate)) {
+      return props.initialDate.map((date) => new Date(date));
+    }
+    return [];
+  }
+  if (props.initialDate) {
+    return new Date(props.initialDate);
+  }
+  return new Date()
+}
+
+const model = ref(getInitialValue());
 
 const submit = () => {
   if (!model) return;
@@ -37,7 +52,7 @@ const submit = () => {
           panel: $style.panel,
           pcInputText: $style.inputText,
         }" date-format="dd.mm.yy" :show-time="showTime" :min-date="minDate" :max-date="maxDate"
-                 fluid inline class="date-picker-backdrop__native"/>
+                 fluid inline class="date-picker-backdrop__native" :selection-mode="selectionMode"/>
     <ion-button class="date-picker-backdrop__button" @click="submit">Выбрать</ion-button>
   </div>
 </template>

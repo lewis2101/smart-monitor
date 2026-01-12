@@ -1,144 +1,90 @@
 <script setup lang="ts">
-import DatePicker, { type DatePickerState } from "primevue/datepicker";
-import { ref, useTemplateRef } from "vue";
+import {IonSpinner} from "@ionic/vue";
+import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import {computed} from "vue";
+import {formatDateString} from "@/utils/formatDate.ts";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     placeholder?: string;
     errorText?: string;
     clearable?: boolean;
     disabled?: boolean;
+    loading?: boolean;
+    showTime?: boolean;
   }>(),
   {
     clearable: false,
     disabled: false,
+    showTime: false,
   },
 );
 
-const datePickerRef = useTemplateRef<DatePickerState>("datePickerRef");
-const baseDatePickerRef = ref<HTMLDivElement | null>(null);
+defineEmits<{
+  (e: "select-date"): void;
+}>()
 
-const model = defineModel<Date | Date[] | null>();
+const model = defineModel<string | string[] | null>();
 
-const isFocused = ref(false);
+const handleClear = () => {
+  model.value = null;
+}
 
-const handleFocus = () => {
-  isFocused.value = true;
-};
-
-const handleBlur = () => {
-  isFocused.value = false;
-};
+const formattedDate = computed(() => {
+  if (model.value) {
+    if (Array.isArray(model.value)) {
+      return model.value.map((date) => formatDateString(date, {time: props.showTime})).join(" - ");
+    }
+    return formatDateString(model.value, {time: props.showTime});
+  }
+  return null;
+})
 </script>
 
 <template>
-  <label class="base-date-picker">
-    <div :class="['base-date-picker__wrapper', disabled && 'base-date-picker-disabled']" ref="baseDatePickerRef">
-      <div
-        v-if="placeholder"
-        :class="['base-date-picker__placeholder', (isFocused || model) && 'base-date-picker__placeholder_focus']"
-      >
-        {{ placeholder }}
-      </div>
-      <date-picker
-        v-model="model"
-        class="base-date-picker__native"
-        ref="datePickerRef"
-        :pt="{
-          day: $style.day,
-          month: $style.month,
-          year: $style.year,
-          panel: $style.panel,
-          pcInputText: $style.inputText,
-        }"
-        v-bind="$attrs"
-        date-format="dd.mm.yy"
-        appendTo="self"
-        :show-on-focus="false"
-        :show-icon="true"
-        :show-clear="clearable"
-        :disabled="disabled"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
+  <div ref="dateTimeFieldRef"
+       :class="['base-date-picker', disabled && 'disabled']" @click="$emit('select-date')">
+    <div
+      v-if="placeholder"
+      :class="['base-date-picker__placeholder', model && 'base-date-picker__placeholder_focus']"
+    >
+      {{ placeholder }}
     </div>
-    <div v-if="errorText" class="base-date-picker__error">{{ errorText }}</div>
-  </label>
+    <div v-if="model" class="base-date-picker__value">
+      {{ formattedDate }}
+    </div>
+    <div v-if="loading" class="base-date-picker__spinner">
+      <ion-spinner name="circular" class="base-date-picker__spinner-icon"/>
+    </div>
+    <div v-if="!loading && clearable && model" class="base-date-picker__clear"
+         @click.stop="handleClear">
+      <base-icon name="close"/>
+    </div>
+  </div>
 </template>
 
-<style lang="scss" module>
-.day {
-  --p-datepicker-date-selected-background: #2a61cc;
-  --p-datepicker-date-range-selected-background: #2a61cc;
-  --p-datepicker-date-range-selected-color: #ffffff;
-}
-.month {
-  --p-datepicker-date-selected-background: #2a61cc;
-}
-.year {
-  --p-datepicker-date-selected-background: #2a61cc;
-}
-.panel {
-  //min-width: auto !important;
-  //width: auto !important;
-}
-.inputText {
-  color: #151515;
-}
-</style>
-
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .base-date-picker {
-  display: block;
-
   color: $txt-black;
 
-  --p-inputtext-focus-ring-shadow: none;
-  --p-inputtext-hover-border-color: #f2f2f7;
-  --p-inputtext-focus-border-color: #f2f2f7;
-  --p-inputtext-border-color: #f2f2f7;
-  --p-inputtext-border-radius: 12px;
+  min-height: 52px;
 
-  --p-datepicker-dropdown-background: #ffffff;
-  --p-datepicker-dropdown-border-color: #f2f2f7;
+  box-shadow: 0px 2px 3px 0px #0000001a;
+  border: 1px solid #f2f2f7;
+  border-radius: 12px;
 
-  --p-inputtext-disabled-background: #ffffff;
-
-  &__wrapper {
-    position: relative;
-  }
-
-  &-disabled {
-    color: #64748b !important;
-  }
-
-  &__native {
-    &:deep(.p-datepicker-dropdown) {
-      box-shadow: 0px 2px 3px 0px #0000001a !important;
-    }
-
-    &:deep(input) {
-      width: 100%;
-      padding-inline-start: 16px;
-      padding-inline-end: 16px;
-      padding-top: 20px;
-      padding-bottom: 12px;
-      box-shadow: 0px 2px 3px 0px #0000001a !important;
-
-      max-height: 50.5px;
-    }
-  }
+  position: relative;
 
   &__placeholder {
     position: absolute;
     top: 50%;
     left: 16px;
     transform: translateY(-50%);
-    z-index: 1;
 
     color: inherit;
 
     transition: all 0.2s ease;
+    will-change: transform;
 
     &_focus {
       font-size: 12px;
@@ -148,25 +94,35 @@ const handleBlur = () => {
     }
   }
 
+  &__value {
+    padding: 20px 16px 12px 16px;
+  }
+
+  &__spinner {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #ffffff;
+
+    &-icon {
+      color: $main-color;
+    }
+  }
+
   &__clear {
     position: absolute;
-    z-index: 2;
-    padding: 16px;
-    right: 0;
-    top: 0;
-    margin-top: 0.3rem;
-    color: #94a3b8;
-  }
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
 
-  &__error {
-    color: $main-red;
-    padding-top: 8px;
-    padding-left: 16px;
-
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 100%;
-    letter-spacing: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+}
+
+.disabled {
+  color: #64748b !important;
 }
 </style>

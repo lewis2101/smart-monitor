@@ -9,7 +9,7 @@ import {useBubbleAnimate} from "@/composables/useBubbleAnimate.ts";
 import type {
   DateCalcRestrictionResponse
 } from "@/composables/apply-restrictions/date-time-picker-restiction.ts";
-import {IonSpinner} from "@ionic/vue";
+import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -69,11 +69,6 @@ const showModal = async () => {
   }
 }
 
-const getFormattedDate = computed(() => {
-  if (!model) return null;
-  return formatDateString(new Date(model.value), {time: true})
-})
-
 onMounted(() => {
   useBubbleAnimate(dateTimeFieldRef);
 })
@@ -95,72 +90,15 @@ watch(() => props.restriction, (value) => {
 </script>
 
 <template>
-  <div ref="dateTimeFieldRef"
-       :class="['date-time-field', isDisabled && 'disabled']" @click="showModal">
-    <div
-      v-if="field.value"
-      :class="['date-time-field__placeholder', (isFocused || model) && 'date-time-field__placeholder_focus']"
-    >
-      {{ $t(field.value) }}
-    </div>
-    <div v-if="model" class="date-time-field__value">
-      {{ getFormattedDate }}
-    </div>
-    <div v-if="loading" class="date-time-field__spinner">
-      <ion-spinner name="circular" class="date-time-field__spinner-icon"/>
-    </div>
-  </div>
+  <base-date-picker
+    v-model="proxyModel"
+    :placeholder="$t(field.value)"
+    :loading="loading"
+    :disabled="isDisabled"
+    :show-time="true"
+    @select-date="showModal"
+  />
 </template>
 
 <style scoped lang="scss">
-.date-time-field {
-  color: $txt-black;
-
-  min-height: 52px;
-
-  box-shadow: 0px 2px 3px 0px #0000001a;
-  border: 1px solid #f2f2f7;
-  border-radius: 12px;
-
-  position: relative;
-
-  &__placeholder {
-    position: absolute;
-    top: 50%;
-    left: 16px;
-    transform: translateY(-50%);
-
-    color: inherit;
-
-    transition: all 0.2s ease;
-    will-change: transform;
-
-    &_focus {
-      font-size: 12px;
-      top: 6px;
-      left: 16px;
-      transform: translate(0, 0);
-    }
-  }
-
-  &__value {
-    padding: 20px 16px 12px 16px;
-  }
-
-  &__spinner {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #ffffff;
-
-    &-icon {
-      color: $main-color;
-    }
-  }
-}
-
-.disabled {
-  color: #64748b !important;
-}
 </style>
