@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import RadioButton from "primevue/radiobutton";
 import { IonButton } from "@ionic/vue";
-import { computed, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import { debounce } from "@/utils/debounce.ts";
@@ -65,6 +65,21 @@ const reset = () => {
   emit("closeBackdrop");
 };
 
+onMounted(() => {
+  if (!temporaryModel.value) return;
+
+  const item = props.list.find((l) => l.value === temporaryModel.value);
+  if (!item) return;
+
+  const element = document.getElementById(`${item.label}-${item.value}`);
+  if (!element) return;
+
+  element.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+});
+
 watch(searchModel, () => {
   filterDebounce();
 });
@@ -77,6 +92,7 @@ watch(searchModel, () => {
       v-for="(item, idx) in filteredList"
       :key="item.value"
       :for="`${item.value}-${idx}`"
+      :id="`${item.label}-${item.value}`"
       class="select-input-backdrop__item"
     >
       <radio-button
@@ -110,6 +126,7 @@ watch(searchModel, () => {
 <style scoped lang="scss">
 .select-input-backdrop {
   padding: 8px 16px 0 16px;
+  scroll-margin-top: 50px;
 
   &__item {
     display: flex;
