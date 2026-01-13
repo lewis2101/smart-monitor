@@ -1,14 +1,8 @@
 <script setup lang="ts">
-import type {StepField} from "@/components/step-generator/types.ts";
-import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
-import {
-  useGlobalBackdropStore
-} from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
-import {formatDateString} from "@/utils/formatDate.ts";
-import {useBubbleAnimate} from "@/composables/useBubbleAnimate.ts";
-import type {
-  DateCalcRestrictionResponse
-} from "@/composables/apply-restrictions/date-time-picker-restiction.ts";
+import type { StepField } from "@/components/step-generator/types.ts";
+import { computed, watch } from "vue";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import type { DateCalcRestrictionResponse } from "@/composables/apply-restrictions/date-time-picker-restiction.ts";
 import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
 
 const props = withDefaults(
@@ -26,9 +20,9 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (e: "change"): void;
-}>()
+}>();
 
-const model = defineModel<string | null>({required: true});
+const model = defineModel<string | null>({ required: true });
 
 const proxyModel = computed({
   get: () => {
@@ -40,12 +34,10 @@ const proxyModel = computed({
   set: (value: Date) => {
     if (value) {
       model.value = value.toISOString();
-      console.log("MODEL: ", model.value)
     }
   },
 });
 
-const dateTimeFieldRef = useTemplateRef("dateTimeFieldRef");
 const globalBackdropStore = useGlobalBackdropStore();
 
 const showModal = async () => {
@@ -56,37 +48,35 @@ const showModal = async () => {
       title: "Выберите дату",
       props: {
         showTime: true,
-        minDate: props.restriction?.min && new Date(props.restriction?.min),
-        maxDate: props.restriction?.max && new Date(props.restriction?.max),
-        initialDate: proxyModel.value
+        minDate: props.restriction?.min ? new Date(props.restriction?.min) : undefined,
+        maxDate: props.restriction?.max ? new Date(props.restriction?.max) : undefined,
+        initialDate: proxyModel.value,
       },
     })) as Date;
 
     proxyModel.value = date;
     emit("change");
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
-
-onMounted(() => {
-  useBubbleAnimate(dateTimeFieldRef);
-})
+};
 
 const isDisabled = computed(() => props.disabled || props.field.disabled || props.loading);
 
-watch(() => props.restriction, (value) => {
-  if (!value) return;
+watch(
+  () => props.restriction,
+  (value) => {
+    if (!value || !model.value) return;
 
-  const minDate = new Date(value.min).getTime();
-  const maxDate = new Date(value.max).getTime();
-  const currentDate = new Date(model.value).getTime();
+    const minDate = new Date(value.min).getTime();
+    const maxDate = new Date(value.max).getTime();
+    const currentDate = new Date(model.value).getTime();
 
-  if (currentDate < minDate || currentDate > maxDate) {
-    model.value = new Date(minDate).toISOString();
-  }
-})
-
+    if (currentDate < minDate || currentDate > maxDate) {
+      model.value = new Date(minDate).toISOString();
+    }
+  },
+);
 </script>
 
 <template>
@@ -100,5 +90,4 @@ watch(() => props.restriction, (value) => {
   />
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

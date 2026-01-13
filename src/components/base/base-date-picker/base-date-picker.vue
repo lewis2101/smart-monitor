@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {IonSpinner} from "@ionic/vue";
+import { IonSpinner } from "@ionic/vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import {computed} from "vue";
-import {formatDateString} from "@/utils/formatDate.ts";
+import { computed } from "vue";
+import { formatDateString } from "@/utils/formatDate.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -22,43 +22,38 @@ const props = withDefaults(
 
 defineEmits<{
   (e: "select-date"): void;
-}>()
+}>();
 
-const model = defineModel<string | string[] | null>();
+const model = defineModel<string | string[] | Date | Date[] | null>();
 
 const handleClear = () => {
   model.value = null;
-}
+};
 
 const formattedDate = computed(() => {
   if (model.value) {
     if (Array.isArray(model.value)) {
-      return model.value.map((date) => formatDateString(date, {time: props.showTime})).join(" - ");
+      return model.value.map((date) => formatDateString(date, { time: props.showTime })).join(" - ");
     }
-    return formatDateString(model.value, {time: props.showTime});
+    return formatDateString(model.value, { time: props.showTime });
   }
   return null;
-})
+});
 </script>
 
 <template>
-  <div ref="dateTimeFieldRef"
-       :class="['base-date-picker', disabled && 'disabled']" @click="$emit('select-date')">
-    <div
-      v-if="placeholder"
-      :class="['base-date-picker__placeholder', model && 'base-date-picker__placeholder_focus']"
-    >
+  <div ref="dateTimeFieldRef" :class="['base-date-picker', disabled && 'disabled']" @click="$emit('select-date')">
+    <div v-if="placeholder" :class="['base-date-picker__placeholder', model && 'base-date-picker__placeholder_focus']">
       {{ placeholder }}
     </div>
     <div v-if="model" class="base-date-picker__value">
       {{ formattedDate }}
     </div>
     <div v-if="loading" class="base-date-picker__spinner">
-      <ion-spinner name="circular" class="base-date-picker__spinner-icon"/>
+      <ion-spinner name="circular" class="base-date-picker__spinner-icon" />
     </div>
-    <div v-if="!loading && clearable && model" class="base-date-picker__clear"
-         @click.stop="handleClear">
-      <base-icon name="close"/>
+    <div v-if="!loading && clearable && model" class="base-date-picker__clear" @click.stop="handleClear">
+      <base-icon name="close" />
     </div>
   </div>
 </template>

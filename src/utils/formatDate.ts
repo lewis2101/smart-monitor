@@ -1,25 +1,25 @@
 // YYYY.MM.DD (HH:MM)
 export const formatDateString = (
-  date: Date,
+  date: Date | string,
   options?: {
     time: boolean;
-  }
+  },
 ) => {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
+  const newDate = new Date(date);
+  const y = newDate.getFullYear();
+  const m = String(newDate.getMonth() + 1).padStart(2, "0");
+  const d = String(newDate.getDate()).padStart(2, "0");
 
   let result = `${y}-${m}-${d}`;
 
   if (options?.time) {
-    const h = String(date.getHours()).padStart(2, "0");
-    const min = String(date.getMinutes()).padStart(2, "0");
+    const h = String(newDate.getHours()).padStart(2, "0");
+    const min = String(newDate.getMinutes()).padStart(2, "0");
     result += ` (${h}:${min})`;
   }
 
   return result;
 };
-
 
 export const parseDateString = (date: string) => {
   const [y, m, d] = date.split("-").map(Number);

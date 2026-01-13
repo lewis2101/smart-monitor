@@ -35,7 +35,7 @@ export const useCalcRestriction = (
     restrictionsLoading[fieldKey] = true;
 
     try {
-      const data = await calcRestrictionMutate({
+      const { data } = await calcRestrictionMutate({
         data: toValue(fieldsModel),
         urlParams: {
           field: fieldKey,
