@@ -23,7 +23,7 @@ const { getErrorForToast } = useExtractErrorData();
 const { mutateAsync: orderInitialMutate } = useOrderInitialMutation({});
 const { mutate: orderValidateMutate, error: validateError } = useValidateInitialMutation({});
 
-const orderData = await orderInitialMutate({
+const { data: orderData } = await orderInitialMutate({
   data: {
     processKey: props.processKey,
   },

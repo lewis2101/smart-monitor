@@ -3,8 +3,8 @@ export type DateCalcRestrictionResponse = {
   min: string | Date;
   timeEnd: number;
   timeStart: number;
-}
+};
 
 export const applyDateTimePickerRestriction = (data: DateCalcRestrictionResponse) => {
   return data;
-}
+};

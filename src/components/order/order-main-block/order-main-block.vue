@@ -51,7 +51,7 @@ const currentUserTask = computed(() =>
   orderData.value?.processCompleted ? COMPLETE_TASK_NAME : orderData.value?.currentTask,
 );
 
-const orderNextData = await orderNextMutate({
+const { data: orderNextData } = await orderNextMutate({
   data: {
     orderId: props.orderId,
     currentUserTask: currentUserTask.value,

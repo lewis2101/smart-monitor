@@ -30,7 +30,7 @@ export function createRawMutations<RawData, Payload, Response>(options: {
         const config = useEndpointBuilder<Payload>(httpClientOptions);
         const url = getUrl?.(httpClientOptions.url) || httpClientOptions.url;
 
-        const response = await httpClient.call<Response, Payload>(url, {
+        const response = await httpClient.request<Response, Payload>(url, {
           ...config,
           data,
           params: p.value!,

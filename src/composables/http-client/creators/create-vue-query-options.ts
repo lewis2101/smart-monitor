@@ -37,7 +37,7 @@ export function createVueQueryOptions<RawData, Response>(options: {
         const config = useEndpointBuilder(httpClientOptions);
         const url = getUrl?.(httpClientOptions.url) || httpClientOptions.url;
 
-        const { data } = await httpClient.call<Response>(url, {
+        const { data } = await httpClient.request<Response>(url, {
           ...config,
           params: p.value!,
         });

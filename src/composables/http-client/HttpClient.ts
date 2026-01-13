@@ -24,7 +24,19 @@ export class HttpClient {
     this.baseURL = config.baseURL;
   }
 
-  private serializeParams(params: Record<string, any> | Array<any>, prefix?: string): Record<string, string> {
+  private normalizeData<T>(data?: T): T | undefined {
+    if (!data) return undefined;
+    return JSON.parse(JSON.stringify(data));
+  }
+
+  private buildHeaders(headers?: Record<string, string>): Record<string, string> {
+    return {
+      ...headers,
+      "Content-Type": "application/json; charset=utf-8",
+    };
+  }
+
+  private buildParams(params: Record<string, unknown> | Array<unknown>, prefix?: string): Record<string, string> {
     let parts: Record<string, string> = {};
 
     for (const key in params) {
@@ -38,7 +50,7 @@ export class HttpClient {
       if (typeof value === "object" || Array.isArray(value)) {
         parts = {
           ...parts,
-          ...this.serializeParams(value, paramKey),
+          ...this.buildParams(value, paramKey),
         };
         continue;
       }
@@ -65,7 +77,7 @@ export class HttpClient {
     for (const interceptor of this.interceptors) {
       const data = await interceptor(response);
       if (data.refetch) {
-        return this.call<Response>(url, {
+        return this.request<Response>(url, {
           ...options,
           headers: {
             ...options.headers,
@@ -76,109 +88,29 @@ export class HttpClient {
     }
   }
 
-  public async get<Response>(url: string, option: CapacitorHttpOptions): CapacitorHttpResponse<Response> {
-    const params = option.params ? this.serializeParams(option.params) : {};
-    const payload = option.data ? JSON.stringify(option.data) : undefined;
+  public async request<Response, Payload = unknown>(
+    url: string,
+    options: CapacitorHttpOptions<Payload>,
+  ): CapacitorHttpResponse<Response> {
+    const { method, data, headers, params, ...rest } = options;
 
-    const data = await CapacitorHttp.get({
-      ...option,
+    const response = await CapacitorHttp.request({
+      ...rest,
+      method,
       url: `${this.baseURL}${url}`,
-      params,
-      data: payload,
-      headers: {
-        ...option.headers,
-        "Content-Type": "application/json; charset=utf-8",
-      },
+      headers: this.buildHeaders(headers),
+      params: params ? this.buildParams(params) : undefined,
+      data: this.normalizeData(data),
     });
 
-    if (this.isValidStatus(data.status)) {
-      return data;
+    if (this.isValidStatus(response.status)) {
+      return response;
     }
 
-    const interceptorResult = await this.executeInterceptors<Response>(url, option, data);
+    const interceptorResult = await this.executeInterceptors<Response>(url, options, response.data);
     if (interceptorResult) {
       return interceptorResult;
     }
-    throw data;
-  }
-
-  public async post<Response, Payload = unknown>(
-    url: string,
-    option: CapacitorHttpOptions<Payload>,
-  ): CapacitorHttpResponse<Response> {
-    const params = option.params ? `?${this.serializeParams(option.params)}` : {};
-    const payload = option.data ? JSON.stringify(option.data) : undefined;
-
-    const data = await CapacitorHttp.post({
-      ...option,
-      url: `${this.baseURL}${url}`,
-      params,
-      data: payload,
-      headers: {
-        ...option.headers,
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
-
-    if (this.isValidStatus(data.status)) {
-      return data;
-    }
-
-    const interceptorResult = await this.executeInterceptors<Response>(url, option, data);
-    if (interceptorResult) {
-      return interceptorResult;
-    }
-    throw data;
-  }
-
-  public patch<Response, Payload = unknown>(
-    url: string,
-    option: CapacitorHttpOptions<Payload>,
-  ): CapacitorHttpResponse<Response> {
-    const params = option.params ? `?${this.serializeParams(option.params)}` : {};
-    const payload = option.data ? JSON.stringify(option.data) : undefined;
-
-    return CapacitorHttp.patch({
-      ...option,
-      url: `${this.baseURL}${url}`,
-      params,
-      data: payload,
-      headers: {
-        ...option.headers,
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
-  }
-
-  public delete<Response>(url: string, option: CapacitorHttpOptions): CapacitorHttpResponse<Response> {
-    const params = option.params ? `?${this.serializeParams(option.params)}` : {};
-    const payload = option.data ? JSON.stringify(option.data) : undefined;
-
-    return CapacitorHttp.delete({
-      ...option,
-      url: `${this.baseURL}${url}`,
-      params,
-      data: payload,
-      headers: {
-        ...option.headers,
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
-  }
-
-  public call<Response, Payload = unknown>(
-    url: string,
-    config: CapacitorHttpOptions<Payload>,
-  ): CapacitorHttpResponse<Response> {
-    switch (config.method) {
-      case "GET":
-        return this.get<Response>(url, config);
-      case "POST":
-        return this.post<Response, Payload>(url, config);
-      case "PATCH":
-        return this.patch<Response, Payload>(url, config);
-      case "DELETE":
-        return this.delete<Response>(url, config);
-    }
+    throw response.data;
   }
 }
