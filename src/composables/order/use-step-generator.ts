@@ -12,6 +12,7 @@ import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
 import RatingField from "@/components/step-generator/RatingField/RatingField.vue";
 import { useCalcRestriction } from "@/composables/order/use-calc-restriction.ts";
 import { useFieldValueInit } from "@/composables/order/use-field-value-init.ts";
+import VehicleSelector from "@/components/step-generator/VehicleSelector/VehicleSelector.vue";
 
 export const useStepGenerator = (processKey: string, fields: StepField[]) => {
   const { fieldsModel } = useFieldValueInit(fields);
@@ -31,6 +32,7 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     NUMBER: null,
     TEXT: markRaw(FieldText),
     RATING: markRaw(RatingField),
+    VehicleSelector: markRaw(VehicleSelector),
   };
 
   const { executeCalcRestriction, restrictions, restrictionsLoading } = useCalcRestriction(processKey, fieldsModel);

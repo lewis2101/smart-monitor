@@ -13,6 +13,7 @@ export type FieldInputClientType =
   | "BOOLEAN"
   | "TITLE"
   | "DATE_TIME_PICKER"
+  | "VehicleSelector"
   | "RATING";
 
 export type FieldInputType =

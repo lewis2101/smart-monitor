@@ -1,25 +1,57 @@
 <script setup lang="ts">
 import RadioButton from "primevue/radiobutton";
 import { IonButton } from "@ionic/vue";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
+import BaseInput from "@/components/base/base-input/base-input.vue";
+import { debounce } from "@/utils/debounce.ts";
 
-const props = defineProps<
+type List = {
+  label: string;
+  description?: string;
+  hint?: string;
+  value: number | string;
+};
+
+const props = withDefaults(
+  defineProps<
+    {
+      list: Array<List>;
+      initialValue: number | string | null;
+      showReset?: boolean;
+      showSearch?: boolean;
+    } & BackdropComponentProps<(value: number | string | null) => any>
+  >(),
   {
-    list: Array<{
-      label: string;
-      value: number | string;
-    }>;
-    initialValue: number | string | null;
-    showReset?: boolean;
-  } & BackdropComponentProps<(value: number | string | null) => any>
->();
+    showSearch: false,
+    showReset: false,
+  },
+);
 
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
 }>();
 
 const temporaryModel = ref(props.initialValue);
+
+const isIncludesList = (list: List, text: string) => {
+  const lowerText = text.toLowerCase();
+  return (
+    list.label.toLowerCase().includes(lowerText) ||
+    list.description?.toLowerCase()?.includes(lowerText) ||
+    list.hint?.toLowerCase()?.includes(lowerText)
+  );
+};
+
+const filterDebounce = debounce(() => {
+  if (!searchModel.value) {
+    filteredList.value = props.list;
+  }
+  filteredList.value = props.list.filter((item) => isIncludesList(item, searchModel.value));
+}, 500);
+
+const searchModel = ref("");
+const filteredList = ref(props.list);
 
 const submit = () => {
   if (temporaryModel.value) {
@@ -32,12 +64,17 @@ const reset = () => {
   props.onSuccess?.(null);
   emit("closeBackdrop");
 };
+
+watch(searchModel, () => {
+  filterDebounce();
+});
 </script>
 
 <template>
   <div class="select-input-backdrop">
+    <base-input v-if="showSearch" v-model="searchModel" placeholder="Поиск" class="select-input-backdrop__search" />
     <label
-      v-for="(item, idx) in list"
+      v-for="(item, idx) in filteredList"
       :key="item.value"
       :for="`${item.value}-${idx}`"
       class="select-input-backdrop__item"
@@ -49,7 +86,17 @@ const reset = () => {
         :input-id="`${item.value}-${idx}`"
         class="select-input-backdrop__radio"
       />
-      <label :for="`${item.value}-${idx}`">{{ item.label }}</label>
+      <label :for="`${item.value}-${idx}`">
+        <div :class="['select-input-backdrop__label', item.description && 'select-input-backdrop__label-bold']">
+          {{ item.label }}
+        </div>
+        <div v-if="item.description" class="select-input-backdrop__description">
+          {{ item.description }}
+        </div>
+        <div v-if="item.hint" class="select-input-backdrop__hint">
+          {{ item.hint }}
+        </div>
+      </label>
     </label>
     <div class="select-input-backdrop__button-wrapper">
       <ion-button v-if="showReset" fill="outline" class="select-input-backdrop__button" @click="reset"
@@ -92,9 +139,33 @@ const reset = () => {
     gap: 8px;
   }
 
+  &__search {
+    position: sticky;
+    top: 8px;
+    background: $white;
+    z-index: 1;
+  }
+
   &__button {
     width: 100%;
     margin-top: 8px;
+  }
+
+  &__label {
+    &-bold {
+      font-weight: 600;
+    }
+  }
+
+  &__description {
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  &__hint {
+    color: $gray-dark;
+    margin-top: 4px;
+    font-size: 14px;
   }
 }
 </style>

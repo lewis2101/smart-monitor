@@ -8,6 +8,8 @@ const props = withDefaults(
     placeholder?: string;
     selectTitle?: string;
     disabled?: boolean;
+    showSearch?: boolean;
+    showReset?: boolean;
     list: Array<{
       label: string;
       value: number | string;
@@ -15,6 +17,8 @@ const props = withDefaults(
   }>(),
   {
     disabled: false,
+    showSearch: false,
+    showReset: false,
   },
 );
 
@@ -34,6 +38,8 @@ const handleClick = async () => {
       props: {
         list: props.list,
         initialValue: model.value,
+        showSearch: props.showSearch,
+        showReset: props.showReset,
       },
     })) as number;
 
