@@ -55,6 +55,9 @@ const formattedDate = computed(() => {
     <div v-if="!loading && clearable && model" class="base-date-picker__clear" @click.stop="handleClear">
       <base-icon name="close" />
     </div>
+    <div v-if="!loading && !model" class="base-date-picker__calendar">
+      <base-icon name="calendar" :width="18" class="base-date-picker__calendar-icon" />
+    </div>
   </div>
 </template>
 
@@ -107,6 +110,19 @@ const formattedDate = computed(() => {
 
   &__clear {
     position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    padding: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__calendar {
+    position: absolute;
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
@@ -114,6 +130,10 @@ const formattedDate = computed(() => {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &-icon {
+      color: $gray-dark;
+    }
   }
 }
 
