@@ -1,23 +1,34 @@
- <script setup lang="ts">
-import {IonButton} from "@ionic/vue"
+<script setup lang="ts">
+import { IonButton } from "@ionic/vue";
 import DatePicker from "primevue/datepicker";
-import {ref} from "vue";
-import {BackdropComponentProps} from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
+import { ref, watch } from "vue";
+import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
+import { useToast } from "primevue/usetoast";
 
-const props = withDefaults(defineProps<{
-  showTime?: boolean;
-  minDate?: Date;
-  maxDate?: Date;
-  initialDate?: Date | Date[] | null;
-  selectionMode?: "single" | "range";
-} & BackdropComponentProps<(value: string | Date) => void, (error: Error) => void>>(), {
-  showTime: false,
-  selectionMode: "single",
-});
+const props = withDefaults(
+  defineProps<
+    {
+      showTime?: boolean;
+      minDate?: Date;
+      maxDate?: Date;
+      minTime?: number;
+      maxTime?: number;
+      initialDate?: Date | Date[] | null;
+      selectionMode?: "single" | "range";
+    } & BackdropComponentProps<(value: string | Date | Date[]) => void, (error: Error) => void>
+  >(),
+  {
+    showTime: false,
+    selectionMode: "single",
+  },
+);
 
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
-}>()
+}>();
+
+const pickerKey = ref(0);
+const toast = useToast();
 
 const getInitialValue = () => {
   if (props.selectionMode === "range") {
@@ -29,30 +40,71 @@ const getInitialValue = () => {
   if (props.initialDate) {
     return new Date(props.initialDate);
   }
-  return new Date()
-}
+  return new Date();
+};
 
 const model = ref(getInitialValue());
 
 const submit = () => {
-  if (!model) return;
+  if (!model.value) return;
 
   props.onSuccess?.(model.value);
   emit("closeBackdrop");
-}
+};
 
+const showToastRestriction = () => {
+  toast.add({
+    summary: "Ошибка",
+    severity: "error",
+    detail: "Нельзя превысить ограничении по времени",
+    life: 3000,
+  });
+};
+
+watch(model, async (value) => {
+  if (!value) return;
+  if (Array.isArray(value)) return;
+
+  const d = new Date(value);
+
+  if (props.minTime && d.getHours() < props.minTime) {
+    d.setHours(props.minTime);
+    model.value = d;
+    pickerKey.value++;
+    showToastRestriction();
+  }
+
+  if (props.maxTime && d.getHours() > props.maxTime) {
+    d.setHours(props.maxTime);
+    model.value = d;
+    pickerKey.value++;
+    showToastRestriction();
+  }
+});
 </script>
 
 <template>
   <div class="date-picker-backdrop">
-    <date-picker v-model="model" :pt="{
-          day: $style.day,
-          month: $style.month,
-          year: $style.year,
-          panel: $style.panel,
-          pcInputText: $style.inputText,
-        }" date-format="dd.mm.yy" :show-time="showTime" :min-date="minDate" :max-date="maxDate"
-                 fluid inline class="date-picker-backdrop__native" :selection-mode="selectionMode"/>
+    <date-picker
+      v-model="model"
+      :key="pickerKey"
+      :pt="{
+        day: $style.day,
+        month: $style.month,
+        year: $style.year,
+        panel: $style.panel,
+        pcInputText: $style.inputText,
+      }"
+      date-format="dd.mm.yy"
+      :show-time="showTime"
+      :min-date="minDate"
+      :max-date="maxDate"
+      fluid
+      inline
+      class="date-picker-backdrop__native"
+      :selection-mode="selectionMode"
+      :step-minute="10"
+    />
     <ion-button class="date-picker-backdrop__button" @click="submit">Выбрать</ion-button>
   </div>
 </template>
@@ -84,7 +136,6 @@ const submit = () => {
 
 <style scoped lang="scss">
 .date-picker-backdrop {
-
   &__button {
     width: 100%;
     padding: 8px 16px;

@@ -27,7 +27,9 @@ const dateTimePickerInit: FieldValueInitFunc = (field) => {
   if (typeof field.default === "string") {
     return new Date(field.default).toISOString();
   }
-  return new Date().toISOString();
+  const newDate = new Date();
+  newDate.setMinutes(0);
+  return newDate;
 };
 
 const addressSelectorInit: FieldValueInitFunc = (field) => {

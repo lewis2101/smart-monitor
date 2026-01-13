@@ -50,6 +50,8 @@ const showModal = async () => {
         showTime: true,
         minDate: props.restriction?.min ? new Date(props.restriction?.min) : undefined,
         maxDate: props.restriction?.max ? new Date(props.restriction?.max) : undefined,
+        minTime: props.restriction?.timeStart,
+        maxTime: props.restriction?.timeEnd,
         initialDate: proxyModel.value,
       },
     })) as Date;
