@@ -30,7 +30,7 @@ type Response = {
     },
   ];
   assignee: string;
-  buttons: AdditionalOrderActions[];
+  buttons?: AdditionalOrderActions[];
 };
 
 type Payload = {

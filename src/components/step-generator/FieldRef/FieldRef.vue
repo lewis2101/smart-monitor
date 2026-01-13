@@ -109,6 +109,7 @@ watch(error, (value) => {
       :list="list"
       :placeholder="$t(field.value)"
       :disabled="disabled || field.disabled || loadingData"
+      show-search
     />
     <div v-if="loadingData" class="field-input__spinner">
       <ion-spinner name="circular" class="field-input__spinner-icon" />

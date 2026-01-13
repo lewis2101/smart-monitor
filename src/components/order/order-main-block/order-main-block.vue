@@ -117,7 +117,7 @@ watch(saveError, (value) => {
         :disabled="orderDisabled"
       />
     </div>
-    <order-more-buttons :action-buttons="orderData.actions" :additional-buttons="orderNextData.buttons" />
+    <order-more-buttons :action-buttons="orderData.actions || []" :additional-buttons="orderNextData.buttons || []" />
   </div>
 </template>
 
