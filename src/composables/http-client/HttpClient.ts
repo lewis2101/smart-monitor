@@ -1,4 +1,4 @@
-import {CapacitorHttp, type HttpOptions, type HttpParams, type HttpResponse} from "@capacitor/core";
+import { CapacitorHttp, type HttpOptions, type HttpResponse } from "@capacitor/core";
 
 export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE";
 export type CapacitorHttpResponse<T> = Promise<Omit<HttpResponse, "data"> & { data: T }>;
@@ -39,7 +39,7 @@ export class HttpClient {
         parts = {
           ...parts,
           ...this.serializeParams(value, paramKey),
-        }
+        };
         continue;
       }
 
@@ -78,13 +78,13 @@ export class HttpClient {
 
   public async get<Response>(url: string, option: CapacitorHttpOptions): CapacitorHttpResponse<Response> {
     const params = option.params ? this.serializeParams(option.params) : {};
-
-    console.log({params})
+    const payload = option.data ? JSON.stringify(option.data) : undefined;
 
     const data = await CapacitorHttp.get({
       ...option,
       url: `${this.baseURL}${url}`,
       params,
+      data: payload,
       headers: {
         ...option.headers,
         "Content-Type": "application/json; charset=utf-8",
@@ -106,12 +106,14 @@ export class HttpClient {
     url: string,
     option: CapacitorHttpOptions<Payload>,
   ): CapacitorHttpResponse<Response> {
-    const params = option.params ? `?${this.serializeParams(option.params)}` : "";
+    const params = option.params ? `?${this.serializeParams(option.params)}` : {};
+    const payload = option.data ? JSON.stringify(option.data) : undefined;
 
     const data = await CapacitorHttp.post({
       ...option,
       url: `${this.baseURL}${url}`,
       params,
+      data: payload,
       headers: {
         ...option.headers,
         "Content-Type": "application/json; charset=utf-8",
@@ -131,30 +133,34 @@ export class HttpClient {
 
   public patch<Response, Payload = unknown>(
     url: string,
-    config: CapacitorHttpOptions<Payload>,
+    option: CapacitorHttpOptions<Payload>,
   ): CapacitorHttpResponse<Response> {
-    const params = config.params ? `?${this.serializeParams(config.params)}` : "";
+    const params = option.params ? `?${this.serializeParams(option.params)}` : {};
+    const payload = option.data ? JSON.stringify(option.data) : undefined;
 
     return CapacitorHttp.patch({
-      ...config,
+      ...option,
       url: `${this.baseURL}${url}`,
       params,
+      data: payload,
       headers: {
-        ...config.headers,
+        ...option.headers,
         "Content-Type": "application/json; charset=utf-8",
       },
     });
   }
 
-  public delete<Response>(url: string, config: CapacitorHttpOptions): CapacitorHttpResponse<Response> {
-    const params = config.params ? `?${this.serializeParams(config.params)}` : "";
+  public delete<Response>(url: string, option: CapacitorHttpOptions): CapacitorHttpResponse<Response> {
+    const params = option.params ? `?${this.serializeParams(option.params)}` : {};
+    const payload = option.data ? JSON.stringify(option.data) : undefined;
 
     return CapacitorHttp.delete({
-      ...config,
+      ...option,
       url: `${this.baseURL}${url}`,
       params,
+      data: payload,
       headers: {
-        ...config.headers,
+        ...option.headers,
         "Content-Type": "application/json; charset=utf-8",
       },
     });
