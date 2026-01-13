@@ -13,7 +13,8 @@ export enum OrdersEndpoints {
   orderSave = "/order/save",
   orderInitial = "/order/initial",
   validateInitial = "/order/validateInitial",
-  calcRestriction = "/order/field-restrictions/:processKey/init/:field"
+  calcRestriction = "/order/field-restrictions/:processKey/init/:field",
+  clientVehicles = "/order/client-vehicles"
 }
 
 export enum DependencyEndpoints {
