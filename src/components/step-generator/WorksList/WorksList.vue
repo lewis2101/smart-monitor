@@ -2,10 +2,11 @@
 import { IonButton, IonSpinner } from "@ionic/vue";
 import type { StepField } from "@/components/step-generator/types.ts";
 import { computed, reactive, watch } from "vue";
-import { useNewOrderPartsQuery } from "@/api/orders/new-order-parts.ts";
+import { type OrderPartsContentChild, useNewOrderPartsQuery } from "@/api/orders/new-order-parts.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { useToast } from "primevue/usetoast";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import SelectedWork from "@/components/step-generator/WorksList/SelectedWork.vue";
 
 const DEPENDENCY_FIELD_KEY = "vehicleId";
 
@@ -21,7 +22,7 @@ const props = withDefaults(
   },
 );
 
-const model = defineModel<number[]>({ required: true });
+const model = defineModel<number[]>({ required: true, default: () => [] });
 
 const toast = useToast();
 const globalBackdropStore = useGlobalBackdropStore();
@@ -53,17 +54,39 @@ const handleClick = async () => {
   }
 
   try {
-    const result = await globalBackdropStore.push("list-tree", {
+    const result = (await globalBackdropStore.push("list-tree", {
       title: "Выберите",
       props: {
         list: newOrderPartsData.value.content,
+        initialValues: model.value,
       },
-    });
-    console.log({ result });
+    })) as number[];
+    model.value = result;
   } catch (e) {
     console.log(e);
   }
 };
+
+const handleRemove = (id: number) => {
+  model.value = model.value.filter((item) => item !== id);
+};
+
+const selectedWorksList = computed(() => {
+  if (!newOrderPartsData.value) return [];
+
+  const selectedItems: OrderPartsContentChild[] = [];
+
+  newOrderPartsData.value.content.forEach((item) => {
+    if (item.children) {
+      item.children.forEach((child) => {
+        if (model.value.includes(child.id)) {
+          selectedItems.push(child);
+        }
+      });
+    }
+  });
+  return selectedItems;
+});
 
 watch(
   () => props.stepModel[DEPENDENCY_FIELD_KEY],
@@ -87,6 +110,15 @@ watch(
       <ion-spinner v-if="isLoading" name="circular" class="works-list__spinner" />
       <span v-else>Выбрать</span>
     </ion-button>
+    <div v-if="selectedWorksList.length" class="works-list__selected">
+      <SelectedWork
+        v-for="item in selectedWorksList"
+        :key="item.id"
+        :item="item"
+        class="works-list__selected-item"
+        @delete="handleRemove(item.id)"
+      />
+    </div>
   </div>
 </template>
 
@@ -111,6 +143,27 @@ watch(
 
   &__spinner {
     height: 20px;
+  }
+
+  &__selected {
+    height: 100%;
+    max-height: 440px;
+    overflow: auto;
+    margin-top: 16px;
+    border: 1px solid var(--System-Gray-Light, #f2f2f7);
+    border-radius: 12px;
+
+    &-item {
+      box-shadow: 0px 2px 3px 0px #0000001a;
+      border: 1px solid var(--System-Gray-Light, #f2f2f7);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 </style>

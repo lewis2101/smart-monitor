@@ -9,6 +9,7 @@ type AccordionTreeList = InstanceType<typeof AccordionTree>["$props"]["list"];
 const props = defineProps<
   {
     list: AccordionTreeList;
+    initialValues: number[];
   } & BackdropComponentProps<(value: number[]) => void, (error: Error) => void>
 >();
 
@@ -16,7 +17,7 @@ const emit = defineEmits<{
   (e: "closeBackdrop"): void;
 }>();
 
-const selectedItems = ref<number[]>([]);
+const selectedItems = ref<number[]>(props.initialValues);
 
 const paddingBottom = computed(() => (!!selectedItems.value.length ? "65px" : "0"));
 

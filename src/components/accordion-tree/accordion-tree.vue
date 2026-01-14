@@ -35,7 +35,7 @@ const accordionTopSticky = computed(() => (props.showSearch ? "60px" : "0"));
 <template>
   <div class="accordion-tree">
     <base-input v-if="showSearch" v-model="searchModel" placeholder="Поиск" class="accordion-tree__search" />
-    <Accordion multiple lazy>
+    <Accordion lazy>
       <AccordionPanel v-for="item in list" :key="item.id" :value="item.id">
         <AccordionHeader class="accordion-tree__header">{{ item.name }}</AccordionHeader>
         <AccordionContent>
