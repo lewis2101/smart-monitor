@@ -8,6 +8,7 @@ defineProps<{
 
 defineEmits<{
   (e: "delete"): void;
+  (e: "change"): void;
 }>();
 
 const showKeys: Array<keyof Partial<OrderPartsContentChild>> = [
@@ -28,7 +29,9 @@ const showKeys: Array<keyof Partial<OrderPartsContentChild>> = [
       </div>
     </template>
     <div class="selected-work__buttons">
-      <ion-button class="selected-work__button" size="small" fill="outline">Редактировать</ion-button>
+      <ion-button class="selected-work__button" size="small" fill="outline" @click="$emit('change')"
+        >Редактировать</ion-button
+      >
       <ion-button class="selected-work__button" size="small" fill="outline" color="danger" @click="$emit('delete')"
         >Удалить</ion-button
       >

@@ -22,7 +22,14 @@ const props = withDefaults(
   },
 );
 
-const model = defineModel<number[]>({ required: true, default: () => [] });
+const model = defineModel<OrderPartsContentChild[]>({ required: true, default: () => [] });
+
+const modelProxy = computed({
+  get: () => model.value.map((item) => item.id),
+  set: (e: number[]) => {
+    model.value = findItems(e);
+  },
+});
 
 const toast = useToast();
 const globalBackdropStore = useGlobalBackdropStore();
@@ -58,35 +65,72 @@ const handleClick = async () => {
       title: "Выберите",
       props: {
         list: newOrderPartsData.value.content,
-        initialValues: model.value,
+        initialValues: modelProxy.value,
       },
     })) as number[];
-    model.value = result;
+    modelProxy.value = result;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const findItem = (id: number): OrderPartsContentChild | null => {
+  let foundItem: OrderPartsContentChild | null = null;
+
+  newOrderPartsData.value.content.forEach((item) => {
+    if (item.children) {
+      item.children.forEach((child) => {
+        if (id === child.id) {
+          foundItem = child;
+        }
+      });
+    }
+  });
+
+  return foundItem;
+};
+
+const findItems = (ids: number[]) => {
+  const foundItems: OrderPartsContentChild[] = [];
+
+  newOrderPartsData.value.content.forEach((item) => {
+    if (item.children) {
+      item.children.forEach((child) => {
+        if (ids.includes(child.id)) {
+          foundItems.push(child);
+        }
+      });
+    }
+  });
+
+  return foundItems;
+};
+
+const handleChange = async (id: number) => {
+  const item = findItem(id);
+  if (!item) return;
+
+  try {
+    const result = (await globalBackdropStore.push("quantity", {
+      title: "Редактирование кол-во",
+      props: {
+        initialValue: item.quantity,
+      },
+    })) as number;
+
+    model.value.forEach((item) => {
+      if (item.id === id) {
+        item.quantity = result;
+      }
+    });
   } catch (e) {
     console.log(e);
   }
 };
 
 const handleRemove = (id: number) => {
-  model.value = model.value.filter((item) => item !== id);
+  modelProxy.value = modelProxy.value.filter((item) => item !== id);
 };
-
-const selectedWorksList = computed(() => {
-  if (!newOrderPartsData.value) return [];
-
-  const selectedItems: OrderPartsContentChild[] = [];
-
-  newOrderPartsData.value.content.forEach((item) => {
-    if (item.children) {
-      item.children.forEach((child) => {
-        if (model.value.includes(child.id)) {
-          selectedItems.push(child);
-        }
-      });
-    }
-  });
-  return selectedItems;
-});
 
 watch(
   () => props.stepModel[DEPENDENCY_FIELD_KEY],
@@ -110,12 +154,13 @@ watch(
       <ion-spinner v-if="isLoading" name="circular" class="works-list__spinner" />
       <span v-else>Выбрать</span>
     </ion-button>
-    <div v-if="selectedWorksList.length" class="works-list__selected">
+    <div v-if="model.length" class="works-list__selected">
       <SelectedWork
-        v-for="item in selectedWorksList"
+        v-for="item in model"
         :key="item.id"
         :item="item"
         class="works-list__selected-item"
+        @change="handleChange(item.id)"
         @delete="handleRemove(item.id)"
       />
     </div>

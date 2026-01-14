@@ -6,6 +6,7 @@ import SelectBackdrop from "@/widgets/backdrops/select-backdrop.vue";
 import DatePickerBackdrop from "@/widgets/backdrops/date-picker-backdrop.vue";
 import type { ExtractProps } from "@/utils/extractProps.ts";
 import ListTreeBackdrop from "@/widgets/backdrops/list-tree-backdrop.vue";
+import QuantityBackdrop from "@/widgets/backdrops/quantity-backdrop.vue";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {
   onSuccess?: S;
@@ -28,4 +29,5 @@ export const backdropComponents = {
   select: markRaw(SelectBackdrop),
   "date-picker": markRaw(DatePickerBackdrop),
   "list-tree": markRaw(ListTreeBackdrop),
+  quantity: markRaw(QuantityBackdrop),
 } as const;
