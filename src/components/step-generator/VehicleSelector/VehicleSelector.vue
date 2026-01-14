@@ -4,9 +4,10 @@ import type { StepField } from "@/components/step-generator/types.ts";
 import { useClientVehiclesQuery, type Vehicle } from "@/api/orders/client-vehicles.ts";
 import { IonSpinner } from "@ionic/vue";
 import { useQuery } from "@tanstack/vue-query";
-import { computed, type ComputedRef } from "vue";
+import { computed, type ComputedRef, onMounted, ref } from "vue";
 import { getValueByLocale } from "@/i18n";
 import { useI18n } from "vue-i18n";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
@@ -22,12 +23,17 @@ withDefaults(
 
 const { t } = useI18n();
 
+const vehicleSelectorRef = ref<HTMLDivElement | null>(null);
 const clientVehicleQuery = useClientVehiclesQuery({});
 const { data, isPending } = useQuery(clientVehicleQuery);
 
 const buildDescriptionOfVehicle = (vehicle: Vehicle) => {
   return `${getValueByLocale(vehicle.color.name)} ${getValueByLocale(vehicle.model.make.name)} ${getValueByLocale(vehicle.model.name)} ${getValueByLocale(vehicle.year.name)}`;
 };
+
+onMounted(() => {
+  useBubbleAnimate(vehicleSelectorRef);
+});
 
 const list: ComputedRef<SelectList> = computed(() => {
   if (!data.value) return [];
@@ -42,7 +48,7 @@ const list: ComputedRef<SelectList> = computed(() => {
 </script>
 
 <template>
-  <div class="vehicle-selector">
+  <div class="vehicle-selector" ref="vehicleSelectorRef">
     <select-input
       :list="list"
       :placeholder="$t(field.value)"

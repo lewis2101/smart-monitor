@@ -4,7 +4,7 @@ import type { StepField } from "@/components/step-generator/types.ts";
 import { onMounted, ref } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     field: StepField;
     disabled?: boolean;

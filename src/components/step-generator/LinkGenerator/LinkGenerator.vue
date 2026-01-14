@@ -7,7 +7,7 @@ import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 
-const props = defineProps<{
+defineProps<{
   field: StepField;
 }>();
 

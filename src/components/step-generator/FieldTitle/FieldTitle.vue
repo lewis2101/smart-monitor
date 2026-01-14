@@ -1,17 +1,24 @@
 <script setup lang="ts">
-import type {StepField} from "@/components/step-generator/types.ts";
+import type { StepField } from "@/components/step-generator/types.ts";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import { onMounted, ref } from "vue";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
-const props = defineProps<{
+defineProps<{
   field: StepField;
 }>();
 
-const model = defineModel<string>()
+const model = defineModel<string>();
+const fieldTitleRef = ref<HTMLDivElement | null>(null);
+
+onMounted(() => {
+  useBubbleAnimate(fieldTitleRef);
+});
 </script>
 
 <template>
-  <div v-if="model" class="field-title">
-    <base-icon name="help" class="field-title__icon"/>
+  <div v-if="model" class="field-title" ref="fieldTitleRef">
+    <base-icon name="help" class="field-title__icon" />
     {{ model }}
   </div>
 </template>

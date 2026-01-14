@@ -2,7 +2,7 @@
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import type { StepField } from "@/components/step-generator/types.ts";
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     field: StepField;
     disabled?: boolean;

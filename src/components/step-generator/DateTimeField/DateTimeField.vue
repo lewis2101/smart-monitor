@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { StepField } from "@/components/step-generator/types.ts";
-import { computed, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import type { DateCalcRestrictionResponse } from "@/composables/apply-restrictions/date-time-picker-restiction.ts";
 import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -23,6 +24,7 @@ const emit = defineEmits<{
 }>();
 
 const model = defineModel<string | null>({ required: true });
+const dateTimeFieldRef = ref<HTMLDivElement | null>(null);
 
 const proxyModel = computed({
   get: () => {
@@ -63,6 +65,10 @@ const showModal = async () => {
   }
 };
 
+onMounted(() => {
+  useBubbleAnimate(dateTimeFieldRef);
+});
+
 const isDisabled = computed(() => props.disabled || props.field.disabled || props.loading);
 
 watch(
@@ -82,14 +88,16 @@ watch(
 </script>
 
 <template>
-  <base-date-picker
-    v-model="proxyModel"
-    :placeholder="$t(field.value)"
-    :loading="loading"
-    :disabled="isDisabled"
-    :show-time="true"
-    @select-date="showModal"
-  />
+  <div class="dateTimeFieldRef">
+    <base-date-picker
+      v-model="proxyModel"
+      :placeholder="$t(field.value)"
+      :loading="loading"
+      :disabled="isDisabled"
+      :show-time="true"
+      @select-date="showModal"
+    />
+  </div>
 </template>
 
 <style scoped lang="scss"></style>

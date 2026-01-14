@@ -50,7 +50,7 @@ emit("getLabel", orderData.name);
 </script>
 
 <template>
-  <div class="new-order-main-block">
+  <div v-if="orderData" class="new-order-main-block">
     <div class="new-order-main-block__fields">
       <step-generator ref="stepGeneratorRef" :process-key="processKey" :fields="orderData.attributes" />
     </div>

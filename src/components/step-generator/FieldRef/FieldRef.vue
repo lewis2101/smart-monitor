@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { StepField } from "@/components/step-generator/types.ts";
-import { computed, type ComputedRef, onMounted, useTemplateRef, watch } from "vue";
+import { computed, type ComputedRef, onMounted, ref, watch } from "vue";
 import { useResourceDependencyQuery } from "@/api/dependency/resource-dependency.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { IonSpinner } from "@ionic/vue";
@@ -26,7 +26,7 @@ const emit = defineEmits<{
   (e: "change"): void;
 }>();
 
-const fieldRef = useTemplateRef("fieldRef");
+const fieldRef = ref<HTMLDivElement | null>(null);
 
 const model = defineModel<{
   id: string | number;
