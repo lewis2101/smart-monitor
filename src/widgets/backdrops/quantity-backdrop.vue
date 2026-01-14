@@ -2,6 +2,7 @@
 import { IonButton } from "@ionic/vue";
 import { ref } from "vue";
 import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
+import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 
 const props = defineProps<
   {
@@ -24,9 +25,13 @@ const handleSave = () => {
 <template>
   <div class="quantity-backdrop-wrapper">
     <div class="quantity-backdrop">
-      <ion-button class="quantity-backdrop__button" fill="outline" @click="model--">-</ion-button>
+      <ion-button class="quantity-backdrop__button" fill="outline" @click="model--">
+        <base-icon name="minus" />
+      </ion-button>
       <div class="quantity-backdrop__number">{{ model }}</div>
-      <ion-button class="quantity-backdrop__button" fill="outline" @click="model++">+</ion-button>
+      <ion-button class="quantity-backdrop__button" fill="outline" @click="model++">
+        <base-icon name="plus" />
+      </ion-button>
     </div>
     <ion-button class="quantity-backdrop-wrapper__button" @click="handleSave">Сохранить</ion-button>
   </div>
@@ -54,6 +59,7 @@ const handleSave = () => {
     border-radius: 12px;
     padding: 16px;
     width: 100%;
+    font-weight: 600;
 
     display: flex;
     align-items: center;
