@@ -4,7 +4,7 @@ import type { StepField } from "@/components/step-generator/types.ts";
 import { useClientVehiclesQuery, type Vehicle } from "@/api/orders/client-vehicles.ts";
 import { IonSpinner } from "@ionic/vue";
 import { useQuery } from "@tanstack/vue-query";
-import { computed, type ComputedRef, onMounted, ref } from "vue";
+import { computed, type ComputedRef, onMounted, ref, watch } from "vue";
 import { getValueByLocale } from "@/i18n";
 import { useI18n } from "vue-i18n";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
@@ -20,6 +20,30 @@ withDefaults(
     disabled: false,
   },
 );
+
+const emit = defineEmits<{
+  (e: "change"): void;
+}>();
+
+const model = defineModel<{
+  id: string | number;
+} | null>({ required: true });
+
+const modelProxy = computed({
+  get: () => {
+    if (typeof model.value === "object" && model.value?.id) {
+      return model.value.id;
+    }
+    return model.value;
+  },
+  set: (value) => {
+    if (value) {
+      model.value = {
+        id: value,
+      };
+    }
+  },
+});
 
 const { t } = useI18n();
 
@@ -45,11 +69,16 @@ const list: ComputedRef<SelectList> = computed(() => {
     hint: `${t("CITY")}: ${getValueByLocale(item.city.name)}`,
   }));
 });
+
+watch(model, () => {
+  emit("change");
+});
 </script>
 
 <template>
   <div class="vehicle-selector" ref="vehicleSelectorRef">
     <select-input
+      v-model="modelProxy"
       :list="list"
       :placeholder="$t(field.value)"
       :disabled="disabled || field.disabled || isPending"

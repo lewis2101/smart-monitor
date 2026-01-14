@@ -13,6 +13,7 @@ import RatingField from "@/components/step-generator/RatingField/RatingField.vue
 import { useCalcRestriction } from "@/composables/order/use-calc-restriction.ts";
 import { useFieldValueInit } from "@/composables/order/use-field-value-init.ts";
 import VehicleSelector from "@/components/step-generator/VehicleSelector/VehicleSelector.vue";
+import WorksList from "@/components/step-generator/WorksList/WorksList.vue";
 
 export const useStepGenerator = (processKey: string, fields: StepField[]) => {
   const { fieldsModel } = useFieldValueInit(fields);
@@ -33,6 +34,7 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     TEXT: markRaw(FieldText),
     RATING: markRaw(RatingField),
     VehicleSelector: markRaw(VehicleSelector),
+    WorksList: markRaw(WorksList),
   };
 
   const { executeCalcRestriction, restrictions, restrictionsLoading } = useCalcRestriction(processKey, fieldsModel);
@@ -65,6 +67,11 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     return payload;
   };
 
+  const handleChangeField = async (fieldKey: string) => {
+    console.log({ fieldKey });
+    await calcAffectedFieldsRestriction(fieldKey);
+  };
+
   initStepGenerator();
 
   return {
@@ -72,7 +79,7 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     fieldsMap,
     restrictions,
     executeCalcRestriction,
-    calcAffectedFieldsRestriction,
+    handleChangeField,
     restrictionsLoading,
     getPayloadOfFields,
   };

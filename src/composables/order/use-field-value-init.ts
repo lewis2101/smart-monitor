@@ -74,6 +74,17 @@ const ratingInit: FieldValueInitFunc = (field) => {
   return null;
 };
 
+const vehicleSelectorInit: FieldValueInitFunc = (field) => {
+  if (!field.default) return null;
+
+  if (typeof field.default === "object" && field.default.id) {
+    return {
+      id: tryToParseNumber(field.default.id),
+    };
+  }
+  return null;
+};
+
 const fieldValueInits: Record<FieldInputClientType, ((field: StepField) => unknown) | null> = {
   REF: refInit,
   LINK_GENERATOR: linkGeneratorInit,
@@ -90,6 +101,7 @@ const fieldValueInits: Record<FieldInputClientType, ((field: StepField) => unkno
   NUMBER: null,
   TEXT: textInit,
   RATING: ratingInit,
+  VehicleSelector: vehicleSelectorInit,
 };
 
 export const useFieldValueInit = (fields: StepField[]) => {

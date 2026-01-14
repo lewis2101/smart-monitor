@@ -9,4 +9,5 @@ export enum OrdersScope {
   validateInitial = "validate-initial",
   calcRestriction = "calc-restriction",
   clientVehicles = "client-vehicles",
+  newOrderParts = "new-order-parts",
 }

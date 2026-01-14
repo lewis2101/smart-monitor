@@ -14,7 +14,8 @@ export enum OrdersEndpoints {
   orderInitial = "/order/initial",
   validateInitial = "/order/validateInitial",
   calcRestriction = "/order/field-restrictions/:processKey/init/:field",
-  clientVehicles = "/order/client-vehicles"
+  clientVehicles = "/order/client-vehicles",
+  newOrderParts = "/order/new-order-parts",
 }
 
 export enum DependencyEndpoints {
