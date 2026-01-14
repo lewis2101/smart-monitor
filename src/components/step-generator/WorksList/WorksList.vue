@@ -5,6 +5,7 @@ import { computed, reactive, watch } from "vue";
 import { useNewOrderPartsQuery } from "@/api/orders/new-order-parts.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { useToast } from "primevue/usetoast";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
 const DEPENDENCY_FIELD_KEY = "vehicleId";
 
@@ -20,7 +21,10 @@ const props = withDefaults(
   },
 );
 
+const model = defineModel<number[]>({ required: true });
+
 const toast = useToast();
+const globalBackdropStore = useGlobalBackdropStore();
 
 const newOrderPartsParams = reactive({
   lang: "rus",
@@ -39,7 +43,7 @@ const { data: newOrderPartsData, isPending } = useQuery({
 
 const isLoading = computed(() => !newOrderPartsData.value && !!isPending.value && !!newOrderPartsParams.vehicleId);
 
-const handleClick = () => {
+const handleClick = async () => {
   if (!newOrderPartsData.value || !newOrderPartsParams.vehicleId) {
     toast.add({
       summary: "Транспорт не выбран",
@@ -48,8 +52,17 @@ const handleClick = () => {
     });
   }
 
-
-  console.log("show details");
+  try {
+    const result = await globalBackdropStore.push("list-tree", {
+      title: "Выберите",
+      props: {
+        list: newOrderPartsData.value.content,
+      },
+    });
+    console.log({ result });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 watch(
@@ -71,7 +84,7 @@ watch(
       :disabled="disabled || field.disabled || isLoading"
       @click="handleClick"
     >
-      <ion-spinner v-if="isLoading" name="circular" />
+      <ion-spinner v-if="isLoading" name="circular" class="works-list__spinner" />
       <span v-else>Выбрать</span>
     </ion-button>
   </div>
@@ -94,6 +107,10 @@ watch(
 
   &__button-select {
     width: 100%;
+  }
+
+  &__spinner {
+    height: 20px;
   }
 }
 </style>

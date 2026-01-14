@@ -29,7 +29,7 @@ export const useGlobalBackdropStore = defineStore("global-backdrop-store", () =>
         },
         model: true,
       });
-    })
+    });
   }
 
   watch(backdrops, (value) => {
