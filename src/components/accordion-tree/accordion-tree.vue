@@ -5,7 +5,8 @@ import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
 import Checkbox from "primevue/checkbox";
 import BaseInput from "@/components/base/base-input/base-input.vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { debounce } from "@/utils/debounce.ts";
 
 type AccordionTree = {
   name: string;
@@ -26,17 +27,51 @@ const props = withDefaults(
   },
 );
 
+const debouncedSearch = debounce(() => {
+  if (!searchModel.value) return;
+
+  const query = searchModel.value.trim().toLowerCase();
+
+  if (!query) {
+    filteredList.value = props.list;
+    return;
+  }
+
+  filteredList.value = props.list
+    .map((parent) => {
+      if (!parent.children?.length) return null;
+
+      const matchedChildren = parent.children.filter((child) => child.name.toLowerCase().includes(query));
+
+      if (!matchedChildren.length) return null;
+
+      return {
+        ...parent,
+        children: matchedChildren,
+      };
+    })
+    .filter(Boolean) as AccordionTree[];
+}, 500);
+
 const model = defineModel<number[]>({ required: true });
 const searchModel = ref("");
 
+const filteredList = ref(props.list);
+
 const accordionTopSticky = computed(() => (props.showSearch ? "60px" : "0"));
+
+watch(searchModel, (value) => {
+  if (value) {
+    debouncedSearch();
+  }
+});
 </script>
 
 <template>
   <div class="accordion-tree">
     <base-input v-if="showSearch" v-model="searchModel" placeholder="Поиск" class="accordion-tree__search" />
     <Accordion lazy>
-      <AccordionPanel v-for="item in list" :key="item.id" :value="item.id">
+      <AccordionPanel v-for="item in filteredList" :key="item.id" :value="item.id">
         <AccordionHeader class="accordion-tree__header">{{ item.name }}</AccordionHeader>
         <AccordionContent>
           <template v-if="item.children">

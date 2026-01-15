@@ -137,7 +137,7 @@ const countOfWorks = computed(() => (model.value.length ? `(${model.value.length
 const isDisabled = computed(() => props.disabled || props.field.disabled || isLoading.value);
 
 const totalSum = computed(() => {
-  const sum = model.value.reduce((acc, curr) => (acc += Number(curr.price)), 0);
+  const sum = model.value.reduce((acc, curr) => (acc += Number(curr.price) * curr.quantity), 0);
 
   return formatSum(sum);
 });
@@ -182,7 +182,7 @@ watch(newOrderPartsData, (value) => {
         @delete="handleRemove(item.id)"
       />
     </div>
-    <div v-if="totalSum" class="works-list__total">
+    <div v-if="model.length" class="works-list__total">
       <span class="works-list__total-bold">Итого: {{ totalSum }}</span>
     </div>
   </div>
