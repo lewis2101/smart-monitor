@@ -132,6 +132,9 @@ const handleRemove = (id: number) => {
   modelProxy.value = modelProxy.value.filter((item) => item !== id);
 };
 
+const countOfWorks = computed(() => (model.value.length ? `(${model.value.length})` : ""));
+const isDisabled = computed(() => props.disabled || props.field.disabled || isLoading.value);
+
 watch(
   () => props.stepModel[DEPENDENCY_FIELD_KEY],
   (value) => {
@@ -140,17 +143,18 @@ watch(
     }
   },
 );
+
+watch(newOrderPartsData, (value) => {
+  if (value) {
+    model.value = findItems(modelProxy.value);
+  }
+});
 </script>
 
 <template>
   <div class="works-list">
-    <div class="works-list__title">{{ $t(field.value) }}</div>
-    <ion-button
-      class="works-list__button-select"
-      fill="outline"
-      :disabled="disabled || field.disabled || isLoading"
-      @click="handleClick"
-    >
+    <div class="works-list__title">{{ $t(field.value) }} {{ countOfWorks }}</div>
+    <ion-button v-if="!disabled" class="works-list__button-select" fill="outline" :disabled="isDisabled" @click="handleClick">
       <ion-spinner v-if="isLoading" name="circular" class="works-list__spinner" />
       <span v-else>Выбрать</span>
     </ion-button>
@@ -159,6 +163,7 @@ watch(
         v-for="item in model"
         :key="item.id"
         :item="item"
+        :disabled="isDisabled"
         class="works-list__selected-item"
         @change="handleChange(item.id)"
         @delete="handleRemove(item.id)"

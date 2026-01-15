@@ -85,6 +85,20 @@ const vehicleSelectorInit: FieldValueInitFunc = (field) => {
   return null;
 };
 
+const worksListInit: FieldValueInitFunc = (field) => {
+  if (field.default) {
+    return field.default;
+  }
+  return [];
+};
+
+const numberInit: FieldValueInitFunc = (field) => {
+  if (field.default) {
+    return String(field.default);
+  }
+  return null;
+};
+
 const fieldValueInits: Record<FieldInputClientType, ((field: StepField) => unknown) | null> = {
   REF: refInit,
   LINK_GENERATOR: linkGeneratorInit,
@@ -98,10 +112,11 @@ const fieldValueInits: Record<FieldInputClientType, ((field: StepField) => unkno
   INTEGER: null,
   ARRAY: null,
   LOCAL: null,
-  NUMBER: null,
+  NUMBER: numberInit,
   TEXT: textInit,
   RATING: ratingInit,
   VehicleSelector: vehicleSelectorInit,
+  WorksList: worksListInit,
 };
 
 export const useFieldValueInit = (fields: StepField[]) => {

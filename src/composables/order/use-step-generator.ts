@@ -14,8 +14,9 @@ import { useCalcRestriction } from "@/composables/order/use-calc-restriction.ts"
 import { useFieldValueInit } from "@/composables/order/use-field-value-init.ts";
 import VehicleSelector from "@/components/step-generator/VehicleSelector/VehicleSelector.vue";
 import WorksList from "@/components/step-generator/WorksList/WorksList.vue";
+import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
 
-export const useStepGenerator = (processKey: string, fields: StepField[]) => {
+export const useStepGenerator = (processKey: string, fields: StepField[], isDisabled?: boolean) => {
   const { fieldsModel } = useFieldValueInit(fields);
   const fieldsMap: Record<FieldInputClientType, Raw<Component> | null> = {
     REF: markRaw(FieldRef),
@@ -30,7 +31,7 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     INTEGER: null,
     ARRAY: null,
     LOCAL: null,
-    NUMBER: null,
+    NUMBER: markRaw(FieldInput),
     TEXT: markRaw(FieldText),
     RATING: markRaw(RatingField),
     VehicleSelector: markRaw(VehicleSelector),
@@ -46,6 +47,8 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
   };
 
   const initStepGenerator = async () => {
+    if (isDisabled) return;
+
     const hasRestrictionFields = fields.filter((field) => field.calcRestrictions);
 
     await Promise.all(hasRestrictionFields.map((field) => executeCalcRestriction(field.value, field.clientType)));
@@ -58,6 +61,11 @@ export const useStepGenerator = (processKey: string, fields: StepField[]) => {
     fields.forEach((field) => {
       if (field.type === "REF" && fieldsModel[field.value] && fieldsModel[field.value]?.id) {
         payload[field.value] = fieldsModel[field.value].id;
+        return;
+      }
+
+      if (field.type === "NUMBER" && fieldsModel[field.value]) {
+        payload[field.value] = tryToParseNumber(fieldsModel[field.value]);
         return;
       }
 

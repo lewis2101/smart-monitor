@@ -14,27 +14,28 @@ const props = withDefaults(
 );
 
 const { fieldsMap, fieldsModel, restrictions, restrictionsLoading, handleChangeField, getPayloadOfFields } =
-  useStepGenerator(props.processKey, props.fields);
+  useStepGenerator(props.processKey, props.fields, props.disabled);
 
 defineExpose({ fieldsModel, getPayloadOfFields });
 </script>
 
 <template>
   <div class="step-generator">
-    <component
-      v-for="field in fields"
-      :key="field.value"
-      :is="fieldsMap[field.clientType]"
-      v-model="fieldsModel[field.value]"
-      :field="field"
-      :step-model="fieldsModel"
-      :process-key="processKey"
-      :restriction="restrictions[field.value]"
-      :loading="restrictionsLoading[field.value]"
-      :disabled="disabled"
-      class="step-generator__field"
-      @change="handleChangeField(field.value)"
-    />
+    <template v-for="field in fields" :key="field.value">
+      <component
+        v-if="field.show"
+        :is="fieldsMap[field.clientType]"
+        v-model="fieldsModel[field.value]"
+        :field="field"
+        :step-model="fieldsModel"
+        :process-key="processKey"
+        :restriction="restrictions[field.value]"
+        :loading="restrictionsLoading[field.value]"
+        :disabled="disabled"
+        class="step-generator__field"
+        @change="handleChangeField(field.value)"
+      />
+    </template>
   </div>
 </template>
 

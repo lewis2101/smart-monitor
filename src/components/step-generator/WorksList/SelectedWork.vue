@@ -2,9 +2,15 @@
 import type { OrderPartsContentChild } from "@/api/orders/new-order-parts.ts";
 import { IonButton } from "@ionic/vue";
 
-defineProps<{
-  item: OrderPartsContentChild;
-}>();
+withDefaults(
+  defineProps<{
+    item: OrderPartsContentChild;
+    disabled?: boolean;
+  }>(),
+  {
+    disabled: false,
+  },
+);
 
 defineEmits<{
   (e: "delete"): void;
@@ -28,13 +34,26 @@ const showKeys: Array<keyof Partial<OrderPartsContentChild>> = [
         <span>{{ item[key] }}</span>
       </div>
     </template>
-    <div class="selected-work__buttons">
-      <ion-button class="selected-work__button" size="small" fill="outline" @click="$emit('change')"
-        >Редактировать</ion-button
+    <div v-if="!disabled" class="selected-work__buttons">
+      <ion-button
+        class="selected-work__button"
+        size="small"
+        fill="outline"
+        :disabled="disabled"
+        @click="$emit('change')"
       >
-      <ion-button class="selected-work__button" size="small" fill="outline" color="danger" @click="$emit('delete')"
-        >Удалить</ion-button
+        Редактировать
+      </ion-button>
+      <ion-button
+        class="selected-work__button"
+        size="small"
+        fill="outline"
+        color="danger"
+        :disabled="disabled"
+        @click="$emit('delete')"
       >
+        Удалить
+      </ion-button>
     </div>
   </div>
 </template>
