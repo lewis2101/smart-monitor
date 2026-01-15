@@ -135,6 +135,8 @@ const handleRemove = (id: number) => {
 const countOfWorks = computed(() => (model.value.length ? `(${model.value.length})` : ""));
 const isDisabled = computed(() => props.disabled || props.field.disabled || isLoading.value);
 
+const totalSum = computed(() => model.value.reduce((acc, curr) => (acc += Number(curr.price)), 0));
+
 watch(
   () => props.stepModel[DEPENDENCY_FIELD_KEY],
   (value) => {
@@ -154,7 +156,13 @@ watch(newOrderPartsData, (value) => {
 <template>
   <div class="works-list">
     <div class="works-list__title">{{ $t(field.value) }} {{ countOfWorks }}</div>
-    <ion-button v-if="!disabled" class="works-list__button-select" fill="outline" :disabled="isDisabled" @click="handleClick">
+    <ion-button
+      v-if="!disabled"
+      class="works-list__button-select"
+      fill="outline"
+      :disabled="isDisabled"
+      @click="handleClick"
+    >
       <ion-spinner v-if="isLoading" name="circular" class="works-list__spinner" />
       <span v-else>Выбрать</span>
     </ion-button>
@@ -168,6 +176,9 @@ watch(newOrderPartsData, (value) => {
         @change="handleChange(item.id)"
         @delete="handleRemove(item.id)"
       />
+    </div>
+    <div v-if="totalSum" class="works-list__total">
+      <span class="works-list__total-bold">Итого: {{ totalSum }}</span>
     </div>
   </div>
 </template>
@@ -213,6 +224,15 @@ watch(newOrderPartsData, (value) => {
       &:last-child {
         margin-bottom: 0;
       }
+    }
+  }
+
+  &__total {
+    text-align: right;
+    margin-top: 8px;
+
+    &-bold {
+      font-weight: 600;
     }
   }
 }
