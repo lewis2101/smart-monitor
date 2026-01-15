@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 import type { StepField } from "@/components/step-generator/types.ts";
 
 type RawData = undefined;
@@ -25,5 +25,5 @@ export const useOrderInitialMutation = createVueQueryMutations<RawData, Payload,
     url: OrdersEndpoints.orderInitial,
     method: "POST",
   },
-  scope: OrdersScope.orderInitial,
+  scope: Scopes.orderInitial,
 });

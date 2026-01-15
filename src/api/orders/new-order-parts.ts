@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 
 export type OrderPartsContentChild = {
   catalogNumber: number | null;
@@ -36,5 +36,5 @@ export const useNewOrderPartsQuery = createVueQueryOptions<RawData, Response>({
     url: OrdersEndpoints.newOrderParts,
     method: "GET",
   },
-  scope: OrdersScope.newOrderParts,
+  scope: Scopes.newOrderParts,
 });

@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 
 export type RawData = {
   vehicleId: string;
@@ -27,5 +27,5 @@ export const useSupplierListQuery = createVueQueryOptions<RawData, Response>({
     url: OrdersEndpoints.supplierList,
     method: "GET",
   },
-  scope: OrdersScope.supplierList,
+  scope: Scopes.supplierList,
 });

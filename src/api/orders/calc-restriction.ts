@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 
 type RawData = undefined;
 
@@ -13,5 +13,5 @@ export const useCalcRestrictionMutation = createVueQueryMutations<RawData, Paylo
     url: OrdersEndpoints.calcRestriction,
     method: "POST",
   },
-  scope: OrdersScope.calcRestriction,
+  scope: Scopes.calcRestriction,
 });

@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 import type { FilterType } from "../../../types/FilterType.ts";
 import type { SortType } from "../../../types/SortType.ts";
 
@@ -46,5 +46,5 @@ export const useOrdersMineViewQuery = createVueQueryOptions<RawData, Response>({
     url: OrdersEndpoints.ordersMineView,
     method: "GET",
   },
-  scope: OrdersScope.ordersMineView,
+  scope: Scopes.ordersMineView,
 });

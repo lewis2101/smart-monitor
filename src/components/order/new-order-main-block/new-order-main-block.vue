@@ -2,10 +2,13 @@
 import { IonButton } from "@ionic/vue";
 import { useOrderInitialMutation } from "@/api/orders/initial-order.ts";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
-import { useTemplateRef, watch } from "vue";
+import { computed, useTemplateRef, watch } from "vue";
 import { useValidateInitialMutation } from "@/api/orders/validate-initial.ts";
 import { useToast } from "primevue/usetoast";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
+import { ClientLimit } from "@/components/order/client-limit";
+
+const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 
 const props = defineProps<{
   processKey: string;
@@ -40,6 +43,8 @@ const createOrder = async () => {
   }
 };
 
+const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(props.processKey));
+
 watch(validateError, (value) => {
   if (value) {
     toast.add(getErrorForToast(value));
@@ -51,6 +56,9 @@ emit("getLabel", orderData.name);
 
 <template>
   <div v-if="orderData" class="new-order-main-block">
+    <div v-if="showLimits" class="new-order-main-block__limits">
+      <client-limit :process-key="processKey" />
+    </div>
     <div class="new-order-main-block__fields">
       <step-generator ref="stepGeneratorRef" :process-key="processKey" :fields="orderData.attributes" />
     </div>
@@ -65,6 +73,10 @@ emit("getLabel", orderData.name);
 <style scoped lang="scss">
 .new-order-main-block {
   width: 100%;
+
+  &__limits {
+    margin-bottom: 8px;
+  }
 
   &__fields {
     margin-bottom: 16px;

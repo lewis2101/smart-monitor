@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 
 export type Vehicle = {
   id: string;
@@ -149,5 +149,5 @@ export const useClientVehiclesQuery = createVueQueryOptions<RawData, Response>({
     url: OrdersEndpoints.clientVehicles,
     method: "GET",
   },
-  scope: OrdersScope.clientVehicles,
+  scope: Scopes.clientVehicles,
 });

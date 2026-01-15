@@ -22,3 +22,7 @@ export enum OrdersEndpoints {
 export enum DependencyEndpoints {
   resourceDependency = "/resource/dependency",
 }
+
+export enum StatEndpoints {
+  currentLimit = "/stat/current-limit",
+}

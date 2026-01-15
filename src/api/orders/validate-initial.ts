@@ -2,7 +2,7 @@ import {OrdersEndpoints} from "@/api/endpoints.ts";
 import {
   createVueQueryMutations
 } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
-import {OrdersScope} from "@/api/orders-scope.ts";
+import {Scopes} from "@/api/scopes.ts";
 
 type RawData = undefined;
 
@@ -17,5 +17,5 @@ export const useValidateInitialMutation = createVueQueryMutations<RawData, Paylo
     url: OrdersEndpoints.validateInitial,
     method: "POST",
   },
-  scope: OrdersScope.validateInitial,
+  scope: Scopes.validateInitial,
 });

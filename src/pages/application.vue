@@ -4,7 +4,7 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 import { ApplicationOrdersBlock } from "@/components/application/application-orders-block";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
 import { reactive, ref } from "vue";
@@ -12,7 +12,7 @@ import { ApplicationFilter } from "@/components/application/application-filter";
 import type { FilterType } from "../../types/FilterType.ts";
 import type { SortType } from "../../types/SortType.ts";
 
-const { pageId, refresh } = useRefreshPage([OrdersScope.ordersMineHeader, OrdersScope.ordersMineView]);
+const { pageId, refresh } = useRefreshPage([Scopes.ordersMineHeader, Scopes.ordersMineView]);
 
 const headerParams = reactive({
   tabName: "!OrdersMine",

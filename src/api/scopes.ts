@@ -1,4 +1,4 @@
-export enum OrdersScope {
+export enum Scopes {
   ordersMineHeader = "orders-mine-header",
   ordersMineView = "orders-mine-view",
   orderAction = "order-action",
@@ -11,4 +11,5 @@ export enum OrdersScope {
   clientVehicles = "client-vehicles",
   newOrderParts = "new-order-parts",
   supplierList = "supplier-list",
+  currentLimit = "current-limit",
 }

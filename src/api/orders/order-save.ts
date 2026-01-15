@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 import type { CapacitorHttpError, HttpRequestError } from "@/api/error-data.ts";
 
 type RawData = undefined;
@@ -18,5 +18,5 @@ export const useOrderSaveMutation = createVueQueryMutations<RawData, Payload, Re
     url: OrdersEndpoints.orderSave,
     method: "POST",
   },
-  scope: OrdersScope.orderSave,
+  scope: Scopes.orderSave,
 });

@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/vue-query";
 import { useToast } from "primevue/usetoast";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import SelectedWork from "@/components/step-generator/WorksList/SelectedWork.vue";
+import { formatSum } from "@/utils/formatSum.ts";
 
 const DEPENDENCY_FIELD_KEY = "vehicleId";
 
@@ -135,7 +136,11 @@ const handleRemove = (id: number) => {
 const countOfWorks = computed(() => (model.value.length ? `(${model.value.length})` : ""));
 const isDisabled = computed(() => props.disabled || props.field.disabled || isLoading.value);
 
-const totalSum = computed(() => model.value.reduce((acc, curr) => (acc += Number(curr.price)), 0));
+const totalSum = computed(() => {
+  const sum = model.value.reduce((acc, curr) => (acc += Number(curr.price)), 0);
+
+  return formatSum(sum);
+});
 
 watch(
   () => props.stepModel[DEPENDENCY_FIELD_KEY],

@@ -1,6 +1,6 @@
 import { OrdersEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
-import { OrdersScope } from "@/api/orders-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 import type { FieldType } from "../../../types/FieldType.ts";
 
 type RawData = {
@@ -18,5 +18,5 @@ export const useOrdersMineHeaderQuery = createVueQueryOptions<RawData, Response>
     url: OrdersEndpoints.ordersMineHeader,
     method: "GET",
   },
-  scope: OrdersScope.ordersMineHeader,
+  scope: Scopes.ordersMineHeader,
 });
