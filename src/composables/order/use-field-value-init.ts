@@ -96,7 +96,7 @@ const numberInit: FieldValueInitFunc = (field) => {
   if (field.default) {
     return String(field.default);
   }
-  return null;
+  return String(0);
 };
 
 const fieldValueInits: Record<FieldInputClientType, ((field: StepField) => unknown) | null> = {
