@@ -27,9 +27,10 @@ const dateTimePickerInit: FieldValueInitFunc = (field) => {
   if (typeof field.default === "string") {
     return new Date(field.default).toISOString();
   }
-  const newDate = new Date();
-  newDate.setMinutes(0);
-  return newDate;
+  return null;
+  // const newDate = new Date();
+  // newDate.setMinutes(0);
+  // return newDate;
 };
 
 const addressSelectorInit: FieldValueInitFunc = (field) => {
@@ -99,6 +100,17 @@ const numberInit: FieldValueInitFunc = (field) => {
   return String(0);
 };
 
+const supplierSelectorInit: FieldValueInitFunc = (field) => {
+  if (!field.default) return null;
+
+  if (typeof field.default === "object" && field.default.id) {
+    return {
+      id: tryToParseNumber(field.default.id),
+    };
+  }
+  return null;
+};
+
 const fieldValueInits: Record<FieldInputClientType, ((field: StepField) => unknown) | null> = {
   REF: refInit,
   LINK_GENERATOR: linkGeneratorInit,
@@ -117,6 +129,7 @@ const fieldValueInits: Record<FieldInputClientType, ((field: StepField) => unkno
   RATING: ratingInit,
   VehicleSelector: vehicleSelectorInit,
   WorksList: worksListInit,
+  SupplierSelector: supplierSelectorInit,
 };
 
 export const useFieldValueInit = (fields: StepField[]) => {

@@ -10,4 +10,5 @@ export enum OrdersScope {
   calcRestriction = "calc-restriction",
   clientVehicles = "client-vehicles",
   newOrderParts = "new-order-parts",
+  supplierList = "supplier-list",
 }

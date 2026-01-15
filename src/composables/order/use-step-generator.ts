@@ -15,6 +15,7 @@ import { useFieldValueInit } from "@/composables/order/use-field-value-init.ts";
 import VehicleSelector from "@/components/step-generator/VehicleSelector/VehicleSelector.vue";
 import WorksList from "@/components/step-generator/WorksList/WorksList.vue";
 import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
+import SupplierSelector from "@/components/step-generator/SupplierSelector/SupplierSelector.vue";
 
 export const useStepGenerator = (processKey: string, fields: StepField[], isDisabled?: boolean) => {
   const { fieldsModel } = useFieldValueInit(fields);
@@ -36,6 +37,7 @@ export const useStepGenerator = (processKey: string, fields: StepField[], isDisa
     RATING: markRaw(RatingField),
     VehicleSelector: markRaw(VehicleSelector),
     WorksList: markRaw(WorksList),
+    SupplierSelector: markRaw(SupplierSelector),
   };
 
   const { executeCalcRestriction, restrictions, restrictionsLoading } = useCalcRestriction(processKey, fieldsModel);
@@ -62,7 +64,7 @@ export const useStepGenerator = (processKey: string, fields: StepField[], isDisa
       if (!field.show) return;
 
       if (field.type === "REF" && fieldsModel[field.value] && fieldsModel[field.value]?.id) {
-        payload[field.value] = fieldsModel[field.value].id;
+        payload[field.value] = tryToParseNumber(fieldsModel[field.value].id);
         return;
       }
 

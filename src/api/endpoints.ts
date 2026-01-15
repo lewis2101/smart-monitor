@@ -16,6 +16,7 @@ export enum OrdersEndpoints {
   calcRestriction = "/order/field-restrictions/:processKey/init/:field",
   clientVehicles = "/order/client-vehicles",
   newOrderParts = "/order/new-order-parts",
+  supplierList = "/order/supplier-list",
 }
 
 export enum DependencyEndpoints {

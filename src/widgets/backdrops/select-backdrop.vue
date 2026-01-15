@@ -9,7 +9,7 @@ import { debounce } from "@/utils/debounce.ts";
 type List = {
   label: string;
   description?: string;
-  hint?: string;
+  hint?: string[];
   value: number | string;
 };
 
@@ -39,7 +39,7 @@ const isIncludesList = (list: List, text: string) => {
   return (
     list.label.toLowerCase().includes(lowerText) ||
     list.description?.toLowerCase()?.includes(lowerText) ||
-    list.hint?.toLowerCase()?.includes(lowerText)
+    list.hint?.some((hint) => hint.toLowerCase().includes(lowerText))
   );
 };
 
@@ -109,8 +109,8 @@ watch(searchModel, () => {
         <div v-if="item.description" class="select-input-backdrop__description">
           {{ item.description }}
         </div>
-        <div v-if="item.hint" class="select-input-backdrop__hint">
-          {{ item.hint }}
+        <div v-for="hint in item.hint" :key="hint" class="select-input-backdrop__hint">
+          {{ hint }}
         </div>
       </label>
     </label>

@@ -12,6 +12,8 @@ const props = withDefaults(
     showReset?: boolean;
     list: Array<{
       label: string;
+      description?: string;
+      hint?: string[];
       value: number | string;
     }>;
   }>(),

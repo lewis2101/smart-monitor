@@ -66,7 +66,7 @@ const list: ComputedRef<SelectList> = computed(() => {
     label: item.registrationNumber,
     value: item.id,
     description: buildDescriptionOfVehicle(item),
-    hint: `${t("CITY")}: ${getValueByLocale(item.city.name)}`,
+    hint: [`${t("CITY")}: ${getValueByLocale(item.city.name)}`],
   }));
 });
 
