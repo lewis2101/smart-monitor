@@ -11,7 +11,11 @@ import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner
 import { useToast } from "primevue/usetoast";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 import OrderMoreButtons from "@/components/order/order-more-buttons/order-more-buttons.vue";
+import ClientLimit from "@/components/order/client-limit/client-limit.vue";
+import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
+import { useRole } from "@/composables/useRole.ts";
 
+const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 const COMPLETE_TASK_NAME = "COMPLETE";
 
 const props = defineProps<{
@@ -21,6 +25,9 @@ const props = defineProps<{
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 const toast = useToast();
 const { getErrorForToast } = useExtractErrorData();
+
+const { clientInfoStorage } = useAuthStorage();
+const { isClient } = useRole(() => clientInfoStorage.value.type);
 
 const orderActionQuery = useOrderActionQuery({
   getUrl: (url) => url + "/" + props.orderId,
@@ -88,6 +95,7 @@ const orderActions: Record<OrderActions | AdditionalOrderActions, () => void> = 
 };
 
 const orderDisabled = computed(() => !orderData.value?.permissions.canComplete);
+const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?.processKey));
 
 watch(savePending, (value) => {
   if (value) {
@@ -106,6 +114,9 @@ watch(saveError, (value) => {
 
 <template>
   <div v-if="orderData" class="order-main-block">
+    <div v-if="isClient && showLimits" class="order-main-block__limits">
+      <client-limit :process-key="orderNextData.processKey" />
+    </div>
     <div class="order-main-block__status-title">
       {{ orderNextData.name }}
     </div>
@@ -125,6 +136,10 @@ watch(saveError, (value) => {
 .order-main-block {
   width: 100%;
 
+  &__limits {
+    margin-bottom: 8px;
+  }
+
   &__status-title {
     font-size: 16px;
     font-weight: 600;
@@ -132,10 +147,11 @@ watch(saveError, (value) => {
     letter-spacing: 0;
 
     color: $white;
-    padding: 4px 12px;
+    padding: 12px;
     background: $main-color;
     border-radius: 20px;
-    width: fit-content;
+    width: 100%;
+    text-align: center;
 
     margin-bottom: 16px;
   }

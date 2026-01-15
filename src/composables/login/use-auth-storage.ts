@@ -1,11 +1,12 @@
 import { useLocalStorage } from "@vueuse/core";
 import {
   accessTokenKey,
+  clientInfoKey,
   refreshTokenKey,
   tokenExpiresKey,
   userInfoKey,
 } from "@/composables/login/auth-storage-keys.ts";
-import type { UserInfo } from "@/api/auth/types.ts";
+import type { ClientInfo, UserInfo } from "@/api/auth/types.ts";
 
 export const useAuthStorage = () => {
   const accessTokenStorage = useLocalStorage(accessTokenKey, "");
@@ -18,6 +19,17 @@ export const useAuthStorage = () => {
     lastName: "",
     role: null,
     username: "",
+  });
+
+  const clientInfoStorage = useLocalStorage<ClientInfo>(clientInfoKey, {
+    id: "",
+    type: null,
+    department: {
+      children: [],
+      admChildren: [],
+      funcChildren: [],
+      departmentId: "",
+    },
   });
 
   const checkHasTokens = () => accessTokenStorage.value && refreshTokenStorage.value;
@@ -35,6 +47,10 @@ export const useAuthStorage = () => {
     userInfoStorage.value = user;
   };
 
+  const setClientInfo = (clientInfo: ClientInfo) => {
+    clientInfoStorage.value = clientInfo;
+  };
+
   const clearStorage = () => {
     accessTokenStorage.value = "";
     refreshTokenStorage.value = "";
@@ -46,6 +62,16 @@ export const useAuthStorage = () => {
       role: null,
       username: "",
     };
+    clientInfoStorage.value = {
+      id: "",
+      type: null,
+      department: {
+        children: [],
+        admChildren: [],
+        funcChildren: [],
+        departmentId: "",
+      },
+    };
   };
 
   return {
@@ -54,7 +80,9 @@ export const useAuthStorage = () => {
     accessTokenStorage,
     refreshTokenStorage,
     expiresTokenStorage,
+    clientInfoStorage,
     setUserInfo,
+    setClientInfo,
     userInfoStorage,
     clearStorage,
   };

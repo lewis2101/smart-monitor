@@ -7,3 +7,14 @@ export type UserInfo = {
   role: Record<Lang, string> | null;
   username: string;
 };
+
+export type ClientInfo = {
+  id: string;
+  type: number | null;
+  department: {
+    children: string[];
+    admChildren: string[];
+    funcChildren: string[];
+    departmentId: string;
+  };
+};

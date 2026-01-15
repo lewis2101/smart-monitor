@@ -29,7 +29,8 @@ export const useLogin = () => {
   const toast = useToast();
   const { getErrorForToast } = useExtractErrorData();
 
-  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo, clearStorage } = useAuthStorage();
+  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo, setClientInfo, clearStorage } =
+    useAuthStorage();
 
   const { values, validate, errors } = useForm<{
     username: string;
@@ -68,6 +69,7 @@ export const useLogin = () => {
         expiresTokenStorage.value = String(data.expiry);
 
         setUserInfo(data.userInfo);
+        setClientInfo(data.clientInfo);
       }
 
       router.replace({ name: MainTabRoutes.home });
