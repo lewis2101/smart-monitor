@@ -43,58 +43,58 @@ const { data: orderData } = await orderInitialMutate({
 });
 
 const createOrder = async () => {
-  if (stepGeneratorRef.value) {
-    try {
-      globalSpinner.show();
+  if (!stepGeneratorRef.value) return;
 
-      const payload = {
-        ...stepGeneratorRef.value.getPayloadOfFields(),
-      };
+  const payload = {
+    ...stepGeneratorRef.value.getPayloadOfFields(),
+  };
 
-      await orderValidateMutate({
-        data: {
-          ...payload,
-          processKey: props.processKey,
-        },
-      });
+  try {
+    globalSpinner.show();
 
-      const { data: orderId } = await orderActionNewMutate({
-        data: {
-          ...payload,
-          processKey: props.processKey,
-        },
-      });
+    await orderValidateMutate({
+      data: {
+        ...payload,
+        processKey: props.processKey,
+      },
+    });
 
-      await orderSaveMutate({
-        data: {
-          ...payload,
-          currentUserTask: "init",
-          userTaskCompleteEvent: "init",
-          orderId,
-        },
-      });
+    const { data: orderId } = await orderActionNewMutate({
+      data: {
+        ...payload,
+        processKey: props.processKey,
+      },
+    });
 
-      await startProcessMutate({
-        data: {
-          orderId,
-          saveData: payload,
-        },
-      }).catch((e) => {
-        console.log(e);
-      });
+    await orderSaveMutate({
+      data: {
+        ...payload,
+        currentUserTask: "init",
+        userTaskCompleteEvent: "init",
+        orderId,
+      },
+    });
 
-      router.replace({
-        name: OrderRoutes.order,
-        params: {
-          orderId: String(orderId),
-        },
-      });
-    } catch (e) {
+    await startProcessMutate({
+      data: {
+        orderId,
+        saveData: payload,
+      },
+    }).catch((e) => {
       console.log(e);
-      toast.add(getErrorForToast(e));
-    } finally {
-      globalSpinner.hide();
-    }
+    });
+
+    router.replace({
+      name: OrderRoutes.order,
+      params: {
+        orderId: String(orderId),
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    toast.add(getErrorForToast(e));
+  } finally {
+    globalSpinner.hide();
   }
 };
 

@@ -5,7 +5,7 @@ import { useOrderNextMutation } from "@/api/orders/order-next.ts";
 import { useQuery } from "@tanstack/vue-query";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
 import type { AdditionalOrderActions, OrderActions } from "@/components/step-generator/types.ts";
-import { computed, useTemplateRef, watch } from "vue";
+import { computed, useTemplateRef } from "vue";
 import { useOrderSaveMutation } from "@/api/orders/order-save.ts";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 import { useToast } from "primevue/usetoast";
@@ -14,6 +14,7 @@ import OrderMoreButtons from "@/components/order/order-more-buttons/order-more-b
 import ClientLimit from "@/components/order/client-limit/client-limit.vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useRole } from "@/composables/useRole.ts";
+import { usePageKeyStore } from "@/stores/use-page-key-store/use-page-key-store.ts";
 
 const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 const COMPLETE_TASK_NAME = "COMPLETE";
@@ -25,6 +26,7 @@ const props = defineProps<{
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 const toast = useToast();
 const { getErrorForToast } = useExtractErrorData();
+const pageKeyStore = usePageKeyStore();
 
 const { clientInfoStorage } = useAuthStorage();
 const { isClient } = useRole(() => clientInfoStorage.value.type);
@@ -36,7 +38,7 @@ const orderActionQuery = useOrderActionQuery({
 
 const { mutateAsync: orderMainMutate } = useOrderMainMutation({});
 const { mutateAsync: orderNextMutate } = useOrderNextMutation({});
-const { mutate: orderSaveMutate, isPending: savePending, error: saveError } = useOrderSaveMutation({});
+const { mutateAsync: orderSaveMutate } = useOrderSaveMutation({});
 
 const globalSpinner = useGlobalSpinner();
 
@@ -65,51 +67,54 @@ const { data: orderNextData } = await orderNextMutate({
   },
 });
 
-const orderActions: Record<OrderActions | AdditionalOrderActions, () => void> = {
-  CONFIRM: () => {
-    console.log("CONFIRM");
-  },
-  RATE_THE_TRIP: () => {
-    if (stepGeneratorRef.value?.fieldsModel) {
-      orderSaveMutate({
-        ...stepGeneratorRef.value.fieldsModel,
+const saveOrder = async (action: OrderActions | AdditionalOrderActions) => {
+  if (!stepGeneratorRef.value) return;
+
+  const payload = {
+    ...stepGeneratorRef.value.getPayloadOfFields(),
+  };
+
+  try {
+    globalSpinner.show();
+
+    await orderSaveMutate({
+      data: {
+        ...payload,
         currentUserTask: currentUserTask.value,
-        userTaskCompleteEvent: "RATE_THE_TRIP",
+        userTaskCompleteEvent: action,
         orderId: props.orderId,
-      });
-      console.log("FIELDS MODEL: ", stepGeneratorRef.value?.fieldsModel);
-    }
-  },
-  REWORK: () => {
-    console.log("TO_REWORK");
-  },
-  TO_REWORK: () => {
-    console.log("TO_REWORK");
-  },
-  CANCEL: () => {
-    console.log("CANCEL");
-  },
+      },
+    });
+
+    pageKeyStore.refreshPageKey();
+  } catch (e) {
+    console.log(e);
+    toast.add(getErrorForToast(e));
+  } finally {
+    globalSpinner.hide();
+  }
+};
+
+const orderActions: Record<OrderActions | AdditionalOrderActions, () => void> = {
+  CONFIRM: () => saveOrder("CONFIRM"),
+  TO_CONFIRM: () => saveOrder("TO_CONFIRM"),
+  RATE_THE_TRIP: () => saveOrder("RATE_THE_TRIP"),
+  REWORK: () => saveOrder("REWORK"),
+  TO_REWORK: () => saveOrder("TO_REWORK"),
+  CANCEL: () => saveOrder("CANCEL"),
   duplicate: () => {
     console.log("duplicate");
   },
 };
 
+const handleActionClick = (action: OrderActions | AdditionalOrderActions) => {
+  if (action) {
+    orderActions[action]();
+  }
+};
+
 const orderDisabled = computed(() => !orderData.value?.permissions.canComplete);
 const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?.processKey));
-
-watch(savePending, (value) => {
-  if (value) {
-    globalSpinner.show();
-  } else {
-    globalSpinner.hide();
-  }
-});
-
-watch(saveError, (value) => {
-  if (value) {
-    toast.add(getErrorForToast(value));
-  }
-});
 </script>
 
 <template>
@@ -128,7 +133,11 @@ watch(saveError, (value) => {
         :disabled="orderDisabled"
       />
     </div>
-    <order-more-buttons :action-buttons="orderData.actions || []" :additional-buttons="orderNextData.buttons || []" />
+    <order-more-buttons
+      :action-buttons="orderData.actions || []"
+      :additional-buttons="orderNextData.buttons || []"
+      @click-action="handleActionClick"
+    />
   </div>
 </template>
 

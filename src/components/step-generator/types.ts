@@ -20,5 +20,5 @@ export type StepField = {
   restriction?: unknown;
 };
 
-export type OrderActions = "RATE_THE_TRIP" | "CONFIRM" | "CANCEL" | "TO_REWORK" | "REWORK";
+export type OrderActions = "RATE_THE_TRIP" | "CONFIRM" | "CANCEL" | "TO_REWORK" | "REWORK" | "TO_CONFIRM";
 export type AdditionalOrderActions = "duplicate";

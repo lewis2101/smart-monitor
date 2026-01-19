@@ -10,7 +10,7 @@ type Response = any;
 type Payload = Record<string, unknown> & {
   currentUserTask: string;
   userTaskCompleteEvent: string;
-  orderId: number;
+  orderId: number | string;
 };
 
 export const useOrderSaveMutation = createVueQueryMutations<RawData, Payload, Response, CapacitorHttpError<HttpRequestError>>({

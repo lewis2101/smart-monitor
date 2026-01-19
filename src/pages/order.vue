@@ -7,6 +7,10 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { useRoute } from "vue-router";
 import { MainTabRoutes } from "@/router/router-list.ts";
 import { OrderMainBlock } from "@/components/order/order-main-block";
+import { storeToRefs } from "pinia";
+import { usePageKeyStore } from "@/stores/use-page-key-store/use-page-key-store.ts";
+
+const { pageKey } = storeToRefs(usePageKeyStore());
 
 const route = useRoute();
 const router = useIonRouter();
@@ -33,7 +37,7 @@ const handleClickClose = () => {
         />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher :key="pageKey" @refresh="mockRefresh">
       <div class="order-page__body">
         <order-main-block :order-id="route.params.orderId as string" />
       </div>
