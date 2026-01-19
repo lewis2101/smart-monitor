@@ -44,7 +44,16 @@ const formattedProcessList = computed(() => {
       value: list.code,
     }));
   }
-  return [];
+  return [
+    {
+      label: "Заявка на транспорт",
+      value: "KT_TAXI_PROCESS",
+    },
+    {
+      label: "Техническое обслуживание и ремонт (ТОиР)",
+      value: "LENKRAD_PROCESS",
+    },
+  ];
 });
 
 const handleClickCreate = async () => {
