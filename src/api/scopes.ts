@@ -12,4 +12,6 @@ export enum Scopes {
   newOrderParts = "new-order-parts",
   supplierList = "supplier-list",
   currentLimit = "current-limit",
+  actionNewOrder = "action-new-order",
+  startProcess = "start-process",
 }

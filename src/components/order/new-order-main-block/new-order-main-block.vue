@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { IonButton } from "@ionic/vue";
+import { IonButton, useIonRouter } from "@ionic/vue";
 import { useOrderInitialMutation } from "@/api/orders/initial-order.ts";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
-import { computed, useTemplateRef, watch } from "vue";
+import { computed, useTemplateRef } from "vue";
 import { useValidateInitialMutation } from "@/api/orders/validate-initial.ts";
 import { useToast } from "primevue/usetoast";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 import { ClientLimit } from "@/components/order/client-limit";
+import { useActionNewOrderMutation } from "@/api/orders/action-new-order.ts";
+import { useOrderSaveMutation } from "@/api/orders/order-save.ts";
+import { OrderRoutes } from "@/router/router-list.ts";
+import { useStartProcessMutation } from "@/api/orders/start-process.ts";
+import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 
 const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 
@@ -18,13 +23,18 @@ const emit = defineEmits<{
   (e: "getLabel", value: string): void;
 }>();
 
+const router = useIonRouter();
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 
 const toast = useToast();
 const { getErrorForToast } = useExtractErrorData();
+const globalSpinner = useGlobalSpinner();
 
 const { mutateAsync: orderInitialMutate } = useOrderInitialMutation({});
-const { mutate: orderValidateMutate, error: validateError } = useValidateInitialMutation({});
+const { mutateAsync: orderValidateMutate } = useValidateInitialMutation({});
+const { mutateAsync: orderActionNewMutate } = useActionNewOrderMutation({});
+const { mutateAsync: orderSaveMutate } = useOrderSaveMutation({});
+const { mutateAsync: startProcessMutate } = useStartProcessMutation({});
 
 const { data: orderData } = await orderInitialMutate({
   data: {
@@ -34,22 +44,61 @@ const { data: orderData } = await orderInitialMutate({
 
 const createOrder = async () => {
   if (stepGeneratorRef.value) {
-    orderValidateMutate({
-      data: {
+    try {
+      globalSpinner.show();
+
+      const payload = {
         ...stepGeneratorRef.value.getPayloadOfFields(),
-        processKey: props.processKey,
-      },
-    });
+      };
+
+      await orderValidateMutate({
+        data: {
+          ...payload,
+          processKey: props.processKey,
+        },
+      });
+
+      const { data: orderId } = await orderActionNewMutate({
+        data: {
+          ...payload,
+          processKey: props.processKey,
+        },
+      });
+
+      await orderSaveMutate({
+        data: {
+          ...payload,
+          currentUserTask: "init",
+          userTaskCompleteEvent: "init",
+          orderId,
+        },
+      });
+
+      await startProcessMutate({
+        data: {
+          orderId,
+          saveData: payload,
+        },
+      }).catch((e) => {
+        console.log(e);
+      });
+
+      router.replace({
+        name: OrderRoutes.order,
+        params: {
+          orderId: String(orderId),
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      toast.add(getErrorForToast(e));
+    } finally {
+      globalSpinner.hide();
+    }
   }
 };
 
 const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(props.processKey));
-
-watch(validateError, (value) => {
-  if (value) {
-    toast.add(getErrorForToast(value));
-  }
-});
 
 emit("getLabel", orderData.name);
 </script>

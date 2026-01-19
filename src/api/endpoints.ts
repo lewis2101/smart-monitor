@@ -17,6 +17,8 @@ export enum OrdersEndpoints {
   clientVehicles = "/order/client-vehicles",
   newOrderParts = "/order/new-order-parts",
   supplierList = "/order/supplier-list",
+  actionNewOrder = "/lenkrad/v1/order/action/new",
+  startProcess = "/lenkrad/v1/order/action/start-process",
 }
 
 export enum DependencyEndpoints {

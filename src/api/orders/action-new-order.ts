@@ -4,16 +4,16 @@ import { Scopes } from "@/api/scopes.ts";
 
 type RawData = undefined;
 
-type Response = any;
+type Response = number;
 
 type Payload = Record<string, unknown> & {
   processKey: string;
 };
 
-export const useValidateInitialMutation = createVueQueryMutations<RawData, Payload, Response, Error>({
+export const useActionNewOrderMutation = createVueQueryMutations<RawData, Payload, Response, Error>({
   httpClientOptions: {
-    url: OrdersEndpoints.validateInitial,
+    url: OrdersEndpoints.actionNewOrder,
     method: "POST",
   },
-  scope: Scopes.validateInitial,
+  scope: Scopes.actionNewOrder,
 });
