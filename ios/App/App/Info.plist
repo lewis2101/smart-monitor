@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>SmartFleet</string>
+	<string>SmartMonitor</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,14 +20,16 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Нужно для съемки фото</string>
+	<string>The app needs access to the camera to take photos if you choose to do so.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Нужно для съемки фото нативной камерой</string>
+	<string>The app needs access to save images to your photo library if you choose to do so.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Нужно для выбора фото из галереи</string>
+    <string>The app needs access to your photo library to upload images if you choose to do so.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
