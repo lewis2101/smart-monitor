@@ -39,7 +39,7 @@ const handleSave = () => {
 
 <style scoped lang="scss">
 .quantity-backdrop-wrapper {
-  padding: 8px 16px;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom)) 16px;
 
   &__button {
     margin-top: 16px;

@@ -30,7 +30,7 @@ const handleClick = (value: string) => {
 
 <style scoped lang="scss">
 .pick-backdrop {
-  padding: 0 8px 16px 8px;
+  padding: 0 8px calc(16px + env(safe-area-inset-bottom)) 8px;
 
   &__item {
     color: $black;

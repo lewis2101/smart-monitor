@@ -48,7 +48,8 @@ const handleSave = () => {
     bottom: 0;
     width: 100%;
     z-index: 2;
-    padding: 8px 16px;
+    padding: 8px 16px calc(8px + env(safe-area-inset-bottom)) 16px;
+    background: $white;
   }
 }
 </style>

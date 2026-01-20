@@ -136,6 +136,7 @@ watch(model, async (value) => {
 
 <style scoped lang="scss">
 .date-picker-backdrop {
+  padding-bottom: env(safe-area-inset-bottom);
   &__button {
     width: 100%;
     padding: 8px 16px;

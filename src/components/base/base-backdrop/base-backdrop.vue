@@ -77,7 +77,7 @@ watch(model, (value) => {
   }
 
   &__body {
-    padding-bottom: env(safe-area-inset-bottom);
+    //padding-bottom: env(safe-area-inset-bottom);
   }
 }
 </style>

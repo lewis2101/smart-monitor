@@ -7,6 +7,8 @@ import { ref } from "vue";
 import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
 import FilterDatePicker from "@/components/filter-fields/filter-date-picker.vue";
 import { useI18n } from "vue-i18n";
+import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
+import { storeToRefs } from "pinia";
 
 const operatorMap: Record<string, string> = {
   DATE_TIME: "=",
@@ -25,6 +27,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+
+const { isVisibleKeyboard } = storeToRefs(useKeyboardStore());
 
 const getInitialValues = (sync = false): Record<string, FilterType> =>
   props.fields.reduce(
@@ -77,7 +81,7 @@ const getComponent = (type: FieldInputClientType) => {
       :placeholder="field.local?.rus || t(field.value)"
       clearable
     />
-    <div class="base-filter__buttons">
+    <div v-if="!isVisibleKeyboard" class="base-filter__buttons">
       <ion-button fill="outline" class="base-filter__button" @click="reset">Сбросить</ion-button>
       <ion-button class="base-filter__button" @click="submit">Применить</ion-button>
     </div>
@@ -101,7 +105,7 @@ const getComponent = (type: FieldInputClientType) => {
     bottom: 0;
     left: 0;
     z-index: 10;
-    padding: 8px 0;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom)) 0;
     background: $white;
 
     margin-top: 16px;

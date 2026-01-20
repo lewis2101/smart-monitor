@@ -23,6 +23,7 @@ export const useKeyboardStore = defineStore("keyboard-store", () => {
       isVisibleKeyboard.value = true;
     });
     const hide = Keyboard.addListener("keyboardDidHide", () => {
+      keyboardHeight.value = 0;
       isVisibleKeyboard.value = false;
     });
 
@@ -46,5 +47,6 @@ export const useKeyboardStore = defineStore("keyboard-store", () => {
   return {
     isVisibleKeyboard: readonly(isVisibleKeyboard),
     disableScroll,
+    keyboardHeight,
   };
 });

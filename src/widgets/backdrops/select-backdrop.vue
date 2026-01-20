@@ -87,7 +87,7 @@ watch(searchModel, () => {
 
 <template>
   <div class="select-input-backdrop">
-    <base-input v-if="showSearch" v-model="searchModel" placeholder="Поиск" class="select-input-backdrop__search" />
+    <base-input v-if="showSearch && list.length > 10" v-model="searchModel" placeholder="Поиск" class="select-input-backdrop__search" />
     <label
       v-for="(item, idx) in filteredList"
       :key="item.value"
@@ -147,7 +147,7 @@ watch(searchModel, () => {
     bottom: 0;
     left: 0;
     z-index: 10;
-    padding: 8px 0;
+    padding-bottom: env(safe-area-inset-bottom);
     background: $white;
 
     display: flex;
