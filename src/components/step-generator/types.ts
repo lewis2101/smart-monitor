@@ -10,7 +10,7 @@ export type StepField = {
   calc: null;
   calcRestrictions: boolean;
   default: any;
-  virtual: boolean;
+  virtual?: boolean;
   fontSize: string;
   fontColor: string;
   clientType: FieldInputClientType;
@@ -18,6 +18,7 @@ export type StepField = {
   expand?: boolean;
   limitation?: string[];
   restriction?: unknown;
+  hidden?: boolean;
 };
 
 export type OrderActions = "RATE_THE_TRIP" | "CONFIRM" | "CANCEL" | "TO_REWORK" | "REWORK" | "TO_CONFIRM";

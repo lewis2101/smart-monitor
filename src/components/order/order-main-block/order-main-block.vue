@@ -14,7 +14,7 @@ import OrderMoreButtons from "@/components/order/order-more-buttons/order-more-b
 import ClientLimit from "@/components/order/client-limit/client-limit.vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useRole } from "@/composables/useRole.ts";
-import { usePageKeyStore } from "@/stores/use-page-key-store/use-page-key-store.ts";
+import { useRefreshPageInjector } from "@/composables/use-refresh-page.ts";
 
 const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 const COMPLETE_TASK_NAME = "COMPLETE";
@@ -26,10 +26,25 @@ const props = defineProps<{
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 const toast = useToast();
 const { getErrorForToast } = useExtractErrorData();
-const pageKeyStore = usePageKeyStore();
 
 const { clientInfoStorage } = useAuthStorage();
 const { isClient } = useRole(() => clientInfoStorage.value.type);
+
+const { getTriesCount, refreshPageKey, refreshPageWithTries } = useRefreshPageInjector();
+
+const checkOrderDataState = () => {
+  const { currentTask, currentTaskType, state, processCompleted } = orderData.value;
+
+  if ((currentTask && currentTaskType === "USER" && state === "RUNNING") || processCompleted) {
+    return;
+  }
+
+  if (getTriesCount() > 10 || state === "ERROR") {
+    return;
+  }
+
+  refreshPageWithTries();
+};
 
 const orderActionQuery = useOrderActionQuery({
   getUrl: (url) => url + "/" + props.orderId,
@@ -45,6 +60,7 @@ const globalSpinner = useGlobalSpinner();
 const { data: orderData, suspense } = useQuery({
   ...orderActionQuery,
   enabled: () => !!props.orderId,
+  staleTime: 0,
 });
 
 await Promise.all([
@@ -56,9 +72,13 @@ await Promise.all([
   }),
 ]);
 
+checkOrderDataState();
+
 const currentUserTask = computed(() =>
   orderData.value?.processCompleted ? COMPLETE_TASK_NAME : orderData.value?.currentTask,
 );
+
+const isBpmnButtonsVisible = computed(() => orderData.value.permissions.canComplete);
 
 const { data: orderNextData } = await orderNextMutate({
   data: {
@@ -86,7 +106,7 @@ const saveOrder = async (action: OrderActions | AdditionalOrderActions) => {
       },
     });
 
-    pageKeyStore.refreshPageKey();
+    refreshPageKey();
   } catch (e) {
     console.log(e);
     toast.add(getErrorForToast(e));
@@ -134,7 +154,7 @@ const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?
       />
     </div>
     <order-more-buttons
-      :action-buttons="orderData.actions || []"
+      :action-buttons="isBpmnButtonsVisible ? orderData.actions || [] : []"
       :additional-buttons="orderNextData.buttons || []"
       @click-action="handleActionClick"
     />

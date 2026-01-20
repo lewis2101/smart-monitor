@@ -61,17 +61,19 @@ export const useStepGenerator = (processKey: string, fields: StepField[], isDisa
     const payload: Record<string, unknown> = {};
 
     fields.forEach((field) => {
-      if (field.type === "REF" && fieldsModel[field.value] && fieldsModel[field.value]?.id) {
-        payload[field.value] = tryToParseNumber(fieldsModel[field.value].id);
-        return;
-      }
+      if (!field.hidden && !field.virtual) {
+        if (field.type === "REF" && fieldsModel[field.value] && fieldsModel[field.value]?.id) {
+          payload[field.value] = tryToParseNumber(fieldsModel[field.value].id);
+          return;
+        }
 
-      if (field.type === "NUMBER" && fieldsModel[field.value]) {
-        payload[field.value] = tryToParseNumber(fieldsModel[field.value]);
-        return;
-      }
+        if (field.type === "NUMBER" && fieldsModel[field.value]) {
+          payload[field.value] = tryToParseNumber(fieldsModel[field.value]);
+          return;
+        }
 
-      payload[field.value] = fieldsModel[field.value];
+        payload[field.value] = fieldsModel[field.value];
+      }
     });
 
     return payload;

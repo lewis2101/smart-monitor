@@ -7,10 +7,9 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { useRoute } from "vue-router";
 import { MainTabRoutes } from "@/router/router-list.ts";
 import { OrderMainBlock } from "@/components/order/order-main-block";
-import { storeToRefs } from "pinia";
-import { usePageKeyStore } from "@/stores/use-page-key-store/use-page-key-store.ts";
+import { useRefreshPage } from "@/composables/use-refresh-page.ts";
 
-const { pageKey } = storeToRefs(usePageKeyStore());
+const { pageKey } = useRefreshPage();
 
 const route = useRoute();
 const router = useIonRouter();
