@@ -140,12 +140,12 @@ const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?
 
 <template>
   <div v-if="orderData" class="order-main-block">
+    <div class="order-main-block__status-title">
+      {{ orderNextData.name }}
+    </div>
     <order-history :order-id="orderId" class="order-main-block__history" />
     <div v-if="isClient && showLimits" class="order-main-block__limits">
       <client-limit :process-key="orderNextData.processKey" />
-    </div>
-    <div class="order-main-block__status-title">
-      {{ orderNextData.name }}
     </div>
     <div class="order-main-block__fields">
       <step-generator
