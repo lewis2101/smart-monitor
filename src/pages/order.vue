@@ -8,6 +8,7 @@ import { useRoute } from "vue-router";
 import { MainTabRoutes } from "@/router/router-list.ts";
 import { OrderMainBlock } from "@/components/order/order-main-block";
 import { useRefreshPage } from "@/composables/use-refresh-page.ts";
+import DefaultPage from "@/layouts/default-page.vue";
 
 const { pageKey } = useRefreshPage();
 
@@ -37,17 +38,14 @@ const handleClickClose = () => {
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher :key="pageKey" @refresh="mockRefresh">
-      <div class="order-page__body">
+      <default-page>
         <order-main-block :order-id="route.params.orderId as string" />
-      </div>
+      </default-page>
     </base-content-with-refresher>
   </ion-page>
 </template>
 
 <style scoped lang="scss">
 .order-page {
-  &__body {
-    padding: 16px 24px;
-  }
 }
 </style>
