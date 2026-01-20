@@ -14,4 +14,5 @@ export enum Scopes {
   currentLimit = "current-limit",
   actionNewOrder = "action-new-order",
   startProcess = "start-process",
+  orderHistory = "order-history",
 }

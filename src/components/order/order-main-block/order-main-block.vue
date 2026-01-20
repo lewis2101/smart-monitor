@@ -15,6 +15,7 @@ import ClientLimit from "@/components/order/client-limit/client-limit.vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useRole } from "@/composables/useRole.ts";
 import { useRefreshPageInjector } from "@/composables/use-refresh-page.ts";
+import OrderHistory from "@/components/order/order-history/order-history.vue";
 
 const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 const COMPLETE_TASK_NAME = "COMPLETE";
@@ -139,6 +140,7 @@ const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?
 
 <template>
   <div v-if="orderData" class="order-main-block">
+    <order-history :order-id="orderId" class="order-main-block__history" />
     <div v-if="isClient && showLimits" class="order-main-block__limits">
       <client-limit :process-key="orderNextData.processKey" />
     </div>
@@ -164,6 +166,10 @@ const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?
 <style scoped lang="scss">
 .order-main-block {
   width: 100%;
+
+  &__history {
+    margin-bottom: 8px;
+  }
 
   &__limits {
     margin-bottom: 8px;
