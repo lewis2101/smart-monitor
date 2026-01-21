@@ -74,12 +74,12 @@ const handleClickCreate = async () => {
 <template>
   <ion-tab-bar slot="bottom" class="main-footer">
     <ion-tab-button tab="home" href="/home">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]" title="Главная">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]" :title="$t('main-tabs.home')">
         <base-icon name="home" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="docs" href="/docs">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" title="Документы">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" :title="$t('main-tabs.docs')">
         <base-icon name="docs" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
@@ -91,12 +91,12 @@ const handleClickCreate = async () => {
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="application" href="/application">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]" title="Заявки">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]" :title="$t('main-tabs.orders')">
         <base-icon name="application" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="service" href="/service">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]" title="Сервисы">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]" :title="$t('main-tabs.services')">
         <base-icon name="service" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>

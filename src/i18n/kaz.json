@@ -1,11 +1,30 @@
 {
+  "develop": {
+    "title": "The page is development"
+  },
+  "main-tabs": {
+    "home": "Бас",
+    "docs": "Құжаттар",
+    "orders": "Өтінімдер",
+    "services": "Қызметтер"
+  },
+  "lang": {
+    "title": "Тіл",
+    "rus": "Орысша",
+    "kaz": "Қазақша",
+    "eng": "Ағылшын"
+  },
   "profile": {
+    "header-title": "Профиль",
     "title": "Пайдаланушы деректері",
     "login": "Логин",
     "role": "Рөлі",
     "name": "Пайдаланушы аты",
     "password": "Пароль өзгерту",
     "logout": "Аккаунттан шығу"
+  },
+  "notification": {
+    "header-title": "Хабарламалар"
   },
   "new-order": {
     "create": "Құру"

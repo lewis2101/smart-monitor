@@ -23,7 +23,7 @@ const handleClickClose = () => {
     <ion-header>
       <base-toolbar>
         <default-layout-header
-          title="Уведомления"
+          :title="$t('notification.header-title')"
           back
           close
           @click-back="handleClickClose"
@@ -32,7 +32,7 @@ const handleClickClose = () => {
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      <default-page> <div style="text-align: center">Страница в разработке</div> </default-page>
+      <default-page> <div style="text-align: center">{{ $t('develop.title')}}</div> </default-page>
     </base-content-with-refresher>
   </ion-page>
 </template>

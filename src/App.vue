@@ -5,9 +5,13 @@ import GlobalSpinner from "@/widgets/global-spinner.vue";
 import { nextTick, onMounted } from "vue";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";
+import { useLangStorage } from "@/composables/use-lang-storage.ts";
 
 const { initRouteWatch } = useStatusBarColor();
 initRouteWatch();
+
+const { initLocaleLang } = useLangStorage();
+initLocaleLang();
 
 onMounted(async () => {
   await nextTick();
@@ -23,7 +27,7 @@ onMounted(async () => {
       :pt="{
         root: $style['global-toast'],
         message: $style.message,
-        messageContent: $style.messageContent
+        messageContent: $style.messageContent,
       }"
       class="global-toast"
     />

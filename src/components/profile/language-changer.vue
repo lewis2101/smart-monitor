@@ -1,27 +1,28 @@
 <script setup lang="ts">
 import SelectInput from "@/widgets/select-input.vue";
 import { useI18n } from "vue-i18n";
+import { computed } from "vue";
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 
-const list = [
+const list = computed(() => [
   {
-    label: "Русский",
+    label: t("lang.rus"),
     value: "rus",
   },
   {
-    label: "Казахский",
+    label: t("lang.kaz"),
     value: "kaz",
   },
   {
-    label: "English",
+    label: t("lang.eng"),
     value: "eng",
   },
-];
+]);
 </script>
 
 <template>
-  <select-input placeholder="Язык" :list="list" v-model="locale" />
+  <select-input :placeholder="$t('lang.title')" :list="list" v-model="locale" />
 </template>
 
 <style scoped lang="scss"></style>

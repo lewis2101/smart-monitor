@@ -1,11 +1,30 @@
 {
+  "develop": {
+    "title": "Страница в разработке"
+  },
+  "main-tabs": {
+    "home": "Home",
+    "docs": "Documents",
+    "orders": "Orders",
+    "services": "Services"
+  },
+  "lang": {
+    "title": "Language",
+    "rus": "Russian",
+    "kaz": "Kazakh",
+    "eng": "English"
+  },
   "profile": {
+    "header-title": "Profile",
     "title": "User info",
     "login": "Login",
     "role": "Role",
     "name": "User name",
     "password": "Change password",
     "logout": "Logout"
+  },
+  "notification": {
+    "header-title": "Notifications"
   },
   "new-order": {
     "create": "Create"

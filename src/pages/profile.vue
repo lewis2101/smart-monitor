@@ -23,7 +23,7 @@ const handleClickClose = () => {
   <ion-page class="profile-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Профиль" back @click-back="handleClickClose" />
+        <default-layout-header :title="$t('profile.header-title')" back @click-back="handleClickClose" />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
