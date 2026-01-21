@@ -6,6 +6,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Lang } from "@/i18n/lang.ts";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
+import LanguageChanger from "@/components/profile/language-changer.vue";
 
 const { locale } = useI18n();
 
@@ -26,6 +27,7 @@ const name = computed(() => `${userInfoStorage.value.firstName} ${userInfoStorag
     />
     <base-input :placeholder="$t('profile.role')" :model-value="role" disabled class="profile-data__input" />
     <base-input :placeholder="$t('profile.name')" :model-value="name" disabled class="profile-data__input" />
+    <language-changer class="profile-data__language" />
     <ion-button class="profile-data__button" fill="outline">{{ $t("profile.password") }}</ion-button>
     <ion-button class="profile-data__button" @click="logout">{{ $t("profile.logout") }}</ion-button>
   </base-island-block>
@@ -48,6 +50,10 @@ const name = computed(() => `${userInfoStorage.value.firstName} ${userInfoStorag
     &:last-child {
       margin-bottom: 0;
     }
+  }
+
+  &__language {
+    margin-bottom: 36px;
   }
 }
 </style>
