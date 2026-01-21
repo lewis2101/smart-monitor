@@ -14,6 +14,24 @@
     "kaz": "Қазақша",
     "eng": "Ағылшын"
   },
+  "application": {
+    "header-title": "Менің өтініштерім",
+    "filter": "Сүзгі",
+    "sort": "Сұрыптау",
+    "order": {
+      "creator": "Жасаушы",
+      "status": "Мәртебесі",
+      "createdAt": "Құрылған күні"
+    }
+  },
+  "select-backdrop": {
+    "submit": "Қолдану",
+    "reset": "Тазалау"
+  },
+  "sort": {
+    "new": "Алдымен жаңа",
+    "old": "Алдымен ескі"
+  },
   "profile": {
     "header-title": "Профиль",
     "title": "Пайдаланушы деректері",

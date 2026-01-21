@@ -14,6 +14,24 @@
     "kaz": "Kazakh",
     "eng": "English"
   },
+  "application": {
+    "header-title": "My orders",
+    "filter": "Filter",
+    "sort": "Sort",
+    "order": {
+      "creator": "Creator",
+      "status": "Status",
+      "createdAt": "Created at"
+    }
+  },
+  "select-backdrop": {
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "sort": {
+    "new": "New by",
+    "old": "Old by"
+  },
   "profile": {
     "header-title": "Profile",
     "title": "User info",

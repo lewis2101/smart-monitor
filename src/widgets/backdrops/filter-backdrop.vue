@@ -9,11 +9,14 @@ import FilterDatePicker from "@/components/filter-fields/filter-date-picker.vue"
 import { useI18n } from "vue-i18n";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
+import type { Lang } from "@/i18n/lang.ts";
 
 const operatorMap: Record<string, string> = {
   DATE_TIME: "=",
   DATE: "=",
 };
+
+const { locale } = useI18n();
 
 const props = defineProps<
   {
@@ -68,6 +71,12 @@ const getComponent = (type: FieldInputClientType) => {
   }
   return BaseInput;
 };
+
+const getLocalePlaceholder = (item: FieldType) => {
+  if (!item.local) return t(item.value);
+
+  return item.local[locale.value as Lang] || t(item.value);
+};
 </script>
 
 <template>
@@ -78,12 +87,12 @@ const getComponent = (type: FieldInputClientType) => {
       v-model="temporaryModel[field.value]!.text as any"
       :key="field.value"
       class="base-filter__item"
-      :placeholder="field.local?.rus || t(field.value)"
+      :placeholder="getLocalePlaceholder(field)"
       clearable
     />
     <div v-if="!isVisibleKeyboard" class="base-filter__buttons">
-      <ion-button fill="outline" class="base-filter__button" @click="reset">Сбросить</ion-button>
-      <ion-button class="base-filter__button" @click="submit">Применить</ion-button>
+      <ion-button fill="outline" class="base-filter__button" @click="reset">{{ $t('select-backdrop.reset') }}</ion-button>
+      <ion-button class="base-filter__button" @click="submit">{{ $t('select-backdrop.submit') }}</ion-button>
     </div>
   </div>
 </template>

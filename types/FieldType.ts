@@ -1,3 +1,5 @@
+import type { LangObject } from "@/api/types.ts";
+
 export type FieldInputClientType =
   | "STRING"
   | "INTEGER"
@@ -48,10 +50,6 @@ export type FieldType = {
   type: FieldInputType;
   value: string;
   visible: boolean;
-  local?: {
-    eng: string;
-    kaz: string;
-    rus: string;
-  };
+  local?: LangObject;
   isTitle?: boolean;
 };

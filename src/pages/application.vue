@@ -11,8 +11,11 @@ import { reactive, ref } from "vue";
 import { ApplicationFilter } from "@/components/application/application-filter";
 import type { FilterType } from "../../types/FilterType.ts";
 import type { SortType } from "../../types/SortType.ts";
+import { useI18n } from "vue-i18n";
 
 const { pageId, refresh } = useRefreshPage([Scopes.ordersMineHeader, Scopes.ordersMineView]);
+
+const { locale } = useI18n();
 
 const headerParams = reactive({
   tabName: "!OrdersMine",
@@ -29,7 +32,7 @@ const sort = ref<SortType>({
 
 const contentParams = reactive({
   paranoid: false,
-  lang: "rus",
+  lang: locale.value,
   sort,
   where: filter,
 });
@@ -44,7 +47,7 @@ const refreshPage = async (event: RefresherCustomEvent) => {
   <ion-page class="application-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Мои заявки" />
+        <default-layout-header :title="$t('application.header-title')" />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="refreshPage">

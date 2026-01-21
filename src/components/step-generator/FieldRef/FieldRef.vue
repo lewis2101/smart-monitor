@@ -9,6 +9,7 @@ import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
 import { useToast } from "primevue/usetoast";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+import { useI18n } from "vue-i18n";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
@@ -27,6 +28,8 @@ const emit = defineEmits<{
 }>();
 
 const fieldRef = ref<HTMLDivElement | null>(null);
+
+const { locale } = useI18n();
 
 const model = defineModel<{
   id: string | number;
@@ -65,11 +68,11 @@ const queryKeys = props.field.table ? [props.field.table] : [];
 
 const resourceDependencyQuery = useResourceDependencyQuery({
   getUrl: (url) => `${url}/${props.field.table}`,
-  params: {
-    lang: "rus",
+  params: computed(() => ({
+    lang: locale.value,
     selectedId: String(fieldDefaultId.value),
     disabled: props.field.disabled,
-  },
+  })),
   keys: queryKeys,
 });
 

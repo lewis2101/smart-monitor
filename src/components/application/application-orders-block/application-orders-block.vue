@@ -5,8 +5,11 @@ import { useQuery } from "@tanstack/vue-query";
 import LinkedInfoBlock from "@/widgets/linked-info-block.vue";
 import Skeleton from "./skeleton.vue";
 import { formatDateString } from "@/utils/formatDate.ts";
+import { useI18n } from "vue-i18n";
 
 type ListType = InstanceType<typeof LinkedInfoBlock>["$props"]["list"];
+
+const { t } = useI18n();
 
 const paramsModel = defineModel<RawData>("params", { required: true });
 const paginationLoading = ref(false);
@@ -29,13 +32,13 @@ const linkedInfoList: ComputedRef<ListType> = computed(() => {
       to: `/order/${item.id}`,
       list: [
         {
-          text: `Создатель: ${item.creator}`,
+          text: `${t("application.order.creator")}: ${item.creator}`,
         },
         {
-          text: `Статус: ${item.taskName?.rus}`,
+          text: `${t("application.order.status")}: ${item.taskName?.rus}`,
         },
         {
-          text: `Дата создания: ${formatDateString(new Date(item.createdAt))}`,
+          text: `${t("application.order.createdAt")}: ${formatDateString(new Date(item.createdAt))}`,
         },
       ],
     })) || []

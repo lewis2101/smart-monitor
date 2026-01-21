@@ -5,6 +5,7 @@ import { computed, ref } from "vue";
 import type { FieldType } from "../../../../types/FieldType.ts";
 import type { FilterType } from "../../../../types/FilterType.ts";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
   fields: FieldType[];
@@ -15,6 +16,7 @@ const props = defineProps<{
 }>();
 
 const globalBackdropStore = useGlobalBackdropStore();
+const { t } = useI18n();
 
 const filterModel = defineModel<FilterType[]>("filter", { required: true });
 const sortModel = defineModel<string | null>("sort", { required: true });
@@ -24,7 +26,7 @@ const filterBackdropModel = ref(false);
 const handleFilterClick = async () => {
   try {
     const values = (await globalBackdropStore.push("filter", {
-      title: "Фильтр",
+      title: t("application.filter"),
       props: {
         fields: props.fields,
         initialValue: filterModel.value,
@@ -41,7 +43,7 @@ const handleFilterClick = async () => {
 const handleSortClick = async () => {
   try {
     const value = (await globalBackdropStore.push("select", {
-      title: "Сортировка",
+      title: t("application.sort"),
       props: {
         list: props.sortValues,
         initialValue: sortModel.value,
@@ -68,7 +70,7 @@ const isActiveSort = computed(() => sortModel.value && sortModel.value.length > 
     >
       <div class="base-filter-header__filter-item">
         <base-icon name="filter" :color="isActiveFilter ? '#FFFFFF' : '#2A61CC'" />
-        <div>Фильтр</div>
+        <div>{{ $t("application.filter") }}</div>
       </div>
     </base-island-block>
     <base-island-block
@@ -78,7 +80,7 @@ const isActiveSort = computed(() => sortModel.value && sortModel.value.length > 
     >
       <div class="base-filter-header__filter-item">
         <base-icon name="sort" :color="isActiveSort ? '#FFFFFF' : '#2A61CC'" />
-        <div>Сортировка</div>
+        <div>{{ $t("application.sort") }}</div>
       </div>
     </base-island-block>
   </div>

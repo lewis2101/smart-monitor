@@ -14,6 +14,24 @@
     "kaz": "Казахский",
     "eng": "Английский"
   },
+  "application": {
+    "header-title": "Мои заявки",
+    "filter": "Фильтр",
+    "sort": "Сортировка",
+    "order": {
+      "creator": "Создатель",
+      "status": "Статус",
+      "createdAt": "Дата создания"
+    }
+  },
+  "select-backdrop": {
+    "submit": "Применить",
+    "reset": "Сбросить"
+  },
+  "sort": {
+    "new": "Сначала новые",
+    "old": "Сначала старые"
+  },
   "profile": {
     "header-title": "Профиль",
     "title": "Данные пользователя",

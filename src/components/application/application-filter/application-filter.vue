@@ -4,7 +4,8 @@ import { useOrdersMineHeaderQuery } from "@/api/orders/order-mine-header.ts";
 import { useQuery } from "@tanstack/vue-query";
 import type { FilterType } from "../../../../types/FilterType.ts";
 import type { SortType } from "../../../../types/SortType.ts";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
   params: {
@@ -13,16 +14,18 @@ const props = defineProps<{
   };
 }>();
 
-const sortValues = [
+const { t } = useI18n();
+
+const sortValues = computed(() => [
   {
-    label: "Сначала новые",
+    label: t("sort.new"),
     value: "createdAt#new",
   },
   {
-    label: "Сначала старые",
+    label: t("sort.old"),
     value: "createdAt#old",
   },
-];
+]);
 
 const headerOptions = useOrdersMineHeaderQuery({
   params: props.params,

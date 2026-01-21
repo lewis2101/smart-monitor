@@ -116,9 +116,9 @@ watch(searchModel, () => {
     </label>
     <div class="select-input-backdrop__button-wrapper">
       <ion-button v-if="showReset" fill="outline" class="select-input-backdrop__button" @click="reset"
-        >Сбросить</ion-button
+        >{{ $t('select-backdrop.reset') }}</ion-button
       >
-      <ion-button class="select-input-backdrop__button" @click="submit">Подтвердить</ion-button>
+      <ion-button class="select-input-backdrop__button" @click="submit">{{ $t('select-backdrop.submit') }}</ion-button>
     </div>
   </div>
 </template>
