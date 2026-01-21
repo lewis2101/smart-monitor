@@ -2,6 +2,7 @@ export enum Scopes {
   ordersMineHeader = "orders-mine-header",
   ordersMineView = "orders-mine-view",
   orderAction = "order-action",
+  orderActionComplete = "order-action-complete",
   orderMain = "order-main",
   orderNext = "order-next",
   orderSave = "order-save",

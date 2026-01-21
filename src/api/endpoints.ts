@@ -8,6 +8,7 @@ export enum OrdersEndpoints {
   ordersMineHeader = "/resource/header",
   ordersMineView = "/resource/view",
   orderAction = "/lenkrad/v1/order/action",
+  orderActionComplete = "/lenkrad/v1/order/action/complete",
   orderMain = "/order/main",
   orderNext = "/order/next",
   orderSave = "/order/save",

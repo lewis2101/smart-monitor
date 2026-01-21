@@ -21,5 +21,27 @@ export type StepField = {
   hidden?: boolean;
 };
 
-export type OrderActions = "RATE_THE_TRIP" | "CONFIRM" | "CANCEL" | "TO_REWORK" | "REWORK" | "TO_CONFIRM";
+export type OrderActions =
+  | "RATE_THE_TRIP"
+  | "CONFIRM"
+  | "CANCEL"
+  | "TO_REWORK"
+  | "REWORK"
+  | "TO_CONFIRM"
+  | "FINISH"
+  | "NEXT"
+  | "SAVE"
+  | "NOT_CONFIRM"
+  | "VEHICLE_IS_CAME"
+  | "VEHICLE_IS_NOT_CAME"
+  | "CONFIRM_WITH_CHANGES"
+  | "ACCEPT"
+  | "ACCESS"
+  | "NO_ACCESS"
+  | "SEND_FOR_PAYMENT"
+  | "RESEND_FOR_PAYMENT"
+  | "TO_REGENERATE"
+  | "HAND_OVER"
+  | "ASSIGN_TO_ME";
+
 export type AdditionalOrderActions = "duplicate";

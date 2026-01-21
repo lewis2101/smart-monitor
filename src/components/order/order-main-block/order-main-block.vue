@@ -5,7 +5,7 @@ import { useOrderNextMutation } from "@/api/orders/order-next.ts";
 import { useQuery } from "@tanstack/vue-query";
 import StepGenerator from "@/components/step-generator/StepGenerator.vue";
 import type { AdditionalOrderActions, OrderActions } from "@/components/step-generator/types.ts";
-import { computed, useTemplateRef } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useOrderSaveMutation } from "@/api/orders/order-save.ts";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 import { useToast } from "primevue/usetoast";
@@ -16,6 +16,7 @@ import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useRole } from "@/composables/useRole.ts";
 import { useRefreshPageInjector } from "@/composables/use-refresh-page.ts";
 import OrderHistory from "@/components/order/order-history/order-history.vue";
+import { useOrderActionCompleteMutation } from "@/api/orders/order-action-complete.ts";
 
 const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 const COMPLETE_TASK_NAME = "COMPLETE";
@@ -55,7 +56,9 @@ const orderActionQuery = useOrderActionQuery({
 const { mutateAsync: orderMainMutate } = useOrderMainMutation({});
 const { mutateAsync: orderNextMutate } = useOrderNextMutation({});
 const { mutateAsync: orderSaveMutate } = useOrderSaveMutation({});
+const { mutateAsync: orderActionCompleteMutate } = useOrderActionCompleteMutation({});
 
+const orderExecutionId = ref(0);
 const globalSpinner = useGlobalSpinner();
 
 const { data: orderData, suspense } = useQuery({
@@ -74,6 +77,7 @@ await Promise.all([
 ]);
 
 checkOrderDataState();
+orderExecutionId.value = orderData.value.orderExecutionId;
 
 const currentUserTask = computed(() =>
   orderData.value?.processCompleted ? COMPLETE_TASK_NAME : orderData.value?.currentTask,
@@ -88,7 +92,7 @@ const { data: orderNextData } = await orderNextMutate({
   },
 });
 
-const saveOrder = async (action: OrderActions | AdditionalOrderActions) => {
+const saveOrder = async (action: OrderActions) => {
   if (!stepGeneratorRef.value) return;
 
   const payload = {
@@ -107,6 +111,19 @@ const saveOrder = async (action: OrderActions | AdditionalOrderActions) => {
       },
     });
 
+    await orderActionCompleteMutate({
+      data: {
+        buttonAction: action,
+        order: payload,
+        orderExecutionId: orderExecutionId.value,
+        saveData: {
+          ...payload,
+          currentUserTask: currentUserTask.value,
+          userTaskCompleteEvent: action,
+        },
+      },
+    });
+
     refreshPageKey();
   } catch (e) {
     console.log(e);
@@ -118,11 +135,30 @@ const saveOrder = async (action: OrderActions | AdditionalOrderActions) => {
 
 const orderActions: Record<OrderActions | AdditionalOrderActions, () => void> = {
   CONFIRM: () => saveOrder("CONFIRM"),
+  FINISH: () => saveOrder("FINISH"),
   TO_CONFIRM: () => saveOrder("TO_CONFIRM"),
   RATE_THE_TRIP: () => saveOrder("RATE_THE_TRIP"),
   REWORK: () => saveOrder("REWORK"),
   TO_REWORK: () => saveOrder("TO_REWORK"),
   CANCEL: () => saveOrder("CANCEL"),
+  NEXT: () => saveOrder("NEXT"),
+  SAVE: () => saveOrder("SAVE"),
+  NOT_CONFIRM: () => saveOrder("NOT_CONFIRM"),
+  VEHICLE_IS_CAME: () => saveOrder("VEHICLE_IS_CAME"),
+  VEHICLE_IS_NOT_CAME: () => saveOrder("VEHICLE_IS_NOT_CAME"),
+  CONFIRM_WITH_CHANGES: () => saveOrder("CONFIRM_WITH_CHANGES"),
+  ACCEPT: () => saveOrder("ACCEPT"),
+  HAND_OVER: () => saveOrder("HAND_OVER"),
+  ACCESS: () => saveOrder("ACCESS"),
+  NO_ACCESS: () => saveOrder("NO_ACCESS"),
+  RESEND_FOR_PAYMENT: () => saveOrder("RESEND_FOR_PAYMENT"),
+  TO_REGENERATE: () => saveOrder("TO_REGENERATE"),
+  ASSIGN_TO_ME: () => {
+    console.log("ASSIGN_TO_ME");
+  },
+  SEND_FOR_PAYMENT: () => {
+    console.log("SEND_FOR_PAYMENT");
+  },
   duplicate: () => {
     console.log("duplicate");
   },

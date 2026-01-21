@@ -90,7 +90,9 @@ onMounted(() => {
 <template>
   <div ref="orderHistoryRef" class="order-history" @click="handleClick">
     <div class="order-history__title">История заявки</div>
-    <ion-spinner v-if="isPending" name="circular" class="order-history__spinner-icon" />
+    <div v-if="isPending" class="order-history__spinner">
+      <ion-spinner name="circular" class="order-history__spinner-icon" />
+    </div>
     <base-icon v-else name="history" class="order-history__icon" />
   </div>
 </template>

@@ -4,6 +4,10 @@ import { IonButton } from "@ionic/vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import type { AdditionalOrderActions, OrderActions } from "@/components/step-generator/types.ts";
 import { computed, type ComputedRef } from "vue";
+import {
+  type OrderButtonConfig,
+  orderButtonsConfig,
+} from "@/components/order/order-more-buttons/orderButtonsConfig.ts";
 
 const props = defineProps<{
   actionButtons: OrderActions[];
@@ -16,61 +20,16 @@ const emit = defineEmits<{
 
 const globalBackdropStore = useGlobalBackdropStore();
 
-type OrderButtonConfig = {
-  label: string;
-  order: number;
-  type: OrderActions | AdditionalOrderActions;
-};
-
-const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, OrderButtonConfig> = {
-  CONFIRM: {
-    label: "Подтвердить",
-    order: 1,
-    type: "CONFIRM",
-  },
-  TO_CONFIRM: {
-    label: "На согласование",
-    order: 2,
-    type: "TO_CONFIRM",
-  },
-  RATE_THE_TRIP: {
-    label: "Оценить поездку",
-    order: 3,
-    type: "RATE_THE_TRIP",
-  },
-  REWORK: {
-    label: "Вернуть",
-    order: 4,
-    type: "REWORK",
-  },
-  TO_REWORK: {
-    label: "На доработку",
-    order: 5,
-    type: "TO_REWORK",
-  },
-  CANCEL: {
-    label: "Отменить",
-    order: 6,
-    type: "CANCEL",
-  },
-  duplicate: {
-    label: "Дублировать заявку",
-    order: 7,
-    type: "duplicate",
-  },
-};
-
 const orderMainButton: ComputedRef<OrderButtonConfig | null> = computed(() => {
-  return [...props.actionButtons, ...props.additionalButtons].reduce<OrderButtonConfig | null>((acc, curr) => {
-    const currentButton = orderButtonsConfig[curr];
-    if (!acc) {
-      return currentButton;
-    }
-    if (currentButton.order < acc.order) {
-      return currentButton;
-    }
-    return acc;
-  }, null);
+  const buttons = [...props.actionButtons, ...props.additionalButtons];
+
+  if (buttons.length === 0) return null;
+  const mainButtonKey = buttons.reduce((mainKey, currentKey) => {
+    return orderButtonsConfig[currentKey].order < orderButtonsConfig[mainKey].order ? currentKey : mainKey;
+  });
+
+  if (!mainButtonKey) return null;
+  return orderButtonsConfig[mainButtonKey];
 });
 
 const orderAdditionalButtons = computed(() => {
