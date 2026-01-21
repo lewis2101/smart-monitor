@@ -22,7 +22,13 @@ const handleClickClose = () => {
   <ion-page class="briefing-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Инструктажи и материалы" back @click-close="handleClickClose" />
+        <default-layout-header
+          title="Инструктажи и материалы"
+          back
+          close
+          @click-back="handleClickClose"
+          @click-close="handleClickClose"
+        />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
