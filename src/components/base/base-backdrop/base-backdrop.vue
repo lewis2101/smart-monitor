@@ -28,7 +28,7 @@ watch(model, (value) => {
     v-model="model"
     ref="bottomSheetRef"
     class="base-backdrop"
-    :expand-on-content-drag="false"
+    :expand-on-content-drag="true"
     swipe-close-threshold="10%"
   >
     <template #header>
