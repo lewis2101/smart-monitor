@@ -94,6 +94,9 @@ watch(model, async (value) => {
         year: $style.year,
         panel: $style.panel,
         pcInputText: $style.inputText,
+        hourPicker: $style.hourPicker,
+        minutePicker: $style.minutePicker,
+        separatorContainer: $style.separator,
       }"
       date-format="dd.mm.yy"
       :show-time="showTime"
@@ -131,6 +134,21 @@ watch(model, async (value) => {
 
 .inputText {
   color: #151515;
+}
+
+.hourPicker,
+.minutePicker {
+  --p-icon-size: 30px !important;
+  span {
+    font-size: 1.5rem !important;
+  }
+}
+
+.separator {
+  span {
+    font-size: 1.5rem !important;
+    margin: 0 8px;
+  }
 }
 </style>
 
