@@ -198,9 +198,11 @@ watch(newOrderPartsData, (value) => {
   padding: 16px;
 
   &__title {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
     font-size: 16px;
     font-weight: 600;
+    border-bottom: 1px #f2f2f7 solid;
   }
 
   &__button-select {

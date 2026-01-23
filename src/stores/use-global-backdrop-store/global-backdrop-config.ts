@@ -8,6 +8,7 @@ import type { ExtractProps } from "@/utils/extractProps.ts";
 import ListTreeBackdrop from "@/widgets/backdrops/list-tree-backdrop.vue";
 import QuantityBackdrop from "@/widgets/backdrops/quantity-backdrop.vue";
 import TimelineBackdrop from "@/widgets/backdrops/timeline-backdrop.vue";
+import MapPinPickerBackdrop from "@/widgets/backdrops/map-pin-picker-backdrop.vue";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {
   onSuccess?: S;
@@ -32,4 +33,5 @@ export const backdropComponents = {
   "list-tree": markRaw(ListTreeBackdrop),
   quantity: markRaw(QuantityBackdrop),
   timeline: markRaw(TimelineBackdrop),
+  "map-pin-picker": markRaw(MapPinPickerBackdrop),
 } as const;

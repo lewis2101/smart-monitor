@@ -105,6 +105,8 @@ const handleClickCreate = async () => {
 
 <style lang="scss" scoped>
 .main-footer {
+  position: relative;
+  z-index: 10;
   --bottom-inset: calc(4px + env(safe-area-inset-bottom));
   display: flex;
   justify-content: space-between;
