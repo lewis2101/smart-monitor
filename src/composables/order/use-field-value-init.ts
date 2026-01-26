@@ -34,7 +34,7 @@ const dateTimePickerInit: FieldValueInitFunc = (field) => {
 };
 
 const addressSelectorInit: FieldValueInitFunc = (field) => {
-  return [];
+  return field.default;
 };
 
 const stringInit: FieldValueInitFunc = (field) => {

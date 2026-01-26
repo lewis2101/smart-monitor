@@ -9,28 +9,40 @@ import { useQuery } from "@tanstack/vue-query";
 import { useOsmAddressQuery } from "@/api/map/osm-address.ts";
 import { IonButton } from "@ionic/vue";
 
-const props = defineProps<{
-  placeholder?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    placeholder?: string;
+    initialCoords?: {
+      lng: number | null;
+      lat: number | null;
+    };
+  }>(),
+  {
+    initialCoords: () => ({
+      lng: null,
+      lat: null,
+    }),
+  },
+);
 
 const mapRef = useTemplateRef("mapRef");
 
 const selectedCoords = reactive<{
-  lat: number | null;
   lng: number | null;
+  lat: number | null;
 }>({
-  lat: null,
-  lng: null,
+  lng: props.initialCoords.lng,
+  lat: props.initialCoords.lat,
 });
 
 const wialonAddressQuery = useWialonAddressQuery({
   params: computed(() => ({
-    posList: [[selectedCoords.lat, selectedCoords.lng]],
+    posList: [[selectedCoords.lng, selectedCoords.lat]],
   })),
 });
 const osmAddressQuery = useOsmAddressQuery({
   params: computed(() => ({
-    posList: [[selectedCoords.lat, selectedCoords.lng]],
+    posList: [[selectedCoords.lng, selectedCoords.lat]],
   })),
 });
 

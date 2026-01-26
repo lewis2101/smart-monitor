@@ -80,7 +80,6 @@ export const useStepGenerator = (processKey: string, fields: StepField[], isDisa
   };
 
   const handleChangeField = async (fieldKey: string) => {
-    console.log({ fieldKey });
     await calcAffectedFieldsRestriction(fieldKey);
   };
 

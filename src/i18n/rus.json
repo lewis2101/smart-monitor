@@ -27,6 +27,11 @@
       "createdAt": "Дата создания"
     }
   },
+  "address-selector": {
+    "title": "Создание маршрута",
+    "departure": "Адрес отправления",
+    "destination": "Адрес назначения - {count}"
+  },
   "select-backdrop": {
     "submit": "Применить",
     "reset": "Сбросить"

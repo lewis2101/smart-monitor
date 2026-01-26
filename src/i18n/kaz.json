@@ -27,6 +27,11 @@
       "createdAt": "Құрылған күні"
     }
   },
+  "address-selector": {
+    "title": "Маршрут құру",
+    "departure": "Жөнелту мекенжайы",
+    "destination": "Апару мекен-жайы - {count}"
+  },
   "select-backdrop": {
     "submit": "Қолдану",
     "reset": "Тазалау"

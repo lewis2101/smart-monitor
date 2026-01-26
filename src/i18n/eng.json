@@ -27,6 +27,11 @@
       "createdAt": "Created at"
     }
   },
+  "address-selector": {
+    "title": "Create route",
+    "departure": "Departure address",
+    "destination": "Destination address - {count}"
+  },
   "select-backdrop": {
     "submit": "Submit",
     "reset": "Reset"

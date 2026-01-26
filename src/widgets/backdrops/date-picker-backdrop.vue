@@ -106,7 +106,7 @@ watch(model, async (value) => {
       inline
       class="date-picker-backdrop__native"
       :selection-mode="selectionMode"
-      :step-minute="10"
+      :step-minute="5"
     />
     <ion-button class="date-picker-backdrop__button" @click="submit">Выбрать</ion-button>
   </div>
