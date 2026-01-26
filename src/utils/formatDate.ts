@@ -1,4 +1,4 @@
-// DD.MM.YYYY (HH:MM)
+// YYYY.DD.MM (HH:MM)
 export const formatDateString = (
   date: Date | string,
   options?: {
@@ -10,7 +10,7 @@ export const formatDateString = (
   const m = String(newDate.getMonth() + 1).padStart(2, "0");
   const d = String(newDate.getDate()).padStart(2, "0");
 
-  let result = `${d}-${m}-${y}`;
+  let result = `${y}-${m}-${d}`;
 
   if (options?.time) {
     const h = String(newDate.getHours()).padStart(2, "0");

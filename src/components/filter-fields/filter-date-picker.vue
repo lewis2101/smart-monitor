@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import BaseDatePicker from "@/components/base/base-date-picker/base-date-picker.vue";
-import {computed} from "vue";
-import {formatDateString, parseDateString} from "@/utils/formatDate.ts";
-import {
-  useGlobalBackdropStore
-} from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { computed } from "vue";
+import { formatDateString, parseDateString } from "@/utils/formatDate.ts";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
 const model = defineModel<string[] | null>();
 
@@ -32,19 +30,19 @@ const selectDate = async () => {
       title: "Выберите дату",
       props: {
         initialDate: modelProxy.value ? modelProxy.value : null,
-        selectionMode: "range"
-      }
-    })
+        selectionMode: "range",
+      },
+    });
+    console.log({ result });
     modelProxy.value = result;
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
-
+};
 </script>
 
 <template>
-  <base-date-picker v-model="modelProxy" clearable @select-date="selectDate"/>
+  <base-date-picker v-model="modelProxy" clearable @select-date="selectDate" />
 </template>
 
 <style scoped></style>
