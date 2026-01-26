@@ -32,6 +32,9 @@
     "departure": "Departure address",
     "destination": "Destination address - {count}"
   },
+  "address-pin-backdrop": {
+    "title": "Select a point on the map"
+  },
   "select-backdrop": {
     "submit": "Submit",
     "reset": "Reset"

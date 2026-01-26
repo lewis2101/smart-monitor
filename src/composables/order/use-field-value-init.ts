@@ -2,6 +2,7 @@ import type { StepField } from "@/components/step-generator/types.ts";
 import type { FieldInputClientType } from "../../../types/FieldType.ts";
 import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
 import { reactive } from "vue";
+import type { AddressSelectorRoute } from "@/composables/order/types.ts";
 
 type FieldValueInitFunc = (field: StepField) => unknown;
 
@@ -34,7 +35,7 @@ const dateTimePickerInit: FieldValueInitFunc = (field) => {
 };
 
 const addressSelectorInit: FieldValueInitFunc = (field) => {
-  return field.default;
+  return field.default as AddressSelectorRoute;
 };
 
 const stringInit: FieldValueInitFunc = (field) => {

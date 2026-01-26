@@ -1,22 +1,27 @@
 <script setup lang="ts">
 import BaseMap from "@/components/map/base-map.vue";
-import { computed, onMounted, reactive, ref, useTemplateRef } from "vue";
-import pinUrl from "@/assets/images/pin.png?url";
-import { debounce } from "@/utils/debounce.ts";
+import { computed, onMounted, useTemplateRef } from "vue";
 import { IonSpinner } from "@ionic/vue";
 import { useWialonAddressQuery } from "@/api/map/wialon-address.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { useOsmAddressQuery } from "@/api/map/osm-address.ts";
 import { IonButton } from "@ionic/vue";
+import { useMapCenterPin } from "@/composables/map/useMapCenterPin.ts";
+import maplibregl from "maplibre-gl";
+import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
+import type { AddressInfo } from "@/api/map/types.ts";
+import { useToast } from "primevue/usetoast";
 
 const props = withDefaults(
-  defineProps<{
-    placeholder?: string;
-    initialCoords?: {
-      lng: number | null;
-      lat: number | null;
-    };
-  }>(),
+  defineProps<
+    {
+      placeholder?: string;
+      initialCoords?: {
+        lng: number | null;
+        lat: number | null;
+      };
+    } & BackdropComponentProps<(value: AddressInfo) => void, (error: Error) => void>
+  >(),
   {
     initialCoords: () => ({
       lng: null,
@@ -25,14 +30,16 @@ const props = withDefaults(
   },
 );
 
-const mapRef = useTemplateRef("mapRef");
+const emit = defineEmits<{
+  (e: "closeBackdrop"): void;
+}>();
 
-const selectedCoords = reactive<{
-  lng: number | null;
-  lat: number | null;
-}>({
-  lng: props.initialCoords.lng,
-  lat: props.initialCoords.lat,
+const mapRef = useTemplateRef<{ map: maplibregl.Map }>("mapRef");
+const toast = useToast();
+
+const { init, selectedCoords } = useMapCenterPin({
+  mapRef: () => mapRef.value?.map ?? null,
+  props,
 });
 
 const wialonAddressQuery = useWialonAddressQuery({
@@ -54,9 +61,41 @@ const {
   ...osmAddressQuery,
   enabled: computed(() => !!selectedCoords.lat && !!selectedCoords.lng),
 });
+
 const { data: wialonData, isPending: wialongPending } = useQuery({
   ...wialonAddressQuery,
   enabled: computed(() => !!selectedCoords.lat && !!selectedCoords.lng && isError.value),
+});
+
+const handleSave = () => {
+  if (osmData.value) {
+    const data = osmData.value.find(Boolean);
+    if (data) {
+      props.onSuccess?.(data);
+      emit("closeBackdrop");
+      return;
+    }
+  }
+
+  if (wialonData.value) {
+    const data = wialonData.value.find(Boolean);
+    if (data) {
+      props.onSuccess?.(data);
+      emit("closeBackdrop");
+      return;
+    }
+  }
+
+  toast.add({
+    severity: "error",
+    summary: "Ошибка",
+    detail: "Ошибка при сохранении координат",
+    life: 3000,
+  });
+};
+
+onMounted(() => {
+  init();
 });
 
 const addressText = computed(() => {
@@ -72,129 +111,6 @@ const addressText = computed(() => {
 
 const hasSelectedCoords = computed(() => !!selectedCoords.lat && !!selectedCoords.lng);
 const isLoading = computed(() => hasSelectedCoords.value && (osmPending.value || wialongPending.value));
-
-function animateOffset(map: maplibregl.Map, from: number, to: number, duration = 150) {
-  const start = performance.now();
-
-  function frame(now: number) {
-    const t = Math.min((now - start) / duration, 1);
-    const eased = t * (2 - t); // easeOut
-
-    const y = from + (to - from) * eased;
-
-    map.setLayoutProperty("center-pin-layer", "icon-offset", [0, y]);
-
-    if (t < 1) requestAnimationFrame(frame);
-  }
-
-  requestAnimationFrame(frame);
-}
-
-function initCenterPin(map: maplibregl.Map) {
-  if (!map.getSource("center-pin")) {
-    map.addSource("center-pin", {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            properties: null,
-            geometry: {
-              type: "Point",
-              coordinates: [map.getCenter().lng, map.getCenter().lat],
-            },
-          },
-        ],
-      },
-    });
-  }
-
-  if (!map.getLayer("center-pin-layer")) {
-    map.addLayer({
-      id: "center-pin-layer",
-      type: "symbol",
-      source: "center-pin",
-      layout: {
-        "icon-image": "center-pin",
-        "icon-size": 1,
-        "icon-anchor": "bottom",
-        "icon-offset": [0, 0],
-        "icon-allow-overlap": true,
-      },
-    });
-  }
-}
-
-function loadPinImage(map: maplibregl.Map) {
-  if (map.hasImage("center-pin")) return;
-
-  const img = new Image();
-  img.width = 200;
-  img.height = 200;
-  img.src = pinUrl;
-
-  img.onload = () => {
-    map.addImage("center-pin", img, {
-      pixelRatio: window.devicePixelRatio || 2,
-    });
-
-    initCenterPin(map);
-  };
-}
-
-onMounted(() => {
-  const map = mapRef.value?.map;
-  if (!map) return;
-
-  const setup = () => loadPinImage(map);
-
-  if (map.isStyleLoaded()) {
-    setup();
-  } else {
-    map.on("style.load", setup);
-  }
-
-  map.on("movestart", () => {
-    animateOffset(map, 0, -12);
-  });
-
-  map.on("moveend", () => {
-    animateOffset(map, -12, 0);
-  });
-
-  map.on("move", () => {
-    const center = map.getCenter();
-
-    const source = map.getSource("center-pin") as maplibregl.GeoJSONSource;
-    if (!source) return;
-
-    source.setData({
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: null,
-          geometry: {
-            type: "Point",
-            coordinates: [center.lng, center.lat],
-          },
-        },
-      ],
-    });
-  });
-
-  const debouncedGetCenter = debounce(() => {
-    const { lng, lat } = map.getCenter();
-    selectedCoords.lng = lng;
-    selectedCoords.lat = lat;
-    console.log({ lng, lat });
-  }, 300);
-
-  map.on("moveend", () => {
-    debouncedGetCenter();
-  });
-});
 </script>
 
 <template>
@@ -212,7 +128,9 @@ onMounted(() => {
       </div>
     </div>
     <transition name="fade">
-      <ion-button v-if="addressText" class="map-picker-backdrop__button">{{ $t("common.save") }}</ion-button>
+      <ion-button v-if="addressText" class="map-picker-backdrop__button" @click="handleSave">{{
+        $t("common.save")
+      }}</ion-button>
     </transition>
   </div>
 </template>

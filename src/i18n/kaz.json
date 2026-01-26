@@ -32,6 +32,9 @@
     "departure": "Жөнелту мекенжайы",
     "destination": "Апару мекен-жайы - {count}"
   },
+  "address-pin-backdrop": {
+    "title": "Картадан нүктені таңдаңыз"
+  },
   "select-backdrop": {
     "submit": "Қолдану",
     "reset": "Тазалау"

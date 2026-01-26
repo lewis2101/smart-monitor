@@ -32,6 +32,9 @@
     "departure": "Адрес отправления",
     "destination": "Адрес назначения - {count}"
   },
+  "address-pin-backdrop": {
+    "title": "Выберите точку на карте"
+  },
   "select-backdrop": {
     "submit": "Применить",
     "reset": "Сбросить"

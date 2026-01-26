@@ -6,80 +6,25 @@ import AddressInput from "@/components/step-generator/AddressSelector/AddressInp
 import { reactive } from "vue";
 import { IonButton } from "@ionic/vue";
 import type { AddressInfo } from "@/api/map/types.ts";
+import { useI18n } from "vue-i18n";
+import type { AddressSelectorRoute } from "@/composables/order/types.ts";
+
+type AddressData = {
+  name?: string;
+  lat?: number;
+  lng?: number;
+  point?: AddressInfo;
+};
 
 defineProps<{
   field: StepField;
 }>();
 
 const globalBackdropStore = useGlobalBackdropStore();
+const { t } = useI18n();
 
-const openMap = () => {
-  globalBackdropStore.push("map", {
-    title: "Маршрут",
-    props: {},
-  });
-};
-
-const openMapPicker = () => {
-  globalBackdropStore.push("map-pin-picker", {
-    title: "Выберите точку на карте",
-    props: {
-      placeholder: "Адрес отправления",
-    },
-  });
-};
-
-type AddressSelectorType = {
-  wp1: string;
-  wp2: string;
-  lat1: number;
-  lat2: number;
-  lon1: number;
-  lon2: number;
-  color: string;
-  point1: {
-    x: number;
-    y: number;
-    city: string;
-    house: string;
-    value: string;
-    street: string;
-    country: string;
-    formatted_path: string;
-  };
-  point2: {
-    x: number;
-    y: number;
-    city: string;
-    house: string;
-    value: string;
-    street: string;
-    country: string;
-    formatted_path: string;
-  };
-  points: number[][];
-  status: string;
-  distance: {
-    text: string;
-    value: number;
-  };
-  duration: {
-    text: string;
-    value: number;
-  };
-  defaultStart: boolean;
-};
-
-const addresses = reactive<
-  {
-    name?: string;
-    lat?: number;
-    lng?: number;
-    point?: AddressInfo;
-  }[]
->([]);
-
-const model = defineModel<AddressSelectorType[]>({ required: true, default: () => [] });
+const model = defineModel<AddressSelectorRoute[]>({ required: true, default: () => [] });
+const addresses = reactive<AddressData[]>([]);
 
 model.value.forEach((item) => {
   const wp1 = {
@@ -97,6 +42,35 @@ model.value.forEach((item) => {
   addresses.push(wp1);
   addresses.push(wp2);
 });
+
+const handleAdd = () => {
+  addresses.push({});
+};
+
+const openMapPicker = async (address: AddressData, idx: number) => {
+  try {
+    const data = (await globalBackdropStore.push("map-pin-picker", {
+      title: t("address-pin-backdrop.title"),
+      props: {
+        placeholder: idx === 0 ? t("address-selector.departure") : t("address-selector.destination", { count: idx }),
+      },
+    })) as AddressInfo;
+
+    address.name = data.formatted_path;
+    address.lat = data.y;
+    address.lng = data.x;
+    address.point = data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const openMapRoute = () => {
+  globalBackdropStore.push("map", {
+    title: "Маршрут",
+    props: {},
+  });
+};
 </script>
 
 <template>
@@ -110,12 +84,12 @@ model.value.forEach((item) => {
           "
           :label="item.name"
           class="address-selector__item"
-          @open-map="openMapPicker"
+          @open-map="openMapPicker(item, idx)"
         />
       </template>
-      <ion-button fill="outline" class="address-selector__button">Добавить</ion-button>
+      <ion-button fill="outline" class="address-selector__button" @click="handleAdd">Добавить</ion-button>
     </div>
-    <base-map @click="openMap" class="address-selector__map" />
+    <base-map @click="openMapRoute" class="address-selector__map" />
   </div>
 </template>
 

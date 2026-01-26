@@ -34,9 +34,7 @@ onMounted(() => {
   });
 });
 
-defineExpose<{
-  map: Ref<maplibregl.Map | null>;
-}>({ map: mapInstance });
+defineExpose({ map: mapInstance });
 </script>
 
 <template>
