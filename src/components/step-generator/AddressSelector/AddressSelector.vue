@@ -16,9 +16,15 @@ type AddressData = {
   point?: AddressInfo;
 };
 
-defineProps<{
-  field: StepField;
-}>();
+const props = withDefaults(
+  defineProps<{
+    field: StepField;
+    disabled?: boolean;
+  }>(),
+  {
+    disabled: false,
+  },
+);
 
 const globalBackdropStore = useGlobalBackdropStore();
 const { t } = useI18n();
@@ -48,6 +54,10 @@ const handleAdd = () => {
 };
 
 const openMapPicker = async (address: AddressData, idx: number) => {
+  if (props.disabled || props.field.disabled) {
+    return;
+  }
+
   try {
     const data = (await globalBackdropStore.push("map-pin-picker", {
       title: t("address-pin-backdrop.title"),
@@ -87,7 +97,9 @@ const openMapRoute = () => {
           @open-map="openMapPicker(item, idx)"
         />
       </template>
-      <ion-button fill="outline" class="address-selector__button" @click="handleAdd">Добавить</ion-button>
+      <ion-button v-if="!field.disabled && !disabled" fill="outline" class="address-selector__button" @click="handleAdd"
+        >Добавить</ion-button
+      >
     </div>
     <base-map @click="openMapRoute" class="address-selector__map" />
   </div>

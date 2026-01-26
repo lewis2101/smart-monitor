@@ -53,6 +53,10 @@ const formattedProcessList = computed(() => {
       label: "Техническое обслуживание и ремонт (ТОиР)",
       value: "LENKRAD_PROCESS",
     },
+    {
+      label: "Поставка товаров/материалов (ТОиР)",
+      value: "PURCHASE_PROCESS",
+    },
   ];
 });
 
@@ -91,12 +95,18 @@ const handleClickCreate = async () => {
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="application" href="/application">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]" :title="$t('main-tabs.orders')">
+      <footer-item
+        :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]"
+        :title="$t('main-tabs.orders')"
+      >
         <base-icon name="application" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="service" href="/service">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]" :title="$t('main-tabs.services')">
+      <footer-item
+        :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]"
+        :title="$t('main-tabs.services')"
+      >
         <base-icon name="service" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
