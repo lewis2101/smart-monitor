@@ -27,7 +27,7 @@ export type AddressSelectorRoute = {
     formatted_path: string;
   };
   points: number[][];
-  status: string;
+  status?: string;
   distance: {
     text: string;
     value: number;
@@ -36,5 +36,5 @@ export type AddressSelectorRoute = {
     text: string;
     value: number;
   };
-  defaultStart: boolean;
+  defaultStart?: boolean;
 };

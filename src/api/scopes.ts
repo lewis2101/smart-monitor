@@ -18,4 +18,8 @@ export enum Scopes {
   orderHistory = "order-history",
   osmAddress = "osm-address",
   wialonAddress = "wialon-address",
+  wialonRoutePoint = "/wialon-route-point-set",
+  osmRoutePoint = "/osm-route-point-set",
+  wialongRoute = "wialong-route",
+  osmRoute = "osm-route",
 }

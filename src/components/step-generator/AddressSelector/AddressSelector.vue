@@ -3,14 +3,17 @@ import BaseMap from "@/components/map/base-map.vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import type { StepField } from "@/components/step-generator/types.ts";
 import AddressInput from "@/components/step-generator/AddressSelector/AddressInput.vue";
-import { reactive } from "vue";
+import { computed, reactive, type Ref, ref } from "vue";
 import { IonButton } from "@ionic/vue";
 import type { AddressInfo } from "@/api/map/types.ts";
 import { useI18n } from "vue-i18n";
 import type { AddressSelectorRoute } from "@/composables/order/types.ts";
+import { useWialonRoutePointQuery, type RawData as RoutePointRawData } from "@/api/map/wialon-route-point.ts";
+import { useQuery } from "@tanstack/vue-query";
+import { useWialonRouteQuery } from "@/api/map/wialon-route.ts";
 
 type AddressData = {
-  name?: string;
+  name: string;
   lat?: number;
   lng?: number;
   point?: AddressInfo;
@@ -28,6 +31,30 @@ const props = withDefaults(
 
 const globalBackdropStore = useGlobalBackdropStore();
 const { t } = useI18n();
+
+const routePointQueryParams = ref<RoutePointRawData | null>(null);
+const currentSessionKey = ref<string>("");
+const showCreateRouteButton = ref(true);
+
+const wialonRoutePointQuery = useWialonRoutePointQuery({
+  params: routePointQueryParams as Ref<RoutePointRawData>,
+});
+
+const wialonRouteQuery = useWialonRouteQuery({
+  params: computed(() => ({
+    sessionKey: currentSessionKey.value,
+  })),
+});
+
+const { data: wialonRoutePointData, suspense: wialonRoutePointSuspense } = useQuery({
+  ...wialonRoutePointQuery,
+  enabled: () => !!routePointQueryParams.value,
+});
+
+const { data: wialonRouteData, suspense: wialonRouteSuspense } = useQuery({
+  ...wialonRouteQuery,
+  enabled: () => !!currentSessionKey.value,
+});
 
 const model = defineModel<AddressSelectorRoute[]>({ required: true, default: () => [] });
 const addresses = reactive<AddressData[]>([]);
@@ -50,7 +77,9 @@ model.value.forEach((item) => {
 });
 
 const handleAdd = () => {
-  addresses.push({});
+  addresses.push({
+    name: "",
+  });
 };
 
 const openMapPicker = async (address: AddressData, idx: number) => {
@@ -75,7 +104,51 @@ const openMapPicker = async (address: AddressData, idx: number) => {
   }
 };
 
+const createRoutes = async () => {
+  const routes: AddressSelectorRoute[] = [];
+
+  for (const idx in addresses) {
+    const firstPoint = addresses[+idx];
+    const secondPoint = addresses[+idx + 1];
+
+    if (!firstPoint || !secondPoint) {
+      continue;
+    }
+
+    const point = {
+      lat1: firstPoint.lat,
+      lon1: firstPoint.lng,
+      wp1: firstPoint.name,
+      point1: firstPoint.point,
+      lat2: secondPoint.lat,
+      lon2: secondPoint.lng,
+      wp2: secondPoint.name,
+      point2: secondPoint.point,
+    };
+
+    routePointQueryParams.value = {
+      point,
+    };
+
+    await wialonRoutePointSuspense();
+
+    currentSessionKey.value = wialonRoutePointData.value.sessionKey;
+
+    await wialonRouteSuspense();
+
+    routes.push({
+      ...point,
+      ...wialonRouteData.value,
+      color: "green",
+    });
+  }
+
+  model.value = routes;
+};
+
 const openMapRoute = () => {
+  if (showCreateRouteButton.value) return;
+
   globalBackdropStore.push("map", {
     title: "Маршрут",
     props: {},
@@ -101,7 +174,13 @@ const openMapRoute = () => {
         >Добавить</ion-button
       >
     </div>
-    <base-map @click="openMapRoute" class="address-selector__map" />
+    <div class="address-selector__map-wrapper">
+      <base-map
+        :class="['address-selector__map', showCreateRouteButton && 'address-selector__map-disabled']"
+        @click="openMapRoute"
+      />
+      <ion-button v-if="showCreateRouteButton" class="address-selector__map-button"> Проложить маршрут </ion-button>
+    </div>
   </div>
 </template>
 
@@ -141,6 +220,26 @@ const openMapRoute = () => {
       inset: 0;
       z-index: 1;
     }
+  }
+
+  &__map-disabled {
+    &::before {
+      background: #ffffff;
+      opacity: 0.6;
+    }
+  }
+
+  &__map-wrapper {
+    position: relative;
+  }
+
+  &__map-button {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    right: 16px;
+    transform: translateY(-50%);
+    z-index: 2;
   }
 
   &__button {

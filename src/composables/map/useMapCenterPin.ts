@@ -4,7 +4,6 @@ import pinUrl from "@/assets/images/pin.png?url";
 import { debounce } from "@/utils/debounce.ts";
 
 export type MapCenterPinProps = {
-  placeholder?: string;
   initialCoords?: {
     lng: number | null;
     lat: number | null;

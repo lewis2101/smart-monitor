@@ -26,6 +26,10 @@ export enum OrdersEndpoints {
 export enum MapEndpoints {
   osmAddress = "/osm/address/by-coords",
   wialonAddress = "/wialon/address/by-coords",
+  wialonRoutePoint = "/wialon/route-point-set",
+  osmRoutePoint = "/osm/route-point-set",
+  wialonRoute = "/wialon/route",
+  osmRoute = "/osm/route",
 }
 
 export enum DependencyEndpoints {
