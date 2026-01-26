@@ -23,6 +23,11 @@ export enum OrdersEndpoints {
   orderHistory = "/order/history",
 }
 
+export enum MapEndpoints {
+  osmAddress = "/osm/address/by-coords",
+  wialonAddress = "/wialon/address/by-coords",
+}
+
 export enum DependencyEndpoints {
   resourceDependency = "/resource/dependency",
 }

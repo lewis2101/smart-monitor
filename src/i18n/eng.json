@@ -1,4 +1,7 @@
 {
+  "common": {
+    "save": "save"
+  },
   "develop": {
     "title": "Страница в разработке"
   },

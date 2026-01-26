@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { computed } from "vue";
+import { computed, onMounted, useTemplateRef } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -27,6 +28,8 @@ const props = withDefaults(
 defineEmits<{
   (e: "open-map"): void;
 }>();
+
+const mapRef = useTemplateRef("mapRef");
 
 const globalBackdropStore = useGlobalBackdropStore();
 const model = defineModel<number | string | null>({ required: true });
@@ -54,6 +57,10 @@ const handleClick = async () => {
     console.log(e);
   }
 };
+
+onMounted(() => {
+  useBubbleAnimate(mapRef);
+});
 </script>
 
 <template>
@@ -69,7 +76,9 @@ const handleClick = async () => {
         {{ currentValueLabel }}
       </div>
     </div>
-    <base-icon name="pin" class="select-input__icon" @click.stop="$emit('open-map')" />
+    <div ref="mapRef" class="select-input__map">
+      <base-icon name="pin" class="select-input__icon" @click.stop="$emit('open-map')" />
+    </div>
   </div>
 </template>
 
@@ -113,18 +122,23 @@ const handleClick = async () => {
     padding-right: 24px;
   }
 
-  &__icon {
-    display: inline-flex;
+  &__map {
+    width: 50px;
+    height: 100%;
+
+    background: $gray-light;
+    display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 50px;
-
     position: absolute;
-    top: 50%;
     right: 0;
-    padding: 16px;
-    transform: translateY(-50%);
+    top: 0;
+
+    border-radius: 0 12px 12px 0;
+  }
+
+  &__icon {
     color: $main-color;
   }
 }

@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import BaseMap from "@/components/map/base-map.vue";
-import { onMounted, reactive, ref, useTemplateRef } from "vue";
+import { computed, onMounted, reactive, ref, useTemplateRef } from "vue";
 import pinUrl from "@/assets/images/pin.png?url";
 import { debounce } from "@/utils/debounce.ts";
 import { IonSpinner } from "@ionic/vue";
+import { useWialonAddressQuery } from "@/api/map/wialon-address.ts";
+import { useQuery } from "@tanstack/vue-query";
+import { useOsmAddressQuery } from "@/api/map/osm-address.ts";
+import { IonButton } from "@ionic/vue";
+
+const props = defineProps<{
+  placeholder?: string;
+}>();
 
 const mapRef = useTemplateRef("mapRef");
 
@@ -14,8 +22,44 @@ const selectedCoords = reactive<{
   lat: null,
   lng: null,
 });
-const isLoading = ref(false);
-const addressText = ref("");
+
+const wialonAddressQuery = useWialonAddressQuery({
+  params: computed(() => ({
+    posList: [[selectedCoords.lat, selectedCoords.lng]],
+  })),
+});
+const osmAddressQuery = useOsmAddressQuery({
+  params: computed(() => ({
+    posList: [[selectedCoords.lat, selectedCoords.lng]],
+  })),
+});
+
+const {
+  data: osmData,
+  isError,
+  isPending: osmPending,
+} = useQuery({
+  ...osmAddressQuery,
+  enabled: computed(() => !!selectedCoords.lat && !!selectedCoords.lng),
+});
+const { data: wialonData, isPending: wialongPending } = useQuery({
+  ...wialonAddressQuery,
+  enabled: computed(() => !!selectedCoords.lat && !!selectedCoords.lng && isError.value),
+});
+
+const addressText = computed(() => {
+  if (osmData.value) {
+    return osmData.value.find(Boolean)?.formatted_path;
+  }
+
+  if (wialonData.value) {
+    return wialonData.value.find(Boolean)?.formatted_path;
+  }
+  return null;
+});
+
+const hasSelectedCoords = computed(() => !!selectedCoords.lat && !!selectedCoords.lng);
+const isLoading = computed(() => hasSelectedCoords.value && (osmPending.value || wialongPending.value));
 
 function animateOffset(map: maplibregl.Map, from: number, to: number, duration = 150) {
   const start = performance.now();
@@ -144,10 +188,20 @@ onMounted(() => {
 <template>
   <div class="map-picker-backdrop" @pointerdown.stop @pointerup.prevent.stop>
     <base-map ref="mapRef" />
-    <div v-if="addressText" class="map-picker-backdrop__address">
-      {{ addressText }}
-      <ion-spinner v-if="isLoading" name="circular" class="map-picker-backdrop__spinner" />
+    <div class="map-picker-backdrop__address">
+      <div class="map-picker-backdrop__wrapper">
+        <div :class="['map-picker-backdrop__placeholder', addressText && 'map-picker-backdrop__placeholder_focus']">
+          {{ placeholder }}
+        </div>
+        <div v-if="addressText" class="map-picker-backdrop__value">
+          {{ addressText }}
+        </div>
+        <ion-spinner v-if="isLoading" name="circular" class="map-picker-backdrop__spinner" />
+      </div>
     </div>
+    <transition name="fade">
+      <ion-button v-if="addressText" class="map-picker-backdrop__button">{{ $t("common.save") }}</ion-button>
+    </transition>
   </div>
 </template>
 
@@ -159,7 +213,6 @@ onMounted(() => {
 
   &__address {
     background: #ffffff;
-    padding: 16px 48px 16px 16px;
 
     box-shadow: 0px 2px 3px 0px #0000001a;
     border: 1px solid var(--System-Gray-Light, #f2f2f7);
@@ -169,7 +222,34 @@ onMounted(() => {
     top: 16px;
     left: 16px;
     right: 16px;
-    min-height: 55px;
+    min-height: 56px;
+  }
+
+  &__wrapper {
+    position: relative;
+    padding: 20px 16px 12px 16px;
+  }
+
+  &__placeholder {
+    position: relative;
+    bottom: 4px;
+    color: inherit;
+
+    transition: all 0.2s ease;
+
+    padding-right: 24px;
+
+    &_focus {
+      position: absolute;
+
+      font-size: 12px;
+      top: 6px;
+      left: 16px;
+    }
+  }
+
+  &__value {
+    margin-top: 4px;
   }
 
   &__spinner {
@@ -178,6 +258,13 @@ onMounted(() => {
     right: 16px;
     transform: translateY(-50%);
     color: $main-color;
+  }
+
+  &__button {
+    position: fixed;
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    left: 16px;
+    right: 16px;
   }
 }
 </style>

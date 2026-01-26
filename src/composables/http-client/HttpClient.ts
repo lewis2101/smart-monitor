@@ -33,7 +33,8 @@ export class HttpClient {
     return {
       ...headers,
       "Content-Type": "application/json; charset=utf-8",
-      "Accept": "application/json",
+      Accept: "application/json",
+      "X-TimeZone": Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
   }
 

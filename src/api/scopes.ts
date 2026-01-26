@@ -16,4 +16,6 @@ export enum Scopes {
   actionNewOrder = "action-new-order",
   startProcess = "start-process",
   orderHistory = "order-history",
+  osmAddress = "osm-address",
+  wialonAddress = "wialon-address",
 }

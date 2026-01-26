@@ -20,8 +20,10 @@ const openMap = () => {
 
 const openMapPicker = () => {
   globalBackdropStore.push("map-pin-picker", {
-    title: "Адрес отправления",
-    props: {},
+    title: "Выберите точку на карте",
+    props: {
+      placeholder: "Адрес отправления",
+    },
   });
 };
 
