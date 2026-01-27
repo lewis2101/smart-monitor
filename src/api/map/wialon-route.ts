@@ -17,7 +17,7 @@ export type Response = {
     text: string;
     value: number;
   };
-};
+}[];
 
 export const useWialonRouteQuery = createVueQueryOptions<RawData, Response>({
   httpClientOptions: {

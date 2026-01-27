@@ -26,7 +26,7 @@ export type AddressSelectorRoute = {
     country: string;
     formatted_path: string;
   };
-  points: number[][];
+  points: [x: number, y: number][];
   status?: string;
   distance: {
     text: string;

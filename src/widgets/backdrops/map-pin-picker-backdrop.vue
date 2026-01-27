@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseMap from "@/components/map/base-map.vue";
-import { computed, onMounted, useTemplateRef } from "vue";
+import { computed, onMounted, useTemplateRef, watch } from "vue";
 import { IonSpinner } from "@ionic/vue";
 import { useWialonAddressQuery } from "@/api/map/wialon-address.ts";
 import { useQuery } from "@tanstack/vue-query";
@@ -62,7 +62,11 @@ const {
   enabled: computed(() => !!selectedCoords.lat && !!selectedCoords.lng),
 });
 
-const { data: wialonData, isPending: wialongPending } = useQuery({
+const {
+  data: wialonData,
+  isPending: wialongPending,
+  error: wialonError,
+} = useQuery({
   ...wialonAddressQuery,
   enabled: computed(() => !!selectedCoords.lat && !!selectedCoords.lng && isError.value),
 });
@@ -111,6 +115,17 @@ const addressText = computed(() => {
 
 const hasSelectedCoords = computed(() => !!selectedCoords.lat && !!selectedCoords.lng);
 const isLoading = computed(() => hasSelectedCoords.value && (osmPending.value || wialongPending.value));
+
+watch(wialonError, (value) => {
+  if (value) {
+    toast.add({
+      severity: "error",
+      summary: "Ошибка",
+      detail: "Ошибка при получении данных координат",
+      life: 3000,
+    });
+  }
+});
 </script>
 
 <template>

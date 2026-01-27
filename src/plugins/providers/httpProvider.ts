@@ -1,13 +1,14 @@
-import {HttpClient, type InterceptorCallback} from "@/composables/http-client/HttpClient.ts";
-import {useRefreshTokenRawMutation} from "@/api/auth/refresh-token.post.ts";
-import {AuthEndpoints} from "@/api/endpoints.ts";
-import {useAuthStorage} from "@/composables/login/use-auth-storage.ts";
-import {CommonRoutes} from "@/router/router-list.ts";
-import {HttpStatus} from "@/composables/http-client/HttpStatuses.ts";
-import type {HttpResponse} from "@capacitor/core";
+import { HttpClient, type InterceptorCallback } from "@/composables/http-client/HttpClient.ts";
+import { useRefreshTokenRawMutation } from "@/api/auth/refresh-token.post.ts";
+import { AuthEndpoints } from "@/api/endpoints.ts";
+import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
+import { CommonRoutes } from "@/router/router-list.ts";
+import { HttpStatus } from "@/composables/http-client/HttpStatuses.ts";
+import type { HttpResponse } from "@capacitor/core";
+import router from "@/router";
 
 const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback => {
-  const {mutateAsync: mutateRefreshToken} = useRefreshTokenRawMutation({
+  const { mutateAsync: mutateRefreshToken } = useRefreshTokenRawMutation({
     client: httpClient,
   });
   let refreshPromise: Promise<void> | null = null;
@@ -19,7 +20,7 @@ const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback =>
       !option.url?.includes(AuthEndpoints.refreshToken);
 
     if (isUnAuthorized) {
-      const {refreshTokenStorage, accessTokenStorage, expiresTokenStorage} = useAuthStorage();
+      const { refreshTokenStorage, accessTokenStorage, expiresTokenStorage } = useAuthStorage();
 
       try {
         if (!refreshPromise) {
@@ -27,7 +28,7 @@ const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback =>
             const data = await mutateRefreshToken({
               data: {
                 refresh: refreshTokenStorage.value,
-              }
+              },
             });
 
             accessTokenStorage.value = data.accessToken;
@@ -35,7 +36,8 @@ const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback =>
             expiresTokenStorage.value = data.expiry;
           })()
             .catch((e) => {
-              location.href = CommonRoutes.login;
+              router.replace({ name: CommonRoutes.login });
+              // location.href = CommonRoutes.login;
               throw e;
             })
             .finally(() => {

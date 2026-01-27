@@ -3,14 +3,34 @@ import BaseMap from "@/components/map/base-map.vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import type { StepField } from "@/components/step-generator/types.ts";
 import AddressInput from "@/components/step-generator/AddressSelector/AddressInput.vue";
-import { computed, reactive, type Ref, ref } from "vue";
-import { IonButton } from "@ionic/vue";
+import { computed, onMounted, reactive, type Ref, ref, useTemplateRef, watch, watchEffect } from "vue";
+import { IonButton, IonSpinner } from "@ionic/vue";
 import type { AddressInfo } from "@/api/map/types.ts";
 import { useI18n } from "vue-i18n";
 import type { AddressSelectorRoute } from "@/composables/order/types.ts";
 import { useWialonRoutePointQuery, type RawData as RoutePointRawData } from "@/api/map/wialon-route-point.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { useWialonRouteQuery } from "@/api/map/wialon-route.ts";
+import maplibregl from "maplibre-gl";
+import { useMapPolyline } from "@/composables/map/useMapPolyline.ts";
+import { useToast } from "primevue/usetoast";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+
+const colors = [
+  "#FF5252",
+  "#2196F3",
+  "#4CAF50",
+  "#FB8C00",
+  "#050b1f",
+  "#4B0082",
+  "#800080",
+  "#483D8B",
+  "#8B0000",
+  "#FFD700",
+  "#FFFF00",
+  "#191970",
+  "#2F4F4F",
+];
 
 type AddressData = {
   name: string;
@@ -31,10 +51,18 @@ const props = withDefaults(
 
 const globalBackdropStore = useGlobalBackdropStore();
 const { t } = useI18n();
+const toast = useToast();
 
 const routePointQueryParams = ref<RoutePointRawData | null>(null);
 const currentSessionKey = ref<string>("");
 const showCreateRouteButton = ref(true);
+
+const mapRef = useTemplateRef<{ map: maplibregl.Map }>("mapRef");
+const mapContainer = useTemplateRef("mapContainer");
+
+const { init, paintRoute, isReady } = useMapPolyline({
+  mapRef: () => mapRef.value?.map ?? null,
+});
 
 const wialonRoutePointQuery = useWialonRoutePointQuery({
   params: routePointQueryParams as Ref<RoutePointRawData>,
@@ -46,12 +74,22 @@ const wialonRouteQuery = useWialonRouteQuery({
   })),
 });
 
-const { data: wialonRoutePointData, suspense: wialonRoutePointSuspense } = useQuery({
+const {
+  data: wialonRoutePointData,
+  suspense: wialonRoutePointSuspense,
+  error: wialonRoutePointError,
+  isPending: wialonRoutePointPending,
+} = useQuery({
   ...wialonRoutePointQuery,
   enabled: () => !!routePointQueryParams.value,
 });
 
-const { data: wialonRouteData, suspense: wialonRouteSuspense } = useQuery({
+const {
+  data: wialonRouteData,
+  suspense: wialonRouteSuspense,
+  error: wialonRouteError,
+  isPending: wialonRoutePending,
+} = useQuery({
   ...wialonRouteQuery,
   enabled: () => !!currentSessionKey.value,
 });
@@ -80,6 +118,7 @@ const handleAdd = () => {
   addresses.push({
     name: "",
   });
+  showCreateRouteButton.value = true;
 };
 
 const openMapPicker = async (address: AddressData, idx: number) => {
@@ -106,6 +145,7 @@ const openMapPicker = async (address: AddressData, idx: number) => {
 
 const createRoutes = async () => {
   const routes: AddressSelectorRoute[] = [];
+  let colorIdx = 0;
 
   for (const idx in addresses) {
     const firstPoint = addresses[+idx];
@@ -115,35 +155,52 @@ const createRoutes = async () => {
       continue;
     }
 
-    const point = {
-      lat1: firstPoint.lat,
-      lon1: firstPoint.lng,
-      wp1: firstPoint.name,
-      point1: firstPoint.point,
-      lat2: secondPoint.lat,
-      lon2: secondPoint.lng,
-      wp2: secondPoint.name,
-      point2: secondPoint.point,
-    };
+    if (
+      firstPoint.point &&
+      firstPoint.lat &&
+      firstPoint.lng &&
+      secondPoint.point &&
+      secondPoint.lat &&
+      secondPoint.lng
+    ) {
+      const point = {
+        lat1: firstPoint.lat,
+        lon1: firstPoint.lng,
+        wp1: firstPoint.name,
+        point1: firstPoint.point,
+        lat2: secondPoint.lat,
+        lon2: secondPoint.lng,
+        wp2: secondPoint.name,
+        point2: secondPoint.point,
+      };
 
-    routePointQueryParams.value = {
-      point,
-    };
+      routePointQueryParams.value = {
+        point,
+      };
 
-    await wialonRoutePointSuspense();
+      await wialonRoutePointSuspense();
 
-    currentSessionKey.value = wialonRoutePointData.value.sessionKey;
+      currentSessionKey.value = wialonRoutePointData.value.sessionKey;
 
-    await wialonRouteSuspense();
+      await wialonRouteSuspense();
 
-    routes.push({
-      ...point,
-      ...wialonRouteData.value,
-      color: "green",
-    });
+      const routeData = wialonRouteData.value.find(Boolean) as any;
+
+      if (routeData) {
+        routes.push({
+          ...point,
+          ...routeData,
+          color: colors[colorIdx++],
+        });
+
+        if (colors.length === colorIdx - 1) colorIdx = 0;
+      }
+    }
   }
 
-  model.value = routes;
+  if (routes.length) {
+    model.value = routes;
+  }
 };
 
 const openMapRoute = () => {
@@ -151,9 +208,52 @@ const openMapRoute = () => {
 
   globalBackdropStore.push("map", {
     title: "Маршрут",
-    props: {},
+    props: {
+      initialData: model.value,
+    },
   });
 };
+
+onMounted(() => {
+  init();
+  useBubbleAnimate(mapContainer);
+});
+
+const isLoading = computed(
+  () =>
+    (!!routePointQueryParams.value && wialonRoutePointPending.value) ||
+    (!!currentSessionKey.value && wialonRoutePending.value),
+);
+
+watch(model, (value) => {
+  if (value) {
+    console.log({ MODEL: model.value });
+    paintRoute(model.value, {
+      boundPadding: 20,
+    });
+    showCreateRouteButton.value = false;
+  }
+});
+
+watch(isReady, (value) => {
+  if (value && model.value) {
+    paintRoute(model.value, {
+      boundPadding: 20,
+    });
+    showCreateRouteButton.value = false;
+  }
+});
+
+watchEffect(() => {
+  if (wialonRouteError.value || wialonRoutePointError.value) {
+    toast.add({
+      severity: "error",
+      summary: "Ошибка",
+      detail: "Приозошла ошибка при проекладке маршрута",
+      life: 3000,
+    });
+  }
+});
 </script>
 
 <template>
@@ -166,6 +266,7 @@ const openMapRoute = () => {
             idx === 0 ? $t('address-selector.departure') : $t('address-selector.destination', { count: idx })
           "
           :label="item.name"
+          :disabled="field.disabled || disabled"
           class="address-selector__item"
           @open-map="openMapPicker(item, idx)"
         />
@@ -174,12 +275,16 @@ const openMapRoute = () => {
         >Добавить</ion-button
       >
     </div>
-    <div class="address-selector__map-wrapper">
+    <div ref="mapContainer" class="address-selector__map-wrapper">
       <base-map
-        :class="['address-selector__map', showCreateRouteButton && 'address-selector__map-disabled']"
+        ref="mapRef"
+        :class="['address-selector__map', (showCreateRouteButton || isLoading) && 'address-selector__map-disabled']"
         @click="openMapRoute"
       />
-      <ion-button v-if="showCreateRouteButton" class="address-selector__map-button"> Проложить маршрут </ion-button>
+      <ion-spinner v-if="isLoading" name="circular" class="address-selector__spinner" />
+      <ion-button v-if="showCreateRouteButton && !isLoading" class="address-selector__map-button" @click="createRoutes">
+        Проложить маршрут
+      </ion-button>
     </div>
   </div>
 </template>
@@ -244,6 +349,15 @@ const openMapRoute = () => {
 
   &__button {
     width: 100%;
+  }
+
+  &__spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    color: $main-color;
   }
 }
 </style>

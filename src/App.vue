@@ -39,6 +39,7 @@ onMounted(async () => {
 <style module lang="scss">
 .global-toast {
   margin-bottom: calc(env(safe-area-inset-bottom) + 42px);
+  z-index: 99999 !important;
 }
 .message {
   margin: 0 auto !important;
