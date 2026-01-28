@@ -53,7 +53,7 @@ const checkOrderDataState = async () => {
     setTimeout(() => {
       refreshPageWithTries();
       resolve();
-    }, 1000);
+    }, 3000);
   });
 };
 

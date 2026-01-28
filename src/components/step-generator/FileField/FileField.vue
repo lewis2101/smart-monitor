@@ -32,10 +32,12 @@ const { data, isPending } = useQuery(orderFileQuery);
         @click="router.push({ name: CommonRoutes.fileView, params: { id: file.id }, query: { name: file.file.name } })"
       />
     </template>
-    <div v-for="item in 3" :key="item" class="file-field__skeleton-item file-field__item">
-      <ion-skeleton-text animated class="file-field__skeleton-icon" />
-      <ion-skeleton-text animated class="file-field__skeleton-text" />
-    </div>
+    <template v-if="isPending">
+      <div v-for="item in 3" :key="item" class="file-field__skeleton-item file-field__item">
+        <ion-skeleton-text animated class="file-field__skeleton-icon" />
+        <ion-skeleton-text animated class="file-field__skeleton-text" />
+      </div>
+    </template>
   </div>
 </template>
 
