@@ -207,6 +207,7 @@ const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?
         :process-key="orderNextData.processKey"
         :fields="orderNextData.attributes"
         :disabled="orderDisabled"
+        :order-id="orderId"
       />
     </div>
     <order-more-buttons

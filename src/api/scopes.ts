@@ -22,4 +22,5 @@ export enum Scopes {
   osmRoutePoint = "/osm-route-point-set",
   wialongRoute = "wialong-route",
   osmRoute = "osm-route",
+  orderFile = "order-file",
 }

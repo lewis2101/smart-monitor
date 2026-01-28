@@ -18,6 +18,7 @@ export type FieldInputClientType =
   | "VehicleSelector"
   | "WorksList"
   | "SupplierSelector"
+  | "FILE"
   | "RATING";
 
 export type FieldInputType =
@@ -36,6 +37,7 @@ export type FieldInputType =
   | "TITLE"
   | "DATE_TIME_PICKER"
   | "RATING"
+  | "FILE"
   | "CUSTOM";
 
 export type FieldType = {

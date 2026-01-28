@@ -7,6 +7,7 @@ const props = withDefaults(
     fields: StepField[];
     disabled?: boolean;
     processKey: string;
+    orderId?: string;
   }>(),
   {
     disabled: false,
@@ -32,6 +33,7 @@ defineExpose({ fieldsModel, getPayloadOfFields });
         :restriction="restrictions[field.value]"
         :loading="restrictionsLoading[field.value]"
         :disabled="disabled"
+        :order-id="orderId"
         class="step-generator__field"
         @change="handleChangeField(field.value)"
       />
