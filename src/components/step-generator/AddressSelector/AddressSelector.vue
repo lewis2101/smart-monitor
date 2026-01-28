@@ -114,6 +114,7 @@ watch(isReady, (value) => {
           "
           :label="item.name"
           :disabled="field.disabled || disabled"
+          :list="[]"
           class="address-selector__item"
           @open-map="openMapPicker(item, idx)"
         />

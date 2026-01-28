@@ -17,7 +17,7 @@ const props = withDefaults(
   defineProps<
     {
       list: List[];
-      initialValue: number | string | null;
+      initialValue?: number | string | null;
       showReset?: boolean;
       showSearch?: boolean;
       searchFn?: (value: string) => Promise<List[]>;
@@ -107,39 +107,41 @@ watch(searchModel, () => {
 <template>
   <div class="select-input-backdrop">
     <base-input
-      v-if="showSearch && list.length > 10"
+      v-if="showSearch"
       v-model="searchModel"
       :loading="isLoading"
       :clearable="clearable"
       placeholder="Поиск"
       class="select-input-backdrop__search"
     />
-    <label
-      v-for="(item, idx) in filteredList"
-      :key="item.value"
-      :for="`${item.value}-${idx}`"
-      :id="`${item.label}-${item.value}`"
-      class="select-input-backdrop__item"
-    >
-      <radio-button
-        v-model="temporaryModel"
-        variant="filled"
-        :value="item.value"
-        :input-id="`${item.value}-${idx}`"
-        class="select-input-backdrop__radio"
-      />
-      <label :for="`${item.value}-${idx}`">
-        <div :class="['select-input-backdrop__label', item.description && 'select-input-backdrop__label-bold']">
-          {{ item.label }}
-        </div>
-        <div v-if="item.description" class="select-input-backdrop__description">
-          {{ item.description }}
-        </div>
-        <div v-for="hint in item.hint" :key="hint" class="select-input-backdrop__hint">
-          {{ hint }}
-        </div>
+    <div class="select-input-backdrop__content">
+      <label
+        v-for="(item, idx) in filteredList"
+        :key="item.value"
+        :for="`${item.value}-${idx}`"
+        :id="`${item.label}-${item.value}`"
+        class="select-input-backdrop__item"
+      >
+        <radio-button
+          v-model="temporaryModel"
+          variant="filled"
+          :value="item.value"
+          :input-id="`${item.value}-${idx}`"
+          class="select-input-backdrop__radio"
+        />
+        <label :for="`${item.value}-${idx}`">
+          <div :class="['select-input-backdrop__label', item.description && 'select-input-backdrop__label-bold']">
+            {{ item.label }}
+          </div>
+          <div v-if="item.description" class="select-input-backdrop__description">
+            {{ item.description }}
+          </div>
+          <div v-for="hint in item.hint" :key="hint" class="select-input-backdrop__hint">
+            {{ hint }}
+          </div>
+        </label>
       </label>
-    </label>
+    </div>
     <div class="select-input-backdrop__button-wrapper">
       <ion-button v-if="showReset" fill="outline" class="select-input-backdrop__button" @click="reset">{{
         $t("select-backdrop.reset")
@@ -155,12 +157,19 @@ watch(searchModel, () => {
   padding: 8px 16px 0 16px;
   scroll-margin-top: 50px;
   height: v-bind(stretchHeight);
+  display: flex;
+  flex-direction: column;
+
+  &__content {
+    flex-grow: 1;
+  }
 
   &__item {
     display: flex;
     align-items: center;
     gap: 16px;
     padding: 19px 16px;
+    height: 100%;
   }
 
   &__radio {
@@ -176,7 +185,6 @@ watch(searchModel, () => {
     left: 0;
     z-index: 10;
     padding-bottom: calc(8px + env(safe-area-inset-bottom));
-    background: $white;
 
     display: flex;
     align-items: center;

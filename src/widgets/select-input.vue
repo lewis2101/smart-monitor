@@ -48,7 +48,7 @@ const handleClick = async () => {
       props: {
         list: props.list,
         initialValue: model.value,
-        showSearch: props.showSearch,
+        showSearch: props.showSearch && props.list.length >= 10,
         showReset: props.showReset,
         searchFn: props.searchFn,
         clearable: props.clearable,

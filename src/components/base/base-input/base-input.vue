@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useEmits } from "@/composables/useEmits.ts";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { IonInput, IonSpinner } from "@ionic/vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     placeholder?: string;
     errorText?: string;
@@ -29,6 +29,8 @@ const isFocused = ref(false);
 const handleClear = () => {
   model.value = "";
 };
+
+const offsetOfClearable = computed(() => (props.clearable ? "46px" : "16px"));
 </script>
 
 <template>
@@ -79,7 +81,7 @@ const handleClear = () => {
 
   &__native {
     --padding-start: 16px;
-    --padding-end: 16px;
+    --padding-end: v-bind(offsetOfClearable);
     --padding-top: 20px;
     --padding-bottom: 12px;
 

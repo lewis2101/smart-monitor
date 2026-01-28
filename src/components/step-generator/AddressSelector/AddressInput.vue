@@ -4,14 +4,20 @@ import { onMounted, useTemplateRef } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
+type List = {
+  label: string;
+  description?: string;
+  hint?: string[];
+  value: number | string;
+};
+
 const props = withDefaults(
   defineProps<{
     placeholder?: string;
     selectTitle?: string;
     disabled?: boolean;
-    showSearch?: boolean;
-    showReset?: boolean;
     label?: string;
+    list: List[];
   }>(),
   {
     disabled: false,
@@ -28,29 +34,26 @@ const mapRef = useTemplateRef("mapRef");
 
 const globalBackdropStore = useGlobalBackdropStore();
 
-// const currentValueLabel = computed(() => props.list?.find((l) => l.value === model.value)?.label || "");
+const handleClick = async () => {
+  if (props.disabled) {
+    return;
+  }
 
-// const handleClick = async () => {
-//   if (props.disabled) {
-//     return;
-//   }
-//
-//   try {
-//     const value = (await globalBackdropStore.push("select", {
-//       title: props.selectTitle || props.placeholder || "",
-//       props: {
-//         list: props.list,
-//         initialValue: model.value,
-//         showSearch: props.showSearch,
-//         showReset: props.showReset,
-//       },
-//     })) as number;
-//
-//     model.value = value;
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
+  try {
+    const value = (await globalBackdropStore.push("select", {
+      title: props.selectTitle || props.placeholder || "",
+      props: {
+        list: props.list,
+        searchValue: props.label,
+        showSearch: true,
+        stretch: true,
+        clearable: true,
+      },
+    })) as number;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 onMounted(() => {
   useBubbleAnimate(mapRef);
@@ -58,7 +61,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="select-input">
+  <div class="select-input" @click="handleClick">
     <div :class="['select-input__native', disabled && 'select-input-disabled']">
       <div v-if="placeholder" :class="['select-input__placeholder', label && 'select-input__placeholder_focus']">
         {{ placeholder }}

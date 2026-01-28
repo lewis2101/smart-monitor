@@ -31,6 +31,7 @@ onMounted(() => {
     },
     center: [76.8512, 43.222],
     zoom: 12,
+    attributionControl: false,
   });
 });
 
