@@ -17,6 +17,8 @@ import { useRole } from "@/composables/useRole.ts";
 import { useRefreshPageInjector } from "@/composables/use-refresh-page.ts";
 import OrderHistory from "@/components/order/order-history/order-history.vue";
 import { useOrderActionCompleteMutation } from "@/api/orders/order-action-complete.ts";
+import { useIonRouter } from "@ionic/vue";
+import { OrderRoutes } from "@/router/router-list.ts";
 
 const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 const COMPLETE_TASK_NAME = "COMPLETE";
@@ -29,10 +31,12 @@ const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
 const toast = useToast();
 const { getErrorForToast } = useExtractErrorData();
 
+const router = useIonRouter();
+
 const { clientInfoStorage } = useAuthStorage();
 const { isClient } = useRole(() => clientInfoStorage.value.type);
 
-const { getTriesCount, refreshPageKey, refreshPageWithTries } = useRefreshPageInjector();
+const { getTriesCount, refreshPageWithTries } = useRefreshPageInjector();
 
 const checkOrderDataState = () => {
   const { currentTask, currentTaskType, state, processCompleted } = orderData.value;
@@ -124,7 +128,16 @@ const saveOrder = async (action: OrderActions) => {
       },
     });
 
-    refreshPageKey();
+    router.replace({
+      name: OrderRoutes.successOrder,
+      params: {
+        orderId: props.orderId,
+        status: "UPDATED",
+      },
+      query: {
+        date: new Date().toISOString(),
+      },
+    });
   } catch (e) {
     console.log(e);
     toast.add(getErrorForToast(e));

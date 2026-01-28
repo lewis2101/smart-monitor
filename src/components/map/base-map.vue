@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { onMounted, type Ref, ref, useId } from "vue";
+import { onMounted, ref, useId } from "vue";
 import { mapsMapper, type MapMapperKeys } from "@/utils/mapMapper.ts";
 
 const mapId = useId();

@@ -14,6 +14,7 @@ import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import Profile from "@/pages/profile.vue";
 import Order from "@/pages/order.vue";
 import Notifications from "@/pages/notifications.vue";
+import SuccessOrder from "@/pages/success-order.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -77,6 +78,11 @@ const router = createRouter({
       path: "/order/:orderId",
       name: OrderRoutes.order,
       component: Order,
+    },
+    {
+      path: "/success-order/:orderId/:status",
+      name: OrderRoutes.successOrder,
+      component: SuccessOrder,
     },
     {
       path: "/profile",

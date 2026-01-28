@@ -85,9 +85,13 @@ const createOrder = async () => {
     });
 
     router.replace({
-      name: OrderRoutes.order,
+      name: OrderRoutes.successOrder,
       params: {
         orderId: String(orderId),
+        status: "CREATED",
+      },
+      query: {
+        date: new Date().toISOString(),
       },
     });
   } catch (e) {

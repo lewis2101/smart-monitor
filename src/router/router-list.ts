@@ -14,6 +14,7 @@ export enum MainTabRoutes {
 export enum OrderRoutes {
   newOrder = "new-order",
   order = "order",
+  successOrder = "success-order",
 }
 
 export enum CommonRoutes {
