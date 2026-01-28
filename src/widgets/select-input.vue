@@ -3,6 +3,13 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { computed } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
+type List = {
+  label: string;
+  description?: string;
+  hint?: string[];
+  value: number | string;
+};
+
 const props = withDefaults(
   defineProps<{
     placeholder?: string;
@@ -10,17 +17,18 @@ const props = withDefaults(
     disabled?: boolean;
     showSearch?: boolean;
     showReset?: boolean;
-    list: Array<{
-      label: string;
-      description?: string;
-      hint?: string[];
-      value: number | string;
-    }>;
+    list: List[];
+    searchFn?: (value: string) => Promise<List[]>;
+    clearable?: boolean;
+    searchValue?: string;
+    stretch?: boolean;
   }>(),
   {
     disabled: false,
     showSearch: false,
     showReset: false,
+    clearable: false,
+    stretch: false,
   },
 );
 
@@ -42,6 +50,9 @@ const handleClick = async () => {
         initialValue: model.value,
         showSearch: props.showSearch,
         showReset: props.showReset,
+        searchFn: props.searchFn,
+        clearable: props.clearable,
+        searchValue: props.searchValue,
       },
     })) as number;
 

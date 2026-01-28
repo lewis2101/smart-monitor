@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import RadioButton from "primevue/radiobutton";
 import { IonButton } from "@ionic/vue";
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import type { BackdropComponentProps } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import { debounce } from "@/utils/debounce.ts";
@@ -16,15 +16,21 @@ type List = {
 const props = withDefaults(
   defineProps<
     {
-      list: Array<List>;
+      list: List[];
       initialValue: number | string | null;
       showReset?: boolean;
       showSearch?: boolean;
+      searchFn?: (value: string) => Promise<List[]>;
+      clearable?: boolean;
+      searchValue?: string;
+      stretch?: boolean;
     } & BackdropComponentProps<(value: number | string | null) => any>
   >(),
   {
     showSearch: false,
     showReset: false,
+    clearable: false,
+    searchFn: false,
   },
 );
 
@@ -33,6 +39,7 @@ const emit = defineEmits<{
 }>();
 
 const temporaryModel = ref(props.initialValue);
+const isLoading = ref(false);
 
 const isIncludesList = (list: List, text: string) => {
   const lowerText = text.toLowerCase();
@@ -43,14 +50,24 @@ const isIncludesList = (list: List, text: string) => {
   );
 };
 
-const filterDebounce = debounce(() => {
+const filterDebounce = debounce(async () => {
   if (!searchModel.value) {
     filteredList.value = props.list;
+    return;
   }
+
+  if (props.searchFn) {
+    isLoading.value = true;
+    const list = await props.searchFn(searchModel.value);
+    isLoading.value = false;
+    filteredList.value = list;
+    return;
+  }
+
   filteredList.value = props.list.filter((item) => isIncludesList(item, searchModel.value));
 }, 500);
 
-const searchModel = ref("");
+const searchModel = ref(props.searchValue || "");
 const filteredList = ref(props.list);
 
 const submit = () => {
@@ -80,6 +97,8 @@ onMounted(() => {
   });
 });
 
+const stretchHeight = computed(() => (props.stretch ? "calc(100vh - (env(safe-area-inset-top) + 150px))" : "auto"));
+
 watch(searchModel, () => {
   filterDebounce();
 });
@@ -87,7 +106,14 @@ watch(searchModel, () => {
 
 <template>
   <div class="select-input-backdrop">
-    <base-input v-if="showSearch && list.length > 10" v-model="searchModel" placeholder="Поиск" class="select-input-backdrop__search" />
+    <base-input
+      v-if="showSearch && list.length > 10"
+      v-model="searchModel"
+      :loading="isLoading"
+      :clearable="clearable"
+      placeholder="Поиск"
+      class="select-input-backdrop__search"
+    />
     <label
       v-for="(item, idx) in filteredList"
       :key="item.value"
@@ -115,18 +141,20 @@ watch(searchModel, () => {
       </label>
     </label>
     <div class="select-input-backdrop__button-wrapper">
-      <ion-button v-if="showReset" fill="outline" class="select-input-backdrop__button" @click="reset"
-        >{{ $t('select-backdrop.reset') }}</ion-button
-      >
-      <ion-button class="select-input-backdrop__button" @click="submit">{{ $t('select-backdrop.submit') }}</ion-button>
+      <ion-button v-if="showReset" fill="outline" class="select-input-backdrop__button" @click="reset">{{
+        $t("select-backdrop.reset")
+      }}</ion-button>
+      <ion-button class="select-input-backdrop__button" @click="submit">{{ $t("select-backdrop.submit") }}</ion-button>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .select-input-backdrop {
+  position: relative;
   padding: 8px 16px 0 16px;
   scroll-margin-top: 50px;
+  height: v-bind(stretchHeight);
 
   &__item {
     display: flex;
@@ -160,7 +188,7 @@ watch(searchModel, () => {
     position: sticky;
     top: 8px;
     background: $white;
-    z-index: 1;
+    z-index: 2;
   }
 
   &__button {

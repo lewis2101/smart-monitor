@@ -1,15 +1,23 @@
 <script setup lang="ts">
 import { useEmits } from "@/composables/useEmits.ts";
 import { ref } from "vue";
-import { IonInput } from "@ionic/vue";
+import { IonInput, IonSpinner } from "@ionic/vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 
-defineProps<{
-  placeholder?: string;
-  errorText?: string;
-  clearable?: boolean;
-  disabled?: boolean;
-}>();
+withDefaults(
+  defineProps<{
+    placeholder?: string;
+    errorText?: string;
+    clearable?: boolean;
+    disabled?: boolean;
+    loading?: boolean;
+  }>(),
+  {
+    clearable: false,
+    disabled: false,
+    loading: false,
+  },
+);
 
 const model = defineModel<string | null>();
 const { emits } = useEmits();
@@ -41,8 +49,11 @@ const handleClear = () => {
         @ion-focus="isFocused = true"
         @ion-blur="isFocused = false"
       />
-      <div v-if="clearable && model" class="base-input__clear" @click.stop="handleClear">
+      <div v-if="clearable && model && !loading" class="base-input__clear" @click.stop="handleClear">
         <base-icon name="close" />
+      </div>
+      <div v-if="loading" class="base-input__loader">
+        <ion-spinner name="circular" />
       </div>
     </div>
     <div v-if="errorText" class="base-input__error">{{ errorText }}</div>
@@ -114,6 +125,16 @@ const handleClear = () => {
     top: 0;
     margin-top: 0.3rem;
     color: #94a3b8;
+  }
+
+  &__loader {
+    position: absolute;
+    z-index: 2;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0.3rem;
+    color: $main-color;
   }
 
   &__error {

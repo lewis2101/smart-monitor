@@ -29,7 +29,7 @@ const emit = defineEmits<{
 }>();
 
 const fieldRef = ref<HTMLDivElement | null>(null);
-
+const search = ref<string>();
 const { locale } = useI18n();
 
 const model = defineModel<{
@@ -88,14 +88,21 @@ const resourceDependencyQuery = useResourceDependencyQuery({
     selectedId: String(fieldDefaultId.value) || undefined,
     disabled: (props.field.disabled || props.field.readonly) && !!fieldDefaultId.value,
     limits: limits.value,
+    search: search.value,
   })),
   keys: queryKeys,
 });
 
-const { data, isPending, error } = useQuery({
+const { data, isPending, error, suspense } = useQuery({
   ...resourceDependencyQuery,
   enabled: isHasTableProperty.value,
 });
+
+const handleSearch = async (value: string) => {
+  search.value = value;
+  await suspense();
+  return list.value;
+};
 
 const list: ComputedRef<SelectList> = computed(() =>
   data.value?.content.map((item) => ({
@@ -128,6 +135,8 @@ watch(error, (value) => {
       :list="list"
       :placeholder="$t(field.value)"
       :disabled="disabled || field.disabled || loadingData"
+      :search-fn="handleSearch"
+      clearable
       show-search
     />
     <div v-if="loadingData" class="field-input__spinner">
