@@ -1,11 +1,10 @@
-export type AddressSelectorRoute = {
+export type AddressSelectorPoints = {
   wp1: string;
   wp2: string;
   lat1: number;
   lat2: number;
   lon1: number;
   lon2: number;
-  color: string;
   point1: {
     x: number;
     y: number;
@@ -26,6 +25,10 @@ export type AddressSelectorRoute = {
     country: string;
     formatted_path: string;
   };
+};
+
+export type AddressSelectorRouteInfo = {
+  color: string;
   points: [x: number, y: number][];
   status?: string;
   distance: {
@@ -38,3 +41,5 @@ export type AddressSelectorRoute = {
   };
   defaultStart?: boolean;
 };
+
+export type AddressSelectorRoute = AddressSelectorPoints & AddressSelectorRouteInfo;

@@ -3,41 +3,15 @@ import BaseMap from "@/components/map/base-map.vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import type { StepField } from "@/components/step-generator/types.ts";
 import AddressInput from "@/components/step-generator/AddressSelector/AddressInput.vue";
-import { computed, onMounted, reactive, type Ref, ref, useTemplateRef, watch, watchEffect } from "vue";
+import { onMounted, useTemplateRef, watch } from "vue";
 import { IonButton, IonSpinner } from "@ionic/vue";
 import type { AddressInfo } from "@/api/map/types.ts";
 import { useI18n } from "vue-i18n";
 import type { AddressSelectorRoute } from "@/composables/order/types.ts";
-import { useWialonRoutePointQuery, type RawData as RoutePointRawData } from "@/api/map/wialon-route-point.ts";
-import { useQuery } from "@tanstack/vue-query";
-import { useWialonRouteQuery } from "@/api/map/wialon-route.ts";
 import maplibregl from "maplibre-gl";
 import { useMapPolyline } from "@/composables/map/useMapPolyline.ts";
-import { useToast } from "primevue/usetoast";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
-
-const colors = [
-  "#FF5252",
-  "#2196F3",
-  "#4CAF50",
-  "#FB8C00",
-  "#050b1f",
-  "#4B0082",
-  "#800080",
-  "#483D8B",
-  "#8B0000",
-  "#FFD700",
-  "#FFFF00",
-  "#191970",
-  "#2F4F4F",
-];
-
-type AddressData = {
-  name: string;
-  lat?: number;
-  lng?: number;
-  point?: AddressInfo;
-};
+import { type AddressData, useAddresses } from "@/components/step-generator/AddressSelector/use-addresses.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -51,11 +25,6 @@ const props = withDefaults(
 
 const globalBackdropStore = useGlobalBackdropStore();
 const { t } = useI18n();
-const toast = useToast();
-
-const routePointQueryParams = ref<RoutePointRawData | null>(null);
-const currentSessionKey = ref<string>("");
-const showCreateRouteButton = ref(true);
 
 const mapRef = useTemplateRef<{ map: maplibregl.Map }>("mapRef");
 const mapContainer = useTemplateRef("mapContainer");
@@ -64,61 +33,15 @@ const { init, paintRoute, isReady } = useMapPolyline({
   mapRef: () => mapRef.value?.map ?? null,
 });
 
-const wialonRoutePointQuery = useWialonRoutePointQuery({
-  params: routePointQueryParams as Ref<RoutePointRawData>,
-});
-
-const wialonRouteQuery = useWialonRouteQuery({
-  params: computed(() => ({
-    sessionKey: currentSessionKey.value,
-  })),
-});
-
-const {
-  data: wialonRoutePointData,
-  suspense: wialonRoutePointSuspense,
-  error: wialonRoutePointError,
-  isPending: wialonRoutePointPending,
-} = useQuery({
-  ...wialonRoutePointQuery,
-  enabled: () => !!routePointQueryParams.value,
-});
-
-const {
-  data: wialonRouteData,
-  suspense: wialonRouteSuspense,
-  error: wialonRouteError,
-  isPending: wialonRoutePending,
-} = useQuery({
-  ...wialonRouteQuery,
-  enabled: () => !!currentSessionKey.value,
-});
-
 const model = defineModel<AddressSelectorRoute[]>({ required: true, default: () => [] });
-const addresses = reactive<AddressData[]>([]);
+const { addresses, addAddress, createRoutes, isPossibleCreateAddress, isPossibleAddRoute, isLoading } =
+  useAddresses(model);
 
-model.value.forEach((item) => {
-  const wp1 = {
-    name: item.wp1,
-    lat: item.lat1,
-    lng: item.lon2,
-    point: item.point1,
-  };
-  const wp2 = {
-    name: item.wp2,
-    lat: item.lat2,
-    lng: item.lon2,
-    point: item.point2,
-  };
-  addresses.push(wp1);
-  addresses.push(wp2);
-});
-
-const handleAdd = () => {
-  addresses.push({
-    name: "",
-  });
-  showCreateRouteButton.value = true;
+const handleCreateRoutes = async () => {
+  const routes = await createRoutes();
+  if (routes) {
+    model.value = routes;
+  }
 };
 
 const openMapPicker = async (address: AddressData, idx: number) => {
@@ -138,73 +61,15 @@ const openMapPicker = async (address: AddressData, idx: number) => {
     address.lat = data.y;
     address.lng = data.x;
     address.point = data;
+
+    isPossibleCreateAddress.value = true;
   } catch (error) {
     console.log(error);
   }
 };
 
-const createRoutes = async () => {
-  const routes: AddressSelectorRoute[] = [];
-  let colorIdx = 0;
-
-  for (const idx in addresses) {
-    const firstPoint = addresses[+idx];
-    const secondPoint = addresses[+idx + 1];
-
-    if (!firstPoint || !secondPoint) {
-      continue;
-    }
-
-    if (
-      firstPoint.point &&
-      firstPoint.lat &&
-      firstPoint.lng &&
-      secondPoint.point &&
-      secondPoint.lat &&
-      secondPoint.lng
-    ) {
-      const point = {
-        lat1: firstPoint.lat,
-        lon1: firstPoint.lng,
-        wp1: firstPoint.name,
-        point1: firstPoint.point,
-        lat2: secondPoint.lat,
-        lon2: secondPoint.lng,
-        wp2: secondPoint.name,
-        point2: secondPoint.point,
-      };
-
-      routePointQueryParams.value = {
-        point,
-      };
-
-      await wialonRoutePointSuspense();
-
-      currentSessionKey.value = wialonRoutePointData.value.sessionKey;
-
-      await wialonRouteSuspense();
-
-      const routeData = wialonRouteData.value.find(Boolean) as any;
-
-      if (routeData) {
-        routes.push({
-          ...point,
-          ...routeData,
-          color: colors[colorIdx++],
-        });
-
-        if (colors.length === colorIdx - 1) colorIdx = 0;
-      }
-    }
-  }
-
-  if (routes.length) {
-    model.value = routes;
-  }
-};
-
 const openMapRoute = () => {
-  if (showCreateRouteButton.value) return;
+  if (isPossibleCreateAddress.value) return;
 
   globalBackdropStore.push("map", {
     title: "Маршрут",
@@ -219,19 +84,12 @@ onMounted(() => {
   useBubbleAnimate(mapContainer);
 });
 
-const isLoading = computed(
-  () =>
-    (!!routePointQueryParams.value && wialonRoutePointPending.value) ||
-    (!!currentSessionKey.value && wialonRoutePending.value),
-);
-
 watch(model, (value) => {
   if (value) {
-    console.log({ MODEL: model.value });
     paintRoute(model.value, {
       boundPadding: 20,
     });
-    showCreateRouteButton.value = false;
+    isPossibleCreateAddress.value = false;
   }
 });
 
@@ -240,18 +98,7 @@ watch(isReady, (value) => {
     paintRoute(model.value, {
       boundPadding: 20,
     });
-    showCreateRouteButton.value = false;
-  }
-});
-
-watchEffect(() => {
-  if (wialonRouteError.value || wialonRoutePointError.value) {
-    toast.add({
-      severity: "error",
-      summary: "Ошибка",
-      detail: "Приозошла ошибка при проекладке маршрута",
-      life: 3000,
-    });
+    isPossibleCreateAddress.value = false;
   }
 });
 </script>
@@ -271,18 +118,27 @@ watchEffect(() => {
           @open-map="openMapPicker(item, idx)"
         />
       </template>
-      <ion-button v-if="!field.disabled && !disabled" fill="outline" class="address-selector__button" @click="handleAdd"
-        >Добавить</ion-button
+      <ion-button
+        v-if="!field.disabled && !disabled && isPossibleAddRoute"
+        fill="outline"
+        class="address-selector__button"
+        @click="addAddress"
       >
+        Добавить
+      </ion-button>
     </div>
     <div ref="mapContainer" class="address-selector__map-wrapper">
       <base-map
         ref="mapRef"
-        :class="['address-selector__map', (showCreateRouteButton || isLoading) && 'address-selector__map-disabled']"
+        :class="['address-selector__map', (isPossibleCreateAddress || isLoading) && 'address-selector__map-disabled']"
         @click="openMapRoute"
       />
       <ion-spinner v-if="isLoading" name="circular" class="address-selector__spinner" />
-      <ion-button v-if="showCreateRouteButton && !isLoading" class="address-selector__map-button" @click="createRoutes">
+      <ion-button
+        v-if="isPossibleCreateAddress && !isLoading"
+        class="address-selector__map-button"
+        @click="handleCreateRoutes"
+      >
         Проложить маршрут
       </ion-button>
     </div>

@@ -1,36 +1,11 @@
 import { MapEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
 import { Scopes } from "@/api/scopes.ts";
+import type { AddressSelectorPoints } from "@/composables/order/types.ts";
 
 export type RawData = {
-  point: {
-    lat1: number;
-    lon1: number;
-    lat2: number;
-    lon2: number;
-    wp1: string;
-    wp2: string;
-    point1: {
-      x: number;
-      y: number;
-      city: string;
-      house: number | string;
-      value: string;
-      street: string;
-      country: string;
-      formatted_path: string;
-    };
-    point2: {
-      x: number;
-      y: number;
-      city: string;
-      house: number | string;
-      value: string;
-      street: string;
-      country: string;
-      formatted_path: string;
-    };
-  };
+  point: AddressSelectorPoints;
+  sessionKey?: string;
 };
 
 export type Response = {
