@@ -40,3 +40,7 @@ export enum DependencyEndpoints {
 export enum StatEndpoints {
   currentLimit = "/stat/current-limit",
 }
+
+export enum FileEndpoints {
+  getFile = "/lenkrad/v1/file/download/base64",
+}

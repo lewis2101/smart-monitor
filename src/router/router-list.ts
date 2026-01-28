@@ -23,4 +23,5 @@ export enum CommonRoutes {
   learning = "learning",
   profile = "profile",
   notifications = "notifications",
+  fileView = "file-view",
 }

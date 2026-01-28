@@ -52,7 +52,7 @@ defineEmits<{
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     min-height: 56px;
 
     background: $white;
@@ -77,6 +77,7 @@ defineEmits<{
     font-size: 16px;
     line-height: 100%;
     letter-spacing: 0;
+    max-width: calc(100% - 56px);
   }
 
   &__skeleton {

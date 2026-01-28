@@ -15,6 +15,8 @@ const { pageKey } = useRefreshPage();
 const route = useRoute();
 const router = useIonRouter();
 
+const orderId = route.params.orderId as string;
+
 const handleClickClose = () => {
   if (router.canGoBack()) {
     router.back();
@@ -29,7 +31,7 @@ const handleClickClose = () => {
     <ion-header>
       <base-toolbar>
         <default-layout-header
-          :title="`Заявка - ${route.params.orderId}`"
+          :title="`Заявка - ${orderId}`"
           back
           close
           @click-close="handleClickClose"
@@ -39,7 +41,7 @@ const handleClickClose = () => {
     </ion-header>
     <base-content-with-refresher :key="pageKey" @refresh="mockRefresh">
       <default-page>
-        <order-main-block :order-id="route.params.orderId as string" />
+        <order-main-block :order-id="orderId" />
       </default-page>
     </base-content-with-refresher>
   </ion-page>

@@ -2,36 +2,40 @@
 import type { StepField } from "@/components/step-generator/types.ts";
 import { useOrderFileQuery } from "@/api/orders/order-file.ts";
 import { useQuery } from "@tanstack/vue-query";
-import { IonSkeletonText } from "@ionic/vue";
-import { onMounted } from "vue";
+import { IonSkeletonText, useIonRouter } from "@ionic/vue";
 import File from "@/components/step-generator/FileField/File.vue";
+import { CommonRoutes } from "@/router/router-list.ts";
 
 const props = defineProps<{
   field: StepField;
   orderId: string;
 }>();
 
+const router = useIonRouter();
+
 const orderFileQuery = useOrderFileQuery({
   getUrl: (url) => `${url}/${props.orderId}`,
 });
 
 const { data, isPending } = useQuery(orderFileQuery);
-
-onMounted(() => {});
 </script>
 
 <template>
   <div class="file-field">
     <div class="file-field__title">Вложенные файлы</div>
     <template v-if="data">
-      <file v-for="(file, idx) in data.content" :file="file" :key="idx" class="file-field__item" />
+      <file
+        v-for="(file, idx) in data.content"
+        :file="file"
+        :key="idx"
+        class="file-field__item"
+        @click="router.push({ name: CommonRoutes.fileView, params: { id: file.id }, query: { name: file.file.name } })"
+      />
     </template>
-    <template v-if="isPending">
-      <div v-for="item in 3" :key="item" class="file-field__item">
-        <ion-skeleton-text animated class="file-field__skeleton-icon" />
-        <ion-skeleton-text animated class="file-field__skeleton-text" />
-      </div>
-    </template>
+    <div v-for="item in 3" :key="item" class="file-field__skeleton-item file-field__item">
+      <ion-skeleton-text animated class="file-field__skeleton-icon" />
+      <ion-skeleton-text animated class="file-field__skeleton-text" />
+    </div>
   </div>
 </template>
 
@@ -55,6 +59,15 @@ onMounted(() => {});
     &:last-child {
       margin-bottom: 0;
     }
+  }
+
+  &__skeleton-item {
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 2px 3px 0px #0000001a;
+    border: 1px solid var(--System-Gray-Light, #f2f2f7);
+    border-radius: 12px;
+    padding: 16px;
   }
 
   &__skeleton-icon {
