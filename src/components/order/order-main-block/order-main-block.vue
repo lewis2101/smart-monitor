@@ -38,7 +38,7 @@ const { isClient } = useRole(() => clientInfoStorage.value.type);
 
 const { getTriesCount, refreshPageWithTries } = useRefreshPageInjector();
 
-const checkOrderDataState = () => {
+const checkOrderDataState = async () => {
   const { currentTask, currentTaskType, state, processCompleted } = orderData.value;
 
   if ((currentTask && currentTaskType === "USER" && state === "RUNNING") || processCompleted) {
@@ -49,7 +49,12 @@ const checkOrderDataState = () => {
     return;
   }
 
-  refreshPageWithTries();
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      refreshPageWithTries();
+      resolve();
+    }, 1000);
+  });
 };
 
 const orderActionQuery = useOrderActionQuery({
@@ -80,7 +85,7 @@ await Promise.all([
   }),
 ]);
 
-checkOrderDataState();
+await checkOrderDataState();
 orderExecutionId.value = orderData.value.orderExecutionId;
 
 const currentUserTask = computed(() =>
