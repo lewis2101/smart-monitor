@@ -19,6 +19,7 @@ export type StepField = {
   limitation?: string[];
   restriction?: unknown;
   hidden?: boolean;
+  readonly?: boolean;
 };
 
 export type OrderActions =

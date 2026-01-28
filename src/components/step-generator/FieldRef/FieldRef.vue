@@ -16,6 +16,7 @@ type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 const props = withDefaults(
   defineProps<{
     field: StepField;
+    stepModel: Record<string, { id: string | number } | undefined>;
     disabled?: boolean;
   }>(),
   {
@@ -62,6 +63,20 @@ const fieldDefaultId = computed(() => {
   }
   return "";
 });
+
+const limits = computed(() =>
+  props.field.limitation?.reduce<Record<string, unknown>>((acc, curr) => {
+    const model = props.stepModel[curr];
+    if (model) {
+      return {
+        ...acc,
+        [curr]: model?.id ? model.id : model,
+      };
+    }
+    return acc;
+  }, {}),
+);
+
 const isHasTableProperty = computed(() => !!props.field.table);
 
 const queryKeys = props.field.table ? [props.field.table] : [];
@@ -70,8 +85,9 @@ const resourceDependencyQuery = useResourceDependencyQuery({
   getUrl: (url) => `${url}/${props.field.table}`,
   params: computed(() => ({
     lang: locale.value,
-    selectedId: String(fieldDefaultId.value),
-    disabled: props.field.disabled,
+    selectedId: String(fieldDefaultId.value) || undefined,
+    disabled: (props.field.disabled || props.field.readonly) && !!fieldDefaultId.value,
+    limits: limits.value,
   })),
   keys: queryKeys,
 });

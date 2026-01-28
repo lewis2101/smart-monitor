@@ -4,8 +4,10 @@ import { DependencyScope } from "@/api/dependency-scope.ts";
 
 type RawData = {
   lang: string;
-  selectedId: string;
-  disabled: boolean;
+  selectedId?: string;
+  disabled?: boolean;
+  limits?: Record<string, unknown>;
+  search?: string;
 };
 
 type Response = {

@@ -9,12 +9,12 @@ export type OrderButtonConfig = {
 export const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, OrderButtonConfig> = {
   CONFIRM: {
     label: "Подтвердить",
-    order: 3,
+    order: 5,
     type: "CONFIRM",
   },
   TO_CONFIRM: {
     label: "На согласование",
-    order: 1,
+    order: 5,
     type: "TO_CONFIRM",
   },
   FINISH: {
@@ -24,7 +24,7 @@ export const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, O
   },
   RATE_THE_TRIP: {
     label: "Оценить поездку",
-    order: 4,
+    order: 5,
     type: "RATE_THE_TRIP",
   },
   REWORK: {
@@ -34,7 +34,7 @@ export const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, O
   },
   TO_REWORK: {
     label: "На доработку",
-    order: 2,
+    order: 4,
     type: "TO_REWORK",
   },
   CANCEL: {
@@ -49,12 +49,12 @@ export const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, O
   },
   NEXT: {
     label: "Далее",
-    order: 3,
+    order: 5,
     type: "NEXT",
   },
   SAVE: {
     label: "Сохранить",
-    order: 4,
+    order: 5,
     type: "SAVE",
   },
   NOT_CONFIRM: {
@@ -64,7 +64,7 @@ export const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, O
   },
   VEHICLE_IS_CAME: {
     label: "Подтвердить",
-    order: 2,
+    order: 5,
     type: "VEHICLE_IS_CAME",
   },
   VEHICLE_IS_NOT_CAME: {
@@ -74,12 +74,12 @@ export const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, O
   },
   CONFIRM_WITH_CHANGES: {
     label: "Подтвердить",
-    order: 2,
+    order: 5,
     type: "CONFIRM_WITH_CHANGES",
   },
   ACCEPT: {
     label: "Принять",
-    order: 1,
+    order: 5,
     type: "ACCEPT",
   },
   HAND_OVER: {
@@ -89,7 +89,7 @@ export const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, O
   },
   ACCESS: {
     label: "Допуск",
-    order: 2,
+    order: 5,
     type: "ACCESS",
   },
   NO_ACCESS: {
@@ -109,12 +109,12 @@ export const orderButtonsConfig: Record<OrderActions | AdditionalOrderActions, O
   },
   ASSIGN_TO_ME: {
     label: "Назначить на меня",
-    order: 4,
+    order: 5,
     type: "ASSIGN_TO_ME",
   },
   SEND_FOR_PAYMENT: {
     label: "Оплатить",
-    order: 2,
+    order: 5,
     type: "SEND_FOR_PAYMENT",
   },
 };

@@ -25,7 +25,7 @@ const orderMainButton: ComputedRef<OrderButtonConfig | null> = computed(() => {
 
   if (buttons.length === 0) return null;
   const mainButtonKey = buttons.reduce((mainKey, currentKey) => {
-    return orderButtonsConfig[currentKey].order < orderButtonsConfig[mainKey].order ? currentKey : mainKey;
+    return orderButtonsConfig[currentKey].order > orderButtonsConfig[mainKey].order ? currentKey : mainKey;
   });
 
   if (!mainButtonKey) return null;
