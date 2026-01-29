@@ -19,6 +19,7 @@ export type FieldInputClientType =
   | "WorksList"
   | "SupplierSelector"
   | "FILE"
+  | "DOCUMENT"
   | "RATING";
 
 export type FieldInputType =
@@ -38,6 +39,7 @@ export type FieldInputType =
   | "DATE_TIME_PICKER"
   | "RATING"
   | "FILE"
+  | "DOCUMENT"
   | "CUSTOM";
 
 export type FieldType = {

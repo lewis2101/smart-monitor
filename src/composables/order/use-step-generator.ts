@@ -17,6 +17,7 @@ import WorksList from "@/components/step-generator/WorksList/WorksList.vue";
 import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
 import SupplierSelector from "@/components/step-generator/SupplierSelector/SupplierSelector.vue";
 import FileField from "@/components/step-generator/FileField/FileField.vue";
+import DocumentField from "@/components/step-generator/DocumentField/DocumentField.vue";
 
 export const useStepGenerator = (processKey: string, fields: StepField[], isDisabled?: boolean) => {
   const { fieldsModel } = useFieldValueInit(fields);
@@ -40,6 +41,7 @@ export const useStepGenerator = (processKey: string, fields: StepField[], isDisa
     WorksList: markRaw(WorksList),
     SupplierSelector: markRaw(SupplierSelector),
     FILE: markRaw(FileField),
+    DOCUMENT: markRaw(DocumentField),
   };
 
   const { executeCalcRestriction, restrictions, restrictionsLoading } = useCalcRestriction(processKey, fieldsModel);

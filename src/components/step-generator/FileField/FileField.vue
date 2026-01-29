@@ -51,8 +51,11 @@ const { data, isPending } = useQuery(orderFileQuery);
   padding: 16px;
 
   &__title {
-    font-weight: 600;
     margin-bottom: 16px;
+    padding-bottom: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 1px #f2f2f7 solid;
   }
 
   &__item {

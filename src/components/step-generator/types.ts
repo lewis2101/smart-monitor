@@ -1,4 +1,5 @@
 import type { FieldInputClientType, FieldInputType } from "../../../types/FieldType.ts";
+import type { FileCode, FileType } from "@/components/step-generator/DocumentField/types.ts";
 
 // TODO Сделать типизацию привязанный к clientType и отталкиваясь от него будет нужный тип у default и так же наличия table ключа так же через clientType
 export type StepField = {
@@ -20,6 +21,13 @@ export type StepField = {
   restriction?: unknown;
   hidden?: boolean;
   readonly?: boolean;
+  options?: { // Document field types
+    files: {
+      fileCode: FileCode;
+      fileName: string;
+      fileType?: FileType;
+    }[];
+  };
 };
 
 export type OrderActions =
