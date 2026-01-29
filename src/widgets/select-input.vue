@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { computed } from "vue";
+import { computed, onMounted, useTemplateRef } from "vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 type List = {
   label: string;
@@ -32,6 +33,8 @@ const props = withDefaults(
   },
 );
 
+const selectInputRef = useTemplateRef("selectInputRef");
+
 const globalBackdropStore = useGlobalBackdropStore();
 const model = defineModel<number | string | null>({ required: true });
 
@@ -61,10 +64,14 @@ const handleClick = async () => {
     console.log(e);
   }
 };
+
+onMounted(() => {
+  useBubbleAnimate(selectInputRef, () => props.disabled);
+});
 </script>
 
 <template>
-  <div class="select-input" @click="handleClick">
+  <div ref="selectInputRef" class="select-input" @click="handleClick">
     <div :class="['select-input__native', disabled && 'select-input-disabled']">
       <div
         v-if="placeholder"

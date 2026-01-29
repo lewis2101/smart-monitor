@@ -5,14 +5,17 @@ import { onMounted, useTemplateRef } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 import { IonButton } from "@ionic/vue";
 
-defineProps<{
+const props = withDefaults(defineProps<{
   file: FileContent;
-}>();
+  disabled?: boolean;
+}>(), {
+  disabled: false,
+});
 
 const fileRef = useTemplateRef("fileRef");
 
 onMounted(() => {
-  useBubbleAnimate(fileRef);
+  useBubbleAnimate(fileRef, () => props.disabled);
 });
 </script>
 

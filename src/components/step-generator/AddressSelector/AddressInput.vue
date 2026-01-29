@@ -30,6 +30,8 @@ defineEmits<{
   (e: "open-map"): void;
 }>();
 
+const addressInputRef = useTemplateRef("addressInputRef");
+
 const mapRef = useTemplateRef("mapRef");
 
 const globalBackdropStore = useGlobalBackdropStore();
@@ -57,11 +59,12 @@ const handleClick = async () => {
 
 onMounted(() => {
   useBubbleAnimate(mapRef);
+  useBubbleAnimate(addressInputRef, () => props.disabled);
 });
 </script>
 
 <template>
-  <div class="select-input" @click="handleClick">
+  <div ref="addressInputRef" class="select-input" @click="handleClick">
     <div :class="['select-input__native', disabled && 'select-input-disabled']">
       <div v-if="placeholder" :class="['select-input__placeholder', label && 'select-input__placeholder_focus']">
         {{ placeholder }}

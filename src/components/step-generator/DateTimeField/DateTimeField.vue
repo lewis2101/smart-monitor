@@ -66,7 +66,7 @@ const showModal = async () => {
 };
 
 onMounted(() => {
-  useBubbleAnimate(dateTimeFieldRef);
+  useBubbleAnimate(dateTimeFieldRef, () => props.disabled);
 });
 
 const isDisabled = computed(() => props.disabled || props.field.disabled || props.loading);

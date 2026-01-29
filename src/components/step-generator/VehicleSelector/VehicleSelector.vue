@@ -11,7 +11,7 @@ import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     field: StepField;
     disabled?: boolean;
@@ -56,7 +56,7 @@ const buildDescriptionOfVehicle = (vehicle: Vehicle) => {
 };
 
 onMounted(() => {
-  useBubbleAnimate(vehicleSelectorRef);
+  useBubbleAnimate(vehicleSelectorRef, () => props.disabled);
 });
 
 const list: ComputedRef<SelectList> = computed(() => {

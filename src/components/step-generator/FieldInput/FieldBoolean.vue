@@ -4,7 +4,7 @@ import type { StepField } from "@/components/step-generator/types.ts";
 import { onMounted, ref, watch } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     field: StepField;
     disabled?: boolean;
@@ -22,7 +22,7 @@ const model = defineModel<boolean | null>();
 const fieldBooleanRef = ref<HTMLDivElement | null>(null);
 
 onMounted(() => {
-  useBubbleAnimate(fieldBooleanRef);
+  useBubbleAnimate(fieldBooleanRef, () => props.disabled);
 });
 
 watch(model, () => {

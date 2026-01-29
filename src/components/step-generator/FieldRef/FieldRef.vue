@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { StepField } from "@/components/step-generator/types.ts";
-import { computed, type ComputedRef, onMounted, ref, watch } from "vue";
+import { computed, type ComputedRef, ref, watch } from "vue";
 import { useResourceDependencyQuery } from "@/api/dependency/resource-dependency.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { IonSpinner } from "@ionic/vue";
@@ -8,7 +8,6 @@ import SelectInput from "@/widgets/select-input.vue";
 import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
 import { useToast } from "primevue/usetoast";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
-import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 import { useI18n } from "vue-i18n";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
@@ -28,7 +27,6 @@ const emit = defineEmits<{
   (e: "change"): void;
 }>();
 
-const fieldRef = ref<HTMLDivElement | null>(null);
 const search = ref<string>();
 const { locale } = useI18n();
 
@@ -113,10 +111,6 @@ const list: ComputedRef<SelectList> = computed(() =>
 
 const loadingData = computed(() => isPending.value && isHasTableProperty.value);
 
-onMounted(() => {
-  useBubbleAnimate(fieldRef);
-});
-
 watch(model, () => {
   emit("change");
 });
@@ -129,7 +123,7 @@ watch(error, (value) => {
 </script>
 
 <template>
-  <div class="field-input" ref="fieldRef">
+  <div class="field-input">
     <select-input
       v-model="modelProxy"
       :list="list"

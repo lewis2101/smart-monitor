@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { IonSpinner } from "@ionic/vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { computed } from "vue";
+import { computed, onMounted, useTemplateRef } from "vue";
 import { formatDateString } from "@/utils/formatDate.ts";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -24,6 +25,8 @@ defineEmits<{
   (e: "select-date"): void;
 }>();
 
+const dateTimeFieldRef = useTemplateRef("dateTimeFieldRef");
+
 const model = defineModel<string | string[] | Date | Date[] | null>();
 
 const handleClear = () => {
@@ -38,6 +41,10 @@ const formattedDate = computed(() => {
     return formatDateString(model.value, { time: props.showTime });
   }
   return null;
+});
+
+onMounted(() => {
+  useBubbleAnimate(dateTimeFieldRef, () => props.disabled);
 });
 </script>
 

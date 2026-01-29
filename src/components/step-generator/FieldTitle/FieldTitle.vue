@@ -4,15 +4,21 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { onMounted, ref } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
-defineProps<{
-  field: StepField;
-}>();
+const props = withDefaults(
+  defineProps<{
+    field: StepField;
+    disabled?: boolean;
+  }>(),
+  {
+    disabled: false,
+  },
+);
 
 const model = defineModel<string>();
 const fieldTitleRef = ref<HTMLDivElement | null>(null);
 
 onMounted(() => {
-  useBubbleAnimate(fieldTitleRef);
+  useBubbleAnimate(fieldTitleRef, () => props.disabled);
 });
 </script>
 
