@@ -8,6 +8,7 @@ import LoginForm from "@/components/login/login-form/login-form.vue";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
 import { useLogin } from "@/composables/login/use-login.ts";
+import DefaultPage from "@/layouts/default-page.vue";
 
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
@@ -23,9 +24,9 @@ const { auth, errors, isPending } = useLogin();
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      <div class="login-page__body">
+      <default-page>
         <login-form :errors="errors" :loading="isPending" @submit="auth" />
-      </div>
+      </default-page>
     </base-content-with-refresher>
     <ion-footer v-if="!isVisibleKeyboard">
       <ion-toolbar class="login-page__buttons">
@@ -37,10 +38,6 @@ const { auth, errors, isPending } = useLogin();
 
 <style scoped lang="scss">
 .login-page {
-  &__body {
-    padding: 16px;
-  }
-
   &__buttons {
     --background: $white;
     background: $white;

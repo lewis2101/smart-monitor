@@ -5,27 +5,25 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import DocsLinkedInfoBlock from "@/components/docs/docs-linked-info-block/docs-linked-info-block.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
+import DefaultPage from "@/layouts/default-page.vue";
 </script>
 
 <template>
   <ion-page class="docs-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Ваши документы" />
+        <default-layout-header title="Ваши документы" hide-back />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      <div class="docs-page__body">
+      <default-page>
         <docs-linked-info-block />
-      </div>
+      </default-page>
     </base-content-with-refresher>
   </ion-page>
 </template>
 
 <style scoped lang="scss">
 .docs-page {
-  &__body {
-    padding: 16px 24px;
-  }
 }
 </style>

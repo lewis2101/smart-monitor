@@ -1,40 +1,51 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { IonSkeletonText } from "@ionic/vue";
+import { IonSkeletonText, useIonRouter } from "@ionic/vue";
+import { MainTabRoutes } from "@/router/router-list.ts";
+import { computed } from "vue";
 
 withDefaults(
   defineProps<{
     title: string;
     close?: boolean;
-    back?: boolean;
     info?: boolean;
     loading?: boolean;
+    hideBack?: boolean;
+    hideClose?: boolean;
   }>(),
   {
-    close: false,
-    back: false,
     info: false,
     loading: false,
+    hideBack: false,
+    hideClose: false,
   },
 );
 
-defineEmits<{
-  (e: "clickClose"): void;
-  (e: "clickBack"): void;
-}>();
+const router = useIonRouter();
+const canGoBack = computed(() => router.canGoBack());
 </script>
 
 <template>
   <div class="default-layout-header">
     <div class="default-layout-header__content">
-      <base-icon v-if="back" class="default-layout-header__icon" name="arrow-back" @click="$emit('clickBack')" />
+      <base-icon
+        v-if="canGoBack && !hideBack"
+        class="default-layout-header__icon"
+        name="arrow-back"
+        @click="router.back"
+      />
       <div v-if="loading" class="default-layout-header__skeleton">
         <ion-skeleton-text class="default-layout-header__skeleton_item" />
       </div>
       <div v-else class="default-layout-header__title">
         {{ title }}
       </div>
-      <base-icon v-if="close" class="default-layout-header__close" name="close" @click="$emit('clickClose')" />
+      <base-icon
+        v-if="!canGoBack && !hideClose"
+        class="default-layout-header__close"
+        name="close"
+        @click="router.replace({ name: MainTabRoutes.home })"
+      />
       <div v-else-if="info" class="default-layout-header__help">
         <base-icon name="help" />
       </div>

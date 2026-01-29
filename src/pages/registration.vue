@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, useIonRouter, IonFooter, IonButton, IonToolbar } from "@ionic/vue";
+import { IonPage, IonHeader, IonFooter, IonButton, IonToolbar } from "@ionic/vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
@@ -11,8 +11,6 @@ import { reactive } from "vue";
 
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
-
-const router = useIonRouter();
 
 const model = reactive({
   fio: "",
@@ -27,7 +25,7 @@ const model = reactive({
   <ion-page class="registration-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Регистрация" back @click-back="router.back" />
+        <default-layout-header title="Регистрация" />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">

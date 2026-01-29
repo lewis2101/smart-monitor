@@ -11,7 +11,7 @@ import DefaultPage from "@/layouts/default-page.vue";
   <ion-page class="service-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Сервисы" />
+        <default-layout-header title="Сервисы" hide-back hide-close />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, type RefresherCustomEvent } from "@ionic/vue";
+import { IonPage, IonHeader, type RefresherCustomEvent, IonToolbar, IonTitle } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
@@ -12,6 +12,7 @@ import { ApplicationFilter } from "@/components/application/application-filter";
 import type { FilterType } from "../../types/FilterType.ts";
 import type { SortType } from "../../types/SortType.ts";
 import { useI18n } from "vue-i18n";
+import DefaultPage from "@/layouts/default-page.vue";
 
 const { pageId, refresh } = useRefreshPage([Scopes.ordersMineHeader, Scopes.ordersMineView]);
 
@@ -47,16 +48,16 @@ const refreshPage = async (event: RefresherCustomEvent) => {
   <ion-page class="application-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header :title="$t('application.header-title')" />
+        <default-layout-header :title="$t('application.header-title')" hide-back hide-close />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="refreshPage">
       <div class="application-page__filter">
         <application-filter v-model:filter="filter" v-model:sort="sort" :params="headerParams" />
       </div>
-      <div class="application-page__body" :key="pageId">
+      <default-page>
         <application-orders-block v-model:params="contentParams" />
-      </div>
+      </default-page>
     </base-content-with-refresher>
   </ion-page>
 </template>
@@ -68,12 +69,9 @@ const refreshPage = async (event: RefresherCustomEvent) => {
     top: 0;
     left: 0;
     z-index: 1;
+    background-color: $white;
 
     padding: 4px 24px;
-  }
-
-  &__body {
-    padding: 16px 24px;
   }
 }
 </style>

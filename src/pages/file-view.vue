@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, useIonRouter } from "@ionic/vue";
+import { IonPage, IonHeader } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
@@ -7,13 +7,11 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 import DefaultPage from "@/layouts/default-page.vue";
 import { useRoute } from "vue-router";
 import { computed, watch } from "vue";
-import { MainTabRoutes } from "@/router/router-list.ts";
 import { IonButton } from "@ionic/vue";
 import { useGetFileQuery } from "@/api/file/get-file.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { useToast } from "primevue/usetoast";
 
-const router = useIonRouter();
 const route = useRoute();
 
 const fileId = computed(() => route.params.id as string);
@@ -40,14 +38,6 @@ function base64ToBlob(base64: string): Blob {
   });
 }
 
-const handleClickClose = () => {
-  if (router.canGoBack()) {
-    router.back();
-  } else {
-    router.replace({ name: MainTabRoutes.home });
-  }
-};
-
 watch(data, (value) => {
   const test = base64ToBlob(value);
   console.log({ test });
@@ -69,13 +59,7 @@ watch(error, (value) => {
   <ion-page class="file-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header
-          :title="fileName"
-          back
-          close
-          @click-back="handleClickClose"
-          @click-close="handleClickClose"
-        />
+        <default-layout-header :title="fileName" />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
