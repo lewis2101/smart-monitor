@@ -160,7 +160,9 @@ watch(newOrderPartsData, (value) => {
 
 <template>
   <div class="works-list">
-    <div class="works-list__title">{{ $t(field.value) }} {{ countOfWorks }}</div>
+    <div class="works-list__title">
+      {{ $t(field.value) }} {{ countOfWorks }}<span v-if="field.required" class="works-list__required">*</span>
+    </div>
     <ion-button
       v-if="!disabled"
       class="works-list__button-select"
@@ -203,6 +205,10 @@ watch(newOrderPartsData, (value) => {
     font-size: 16px;
     font-weight: 600;
     border-bottom: 1px #f2f2f7 solid;
+  }
+
+  &__required {
+    color: $danger;
   }
 
   &__button-select {

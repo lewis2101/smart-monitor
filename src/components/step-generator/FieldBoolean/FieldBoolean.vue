@@ -37,7 +37,7 @@ watch(model, () => {
     ref="fieldBooleanRef"
   >
     <div class="field-boolean__title">
-      {{ $t(field.value) }}
+      {{ $t(field.value) }} <span v-if="field.required" class="field-boolean__required">*</span>
     </div>
     <toggle-switch
       v-model="model"
@@ -59,6 +59,10 @@ watch(model, () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  &__required {
+    color: $danger;
+  }
 
   &__switch {
     --p-toggleswitch-checked-background: #{$main-color};

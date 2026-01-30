@@ -95,6 +95,7 @@ watch(
       :loading="loading"
       :disabled="isDisabled"
       :show-time="true"
+      :required="field.required"
       @select-date="showModal"
     />
   </div>

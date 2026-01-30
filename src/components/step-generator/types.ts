@@ -21,6 +21,7 @@ export type StepField = {
   restriction?: unknown;
   hidden?: boolean;
   readonly?: boolean;
+  required: boolean;
   options?: { // Document field types
     files: {
       fileCode: FileCode;

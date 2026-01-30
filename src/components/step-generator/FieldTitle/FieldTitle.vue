@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { StepField } from "@/components/step-generator/types.ts";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { onMounted, ref } from "vue";
-import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+import { ref } from "vue";
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     field: StepField;
     disabled?: boolean;
@@ -16,10 +15,6 @@ const props = withDefaults(
 
 const model = defineModel<string>();
 const fieldTitleRef = ref<HTMLDivElement | null>(null);
-
-onMounted(() => {
-  useBubbleAnimate(fieldTitleRef, () => props.disabled);
-});
 </script>
 
 <template>

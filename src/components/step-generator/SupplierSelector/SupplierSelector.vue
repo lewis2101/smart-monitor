@@ -123,7 +123,14 @@ watch(
 
 <template>
   <div class="supplier-selector">
-    <select-input v-model="modelProxy" :placeholder="$t(field.value)" :list="list" :disabled="isDisabled" show-search />
+    <select-input
+      v-model="modelProxy"
+      :placeholder="$t(field.value)"
+      :list="list"
+      :disabled="isDisabled"
+      show-search
+      :required="field.required"
+    />
     <div v-if="isLoading" class="supplier-selector__spinner">
       <ion-spinner name="circular" class="supplier-selector__spinner-icon" />
     </div>

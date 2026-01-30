@@ -6,9 +6,11 @@ withDefaults(
   defineProps<{
     disabled?: boolean;
     placeholder?: string;
+    required?: boolean;
   }>(),
   {
     disabled: false,
+    required: false,
   },
 );
 
@@ -22,7 +24,7 @@ const model = defineModel<string | null>({ required: true });
       v-if="placeholder"
       :class="['base-textarea__placeholder', (isFocused || model) && 'base-textarea__placeholder_focus']"
     >
-      {{ placeholder }}
+      {{ placeholder }} <span v-if="required" class="base-textarea__required">*</span>
     </div>
     <ion-textarea
       v-model="model"
@@ -71,6 +73,10 @@ const model = defineModel<string | null>({ required: true });
     &:focus-visible {
       border: 1px solid $gray-light;
     }
+  }
+
+  &__required {
+    color: $danger;
   }
 
   &__placeholder {

@@ -23,6 +23,7 @@ const props = withDefaults(
     clearable?: boolean;
     searchValue?: string;
     stretch?: boolean;
+    required?: boolean;
   }>(),
   {
     disabled: false,
@@ -30,6 +31,7 @@ const props = withDefaults(
     showReset: false,
     clearable: false,
     stretch: false,
+    required: false,
   },
 );
 
@@ -77,7 +79,7 @@ onMounted(() => {
         v-if="placeholder"
         :class="['select-input__placeholder', currentValueLabel && 'select-input__placeholder_focus']"
       >
-        {{ placeholder }}
+        {{ placeholder }} <span v-if="required" class="select-input__required">*</span>
       </div>
       <div class="select-input__value">
         {{ currentValueLabel }}
@@ -120,6 +122,10 @@ onMounted(() => {
       top: 6px;
       left: 16px;
     }
+  }
+
+  &__required {
+    color: $danger;
   }
 
   &__value {

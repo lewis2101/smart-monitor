@@ -17,7 +17,12 @@ const model = defineModel<string | null>({ required: true });
 </script>
 
 <template>
-  <base-textarea v-model="model" :placeholder="$t(field.value)" :disabled="disabled || field.disabled" />
+  <base-textarea
+    v-model="model"
+    :placeholder="$t(field.value)"
+    :disabled="disabled || field.disabled"
+    :required="field.required"
+  />
 </template>
 
 <style scoped lang="scss"></style>

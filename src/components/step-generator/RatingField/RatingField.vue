@@ -25,7 +25,7 @@ onMounted(() => {
 
 <template>
   <div title="Оцените" class="rating-field">
-    <div class="rating-field__title">Оцените</div>
+    <div class="rating-field__title">Оцените <span v-if="field.required" class="rating-field__required">*</span></div>
     <div ref="ratingRef" class="rating-field__stars">
       <Rating v-model="model as number" :disabled="disabled || field.disabled" />
     </div>
@@ -50,6 +50,10 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
+  &__required {
+    color: $danger;
+  }
 
   &__title {
     font-weight: 600;

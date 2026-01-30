@@ -130,6 +130,7 @@ watch(error, (value) => {
       :placeholder="$t(field.value)"
       :disabled="disabled || field.disabled || loadingData"
       :search-fn="handleSearch"
+      :required="field.required"
       clearable
       show-search
     />

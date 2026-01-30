@@ -6,7 +6,7 @@ import LinkGenerator from "@/components/step-generator/LinkGenerator/LinkGenerat
 import DateTimeField from "@/components/step-generator/DateTimeField/DateTimeField.vue";
 import AddressSelector from "@/components/step-generator/AddressSelector/AddressSelector.vue";
 import FieldInput from "@/components/step-generator/FieldInput/FieldInput.vue";
-import FieldBoolean from "@/components/step-generator/FieldInput/FieldBoolean.vue";
+import FieldBoolean from "@/components/step-generator/FieldBoolean/FieldBoolean.vue";
 import FieldTitle from "@/components/step-generator/FieldTitle/FieldTitle.vue";
 import FieldText from "@/components/step-generator/FieldText/FieldText.vue";
 import RatingField from "@/components/step-generator/RatingField/RatingField.vue";

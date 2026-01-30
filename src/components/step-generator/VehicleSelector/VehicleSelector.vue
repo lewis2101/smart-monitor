@@ -82,6 +82,7 @@ watch(model, () => {
       :list="list"
       :placeholder="$t(field.value)"
       :disabled="disabled || field.disabled || isPending"
+      :required="field.required"
       show-search
     />
     <div v-if="isPending" class="vehicle-selector__spinner">

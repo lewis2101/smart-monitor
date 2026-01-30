@@ -13,11 +13,13 @@ const props = withDefaults(
     disabled?: boolean;
     loading?: boolean;
     showTime?: boolean;
+    required?: boolean;
   }>(),
   {
     clearable: false,
     disabled: false,
     showTime: false,
+    required: false,
   },
 );
 
@@ -51,7 +53,7 @@ onMounted(() => {
 <template>
   <div ref="dateTimeFieldRef" :class="['base-date-picker', disabled && 'disabled']" @click="$emit('select-date')">
     <div v-if="placeholder" :class="['base-date-picker__placeholder', model && 'base-date-picker__placeholder_focus']">
-      {{ placeholder }}
+      {{ placeholder }} <span v-if="required" class="base-date-picker__required">*</span>
     </div>
     <div v-if="model" class="base-date-picker__value">
       {{ formattedDate }}
@@ -113,6 +115,10 @@ onMounted(() => {
     &-icon {
       color: $main-color;
     }
+  }
+
+  &__required {
+    color: $danger;
   }
 
   &__clear {
