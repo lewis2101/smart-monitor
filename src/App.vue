@@ -15,7 +15,9 @@ initLocaleLang();
 
 onMounted(async () => {
   await nextTick();
-  await SplashScreen.hide();
+  setTimeout(async () => {
+    await SplashScreen.hide();
+  }, 1000);
 });
 </script>
 

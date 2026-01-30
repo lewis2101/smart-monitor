@@ -25,4 +25,6 @@ export enum Scopes {
   orderFile = "order-file",
   getFile = "get-file",
   selectedPartsHistoryByOrder = "selected-parts-history",
+  getNotifications = "get-notifications",
+  readNotification = "read-notification",
 }

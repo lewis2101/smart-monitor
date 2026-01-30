@@ -20,6 +20,11 @@ const restrictionHandlers: Record<FieldInputClientType, (...args: any[]) => unkn
   BOOLEAN: () => null,
   TITLE: () => null,
   RATING: () => null,
+  DOCUMENT: () => null,
+  FILE: () => null,
+  WorksList: () => null,
+  SupplierSelector: () => null,
+  VehicleSelector: () => null,
 };
 
 export const useCalcRestriction = (

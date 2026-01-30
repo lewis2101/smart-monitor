@@ -1,6 +1,6 @@
 import { CapacitorHttp, type HttpOptions, type HttpResponse } from "@capacitor/core";
 
-export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE";
+export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
 export type CapacitorHttpResponse<T> = Omit<HttpResponse, "data"> & { data: T };
 export type CapacitorHttpOptions<D = unknown> = Omit<HttpOptions, "method" | "data"> & {
   method: HttpClientMethod;

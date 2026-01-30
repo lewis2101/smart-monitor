@@ -5,6 +5,7 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import DefaultPage from "@/layouts/default-page.vue";
+import { NotificationsList } from "@/components/notifications";
 </script>
 
 <template>
@@ -16,7 +17,7 @@ import DefaultPage from "@/layouts/default-page.vue";
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
       <default-page>
-        <div style="text-align: center">{{ $t("develop.title") }}</div>
+        <notifications-list />
       </default-page>
     </base-content-with-refresher>
   </ion-page>

@@ -45,3 +45,8 @@ export enum StatEndpoints {
 export enum FileEndpoints {
   getFile = "/lenkrad/v1/file/download/base64",
 }
+
+export enum NotificationEndpoints {
+  getNotifications = "/lenkrad/v1/user/notification",
+  readNotification = "/lenkrad/v1/user/notification/read/:orderId",
+}

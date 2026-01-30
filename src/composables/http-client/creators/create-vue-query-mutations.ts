@@ -5,7 +5,7 @@ import { type CapacitorHttpOptions, type CapacitorHttpResponse, HttpClient } fro
 import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-builder.ts";
 
 type MutationPayload<D> = {
-  data: D;
+  data?: D;
   urlParams?: Record<string, string>;
 };
 
