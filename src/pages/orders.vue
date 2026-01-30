@@ -7,19 +7,23 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { Scopes } from "@/api/scopes.ts";
 import { ApplicationOrdersBlock } from "@/components/application/application-orders-block";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { ApplicationFilter } from "@/components/application/application-filter";
 import type { FilterType } from "../../types/FilterType.ts";
 import type { SortType } from "../../types/SortType.ts";
 import { useI18n } from "vue-i18n";
 import DefaultPage from "@/layouts/default-page.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const ordersType = computed(() => route.params.ordersType as string);
 
 const { pageId, refresh } = useRefreshPage([Scopes.ordersMineHeader, Scopes.ordersMineView]);
 
 const { locale } = useI18n();
 
 const headerParams = reactive({
-  tabName: "!OrdersMine",
+  tabName: ordersType.value,
   lng: "rus",
 });
 
@@ -45,14 +49,14 @@ const refreshPage = async (event: RefresherCustomEvent) => {
 </script>
 
 <template>
-  <ion-page class="application-page">
+  <ion-page class="orders-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header :title="$t('application.header-title')" hide-back hide-close />
+        <default-layout-header :title="$t('orders.header-title')" hide-back hide-close />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="refreshPage">
-      <div class="application-page__filter">
+      <div class="orders-page__filter">
         <application-filter v-model:filter="filter" v-model:sort="sort" :params="headerParams" />
       </div>
       <default-page>
@@ -63,7 +67,7 @@ const refreshPage = async (event: RefresherCustomEvent) => {
 </template>
 
 <style scoped lang="scss">
-.application-page {
+.orders-page {
   &__filter {
     position: sticky;
     top: 0;

@@ -32,13 +32,13 @@ const linkedInfoList: ComputedRef<ListType> = computed(() => {
       to: `/order/${item.id}`,
       list: [
         {
-          text: `${t("application.order.creator")}: ${item.creator}`,
+          text: `${t("orders.order.creator")}: ${item.creator}`,
         },
         {
-          text: `${t("application.order.status")}: ${item.taskName?.rus}`,
+          text: `${t("orders.order.status")}: ${item.taskName?.rus}`,
         },
         {
-          text: `${t("application.order.createdAt")}: ${formatDateString(new Date(item.createdAt))}`,
+          text: `${t("orders.order.createdAt")}: ${formatDateString(new Date(item.createdAt))}`,
         },
       ],
     })) || []

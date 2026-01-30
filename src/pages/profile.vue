@@ -24,6 +24,6 @@ import ProfileData from "@/components/profile/profile-data.vue";
 </template>
 
 <style scoped lang="scss">
-.application-page {
+.orders-page {
 }
 </style>

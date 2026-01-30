@@ -4,7 +4,7 @@ import MainTabs from "@/layouts/main-tabs.vue";
 import Main from "@/pages/main.vue";
 import Docs from "@/pages/docs.vue";
 import Briefing from "@/pages/briefing.vue";
-import Application from "@/pages/application.vue";
+import Orders from "@/pages/orders.vue";
 import Service from "@/pages/service.vue";
 import NewOrder from "@/pages/new-order.vue";
 import Learning from "@/pages/learning.vue";
@@ -39,9 +39,9 @@ const router = createRouter({
           component: Docs,
         },
         {
-          path: "application",
-          name: MainTabRoutes.application,
-          component: Application,
+          path: "orders/:ordersType",
+          name: MainTabRoutes.orders,
+          component: Orders,
         },
         {
           path: "service",

@@ -17,7 +17,7 @@
     "kaz": "Казахский",
     "eng": "Английский"
   },
-  "application": {
+  "orders": {
     "header-title": "Мои заявки",
     "filter": "Фильтр",
     "sort": "Сортировка",

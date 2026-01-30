@@ -26,7 +26,7 @@ const filterBackdropModel = ref(false);
 const handleFilterClick = async () => {
   try {
     const values = (await globalBackdropStore.push("filter", {
-      title: t("application.filter"),
+      title: t("orders.filter"),
       props: {
         fields: props.fields,
         initialValue: filterModel.value,
@@ -43,7 +43,7 @@ const handleFilterClick = async () => {
 const handleSortClick = async () => {
   try {
     const value = (await globalBackdropStore.push("select", {
-      title: t("application.sort"),
+      title: t("orders.sort"),
       props: {
         list: props.sortValues,
         initialValue: sortModel.value,
@@ -70,7 +70,7 @@ const isActiveSort = computed(() => sortModel.value && sortModel.value.length > 
     >
       <div class="base-filter-header__filter-item">
         <base-icon name="filter" :color="isActiveFilter ? '#FFFFFF' : '#014f59'" />
-        <div>{{ $t("application.filter") }}</div>
+        <div>{{ $t("orders.filter") }}</div>
       </div>
     </base-island-block>
     <base-island-block
@@ -80,7 +80,7 @@ const isActiveSort = computed(() => sortModel.value && sortModel.value.length > 
     >
       <div class="base-filter-header__filter-item">
         <base-icon name="sort" :color="isActiveSort ? '#FFFFFF' : '#014f59'" />
-        <div>{{ $t("application.sort") }}</div>
+        <div>{{ $t("orders.sort") }}</div>
       </div>
     </base-island-block>
   </div>

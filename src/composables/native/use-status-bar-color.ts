@@ -31,7 +31,7 @@ const routeNamesStatusBarColors: Record<AllRoutesType, Color> = {
   [MainTabRoutes.home]: Color.main,
   [MainTabRoutes.docs]: Color.secondary,
   [MainTabRoutes.briefing]: Color.secondary,
-  [MainTabRoutes.application]: Color.secondary,
+  [MainTabRoutes.orders]: Color.secondary,
   [MainTabRoutes.service]: Color.secondary,
   [OrderRoutes.newOrder]: Color.secondary,
   [CommonRoutes.login]: Color.secondary,

@@ -17,7 +17,7 @@
     "kaz": "Kazakh",
     "eng": "English"
   },
-  "application": {
+  "orders": {
     "header-title": "My orders",
     "filter": "Filter",
     "sort": "Sort",

@@ -17,7 +17,7 @@
     "kaz": "Қазақша",
     "eng": "Ағылшын"
   },
-  "application": {
+  "orders": {
     "header-title": "Менің өтініштерім",
     "filter": "Сүзгі",
     "sort": "Сұрыптау",

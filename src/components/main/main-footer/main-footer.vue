@@ -94,9 +94,9 @@ const handleClickCreate = async () => {
         </div>
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="application" href="/application">
+    <ion-tab-button tab="orders" href="/orders/!OrdersMine">
       <footer-item
-        :class="['main-footer__item', getActiveClass(MainTabRoutes.application)]"
+        :class="['main-footer__item', getActiveClass(MainTabRoutes.orders)]"
         :title="$t('main-tabs.orders')"
       >
         <base-icon name="application" class="main-footer__icon" />

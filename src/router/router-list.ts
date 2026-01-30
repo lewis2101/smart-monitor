@@ -7,7 +7,7 @@ export enum MainTabRoutes {
   home = "home",
   docs = "docs",
   briefing = "briefing",
-  application = "application",
+  orders = "orders",
   service = "service",
 }
 
