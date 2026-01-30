@@ -18,7 +18,7 @@ type AllRoutesType = MainTabRoutes & CommonRoutes & OrderRoutes;
 
 const statusBarColors: Record<Color, StatusBarColor> = {
   main: {
-    bg: "#041A4B",
+    bg: "#014f59",
     text: Style.Dark,
   },
   secondary: {
@@ -39,6 +39,7 @@ const routeNamesStatusBarColors: Record<AllRoutesType, Color> = {
   [CommonRoutes.learning]: Color.secondary,
   [CommonRoutes.profile]: Color.secondary,
   [CommonRoutes.notifications]: Color.secondary,
+  [CommonRoutes.fileView]: Color.secondary,
 };
 
 async function setNativeColors(key: Color) {

@@ -32,7 +32,7 @@ const canGoBack = computed(() => router.canGoBack());
         v-if="canGoBack && !hideBack"
         class="default-layout-header__icon"
         name="arrow-back"
-        @click="router.back"
+        @click="() => router.back()"
       />
       <div v-if="loading" class="default-layout-header__skeleton">
         <ion-skeleton-text class="default-layout-header__skeleton_item" />
@@ -44,7 +44,7 @@ const canGoBack = computed(() => router.canGoBack());
         v-if="!canGoBack && !hideClose"
         class="default-layout-header__close"
         name="close"
-        @click="router.replace({ name: MainTabRoutes.home })"
+        @click="() => router.replace({ name: MainTabRoutes.home })"
       />
       <div v-else-if="info" class="default-layout-header__help">
         <base-icon name="help" />
