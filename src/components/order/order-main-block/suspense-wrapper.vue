@@ -7,12 +7,16 @@ import Skeleton from "./skeleton.vue";
 defineProps<{
   orderId: string;
 }>();
+
+defineEmits<{
+  (e: "getLabel", value: string): void;
+}>();
 </script>
 
 <template>
   <error-boundary>
     <suspense>
-      <order-main-block :order-id="orderId" />
+      <order-main-block :order-id="orderId" @get-label="(value) => $emit('getLabel', value)" />
 
       <template #fallback> <skeleton /> </template>
     </suspense>

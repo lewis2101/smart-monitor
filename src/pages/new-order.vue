@@ -12,11 +12,9 @@ import { NewOrderMainBlock } from "@/components/order/new-order-main-block";
 const route = useRoute();
 
 const orderTitle = ref("");
-
 const handleChangeTitle = (value: string) => {
   orderTitle.value = value;
 };
-
 const orderTitleLoading = computed(() => !orderTitle.value);
 const processKey = computed(() => route.params.processKey as string);
 </script>

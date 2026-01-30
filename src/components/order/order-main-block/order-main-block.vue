@@ -19,12 +19,17 @@ import OrderHistory from "@/components/order/order-history/order-history.vue";
 import { useOrderActionCompleteMutation } from "@/api/orders/order-action-complete.ts";
 import { useIonRouter } from "@ionic/vue";
 import { OrderRoutes } from "@/router/router-list.ts";
+import { formatDateString } from "@/utils/formatDate.ts";
 
 const LIMIT_HAS_PROCESS_KEYS = ["LENKRAD_PROCESS", "PURCHASE_PROCESS"];
 const COMPLETE_TASK_NAME = "COMPLETE";
 
 const props = defineProps<{
   orderId: string;
+}>();
+
+const emit = defineEmits<{
+  (e: "getLabel", value: string): void;
 }>();
 
 const stepGeneratorRef = useTemplateRef("stepGeneratorRef");
@@ -62,10 +67,18 @@ const orderActionQuery = useOrderActionQuery({
   keys: [() => props.orderId],
 });
 
-const { mutateAsync: orderMainMutate } = useOrderMainMutation({});
+const { mutate: orderMainMutate, data: orderMainResponse } = useOrderMainMutation({});
 const { mutateAsync: orderNextMutate } = useOrderNextMutation({});
 const { mutateAsync: orderSaveMutate } = useOrderSaveMutation({});
 const { mutateAsync: orderActionCompleteMutate } = useOrderActionCompleteMutation({});
+
+const orderMainData = computed(() => {
+  if (orderMainResponse.value) {
+    emit("getLabel", orderMainResponse.value.data.number);
+    return orderMainResponse.value.data;
+  }
+  return null;
+});
 
 const orderExecutionId = ref(0);
 const globalSpinner = useGlobalSpinner();
@@ -194,8 +207,17 @@ const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?
 
 <template>
   <div v-if="orderData" class="order-main-block">
-    <div class="order-main-block__status-title">
-      {{ orderNextData.name }}
+    <div v-if="orderMainData" class="order-main-block__order-info">
+      <div class="order-main-block__info-text">
+        <span class="bold">ID: </span> {{ orderId }}
+      </div>
+      <div class="order-main-block__info-text">
+        <span class="bold">Создана:</span> {{ formatDateString(orderMainData.createdDate, { time: true }) }}
+      </div>
+      <div class="order-main-block__info-text">
+        <span class="bold">Создатель:</span> {{ orderMainData.creatorName }}
+      </div>
+      <div class="order-main-block__info-text"><span class="bold">Статус:</span> {{ orderNextData.name }}</div>
     </div>
     <order-history :order-id="orderId" class="order-main-block__history" />
     <div v-if="isClient && showLimits" class="order-main-block__limits">
@@ -230,20 +252,33 @@ const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?
     margin-bottom: 8px;
   }
 
+  &__order-info {
+    box-shadow: 0px 2px 3px 0px #0000001a;
+    border: 1px solid var(--System-Gray-Light, #f2f2f7);
+    border-radius: 12px;
+    padding: 16px;
+
+    border-bottom: 1px #f2f2f7 solid;
+    margin-bottom: 8px;
+  }
+
   &__status-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     line-height: 100%;
     letter-spacing: 0;
+    margin-bottom: 8px;
+  }
 
-    color: $white;
-    padding: 12px;
-    background: $main-color;
-    border-radius: 20px;
-    width: 100%;
-    text-align: center;
+  &__info-text {
+    margin-bottom: 4px;
+    font-size: 14px;
+    color: $gray-dark;
 
-    margin-bottom: 16px;
+    .bold {
+      color: $black;
+      font-weight: 600;
+    }
   }
 
   &__fields {

@@ -1,7 +1,7 @@
 import { CapacitorHttp, type HttpOptions, type HttpResponse } from "@capacitor/core";
 
 export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE";
-export type CapacitorHttpResponse<T> = Promise<Omit<HttpResponse, "data"> & { data: T }>;
+export type CapacitorHttpResponse<T> = Omit<HttpResponse, "data"> & { data: T };
 export type CapacitorHttpOptions<D = unknown> = Omit<HttpOptions, "method" | "data"> & {
   method: HttpClientMethod;
   data?: D;
@@ -93,7 +93,7 @@ export class HttpClient {
   public async request<Response, Payload = unknown>(
     url: string,
     options: CapacitorHttpOptions<Payload>,
-  ): CapacitorHttpResponse<Response> {
+  ): Promise<CapacitorHttpResponse<Response>> {
     const { method, data, headers, params, ...rest } = options;
 
     const response = await CapacitorHttp.request({
