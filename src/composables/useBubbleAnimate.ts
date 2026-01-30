@@ -4,7 +4,7 @@ import { useEventListener } from "@vueuse/core";
 export const useBubbleAnimate = (root: Ref<HTMLDivElement | null>, isDisabled?: MaybeRefOrGetter<boolean>) => {
   if (toValue(isDisabled)) return;
 
-  const baseClasses = ["animate-pressable", "animate-pressable_pressed"];
+  const baseClasses = ["animate-pressable"];
   root.value?.classList.add(...baseClasses);
 
   useEventListener(root, "touchstart", () => {

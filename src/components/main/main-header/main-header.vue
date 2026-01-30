@@ -12,10 +12,12 @@ const { userInfoStorage } = useAuthStorage();
 
 const userInfoRef = useTemplateRef<HTMLDivElement | null>("userInfoRef");
 const notificationRef = useTemplateRef<HTMLDivElement | null>("notificationRef");
+const searchRef = useTemplateRef<HTMLDivElement | null>("searchRef");
 
 onMounted(() => {
   useBubbleAnimate(userInfoRef);
   useBubbleAnimate(notificationRef);
+  // useBubbleAnimate(searchRef);
 });
 </script>
 
@@ -31,7 +33,7 @@ onMounted(() => {
       </button>
     </div>
     <div class="main-header__menu">
-      <button class="main-header__button">
+      <button ref="searchRef" class="main-header__button" @click="router.push({ name: CommonRoutes.search })">
         <base-icon name="search" color="white" />
       </button>
       <button

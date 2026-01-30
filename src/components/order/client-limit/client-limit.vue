@@ -13,7 +13,10 @@ const currentLimitQuery = useCurrentLimitQuery({
   },
 });
 
-const { data, suspense } = useQuery(currentLimitQuery);
+const { data, suspense } = useQuery({
+  ...currentLimitQuery,
+  staleTime: 0,
+});
 
 await suspense();
 </script>
