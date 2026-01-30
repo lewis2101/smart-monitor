@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, type RefresherCustomEvent, IonToolbar, IonTitle } from "@ionic/vue";
+import { IonPage, IonHeader, type RefresherCustomEvent } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";

@@ -47,3 +47,18 @@ body {
 .animate-pressable .animate-pressable_release {
   transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+.button-outline {
+  --background-activated: #{$main-color};
+  --background-hover: #{$main-color};
+  --background-focused: #{$main-color};
+  --border-color: #{$main-color};
+  --color: #{$main-color};
+}
+
+.button-solid {
+  --background: #{$main-color};
+  --background-activated: #{$secondary-color};
+  --background-focused: #{$main-color};
+  --background-hover: #{$secondary-color};
+}

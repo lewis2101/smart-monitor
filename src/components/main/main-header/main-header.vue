@@ -47,7 +47,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .main-header {
-  background: #041a4b;
+  background: $main-color;
   color: $white;
   padding: calc(16px + env(safe-area-inset-top)) 16px 16px 16px;
   width: 100%;

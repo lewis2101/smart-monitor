@@ -19,10 +19,10 @@ const props = withDefaults(
   },
 );
 // 625B71
-const rectangleColor = computed(() => props.rectColor === "light" ? "#FFFFFF" : "#143b88");
+const rectangleColor = computed(() => props.rectColor === "light" ? "#FFFFFF" : "#014f59");
 const direction = computed(() => (props.orientation === "horizontal" ? "row" : "column"));
 const gap = computed(() => (props.orientation === "horizontal" ? "8px" : "2px"));
-const iconColor = computed(() => (props.rectColor === "light" ? "#2A61CC" : "#FFFFFF"));
+const iconColor = computed(() => (props.rectColor === "light" ? "#014f59" : "#FFFFFF"));
 const isHorizontal = computed(() => props.orientation === "horizontal");
 </script>
 

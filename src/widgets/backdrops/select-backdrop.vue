@@ -185,6 +185,7 @@ watch(searchModel, () => {
     left: 0;
     z-index: 10;
     padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    background: $white;
 
     display: flex;
     align-items: center;

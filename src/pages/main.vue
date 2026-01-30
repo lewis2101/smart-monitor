@@ -30,13 +30,13 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 <style lang="scss" scoped>
 .main-page {
   &__content {
-    --background: linear-gradient(180deg, #041a4b 15%, #ffffff 100%);
+    --background: linear-gradient(180deg, $main-color 15%, #ffffff 100%);
   }
 
   &__decor {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, #041a4b 15%, #143b88 30%, #ffffff 100%);
+    background: linear-gradient(180deg, $main-color 15%, $main-color 30%, #ffffff 100%);
   }
 
   &__body {
