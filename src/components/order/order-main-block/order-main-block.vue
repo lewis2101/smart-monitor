@@ -206,7 +206,7 @@ const showLimits = computed(() => LIMIT_HAS_PROCESS_KEYS.includes(orderNextData?
 </script>
 
 <template>
-  <div v-if="orderData" class="order-main-block">
+  <div class="order-main-block">
     <div v-if="orderMainData" class="order-main-block__order-info">
       <div class="order-main-block__info-text">
         <span class="bold">ID: </span> {{ orderId }}

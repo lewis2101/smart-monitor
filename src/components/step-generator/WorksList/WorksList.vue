@@ -2,7 +2,7 @@
 import { IonButton, IonSpinner } from "@ionic/vue";
 import type { StepField } from "@/components/step-generator/types.ts";
 import { computed, reactive, watch } from "vue";
-import { type OrderPartsContentChild, useNewOrderPartsQuery } from "@/api/orders/new-order-parts.ts";
+import { type OrderPartsContentChild, useOrderPartsQuery } from "@/api/orders/new-order-parts.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { useToast } from "primevue/usetoast";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
@@ -17,6 +17,7 @@ const props = withDefaults(
     stepModel: Record<string, { id: string | number } | undefined>;
     processKey: string;
     disabled?: boolean;
+    orderId?: string;
   }>(),
   {
     disabled: false,
@@ -38,10 +39,11 @@ const globalBackdropStore = useGlobalBackdropStore();
 const newOrderPartsParams = reactive({
   lang: "rus",
   vehicleId: "",
-  processKey: props.processKey,
+  ...(props.orderId ? { orderId: props.orderId } : { processKey: props.processKey }),
 });
 
-const newOrderPartsQuery = useNewOrderPartsQuery({
+const newOrderPartsQuery = useOrderPartsQuery({
+  getUrl: (url) => (props.orderId ? `${url}/order-parts` : `${url}/new-order-parts`),
   params: newOrderPartsParams,
 });
 
@@ -148,6 +150,9 @@ watch(
     if (value && value?.id) {
       newOrderPartsParams.vehicleId = String(value.id);
     }
+  },
+  {
+    immediate: true,
   },
 );
 

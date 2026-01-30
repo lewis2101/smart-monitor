@@ -16,7 +16,7 @@ export enum OrdersEndpoints {
   validateInitial = "/order/validateInitial",
   calcRestriction = "/order/field-restrictions/:processKey/init/:field",
   clientVehicles = "/order/client-vehicles",
-  newOrderParts = "/order/new-order-parts",
+  order = "/order",
   supplierList = "/order/supplier-list",
   actionNewOrder = "/lenkrad/v1/order/action/new",
   startProcess = "/lenkrad/v1/order/action/start-process",

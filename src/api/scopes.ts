@@ -10,7 +10,7 @@ export enum Scopes {
   validateInitial = "validate-initial",
   calcRestriction = "calc-restriction",
   clientVehicles = "client-vehicles",
-  newOrderParts = "new-order-parts",
+  orderParts = "order-parts",
   supplierList = "supplier-list",
   currentLimit = "current-limit",
   actionNewOrder = "action-new-order",

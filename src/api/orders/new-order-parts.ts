@@ -19,8 +19,14 @@ export type OrderPartsContentChild = {
 export type RawData = {
   lang: string;
   vehicleId: string | number;
-  processKey: string;
-};
+} & (
+  | {
+      processKey: string;
+    }
+  | {
+      orderId: string;
+    }
+);
 
 export type Response = {
   content: {
@@ -31,10 +37,10 @@ export type Response = {
   size: number;
 };
 
-export const useNewOrderPartsQuery = createVueQueryOptions<RawData, Response>({
+export const useOrderPartsQuery = createVueQueryOptions<RawData, Response>({
   httpClientOptions: {
-    url: OrdersEndpoints.newOrderParts,
+    url: OrdersEndpoints.order,
     method: "GET",
   },
-  scope: Scopes.newOrderParts,
+  scope: Scopes.orderParts,
 });
