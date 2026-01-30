@@ -22,6 +22,7 @@ export enum OrdersEndpoints {
   startProcess = "/lenkrad/v1/order/action/start-process",
   orderHistory = "/order/history",
   orderFile = "/lenkrad/v1/file",
+  selectedPartsHistoryByOrder = "/order/selected-part-history-by-order",
 }
 
 export enum MapEndpoints {

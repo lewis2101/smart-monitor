@@ -131,6 +131,8 @@ const fieldValueInits: Record<FieldInputClientType, ((field: StepField) => unkno
   VehicleSelector: vehicleSelectorInit,
   WorksList: worksListInit,
   SupplierSelector: supplierSelectorInit,
+  DOCUMENT: null,
+  FILE: null,
 };
 
 export const useFieldValueInit = (fields: StepField[]) => {

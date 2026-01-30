@@ -8,6 +8,7 @@ import { useToast } from "primevue/usetoast";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import SelectedWork from "@/components/step-generator/WorksList/SelectedWork.vue";
 import { formatSum } from "@/utils/formatSum.ts";
+import { useSelectedPartsHistoryByOrderQuery } from "@/api/orders/selectedPartsHistoryByOrder.ts";
 
 const DEPENDENCY_FIELD_KEY = "vehicleId";
 
@@ -42,20 +43,31 @@ const newOrderPartsParams = reactive({
   ...(props.orderId ? { orderId: props.orderId } : { processKey: props.processKey }),
 });
 
-const newOrderPartsQuery = useOrderPartsQuery({
+const orderPartsQuery = useOrderPartsQuery({
   getUrl: (url) => (props.orderId ? `${url}/order-parts` : `${url}/new-order-parts`),
   params: newOrderPartsParams,
 });
 
-const { data: newOrderPartsData, isPending } = useQuery({
-  ...newOrderPartsQuery,
+const selectedPartsHistoryByOrderQuery = useSelectedPartsHistoryByOrderQuery({
+  params: () => ({
+    orderId: props.orderId || "",
+  }),
+});
+
+const { data: orderPartsData, isPending } = useQuery({
+  ...orderPartsQuery,
   enabled: () => !!newOrderPartsParams.vehicleId,
 });
 
-const isLoading = computed(() => !newOrderPartsData.value && !!isPending.value && !!newOrderPartsParams.vehicleId);
+const { data: orderPartsHistoryByOrder } = useQuery({
+  ...selectedPartsHistoryByOrderQuery,
+  enabled: () => !!props.orderId,
+});
+
+const isLoading = computed(() => !orderPartsData.value && !!isPending.value && !!newOrderPartsParams.vehicleId);
 
 const handleClick = async () => {
-  if (!newOrderPartsData.value || !newOrderPartsParams.vehicleId) {
+  if (!orderPartsData.value || !newOrderPartsParams.vehicleId) {
     toast.add({
       summary: "Транспорт не выбран",
       severity: "error",
@@ -67,7 +79,7 @@ const handleClick = async () => {
     const result = (await globalBackdropStore.push("list-tree", {
       title: "Выберите",
       props: {
-        list: newOrderPartsData.value.content,
+        list: orderPartsData.value.content,
         initialValues: modelProxy.value,
       },
     })) as number[];
@@ -80,7 +92,7 @@ const handleClick = async () => {
 const findItem = (id: number): OrderPartsContentChild | null => {
   let foundItem: OrderPartsContentChild | null = null;
 
-  newOrderPartsData.value.content.forEach((item) => {
+  orderPartsData.value.content.forEach((item) => {
     if (item.children) {
       item.children.forEach((child) => {
         if (id === child.id) {
@@ -96,7 +108,7 @@ const findItem = (id: number): OrderPartsContentChild | null => {
 const findItems = (ids: number[]) => {
   const foundItems: OrderPartsContentChild[] = [];
 
-  newOrderPartsData.value.content.forEach((item) => {
+  orderPartsData.value.content.forEach((item) => {
     if (item.children) {
       item.children.forEach((child) => {
         if (ids.includes(child.id)) {
@@ -156,7 +168,7 @@ watch(
   },
 );
 
-watch(newOrderPartsData, (value) => {
+watch(orderPartsData, (value) => {
   if (value) {
     model.value = findItems(modelProxy.value);
   }

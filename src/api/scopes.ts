@@ -24,4 +24,5 @@ export enum Scopes {
   osmRoute = "osm-route",
   orderFile = "order-file",
   getFile = "get-file",
+  selectedPartsHistoryByOrder = "selected-parts-history",
 }
