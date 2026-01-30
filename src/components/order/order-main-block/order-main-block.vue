@@ -14,7 +14,7 @@ import OrderMoreButtons from "@/components/order/order-more-buttons/order-more-b
 import ClientLimit from "@/components/order/client-limit/client-limit.vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useRole } from "@/composables/useRole.ts";
-import { useRefreshPageInjector } from "@/composables/use-refresh-page.ts";
+import { useRefreshPageInjector } from "@/composables/use-refresh-page-provider.ts";
 import OrderHistory from "@/components/order/order-history/order-history.vue";
 import { useOrderActionCompleteMutation } from "@/api/orders/order-action-complete.ts";
 import { useIonRouter } from "@ionic/vue";

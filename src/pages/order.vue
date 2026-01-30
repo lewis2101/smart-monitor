@@ -3,14 +3,16 @@ import { IonPage, IonHeader } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
-import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { useRoute } from "vue-router";
 import { OrderMainBlock } from "@/components/order/order-main-block";
-import { useRefreshPage } from "@/composables/use-refresh-page.ts";
+import { useRefreshPageProvider } from "@/composables/use-refresh-page-provider.ts";
 import DefaultPage from "@/layouts/default-page.vue";
 import { computed, ref } from "vue";
+import { useRefreshPage } from "@/composables/refresh-page.ts";
 
-const { pageKey } = useRefreshPage();
+const { pageKey, refreshPageKey} = useRefreshPageProvider();
+const { refresh } = useRefreshPage([], () => refreshPageKey());
+
 const route = useRoute();
 
 const orderTitle = ref("");
@@ -29,9 +31,9 @@ const orderId = route.params.orderId as string;
         <default-layout-header :title="orderTitle" :loading="orderTitleLoading" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher :key="pageKey" @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="refresh">
       <default-page>
-        <order-main-block :order-id="orderId" @get-label="handleChangeTitle" />
+        <order-main-block :order-id="orderId" :key="pageKey" @get-label="handleChangeTitle" />
       </default-page>
     </base-content-with-refresher>
   </ion-page>

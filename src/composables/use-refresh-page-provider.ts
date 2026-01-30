@@ -7,7 +7,7 @@ export const refreshPageProviderKey = Symbol("refresh-page-key") as InjectionKey
   refreshPageWithTries: () => void;
 }>;
 
-export const useRefreshPage = () => {
+export const useRefreshPageProvider = () => {
   const refreshTries = ref(0);
   const pageKey = ref<string>(getUniqueString());
 

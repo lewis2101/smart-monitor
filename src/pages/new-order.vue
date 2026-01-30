@@ -4,12 +4,14 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { computed, ref } from "vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
-import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { useRoute } from "vue-router";
 import DefaultPage from "@/layouts/default-page.vue";
 import { NewOrderMainBlock } from "@/components/order/new-order-main-block";
+import { useRefreshPage } from "@/composables/refresh-page.ts";
 
 const route = useRoute();
+
+const { pageId, refresh } = useRefreshPage([]);
 
 const orderTitle = ref("");
 const handleChangeTitle = (value: string) => {
@@ -26,9 +28,9 @@ const processKey = computed(() => route.params.processKey as string);
         <default-layout-header :title="orderTitle" :loading="orderTitleLoading" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="refresh">
       <default-page>
-        <new-order-main-block :process-key="processKey" @get-label="handleChangeTitle" />
+        <new-order-main-block :process-key="processKey" @get-label="handleChangeTitle" :key="pageId" />
       </default-page>
     </base-content-with-refresher>
   </ion-page>
