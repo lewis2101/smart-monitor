@@ -17,7 +17,7 @@ const searchRef = useTemplateRef<HTMLDivElement | null>("searchRef");
 onMounted(() => {
   useBubbleAnimate(userInfoRef);
   useBubbleAnimate(notificationRef);
-  // useBubbleAnimate(searchRef);
+  useBubbleAnimate(searchRef);
 });
 </script>
 
@@ -33,12 +33,12 @@ onMounted(() => {
       </button>
     </div>
     <div class="main-header__menu">
-      <button ref="searchRef" class="main-header__button" @click="router.push({ name: CommonRoutes.search })">
+      <button ref="searchRef" class="main-header__liquid-button" @click="router.push({ name: CommonRoutes.search })">
         <base-icon name="search" color="white" />
       </button>
       <button
         ref="notificationRef"
-        class="main-header__button"
+        class="main-header__liquid-button"
         @click="router.push({ name: CommonRoutes.notifications })"
       >
         <base-icon name="notification" color="white" />
@@ -49,9 +49,11 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .main-header {
-  background: $main-color;
+  background: $opacity-main;
   color: $white;
   padding: calc(16px + env(safe-area-inset-top)) 16px 16px 16px;
+  border-bottom: 1px solid $opacity-main;
+
   width: 100%;
   display: flex;
   align-items: center;
@@ -66,7 +68,7 @@ onMounted(() => {
   &__menu {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
   }
 
   &__button {
@@ -75,6 +77,19 @@ onMounted(() => {
     justify-content: center;
     background: none;
     border: none;
+  }
+
+  &__liquid-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $opacity-white;
+    border: none;
+
+    border-radius: 16px;
+
+    width: 44px;
+    height: 44px;
   }
 }
 </style>

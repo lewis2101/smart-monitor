@@ -22,7 +22,47 @@ const handleClick = (to?: string) => to && router.push(to);
 </script>
 
 <template>
-  <base-island-block>
+  <base-island-block rounded-orient="top">
+    <base-rect-item
+      v-for="item in list"
+      :key="item.title"
+      :title="item.title"
+      :description="item.description"
+      :rect-color="item.rectColor"
+      :orientation="item.orientation"
+      :icon="item.icon"
+      @click="handleClick(item.to)"
+    />
+    <base-rect-item
+      v-for="item in list"
+      :key="item.title"
+      :title="item.title"
+      :description="item.description"
+      :rect-color="item.rectColor"
+      :orientation="item.orientation"
+      :icon="item.icon"
+      @click="handleClick(item.to)"
+    />
+    <base-rect-item
+      v-for="item in list"
+      :key="item.title"
+      :title="item.title"
+      :description="item.description"
+      :rect-color="item.rectColor"
+      :orientation="item.orientation"
+      :icon="item.icon"
+      @click="handleClick(item.to)"
+    />
+    <base-rect-item
+      v-for="item in list"
+      :key="item.title"
+      :title="item.title"
+      :description="item.description"
+      :rect-color="item.rectColor"
+      :orientation="item.orientation"
+      :icon="item.icon"
+      @click="handleClick(item.to)"
+    />
     <base-rect-item
       v-for="item in list"
       :key="item.title"

@@ -15,5 +15,6 @@ import { IonToolbar } from "@ionic/vue";
   --padding-end: 0;
   --padding-bottom: 0;
   --padding-top: 0;
+  --background: transparent;
 }
 </style>

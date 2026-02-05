@@ -11,17 +11,19 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 
 <template>
   <ion-page class="main-page">
-    <ion-header>
+    <ion-header :translucent="true">
       <base-toolbar>
         <main-header />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher class="main-page__content" @refresh="mockRefresh">
+    <base-content-with-refresher class="main-page__content" loader-color="light" @refresh="mockRefresh">
       <div class="main-page__decor"></div>
       <div class="main-page__body">
-        <main-docs-block class="main-docs-block" />
+        <div class="main-page__padding">
+          <main-docs-block class="main-docs-block" />
+        </div>
         <main-menu-block class="main-menu-block" />
-        <main-reports class="main-reports" />
+<!--        <main-reports class="main-reports" />-->
       </div>
     </base-content-with-refresher>
   </ion-page>
@@ -39,16 +41,17 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
     background: linear-gradient(180deg, $main-color 15%, $main-color 30%, #ffffff 100%);
   }
 
+  &__padding {
+    padding: 0 8px;
+  }
+
   &__body {
     position: relative;
     z-index: 1;
-    padding: 0 8px;
   }
 }
 
-.main-docs-block,
-.main-menu-block,
-.main-reports {
+.main-docs-block {
   margin-bottom: 16px;
 }
 </style>
