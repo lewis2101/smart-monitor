@@ -19,11 +19,13 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
     <base-content-with-refresher class="main-page__content" loader-color="light" @refresh="mockRefresh">
       <div class="main-page__decor"></div>
       <div class="main-page__body">
-        <div class="main-page__padding">
+        <div class="main-page__top">
           <main-docs-block class="main-docs-block" />
         </div>
-        <main-menu-block class="main-menu-block" />
-<!--        <main-reports class="main-reports" />-->
+        <div class="main-page__padding">
+          <main-menu-block class="main-menu-block" />
+          <main-reports class="main-reports" />
+        </div>
       </div>
     </base-content-with-refresher>
   </ion-page>
@@ -32,16 +34,20 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 <style lang="scss" scoped>
 .main-page {
   &__content {
-    --background: linear-gradient(180deg, $main-color 15%, #ffffff 100%);
+    //--background: linear-gradient(180deg, $main-color 15%, #ffffff 100%);
+    --background: $main-color;
   }
 
   &__decor {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, $main-color 15%, $main-color 30%, #ffffff 100%);
+    //background: linear-gradient(180deg, $main-color 15%, $main-color 30%, #ffffff 100%);
+    background: $main-color;
   }
 
-  &__padding {
+  &__top {
+    position: sticky;
+    top: 0;
     padding: 0 8px;
   }
 
@@ -49,9 +55,14 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
     position: relative;
     z-index: 1;
   }
+
+  &__padding {
+    padding: 0 8px;
+  }
 }
 
-.main-docs-block {
+.main-docs-block,
+.main-menu-block {
   margin-bottom: 16px;
 }
 </style>

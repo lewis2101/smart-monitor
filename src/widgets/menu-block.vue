@@ -22,47 +22,7 @@ const handleClick = (to?: string) => to && router.push(to);
 </script>
 
 <template>
-  <base-island-block rounded-orient="top">
-    <base-rect-item
-      v-for="item in list"
-      :key="item.title"
-      :title="item.title"
-      :description="item.description"
-      :rect-color="item.rectColor"
-      :orientation="item.orientation"
-      :icon="item.icon"
-      @click="handleClick(item.to)"
-    />
-    <base-rect-item
-      v-for="item in list"
-      :key="item.title"
-      :title="item.title"
-      :description="item.description"
-      :rect-color="item.rectColor"
-      :orientation="item.orientation"
-      :icon="item.icon"
-      @click="handleClick(item.to)"
-    />
-    <base-rect-item
-      v-for="item in list"
-      :key="item.title"
-      :title="item.title"
-      :description="item.description"
-      :rect-color="item.rectColor"
-      :orientation="item.orientation"
-      :icon="item.icon"
-      @click="handleClick(item.to)"
-    />
-    <base-rect-item
-      v-for="item in list"
-      :key="item.title"
-      :title="item.title"
-      :description="item.description"
-      :rect-color="item.rectColor"
-      :orientation="item.orientation"
-      :icon="item.icon"
-      @click="handleClick(item.to)"
-    />
+  <base-island-block rounded="M" rounded-orient="all" class="menu-block">
     <base-rect-item
       v-for="item in list"
       :key="item.title"
@@ -76,4 +36,8 @@ const handleClick = (to?: string) => to && router.push(to);
   </base-island-block>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.menu-block {
+  //padding: 24px;
+}
+</style>

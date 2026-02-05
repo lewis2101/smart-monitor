@@ -2,12 +2,14 @@
 import { computed, onMounted, ref } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
-type Radius = "S" | "M";
+type Radius = "S" | "M" | "L" | "XL";
 type RadiusOrient = "top" | "bottom" | "left" | "right" | "all";
 
 const radiusMapper: Record<Radius, number> = {
   S: 12,
   M: 24,
+  L: 36,
+  XL: 48,
 };
 
 const radiusOrientMapper: Record<RadiusOrient, (radius: string) => string> = {

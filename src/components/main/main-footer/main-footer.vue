@@ -77,57 +77,81 @@ const handleClickCreate = async () => {
 
 <template>
   <ion-tab-bar slot="bottom" class="main-footer">
-    <ion-tab-button tab="home" href="/home">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]" :title="$t('main-tabs.home')">
-        <base-icon name="home" class="main-footer__icon" />
-      </footer-item>
-    </ion-tab-button>
-    <ion-tab-button tab="docs" href="/docs">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" :title="$t('main-tabs.docs')">
-        <base-icon name="docs" class="main-footer__icon" />
-      </footer-item>
-    </ion-tab-button>
-    <ion-tab-button tab="camera" @click="handleClickCreate">
-      <footer-item>
-        <div ref="createRef" class="main-footer__create-item">
-          <base-icon name="plus" class="main-footer__camera-icon" />
-        </div>
-      </footer-item>
-    </ion-tab-button>
-    <ion-tab-button tab="orders" href="/orders/!OrdersMine">
-      <footer-item
-        :class="['main-footer__item', getActiveClass(MainTabRoutes.orders)]"
-        :title="$t('main-tabs.orders')"
-      >
-        <base-icon name="application" class="main-footer__icon" />
-      </footer-item>
-    </ion-tab-button>
-    <ion-tab-button tab="service" href="/service">
-      <footer-item
-        :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]"
-        :title="$t('main-tabs.services')"
-      >
-        <base-icon name="service" class="main-footer__icon" />
-      </footer-item>
-    </ion-tab-button>
+    <div class="main-footer__wrapper">
+      <ion-tab-button tab="home" href="/home">
+        <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]" :title="$t('main-tabs.home')">
+          <base-icon name="home" class="main-footer__icon" />
+        </footer-item>
+      </ion-tab-button>
+      <ion-tab-button tab="docs" href="/docs">
+        <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" :title="$t('main-tabs.docs')">
+          <base-icon name="docs" class="main-footer__icon" />
+        </footer-item>
+      </ion-tab-button>
+      <ion-tab-button tab="camera" @click="handleClickCreate">
+        <footer-item class="main-footer__middle-item">
+          <div ref="createRef" class="main-footer__create-item">
+            <base-icon name="plus" class="main-footer__camera-icon" />
+          </div>
+        </footer-item>
+      </ion-tab-button>
+      <ion-tab-button tab="orders" href="/orders/!OrdersMine">
+        <footer-item
+          :class="['main-footer__item', getActiveClass(MainTabRoutes.orders)]"
+          :title="$t('main-tabs.orders')"
+        >
+          <base-icon name="application" class="main-footer__icon" />
+        </footer-item>
+      </ion-tab-button>
+      <ion-tab-button tab="service" href="/service">
+        <footer-item
+          :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]"
+          :title="$t('main-tabs.services')"
+        >
+          <base-icon name="service" class="main-footer__icon" />
+        </footer-item>
+      </ion-tab-button>
+    </div>
   </ion-tab-bar>
 </template>
 
 <style lang="scss" scoped>
 .main-footer {
+  --background: transparent;
+
   position: relative;
+  bottom: 16px;
   z-index: 10;
-  --bottom-inset: calc(4px + env(safe-area-inset-bottom));
+  --bottom-inset: env(safe-area-inset-bottom);
   display: flex;
   justify-content: space-between;
+  border: none;
 
-  background: $white;
-  border: 1px solid #f2f2f7;
   border-bottom: 0;
-  padding: 8px 0 var(--bottom-inset) 0;
+  padding: 0 16px var(--bottom-inset) 16px;
+
+  height: 70px;
 
   & > * {
-    background: $white;
+    background: transparent;
+  }
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #fffc;
+    box-shadow: 0px 2px 3px 0px #0000001a;
+    border: 1px solid var(--System-Gray-Light, #f2f2f7);
+    backdrop-filter: blur(4px);
+
+    border-radius: 16px;
+  }
+
+  &__middle-item {
+    position: relative;
+    bottom: 4px;
   }
 
   .main-footer__item {
@@ -136,11 +160,16 @@ const handleClickCreate = async () => {
 
   .active {
     color: $main-color;
+
+    .main-footer__icon {
+      background: $opacity-main;
+      color: $white;
+    }
   }
 
   .animate {
     span {
-      animation: bubble 0.3s ease-in-out;
+      animation: bubble 0.4s ease-in;
     }
   }
 
@@ -149,7 +178,7 @@ const handleClickCreate = async () => {
       transform: scale(1);
     }
     50% {
-      transform: scale(1.3);
+      transform: scale(1.1);
     }
     100% {
       transform: scale(1);
@@ -157,7 +186,13 @@ const handleClickCreate = async () => {
   }
 
   &__icon {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+
+    background: $white;
+    color: $main-color;
   }
 
   &__create-item {
@@ -165,8 +200,11 @@ const handleClickCreate = async () => {
     height: 48px;
     display: grid;
     place-items: center;
-    background: $main-color;
+    background: $secondary-color;
     border-radius: 50%;
+    border: 1px $white solid;
+
+    box-shadow: 0 0 12px 0 $secondary-color;
   }
 
   &__camera-icon {

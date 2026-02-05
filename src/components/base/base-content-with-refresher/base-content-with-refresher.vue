@@ -21,8 +21,8 @@ const getColorLoader = computed(() => (props.loaderColor === "light" ? "#FFFFFF"
 </script>
 
 <template>
-  <ion-content :fullscreen="true">
-    <ion-refresher class="refresher" slot="fixed" @ion-refresh="$emit('refresh', $event)">
+  <ion-content class="base-content" :fullscreen="true">
+    <ion-refresher class="base-refresher" slot="fixed" @ion-refresh="$emit('refresh', $event)">
       <ion-refresher-content>
         <slot name="refresher" />
       </ion-refresher-content>
@@ -32,7 +32,10 @@ const getColorLoader = computed(() => (props.loaderColor === "light" ? "#FFFFFF"
 </template>
 
 <style scoped lang="scss">
-.refresher {
+.base-content {
+  --padding-bottom: 16px;
+}
+.base-refresher {
   z-index: 10;
   --color: v-bind(getColorLoader);
 }
