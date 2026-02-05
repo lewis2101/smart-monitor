@@ -18,8 +18,8 @@ type AllRoutesType = MainTabRoutes & CommonRoutes & OrderRoutes;
 
 const statusBarColors: Record<Color, StatusBarColor> = {
   main: {
-    // bg: "#ffffff",
-    bg: "#066046",
+    bg: "#ffffff",
+    // bg: "#066046",
     // bg: "linear-gradient(180deg, #066046 50%, #ffffff 50%)",
     text: Style.Dark,
   },

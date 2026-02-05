@@ -120,7 +120,7 @@ const handleClickCreate = async () => {
   --background: transparent;
 
   position: relative;
-  bottom: 16px;
+  bottom: 4px;
   z-index: 10;
   --bottom-inset: env(safe-area-inset-bottom);
   display: flex;
@@ -146,7 +146,7 @@ const handleClickCreate = async () => {
     border: 1px solid var(--System-Gray-Light, #f2f2f7);
     backdrop-filter: blur(4px);
 
-    border-radius: 16px;
+    border-radius: 24px;
   }
 
   &__middle-item {
@@ -162,6 +162,7 @@ const handleClickCreate = async () => {
     color: $main-color;
 
     .main-footer__icon {
+      transition: 0.2s ease-in-out;
       background: $opacity-main;
       color: $white;
     }

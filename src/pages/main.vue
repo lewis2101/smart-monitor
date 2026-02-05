@@ -7,6 +7,8 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import MainHeader from "@/components/main/main-header/main-header.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
+ import BriefingMenuBlock from "@/components/briefing/briefing-menu-block/briefing-menu-block.vue";
+import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 </script>
 
 <template>
@@ -22,10 +24,11 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
         <div class="main-page__top">
           <main-docs-block class="main-docs-block" />
         </div>
-        <div class="main-page__padding">
+        <base-island-block rounded-orient="top" rounded="XL">
           <main-menu-block class="main-menu-block" />
           <main-reports class="main-reports" />
-        </div>
+          <briefing-menu-block />
+        </base-island-block>
       </div>
     </base-content-with-refresher>
   </ion-page>
@@ -62,7 +65,8 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
 }
 
 .main-docs-block,
-.main-menu-block {
+.main-menu-block,
+.main-reports {
   margin-bottom: 16px;
 }
 </style>
