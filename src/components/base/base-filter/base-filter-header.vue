@@ -69,7 +69,7 @@ const isActiveSort = computed(() => sortModel.value && sortModel.value.length > 
       @click="handleFilterClick"
     >
       <div class="base-filter-header__filter-item">
-        <base-icon name="filter" :color="isActiveFilter ? '#FFFFFF' : '#014f59'" />
+        <base-icon name="filter" :color="isActiveFilter ? '#FFFFFF' : '#066046'" />
         <div>{{ $t("orders.filter") }}</div>
       </div>
     </base-island-block>
@@ -79,7 +79,7 @@ const isActiveSort = computed(() => sortModel.value && sortModel.value.length > 
       @click="handleSortClick"
     >
       <div class="base-filter-header__filter-item">
-        <base-icon name="sort" :color="isActiveSort ? '#FFFFFF' : '#014f59'" />
+        <base-icon name="sort" :color="isActiveSort ? '#FFFFFF' : '#066046'" />
         <div>{{ $t("orders.sort") }}</div>
       </div>
     </base-island-block>

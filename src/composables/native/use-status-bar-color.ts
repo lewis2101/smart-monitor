@@ -18,7 +18,7 @@ type AllRoutesType = MainTabRoutes & CommonRoutes & OrderRoutes;
 
 const statusBarColors: Record<Color, StatusBarColor> = {
   main: {
-    bg: "#014f59",
+    bg: "#066046",
     text: Style.Dark,
   },
   secondary: {

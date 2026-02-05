@@ -18,6 +18,7 @@ const config: CapacitorConfig = {
       splashImmersive: true,
       layoutName: "launch_screen",
       useDialog: true,
+      showSpinner: false,
     },
     CapacitorHttp: {
       enabled: true,

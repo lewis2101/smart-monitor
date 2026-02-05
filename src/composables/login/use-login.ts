@@ -14,7 +14,7 @@ import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 
 const loginSchema = toTypedSchema(
   object({
-    username: string().min(1, "Введите Логин").uppercase("Логин должен быть в верхнем регистре"),
+    username: string().min(1, "Введите Логин"),
     password: string().min(1, "Введите пароль"),
   }),
 );

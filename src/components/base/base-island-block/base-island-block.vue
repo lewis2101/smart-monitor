@@ -3,20 +3,31 @@ import { computed, onMounted, ref } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 type Radius = "S" | "M";
+type RadiusOrient = "top" | "bottom" | "left" | "right" | "all";
 
 const radiusMapper: Record<Radius, number> = {
   S: 12,
   M: 24,
 };
 
+const radiusOrientMapper: Record<RadiusOrient, (radius: string) => string> = {
+  top: (radius) => `${radius} ${radius} 0 0`,
+  bottom: (radius) => `0 0 ${radius} ${radius}`,
+  left: (radius) => `${radius} 0 0 ${radius}`,
+  right: (radius) => `0 ${radius} ${radius} 0`,
+  all: (radius) => `${radius}`,
+};
+
 const props = withDefaults(
   defineProps<{
     title?: string;
     rounded?: Radius;
+    roundedOrient?: RadiusOrient;
     clickable?: boolean;
   }>(),
   {
     rounded: "M",
+    roundedOrient: "all",
     clickable: true,
   },
 );
@@ -29,7 +40,8 @@ onMounted(() => {
   }
 });
 
-const radius = computed(() => `${radiusMapper[props.rounded]}px`);
+const radiusPx = computed(() => `${radiusMapper[props.rounded]}px`);
+const radius = computed(() => radiusOrientMapper[props.roundedOrient](radiusPx.value));
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import { useField } from "vee-validate";
+import { computed } from "vue";
 
 defineProps<{
   errors: {
@@ -16,12 +17,19 @@ defineEmits<{
 
 const { value: username } = useField<string>("username");
 const { value: password } = useField<string>("password");
+
+const upperCaseUsernameProxy = computed({
+  get: () => username.value.toUpperCase(),
+  set: (value: string) => {
+    username.value = value.toUpperCase();
+  },
+});
 </script>
 
 <template>
   <form class="login-form" @submit="$emit('submit')" @keyup.enter.passive="$emit('submit')">
     <base-input
-      v-model="username"
+      v-model="upperCaseUsernameProxy"
       class="login-form__field"
       placeholder="Логин"
       name="login"
