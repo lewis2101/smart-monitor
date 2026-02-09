@@ -18,9 +18,10 @@ type AllRoutesType = MainTabRoutes & CommonRoutes & OrderRoutes;
 
 const statusBarColors: Record<Color, StatusBarColor> = {
   main: {
-    bg: "#ffffff",
+    // bg: "#ffffff",
     // bg: "#066046",
     // bg: "linear-gradient(180deg, #066046 50%, #ffffff 50%)",
+    bg: "background: linear-gradient(180deg, $main-color 50%, #ffffff 50%);",
     text: Style.Dark,
   },
   secondary: {
@@ -31,17 +32,17 @@ const statusBarColors: Record<Color, StatusBarColor> = {
 
 const routeNamesStatusBarColors: Record<AllRoutesType, Color> = {
   [MainTabRoutes.home]: Color.main,
-  [MainTabRoutes.docs]: Color.secondary,
-  [MainTabRoutes.briefing]: Color.secondary,
-  [MainTabRoutes.orders]: Color.secondary,
-  [MainTabRoutes.service]: Color.secondary,
-  [OrderRoutes.newOrder]: Color.secondary,
-  [CommonRoutes.login]: Color.secondary,
-  [CommonRoutes.registration]: Color.secondary,
-  [CommonRoutes.learning]: Color.secondary,
-  [CommonRoutes.profile]: Color.secondary,
-  [CommonRoutes.notifications]: Color.secondary,
-  [CommonRoutes.fileView]: Color.secondary,
+  [MainTabRoutes.docs]: Color.main,
+  [MainTabRoutes.briefing]: Color.main,
+  [MainTabRoutes.orders]: Color.main,
+  [MainTabRoutes.service]: Color.main,
+  [OrderRoutes.newOrder]: Color.main,
+  [CommonRoutes.login]: Color.main,
+  [CommonRoutes.registration]: Color.main,
+  [CommonRoutes.learning]: Color.main,
+  [CommonRoutes.profile]: Color.main,
+  [CommonRoutes.notifications]: Color.main,
+  [CommonRoutes.fileView]: Color.main,
 };
 
 async function setNativeColors(key: Color) {

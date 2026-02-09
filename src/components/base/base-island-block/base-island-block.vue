@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 type Radius = "S" | "M" | "L" | "XL";
-type RadiusOrient = "top" | "bottom" | "left" | "right" | "all";
+type RadiusOrient = "top" | "bottom" | "left" | "right" | "all" | "none";
 
 const radiusMapper: Record<Radius, number> = {
   S: 12,
@@ -18,6 +18,7 @@ const radiusOrientMapper: Record<RadiusOrient, (radius: string) => string> = {
   left: (radius) => `${radius} 0 0 ${radius}`,
   right: (radius) => `0 ${radius} ${radius} 0`,
   all: (radius) => `${radius}`,
+  none: () => `none`,
 };
 
 const props = withDefaults(
@@ -26,11 +27,13 @@ const props = withDefaults(
     rounded?: Radius;
     roundedOrient?: RadiusOrient;
     clickable?: boolean;
+    shadow?: boolean;
   }>(),
   {
     rounded: "M",
     roundedOrient: "all",
     clickable: true,
+    shadow: true,
   },
 );
 
@@ -44,6 +47,7 @@ onMounted(() => {
 
 const radiusPx = computed(() => `${radiusMapper[props.rounded]}px`);
 const radius = computed(() => radiusOrientMapper[props.roundedOrient](radiusPx.value));
+const boxShadow = computed(() => (props.shadow ? `0 8px 16px 0 #00000014` : "none"));
 </script>
 
 <template>
@@ -60,7 +64,7 @@ const radius = computed(() => radiusOrientMapper[props.roundedOrient](radiusPx.v
   padding: 12px;
   border-radius: v-bind("radius");
   background: $white;
-  box-shadow: 0 8px 16px 0 #00000014;
+  box-shadow: v-bind(boxShadow);
   transition: all 0.2s ease-in-out;
 
   display: flex;

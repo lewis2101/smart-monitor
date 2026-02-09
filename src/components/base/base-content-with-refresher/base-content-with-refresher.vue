@@ -27,6 +27,7 @@ const getColorLoader = computed(() => (props.loaderColor === "light" ? "#FFFFFF"
         <slot name="refresher" />
       </ion-refresher-content>
     </ion-refresher>
+<!--    <div class="base-content__decor" />-->
     <slot />
   </ion-content>
 </template>
@@ -34,6 +35,13 @@ const getColorLoader = computed(() => (props.loaderColor === "light" ? "#FFFFFF"
 <style scoped lang="scss">
 .base-content {
   --padding-bottom: 16px;
+  --background: $main-color;
+
+  &__decor {
+    position: fixed;
+    inset: 0;
+    background: $main-color;
+  }
 }
 .base-refresher {
   z-index: 10;

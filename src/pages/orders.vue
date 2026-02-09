@@ -47,7 +47,7 @@ const contentParams = reactive({
 
 <template>
   <ion-page class="orders-page">
-    <ion-header>
+    <ion-header :translucent="true">
       <base-toolbar>
         <default-layout-header :title="$t('orders.header-title')" hide-back hide-close />
       </base-toolbar>

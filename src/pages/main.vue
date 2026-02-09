@@ -7,7 +7,7 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import MainHeader from "@/components/main/main-header/main-header.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
- import BriefingMenuBlock from "@/components/briefing/briefing-menu-block/briefing-menu-block.vue";
+import BriefingMenuBlock from "@/components/briefing/briefing-menu-block/briefing-menu-block.vue";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 </script>
 
@@ -24,7 +24,13 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
         <div class="main-page__top">
           <main-docs-block class="main-docs-block" />
         </div>
-        <base-island-block rounded-orient="top" rounded="XL">
+        <base-island-block
+          rounded-orient="all"
+          rounded="XL"
+          :shadow="false"
+          :clickable="false"
+          class="main-page__block"
+        >
           <main-menu-block class="main-menu-block" />
           <main-reports class="main-reports" />
           <briefing-menu-block />
@@ -61,6 +67,11 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
 
   &__padding {
     padding: 0 8px;
+  }
+
+  &__block {
+    position: relative;
+    z-index: 3;
   }
 }
 

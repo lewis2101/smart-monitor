@@ -10,7 +10,7 @@ import DefaultPage from "@/layouts/default-page.vue";
 
 <template>
   <ion-page class="docs-page">
-    <ion-header>
+    <ion-header :translucent="true">
       <base-toolbar>
         <default-layout-header title="Ваши документы" hide-back />
       </base-toolbar>

@@ -55,8 +55,9 @@ const canGoBack = computed(() => router.canGoBack());
 
 <style scoped lang="scss">
 .default-layout-header {
-  background: $white;
+  background: $opacity-main;
   padding-top: env(safe-area-inset-top);
+  color: $white;
 
   &__content {
     position: relative;
@@ -64,9 +65,7 @@ const canGoBack = computed(() => router.canGoBack());
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 56px;
-
-    background: $white;
+    min-height: 70px;
 
     padding: 20px 16px;
   }

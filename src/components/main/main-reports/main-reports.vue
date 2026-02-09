@@ -11,7 +11,7 @@ const router = useIonRouter();
     <base-rect-item title="Черновики" rect-color="dark" icon="layer" />
     <base-rect-item title="Отправлено" rect-color="dark" icon="check" />
     <base-rect-item title="Закрытые" rect-color="dark" icon="check-all" />
-    <base-rect-item title="Все" rect-color="dark" icon="checklist" @click="router.push('/application')" />
+    <base-rect-item title="Все" rect-color="dark" icon="checklist" @click="router.push('/orders/!OrdersMine')" />
   </base-island-block>
 </template>
 
