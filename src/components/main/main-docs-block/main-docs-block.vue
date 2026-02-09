@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import BaseLiquidBlock from "@/components/base/base-liquid-block/base-liquid-block.vue";
 import BaseRectItem from "@/components/base/base-rect-item/base-rect-item.vue";
-import { useIonRouter } from "@ionic/vue";
-
-const router = useIonRouter();
 </script>
 
 <template>
   <base-liquid-block title="Мои документы">
     <div class="main-docs-block__content">
-      <base-rect-item title="Сертификаты" icon="article-person" />
-      <base-rect-item title="Техосмотры" icon="article-person" />
-      <base-rect-item title="Обучения" icon="article-person" />
-      <base-rect-item title="Все" @click="router.push('/docs')" icon="docs" />
+      <base-rect-item title="События" icon="article-person" rect-color="dark" />
+      <base-rect-item title="Обучение" icon="article-person" rect-color="dark" />
+      <base-rect-item title="Тесты" icon="article-person" rect-color="dark" />
+      <base-rect-item title="KPI" icon="docs" rect-color="dark" />
     </div>
   </base-liquid-block>
 </template>

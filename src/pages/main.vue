@@ -7,8 +7,8 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import MainHeader from "@/components/main/main-header/main-header.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import BriefingMenuBlock from "@/components/briefing/briefing-menu-block/briefing-menu-block.vue";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
+import MainStories from "@/components/main/main-stories/main-stories.vue";
 </script>
 
 <template>
@@ -30,9 +30,9 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
           :clickable="false"
           class="main-page__block"
         >
+          <main-stories />
           <main-menu-block class="main-menu-block" />
           <main-reports class="main-reports" />
-          <briefing-menu-block />
         </base-island-block>
       </div>
     </base-content-with-refresher>

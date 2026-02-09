@@ -7,7 +7,7 @@ const router = useIonRouter();
 </script>
 
 <template>
-  <base-island-block title="Мои заявки" class="main-reports">
+  <base-island-block title="Мои заявки" class="main-reports" :shadow="false">
     <base-rect-item title="Черновики" rect-color="dark" icon="layer" />
     <base-rect-item title="Отправлено" rect-color="dark" icon="check" />
     <base-rect-item title="Закрытые" rect-color="dark" icon="check-all" />
@@ -17,8 +17,6 @@ const router = useIonRouter();
 
 <style lang="scss" scoped>
 .main-reports {
-  border: 1px solid #f2f2f7;
-
   &:deep(.base-island-block__content) {
     width: 100%;
     flex-direction: row;

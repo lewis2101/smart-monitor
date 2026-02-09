@@ -22,7 +22,7 @@ const handleClick = (to?: string) => to && router.push(to);
 </script>
 
 <template>
-  <base-island-block rounded="M" rounded-orient="all" class="menu-block">
+  <base-island-block rounded="M" rounded-orient="all" class="menu-block" :shadow="false">
     <base-rect-item
       v-for="item in list"
       :key="item.title"
