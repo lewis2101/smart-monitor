@@ -15,10 +15,10 @@ const { pageId, refresh } = useRefreshPage([Scopes.getNotifications]);
   <ion-page class="notification-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header :title="$t('notification.header-title')" />
+        <default-layout-header :title="$t('notification.header-title')" variant="secondary" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="refresh">
+    <base-content-with-refresher @refresh="refresh" variant="secondary">
       <default-page>
         <notifications-list :key="pageId" />
       </default-page>

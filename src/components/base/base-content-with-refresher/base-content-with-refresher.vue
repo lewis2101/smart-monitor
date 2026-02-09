@@ -2,14 +2,12 @@
 import { IonContent, IonRefresher, IonRefresherContent, type RefresherCustomEvent } from "@ionic/vue";
 import { computed } from "vue";
 
-type LoaderColor = "light" | "dark";
-
 const props = withDefaults(
   defineProps<{
-    loaderColor?: LoaderColor;
+    variant?: "primary" | "secondary";
   }>(),
   {
-    loaderColor: "dark",
+    variant: "primary",
   },
 );
 
@@ -17,7 +15,7 @@ defineEmits<{
   (e: "refresh", event: RefresherCustomEvent): void;
 }>();
 
-const getColorLoader = computed(() => (props.loaderColor === "light" ? "#FFFFFF" : "#000000"));
+const getColorLoader = computed(() => (props.variant === "primary" ? "#FFFFFF" : "#000000"));
 </script>
 
 <template>
@@ -27,8 +25,11 @@ const getColorLoader = computed(() => (props.loaderColor === "light" ? "#FFFFFF"
         <slot name="refresher" />
       </ion-refresher-content>
     </ion-refresher>
-<!--    <div class="base-content__decor" />-->
-    <slot />
+    <div v-if="variant === 'primary'" class="base-content__decor" />
+    <div v-else class="base-content__decor-white" />
+    <div class="base-content__body">
+      <slot />
+    </div>
   </ion-content>
 </template>
 
@@ -41,6 +42,17 @@ const getColorLoader = computed(() => (props.loaderColor === "light" ? "#FFFFFF"
     position: fixed;
     inset: 0;
     background: $main-color;
+  }
+
+  &__decor-white {
+    position: fixed;
+    inset: 0;
+    background: $white;
+  }
+
+  &__body {
+    position: relative;
+    z-index: 1;
   }
 }
 .base-refresher {

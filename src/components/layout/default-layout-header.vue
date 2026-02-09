@@ -12,12 +12,14 @@ withDefaults(
     loading?: boolean;
     hideBack?: boolean;
     hideClose?: boolean;
+    variant?: "primary" | "secondary";
   }>(),
   {
     info: false,
     loading: false,
     hideBack: false,
     hideClose: false,
+    variant: "primary",
   },
 );
 
@@ -26,7 +28,7 @@ const canGoBack = computed(() => router.canGoBack());
 </script>
 
 <template>
-  <div class="default-layout-header">
+  <div :class="['default-layout-header', `default-layout-header__${variant}`]">
     <div class="default-layout-header__content">
       <base-icon
         v-if="canGoBack && !hideBack"
@@ -55,9 +57,17 @@ const canGoBack = computed(() => router.canGoBack());
 
 <style scoped lang="scss">
 .default-layout-header {
-  background: $opacity-main;
   padding-top: env(safe-area-inset-top);
-  color: $white;
+
+  &__primary {
+    background: $opacity-main;
+    color: $white;
+  }
+
+  &__secondary {
+    background: $white;
+    color: $black;
+  }
 
   &__content {
     position: relative;

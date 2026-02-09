@@ -20,10 +20,10 @@ const { auth, errors, isPending } = useLogin();
   <ion-page class="login-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Авторизация" />
+        <default-layout-header title="Авторизация" variant="secondary" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
       <default-page>
         <login-form :errors="errors" :loading="isPending" @submit="auth" />
       </default-page>

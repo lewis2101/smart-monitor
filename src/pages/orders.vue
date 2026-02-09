@@ -70,7 +70,6 @@ const contentParams = reactive({
     top: 0;
     left: 0;
     z-index: 1;
-    background-color: $white;
 
     padding: 4px 24px;
   }

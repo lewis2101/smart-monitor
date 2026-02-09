@@ -25,10 +25,10 @@ const processKey = computed(() => route.params.processKey as string);
   <ion-page class="new-order-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header :title="orderTitle" :loading="orderTitleLoading" />
+        <default-layout-header :title="orderTitle" :loading="orderTitleLoading" variant="secondary" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="refresh">
+    <base-content-with-refresher @refresh="refresh" variant="secondary">
       <default-page>
         <new-order-main-block :process-key="processKey" @get-label="handleChangeTitle" :key="pageId" />
       </default-page>

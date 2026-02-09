@@ -12,4 +12,8 @@ import { IonRouterOutlet, IonTabs, IonPage } from "@ionic/vue";
   </ion-page>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.ion-page {
+  background: #{$main-color};
+}
+</style>

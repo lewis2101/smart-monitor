@@ -12,10 +12,10 @@ import DefaultPage from "@/layouts/default-page.vue";
   <ion-page class="learning-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Обучение" />
+        <default-layout-header title="Обучение" variant="secondary" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
       <default-page>
         <learning-linked-info-block />
       </default-page>

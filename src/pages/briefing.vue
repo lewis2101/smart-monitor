@@ -12,10 +12,10 @@ import DefaultPage from "@/layouts/default-page.vue";
   <ion-page class="briefing-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Инструктажи и материалы" />
+        <default-layout-header title="Инструктажи и материалы" variant="secondary" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
       <default-page>
         <briefing-menu-block />
       </default-page>

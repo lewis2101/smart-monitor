@@ -12,10 +12,10 @@ import ProfileData from "@/components/profile/profile-data.vue";
   <ion-page class="profile-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header :title="$t('profile.header-title')" />
+        <default-layout-header :title="$t('profile.header-title')" variant="secondary" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
       <default-page>
         <profile-data />
       </default-page>

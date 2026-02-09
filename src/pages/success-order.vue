@@ -50,7 +50,7 @@ onMounted(() => {
 
 <template>
   <ion-page class="service-page">
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
       <default-page>
         <div class="success-order">
           <div :class="['success-order__image', showSuccess && 'success-order__image-show']">

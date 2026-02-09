@@ -117,7 +117,7 @@ const handleClickCreate = async () => {
 
 <style lang="scss" scoped>
 .main-footer {
-  --background: trasparent;
+  --background: transparent;
 
   position: relative;
   bottom: 0;

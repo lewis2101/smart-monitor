@@ -59,10 +59,10 @@ watch(error, (value) => {
   <ion-page class="file-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header :title="fileName" />
+        <default-layout-header :title="fileName" variant="secondary" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
       <default-page>
         <div class="file-page__body"></div>
         <div class="file-page__buttons">

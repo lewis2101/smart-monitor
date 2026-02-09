@@ -28,10 +28,10 @@ const orderId = route.params.orderId as string;
   <ion-page class="order-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header :title="orderTitle" :loading="orderTitleLoading" />
+        <default-layout-header :title="orderTitle" :loading="orderTitleLoading" variant="secondary" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="refresh">
+    <base-content-with-refresher @refresh="refresh" variant="secondary">
       <default-page>
         <order-main-block :order-id="orderId" :key="pageKey" @get-label="handleChangeTitle" />
       </default-page>

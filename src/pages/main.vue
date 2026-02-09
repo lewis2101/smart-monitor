@@ -18,8 +18,7 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
         <main-header />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher class="main-page__content" loader-color="light" @refresh="mockRefresh">
-      <div class="main-page__decor"></div>
+    <base-content-with-refresher class="main-page__content" @refresh="mockRefresh">
       <div class="main-page__body">
         <div class="main-page__top">
           <main-docs-block class="main-docs-block" />
@@ -45,13 +44,6 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
   &__content {
     //--background: linear-gradient(180deg, $main-color 15%, #ffffff 100%);
     --background: $main-color;
-  }
-
-  &__decor {
-    position: absolute;
-    inset: 0;
-    //background: linear-gradient(180deg, $main-color 15%, $main-color 30%, #ffffff 100%);
-    background: $main-color;
   }
 
   &__top {
