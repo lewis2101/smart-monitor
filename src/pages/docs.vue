@@ -6,6 +6,7 @@ import DocsLinkedInfoBlock from "@/components/docs/docs-linked-info-block/docs-l
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import DefaultPage from "@/layouts/default-page.vue";
+import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 </script>
 
 <template>
@@ -16,9 +17,11 @@ import DefaultPage from "@/layouts/default-page.vue";
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh">
-      <default-page>
-        <docs-linked-info-block />
-      </default-page>
+     <base-island-block :clickable="false">
+       <default-page>
+         <docs-linked-info-block />
+       </default-page>
+     </base-island-block>
     </base-content-with-refresher>
   </ion-page>
 </template>

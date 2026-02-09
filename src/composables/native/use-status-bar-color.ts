@@ -37,14 +37,16 @@ const routeNamesStatusBarColors: Record<AllRoutesType, Color> = {
   [MainTabRoutes.orders]: Color.main,
   [MainTabRoutes.service]: Color.main,
   //
-  [MainTabRoutes.briefing]: Color.secondary,
-  [OrderRoutes.newOrder]: Color.secondary,
-  [CommonRoutes.login]: Color.secondary,
-  [CommonRoutes.registration]: Color.secondary,
-  [CommonRoutes.learning]: Color.secondary,
-  [CommonRoutes.profile]: Color.secondary,
-  [CommonRoutes.notifications]: Color.secondary,
-  [CommonRoutes.fileView]: Color.secondary,
+  [MainTabRoutes.briefing]: Color.main,
+  [OrderRoutes.newOrder]: Color.main,
+  [CommonRoutes.login]: Color.main,
+  [CommonRoutes.registration]: Color.main,
+  [CommonRoutes.learning]: Color.main,
+  [CommonRoutes.profile]: Color.main,
+  [CommonRoutes.notifications]: Color.main,
+  [CommonRoutes.fileView]: Color.main,
+  [CommonRoutes.search]: Color.main,
+  [OrderRoutes.order]: Color.main,
 };
 
 async function setNativeColors(key: Color) {

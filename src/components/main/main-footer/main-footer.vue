@@ -130,7 +130,7 @@ const handleClickCreate = async () => {
   border-bottom: 0;
   padding: 0 16px var(--bottom-inset) 16px;
 
-  height: 80px;
+  height: 70px;
 
   & > * {
     background: transparent;
@@ -142,7 +142,7 @@ const handleClickCreate = async () => {
     width: 100%;
     background: #fffc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-    border: 1px solid var(--System-Gray-Light, #f2f2f7);
+    border: 1px solid #f2f2f7;
     backdrop-filter: blur(10px);
 
     height: 70px;

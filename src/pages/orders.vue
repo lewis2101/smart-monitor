@@ -13,6 +13,7 @@ import type { SortType } from "../../types/SortType.ts";
 import { useI18n } from "vue-i18n";
 import DefaultPage from "@/layouts/default-page.vue";
 import { useRoute } from "vue-router";
+import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 
 const route = useRoute();
 const ordersType = computed(() => route.params.ordersType as string);
@@ -56,9 +57,11 @@ const contentParams = reactive({
       <div class="orders-page__filter">
         <application-filter v-model:filter="filter" v-model:sort="sort" :params="headerParams" />
       </div>
-      <default-page>
-        <application-orders-block v-model:params="contentParams" :key="pageId" />
-      </default-page>
+      <base-island-block :clickable="false">
+        <default-page>
+          <application-orders-block v-model:params="contentParams" :key="pageId" />
+        </default-page>
+      </base-island-block>
     </base-content-with-refresher>
   </ion-page>
 </template>

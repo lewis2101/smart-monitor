@@ -9,12 +9,12 @@ import DefaultPage from "@/layouts/default-page.vue";
 
 <template>
   <ion-page class="search-page">
-    <ion-header>
+    <ion-header :translucent="true">
       <base-toolbar>
-        <default-layout-header title="Поиск" variant="secondary" />
+        <default-layout-header title="Поиск" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
+    <base-content-with-refresher @refresh="mockRefresh">
       <default-page>
         <div style="text-align: center">Страница в разработке</div>
       </default-page>

@@ -23,12 +23,12 @@ const model = reactive({
 
 <template>
   <ion-page class="registration-page">
-    <ion-header>
+    <ion-header :translucent="true">
       <base-toolbar>
-        <default-layout-header title="Регистрация" variant="secondary" />
+        <default-layout-header title="Регистрация" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
+    <base-content-with-refresher @refresh="mockRefresh">
       <div class="registration-page__body">
         <registration-form
           v-model:fio="model.fio"

@@ -57,12 +57,12 @@ watch(error, (value) => {
 
 <template>
   <ion-page class="file-page">
-    <ion-header>
+    <ion-header :translucent="true">
       <base-toolbar>
-        <default-layout-header :title="fileName" variant="secondary" />
+        <default-layout-header :title="fileName" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
+    <base-content-with-refresher @refresh="mockRefresh">
       <default-page>
         <div class="file-page__body"></div>
         <div class="file-page__buttons">

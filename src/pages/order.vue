@@ -9,8 +9,9 @@ import { useRefreshPageProvider } from "@/composables/use-refresh-page-provider.
 import DefaultPage from "@/layouts/default-page.vue";
 import { computed, ref } from "vue";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
+import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 
-const { pageKey, refreshPageKey} = useRefreshPageProvider();
+const { pageKey, refreshPageKey } = useRefreshPageProvider();
 const { refresh } = useRefreshPage([], () => refreshPageKey());
 
 const route = useRoute();
@@ -26,15 +27,17 @@ const orderId = route.params.orderId as string;
 
 <template>
   <ion-page class="order-page">
-    <ion-header>
+    <ion-header :translucent="true">
       <base-toolbar>
-        <default-layout-header :title="orderTitle" :loading="orderTitleLoading" variant="secondary" />
+        <default-layout-header :title="orderTitle" :loading="orderTitleLoading" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="refresh" variant="secondary">
-      <default-page>
-        <order-main-block :order-id="orderId" :key="pageKey" @get-label="handleChangeTitle" />
-      </default-page>
+    <base-content-with-refresher @refresh="refresh">
+      <base-island-block :clickable="false">
+        <default-page>
+          <order-main-block :order-id="orderId" :key="pageKey" @get-label="handleChangeTitle" />
+        </default-page>
+      </base-island-block>
     </base-content-with-refresher>
   </ion-page>
 </template>

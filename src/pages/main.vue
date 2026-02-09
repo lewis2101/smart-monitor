@@ -23,13 +23,7 @@ import MainStories from "@/components/main/main-stories/main-stories.vue";
         <div class="main-page__top">
           <main-docs-block class="main-docs-block" />
         </div>
-        <base-island-block
-          rounded-orient="all"
-          rounded="XL"
-          :shadow="false"
-          :clickable="false"
-          class="main-page__block"
-        >
+        <base-island-block :shadow="false" :clickable="false" class="main-page__block">
           <main-stories />
           <main-menu-block class="main-menu-block" />
           <main-reports class="main-reports" />
