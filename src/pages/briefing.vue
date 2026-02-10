@@ -5,20 +5,17 @@ import { IonHeader, IonPage } from "@ionic/vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import BriefingMenuBlock from "@/components/briefing/briefing-menu-block/briefing-menu-block.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import DefaultPage from "@/layouts/default-page.vue";
 </script>
 
 <template>
   <ion-page class="briefing-page">
-    <ion-header :translucent="true">
+    <ion-header>
       <base-toolbar>
         <default-layout-header title="Инструктажи и материалы" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
-      <default-page>
-        <briefing-menu-block />
-      </default-page>
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
+      <briefing-menu-block />
     </base-content-with-refresher>
   </ion-page>
 </template>

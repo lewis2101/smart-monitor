@@ -4,20 +4,17 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import { IonHeader, IonPage } from "@ionic/vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import DefaultPage from "@/layouts/default-page.vue";
 </script>
 
 <template>
   <ion-page class="search-page">
-    <ion-header :translucent="true">
+    <ion-header>
       <base-toolbar>
         <default-layout-header title="Поиск" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
-      <default-page>
-        <div style="text-align: center">Страница в разработке</div>
-      </default-page>
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
+      <div style="text-align: center">Страница в разработке</div>
     </base-content-with-refresher>
   </ion-page>
 </template>

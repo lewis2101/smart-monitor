@@ -11,9 +11,7 @@ import { ApplicationFilter } from "@/components/application/application-filter";
 import type { FilterType } from "../../types/FilterType.ts";
 import type { SortType } from "../../types/SortType.ts";
 import { useI18n } from "vue-i18n";
-import DefaultPage from "@/layouts/default-page.vue";
 import { useRoute } from "vue-router";
-import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 
 const route = useRoute();
 const ordersType = computed(() => route.params.ordersType as string);
@@ -48,20 +46,18 @@ const contentParams = reactive({
 
 <template>
   <ion-page class="orders-page">
-    <ion-header :translucent="true">
+    <ion-header>
       <base-toolbar>
         <default-layout-header :title="$t('orders.header-title')" hide-back hide-close />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="refresh">
+    <base-content-with-refresher class="orders-page__content" @refresh="refresh" variant="secondary" :x-offset="false">
       <div class="orders-page__filter">
         <application-filter v-model:filter="filter" v-model:sort="sort" :params="headerParams" />
       </div>
-      <base-island-block :clickable="false">
-        <default-page>
-          <application-orders-block v-model:params="contentParams" :key="pageId" />
-        </default-page>
-      </base-island-block>
+      <div class="orders-page__content">
+        <application-orders-block v-model:params="contentParams" :key="pageId" />
+      </div>
     </base-content-with-refresher>
   </ion-page>
 </template>
@@ -73,8 +69,13 @@ const contentParams = reactive({
     top: 0;
     left: 0;
     z-index: 1;
+    background: $white;
 
-    padding: 4px 24px;
+    padding: 16px 16px 0 16px;
+  }
+
+  &__content {
+    padding: 16px;
   }
 }
 </style>

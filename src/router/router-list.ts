@@ -25,4 +25,6 @@ export enum CommonRoutes {
   notifications = "notifications",
   fileView = "file-view",
   search = "search",
+  kpi = "kpi",
+  events = "events",
 }

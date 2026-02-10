@@ -49,11 +49,10 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .main-header {
-  background: $opacity-main;
+  background: $main-color;
   color: $white;
   padding: calc(12px + env(safe-area-inset-top)) 16px 12px 16px;
   border-bottom: 1px solid $opacity-main;
-  min-height: 70px;
 
   width: 100%;
   display: flex;

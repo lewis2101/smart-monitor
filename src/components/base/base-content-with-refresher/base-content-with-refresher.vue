@@ -5,9 +5,11 @@ import { computed } from "vue";
 const props = withDefaults(
   defineProps<{
     variant?: "primary" | "secondary";
+    xOffset?: boolean;
   }>(),
   {
     variant: "primary",
+    xOffset: true,
   },
 );
 
@@ -15,18 +17,17 @@ defineEmits<{
   (e: "refresh", event: RefresherCustomEvent): void;
 }>();
 
-const getColorLoader = computed(() => (props.variant === "primary" ? "#FFFFFF" : "#000000"));
+const getVariantColor = computed(() => (props.variant === "primary" ? "#066046" : "#FFFFFF"));
+const getXOffset = computed(() => (props.xOffset ? "16px" : 0));
 </script>
 
 <template>
-  <ion-content class="base-content" :fullscreen="true">
+  <ion-content class="base-content">
     <ion-refresher class="base-refresher" slot="fixed" @ion-refresh="$emit('refresh', $event)">
       <ion-refresher-content>
         <slot name="refresher" />
       </ion-refresher-content>
     </ion-refresher>
-    <div v-if="variant === 'primary'" class="base-content__decor" />
-    <div v-else class="base-content__decor-white" />
     <div class="base-content__body">
       <slot />
     </div>
@@ -35,28 +36,26 @@ const getColorLoader = computed(() => (props.variant === "primary" ? "#FFFFFF" :
 
 <style scoped lang="scss">
 .base-content {
-  --padding-bottom: 16px;
-  --background: $main-color;
+  --offset-bottom: 0;
+  --background: v-bind(getVariantColor);
+  border-radius: 24px;
 
-  &__decor {
-    position: fixed;
-    inset: 0;
-    background: $main-color;
+  &::part(scroll) {
+    border-radius: 24px 24px 0 0;
   }
 
-  &__decor-white {
-    position: fixed;
-    inset: 0;
-    background: $white;
+  &::part(background) {
+    border-radius: 24px 24px 0 0;
   }
 
   &__body {
     position: relative;
     z-index: 1;
+    padding: v-bind(getXOffset);
   }
 }
 .base-refresher {
   z-index: 10;
-  --color: v-bind(getColorLoader);
+  --color: #{$white} !important;
 }
 </style>

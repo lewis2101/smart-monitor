@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
+import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 
 const stories = [
   {
@@ -23,10 +24,12 @@ const stories = [
     title: "СИЗ головы",
   },
 ];
+
+await mockDelayPromise();
 </script>
 
 <template>
-  <base-island-block :shadow="false" title="Новости" :clickable="false">
+  <base-island-block title="Новости" :clickable="false">
     <div class="main-stories">
       <div v-for="(item, idx) in stories" :key="idx" class="main-stories__item">
         <div class="main-stories__item-img">
@@ -69,6 +72,7 @@ const stories = [
     }
     &-title {
       font-size: 12px;
+      text-align: center;
     }
   }
 }

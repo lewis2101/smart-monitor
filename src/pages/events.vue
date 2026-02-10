@@ -1,26 +1,32 @@
 <script setup lang="ts">
-import { IonHeader, IonPage } from "@ionic/vue";
+import { IonPage, IonHeader } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
-import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
-import LearningLinkedInfoBlock from "@/components/learning/learning-linked-info-block/learning-linked-info-block.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
+import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 </script>
 
 <template>
-  <ion-page class="learning-page">
+  <ion-page class="service-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Обучение" />
+        <default-layout-header title="События" />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
-      <learning-linked-info-block />
+      <div class="events">
+        <div class="events__title">Последние обновления и происшествия на объекте</div>
+      </div>
     </base-content-with-refresher>
   </ion-page>
 </template>
 
 <style scoped lang="scss">
-.learning-page {
+.service-page {
+}
+.events {
+  &__title {
+    font-weight: bold;
+  }
 }
 </style>

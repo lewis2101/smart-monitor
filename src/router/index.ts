@@ -17,6 +17,8 @@ import Notifications from "@/pages/notifications.vue";
 import SuccessOrder from "@/pages/success-order.vue";
 import FileView from "@/pages/file-view.vue";
 import Search from "@/pages/search.vue";
+import Kpi from "@/pages/kpi.vue";
+import Events from "@/pages/events.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -105,6 +107,16 @@ const router = createRouter({
       path: "/search",
       name: CommonRoutes.search,
       component: Search,
+    },
+    {
+      path: "/kpi",
+      name: CommonRoutes.kpi,
+      component: Kpi,
+    },
+    {
+      path: "/events",
+      name: CommonRoutes.events,
+      component: Events,
     },
   ],
 });

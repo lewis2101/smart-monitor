@@ -5,10 +5,8 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import { computed, ref } from "vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { useRoute } from "vue-router";
-import DefaultPage from "@/layouts/default-page.vue";
 import { NewOrderMainBlock } from "@/components/order/new-order-main-block";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
-import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 
 const route = useRoute();
 
@@ -24,17 +22,13 @@ const processKey = computed(() => route.params.processKey as string);
 
 <template>
   <ion-page class="new-order-page">
-    <ion-header :translucent="true">
+    <ion-header>
       <base-toolbar>
         <default-layout-header :title="orderTitle" :loading="orderTitleLoading" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="refresh">
-      <base-island-block :clickable="false">
-        <default-page>
-          <new-order-main-block :process-key="processKey" @get-label="handleChangeTitle" :key="pageId" />
-        </default-page>
-      </base-island-block>
+    <base-content-with-refresher @refresh="refresh" variant="secondary">
+      <new-order-main-block :process-key="processKey" @get-label="handleChangeTitle" :key="pageId" />
     </base-content-with-refresher>
   </ion-page>
 </template>

@@ -2,12 +2,15 @@
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import BaseRectItem from "@/components/base/base-rect-item/base-rect-item.vue";
 import { useIonRouter } from "@ionic/vue";
+import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 
 const router = useIonRouter();
+
+await mockDelayPromise();
 </script>
 
 <template>
-  <base-island-block title="Мои заявки" class="main-reports" :shadow="false">
+  <base-island-block title="Мои заявки" class="main-reports">
     <base-rect-item title="Черновики" rect-color="dark" icon="layer" />
     <base-rect-item title="Отправлено" rect-color="dark" icon="check" />
     <base-rect-item title="Закрытые" rect-color="dark" icon="check-all" />

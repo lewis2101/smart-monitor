@@ -46,9 +46,9 @@ const isHorizontal = computed(() => props.orientation === "horizontal");
   gap: v-bind("gap");
 
   &__rect {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
     background: v-bind("rectangleColor");
     margin-bottom: 4px;
     flex-shrink: 0;

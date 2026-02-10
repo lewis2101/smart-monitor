@@ -2,7 +2,6 @@
 import { IonPage, useIonRouter } from "@ionic/vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import DefaultPage from "@/layouts/default-page.vue";
 import { computed, onMounted, ref } from "vue";
 import { IonButton } from "@ionic/vue";
 import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
@@ -51,31 +50,29 @@ onMounted(() => {
 <template>
   <ion-page class="service-page">
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
-      <default-page>
-        <div class="success-order">
-          <div :class="['success-order__image', showSuccess && 'success-order__image-show']">
-            <img src="@/assets/images/success.png" alt="success-image" />
-          </div>
-          <div class="success-order__title">Заявка №{{ orderId }}</div>
-          <div class="success-order__description">{{ statusText }}</div>
-          <div class="success-order__description">{{ formattedDate }}</div>
+      <div class="success-order">
+        <div :class="['success-order__image', showSuccess && 'success-order__image-show']">
+          <img src="@/assets/images/success.png" alt="success-image" />
         </div>
-        <div class="success-order__button-wrapper">
-          <ion-button
-            fill="outline"
-            :class="['success-order__button', showHomeButton && 'success-order__button-show']"
-            @click="router.replace({ name: MainTabRoutes.home })"
-          >
-            Вернуть на главную
-          </ion-button>
-          <ion-button
-            :class="['success-order__button', showOrderButton && 'success-order__button-show']"
-            @click="router.replace({ name: OrderRoutes.order, params: { orderId: orderId } })"
-          >
-            Перейти в заявку
-          </ion-button>
-        </div>
-      </default-page>
+        <div class="success-order__title">Заявка №{{ orderId }}</div>
+        <div class="success-order__description">{{ statusText }}</div>
+        <div class="success-order__description">{{ formattedDate }}</div>
+      </div>
+      <div class="success-order__button-wrapper">
+        <ion-button
+          fill="outline"
+          :class="['success-order__button', showHomeButton && 'success-order__button-show']"
+          @click="router.replace({ name: MainTabRoutes.home })"
+        >
+          Вернуть на главную
+        </ion-button>
+        <ion-button
+          :class="['success-order__button', showOrderButton && 'success-order__button-show']"
+          @click="router.replace({ name: OrderRoutes.order, params: { orderId: orderId } })"
+        >
+          Перейти в заявку
+        </ion-button>
+      </div>
     </base-content-with-refresher>
   </ion-page>
 </template>

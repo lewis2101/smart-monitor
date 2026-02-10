@@ -6,10 +6,8 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import { useRoute } from "vue-router";
 import { OrderMainBlock } from "@/components/order/order-main-block";
 import { useRefreshPageProvider } from "@/composables/use-refresh-page-provider.ts";
-import DefaultPage from "@/layouts/default-page.vue";
 import { computed, ref } from "vue";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
-import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 
 const { pageKey, refreshPageKey } = useRefreshPageProvider();
 const { refresh } = useRefreshPage([], () => refreshPageKey());
@@ -27,17 +25,13 @@ const orderId = route.params.orderId as string;
 
 <template>
   <ion-page class="order-page">
-    <ion-header :translucent="true">
+    <ion-header>
       <base-toolbar>
         <default-layout-header :title="orderTitle" :loading="orderTitleLoading" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="refresh">
-      <base-island-block :clickable="false">
-        <default-page>
-          <order-main-block :order-id="orderId" :key="pageKey" @get-label="handleChangeTitle" />
-        </default-page>
-      </base-island-block>
+    <base-content-with-refresher @refresh="refresh" variant="secondary">
+      <order-main-block :order-id="orderId" :key="pageKey" @get-label="handleChangeTitle" />
     </base-content-with-refresher>
   </ion-page>
 </template>

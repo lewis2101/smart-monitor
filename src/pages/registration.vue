@@ -23,7 +23,7 @@ const model = reactive({
 
 <template>
   <ion-page class="registration-page">
-    <ion-header :translucent="true">
+    <ion-header>
       <base-toolbar>
         <default-layout-header title="Регистрация" />
       </base-toolbar>

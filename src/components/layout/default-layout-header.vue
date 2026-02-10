@@ -75,7 +75,6 @@ const canGoBack = computed(() => router.canGoBack());
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 70px;
 
     padding: 20px 16px;
   }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MenuBlock from "@/widgets/menu-block.vue";
+import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 
 type listType = InstanceType<typeof MenuBlock>["$props"]["list"];
 
@@ -42,6 +43,8 @@ const mainList: listType = [
     to: "/briefing",
   },
 ];
+
+await mockDelayPromise();
 </script>
 
 <template>

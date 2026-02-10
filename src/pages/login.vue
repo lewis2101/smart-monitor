@@ -8,8 +8,6 @@ import LoginForm from "@/components/login/login-form/login-form.vue";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 import { storeToRefs } from "pinia";
 import { useLogin } from "@/composables/login/use-login.ts";
-import DefaultPage from "@/layouts/default-page.vue";
-import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 
 const keyboardStore = useKeyboardStore();
 const { isVisibleKeyboard } = storeToRefs(keyboardStore);
@@ -19,17 +17,13 @@ const { auth, errors, isPending } = useLogin();
 
 <template>
   <ion-page class="login-page">
-    <ion-header :translucent="true">
+    <ion-header>
       <base-toolbar>
         <default-layout-header title="Авторизация" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
-     <base-island-block :clickable="false">
-       <default-page>
-         <login-form :errors="errors" :loading="isPending" @submit="auth" />
-       </default-page>
-     </base-island-block>
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
+      <login-form :errors="errors" :loading="isPending" @submit="auth" />
     </base-content-with-refresher>
     <ion-footer v-if="!isVisibleKeyboard">
       <ion-toolbar class="login-page__buttons">

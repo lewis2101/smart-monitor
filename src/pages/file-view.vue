@@ -4,7 +4,6 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
-import DefaultPage from "@/layouts/default-page.vue";
 import { useRoute } from "vue-router";
 import { computed, watch } from "vue";
 import { IonButton } from "@ionic/vue";
@@ -57,18 +56,16 @@ watch(error, (value) => {
 
 <template>
   <ion-page class="file-page">
-    <ion-header :translucent="true">
+    <ion-header>
       <base-toolbar>
         <default-layout-header :title="fileName" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh">
-      <default-page>
-        <div class="file-page__body"></div>
-        <div class="file-page__buttons">
-          <ion-button class="file-page__button">Поделиться</ion-button>
-        </div>
-      </default-page>
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
+      <div class="file-page__body"></div>
+      <div class="file-page__buttons">
+        <ion-button class="file-page__button">Поделиться</ion-button>
+      </div>
     </base-content-with-refresher>
   </ion-page>
 </template>

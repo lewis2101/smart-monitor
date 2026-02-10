@@ -53,7 +53,7 @@ const name = computed(() => `${userInfoStorage.value.firstName} ${userInfoStorag
   }
 
   &__language {
-    margin-bottom: 36px;
+    margin-bottom: 8px;
   }
 }
 </style>

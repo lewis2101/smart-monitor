@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import LinkedInfoBlock from "@/widgets/linked-info-block.vue";
+import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 
 type ListType = InstanceType<typeof LinkedInfoBlock>["$props"]["list"];
 
@@ -66,11 +67,12 @@ const infoList: ListType = [
     ],
   },
 ];
+
+await mockDelayPromise();
 </script>
 
 <template>
   <linked-info-block :list="infoList" />
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
