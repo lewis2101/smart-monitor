@@ -16,7 +16,7 @@ await mockDelayPromise();
     <base-island-block class="learning-score__wrapper" :clickable="false">
       <div class="learning-score__item">
         <div class="learning-score__title process">2</div>
-        <div class="learning-score__description">Пройдено</div>
+        <div class="learning-score__description">В процессе</div>
       </div>
     </base-island-block>
   </div>

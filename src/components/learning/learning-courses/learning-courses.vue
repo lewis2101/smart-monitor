@@ -3,6 +3,16 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { IonButton, IonProgressBar } from "@ionic/vue";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+
+const { push } = useGlobalBackdropStore();
+
+const handleClick = () => {
+  push("develop", {
+    title: "Этап не доступен",
+    props: {},
+  });
+};
 
 await mockDelayPromise();
 </script>
@@ -28,7 +38,7 @@ await mockDelayPromise();
             <span>Прогресс</span>
             <ion-progress-bar :value="0.65" />
           </div>
-          <ion-button>Продолжить</ion-button>
+          <ion-button @click="handleClick">Продолжить</ion-button>
         </div>
       </div>
     </base-island-block>
@@ -46,7 +56,7 @@ await mockDelayPromise();
             </div>
           </div>
           <div class="learning-courses__item-title">Оказание первой медицинской помощи</div>
-          <ion-button>Начать</ion-button>
+          <ion-button @click="handleClick">Начать</ion-button>
         </div>
       </div>
     </base-island-block>
@@ -68,7 +78,7 @@ await mockDelayPromise();
             <span>Прогресс</span>
             <ion-progress-bar :value="1" />
           </div>
-          <ion-button fill="outline">Повторить</ion-button>
+          <ion-button fill="outline" @click="handleClick">Повторить</ion-button>
         </div>
       </div>
     </base-island-block>
@@ -86,7 +96,7 @@ await mockDelayPromise();
             </div>
           </div>
           <div class="learning-courses__item-title">Электробезопасность (Группа II)</div>
-          <ion-button>Продолжить</ion-button>
+          <ion-button @click="handleClick">Продолжить</ion-button>
         </div>
       </div>
     </base-island-block>

@@ -3,7 +3,7 @@ import BaseLiquidBlock from "@/components/base/base-liquid-block/base-liquid-blo
 import BaseRectItem from "@/components/base/base-rect-item/base-rect-item.vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 import { useIonRouter } from "@ionic/vue";
-import { CommonRoutes } from "@/router/router-list.ts";
+import { CommonRoutes, MainTabRoutes } from "@/router/router-list.ts";
 
 const router = useIonRouter();
 
@@ -25,7 +25,12 @@ await mockDelayPromise();
         rect-color="dark"
         @click="router.push({ name: CommonRoutes.learning })"
       />
-      <base-rect-item title="Тесты" icon="article-person" rect-color="dark" />
+      <base-rect-item
+        title="Материалы"
+        icon="article-person"
+        rect-color="dark"
+        @click="router.push({ name: MainTabRoutes.briefing })"
+      />
       <base-rect-item title="KPI" icon="docs" rect-color="dark" @click="router.push({ name: CommonRoutes.kpi })" />
     </div>
   </base-liquid-block>

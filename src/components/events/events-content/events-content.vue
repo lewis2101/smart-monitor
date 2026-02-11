@@ -2,13 +2,23 @@
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+
+const { push } = useGlobalBackdropStore();
+
+const handleClick = () => {
+  push("develop", {
+    title: "Этап не доступен",
+    props: {},
+  });
+};
 
 await mockDelayPromise();
 </script>
 
 <template>
   <div class="events">
-    <base-island-block class="events__item-wrapper" :clickable="false">
+    <base-island-block class="events__item-wrapper" :clickable="true" @click="handleClick">
       <div class="events__item">
         <div class="events__item-icon danger">
           <base-icon name="danger" />
@@ -22,7 +32,7 @@ await mockDelayPromise();
         </div>
       </div>
     </base-island-block>
-    <base-island-block class="events__item-wrapper" :clickable="false">
+    <base-island-block class="events__item-wrapper" :clickable="true" @click="handleClick">
       <div class="events__item">
         <div class="events__item-icon warning">
           <base-icon name="warning" />
@@ -36,7 +46,7 @@ await mockDelayPromise();
         </div>
       </div>
     </base-island-block>
-    <base-island-block class="events__item-wrapper" :clickable="false">
+    <base-island-block class="events__item-wrapper" :clickable="true" @click="handleClick">
       <div class="events__item">
         <div class="events__item-icon notification">
           <base-icon name="notification" />
@@ -50,7 +60,7 @@ await mockDelayPromise();
         </div>
       </div>
     </base-island-block>
-    <base-island-block class="events__item-wrapper" :clickable="false">
+    <base-island-block class="events__item-wrapper" :clickable="true" @click="handleClick">
       <div class="events__item">
         <div class="events__item-icon info">
           <base-icon name="info" />
