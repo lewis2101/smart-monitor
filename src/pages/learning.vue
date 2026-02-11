@@ -2,9 +2,10 @@
 import { IonHeader, IonPage } from "@ionic/vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
-import LearningLinkedInfoBlock from "@/components/learning/learning-linked-info-block/learning-linked-info-block.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
+import { LearningScore } from "@/components/learning/learning-score";
+import { LearningCourses } from "@/components/learning/learning-courses";
 </script>
 
 <template>
@@ -15,7 +16,8 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
-      <learning-linked-info-block />
+      <learning-score />
+      <learning-courses />
     </base-content-with-refresher>
   </ion-page>
 </template>

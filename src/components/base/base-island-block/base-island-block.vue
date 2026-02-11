@@ -47,7 +47,7 @@ onMounted(() => {
 
 const radiusPx = computed(() => `${radiusMapper[props.rounded]}px`);
 const radius = computed(() => radiusOrientMapper[props.roundedOrient](radiusPx.value));
-const boxShadow = computed(() => (props.shadow ? `0 8px 16px 0 #00000014` : "none"));
+const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"));
 </script>
 
 <template>
