@@ -7,7 +7,7 @@ import { IonSkeletonText } from "@ionic/vue";
   <base-island-block class="wrapper" :clickable="false">
     <ion-skeleton-text class="skeleton-title" />
     <div class="content">
-      <div v-for="i in 4" :key="i">
+      <div v-for="i in 6" :key="i">
         <ion-skeleton-text animated class="skeleton-circle" />
         <ion-skeleton-text animated class="skeleton-text" />
       </div>
@@ -20,9 +20,10 @@ import { IonSkeletonText } from "@ionic/vue";
   width: 100%;
 }
 .content {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  place-items: center;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  gap: 16px;
   width: 100%;
 }
 .skeleton-title {
@@ -33,13 +34,13 @@ import { IonSkeletonText } from "@ionic/vue";
   margin-left: 8px;
 }
 .skeleton-circle {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   margin-bottom: 8px;
 }
 .skeleton-text {
-  width: 50px;
+  width: 100%;
   height: 15px;
   border-radius: 16px;
 }

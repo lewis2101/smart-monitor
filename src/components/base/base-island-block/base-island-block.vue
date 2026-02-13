@@ -52,7 +52,10 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
 
 <template>
   <div :class="['base-island-block']" ref="islandBlockRef">
-    <span v-if="title" class="base-island-block__title">{{ title }}</span>
+    <div v-if="title || $slots['top-right']" class="base-island-block__header">
+      <span v-if="title" class="base-island-block__title">{{ title }}</span>
+      <slot name="top-right" />
+    </div>
     <div class="base-island-block__content">
       <slot />
     </div>
@@ -71,6 +74,13 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
   flex-direction: column;
   justify-content: center;
   gap: 8px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 4px;
+  }
 
   &__title {
     font-weight: 600;

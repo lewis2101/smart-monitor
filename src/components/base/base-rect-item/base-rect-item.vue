@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, useTemplateRef } from "vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 
 type Orientation = "horizontal" | "vertical";
 type RectColor = "light" | "dark";
@@ -12,27 +13,40 @@ const props = withDefaults(
     description?: string;
     orientation?: Orientation;
     icon?: string;
+    clickable?: boolean;
   }>(),
   {
     rectColor: "light",
     orientation: "vertical",
+    clickable: false,
   },
 );
+
+const rectItemRef = useTemplateRef("rectItemRef");
+
 // 625B71
-const rectangleColor = computed(() => props.rectColor === "light" ? "#FFFFFF" : "#066046");
+const rectangleColor = computed(() => (props.rectColor === "light" ? "#FFFFFF" : "#066046"));
 const direction = computed(() => (props.orientation === "horizontal" ? "row" : "column"));
 const gap = computed(() => (props.orientation === "horizontal" ? "8px" : "2px"));
 const iconColor = computed(() => (props.rectColor === "light" ? "#066046" : "#FFFFFF"));
 const isHorizontal = computed(() => props.orientation === "horizontal");
+
+onMounted(() => {
+  if (props.clickable) {
+    useBubbleAnimate(rectItemRef);
+  }
+});
 </script>
 
 <template>
-  <div class="base-rect-item">
+  <div ref="rectItemRef" class="base-rect-item">
     <div class="base-rect-item__rect">
       <base-icon v-if="icon" :name="icon" class="base-rect-item__icon" />
     </div>
     <div class="base-rect-item__content">
-      <div :class="isHorizontal ? 'base-rect-item__horizontal-title' : 'base-rect-item__vertical-title'">{{ title }}</div>
+      <div :class="isHorizontal ? 'base-rect-item__horizontal-title' : 'base-rect-item__vertical-title'">
+        {{ title }}
+      </div>
       <div v-if="isHorizontal && description" class="base-rect-item__description">{{ description }}</div>
     </div>
   </div>

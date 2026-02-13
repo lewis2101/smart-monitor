@@ -18,7 +18,7 @@ defineEmits<{
 }>();
 
 const getVariantColor = computed(() => (props.variant === "primary" ? "#066046" : "#FFFFFF"));
-const getXOffset = computed(() => (props.xOffset ? "16px" : 0));
+const getXOffset = computed(() => (props.xOffset ? "16px 16px calc(16px + env(safe-area-inset-bottom)) 16px" : 0));
 </script>
 
 <template>

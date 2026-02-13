@@ -11,27 +11,36 @@ await mockDelayPromise();
 </script>
 
 <template>
-  <base-liquid-block title="Основные">
+  <base-liquid-block title="Основные" :clickable="false">
     <div class="main-docs-block__content">
       <base-rect-item
         title="События"
-        icon="article-person"
+        icon="events"
         rect-color="dark"
+        clickable
         @click="router.push({ name: CommonRoutes.events })"
       />
       <base-rect-item
         title="Обучение"
-        icon="article-person"
+        icon="learning"
         rect-color="dark"
+        clickable
         @click="router.push({ name: CommonRoutes.learning })"
       />
       <base-rect-item
         title="Материалы"
-        icon="article-person"
+        icon="folder"
         rect-color="dark"
+        clickable
         @click="router.push({ name: MainTabRoutes.briefing })"
       />
-      <base-rect-item title="KPI" icon="docs" rect-color="dark" @click="router.push({ name: CommonRoutes.kpi })" />
+      <base-rect-item
+        title="KPI"
+        icon="stats"
+        rect-color="dark"
+        clickable
+        @click="router.push({ name: CommonRoutes.kpi })"
+      />
     </div>
   </base-liquid-block>
 </template>

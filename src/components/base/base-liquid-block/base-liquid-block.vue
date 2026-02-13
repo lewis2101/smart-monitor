@@ -37,7 +37,7 @@ onMounted(() => {
   padding: 16px 8px;
 
   &__title {
-    padding: 0 8px;
+    padding: 0 16px;
     font-size: 16px;
     font-weight: 600;
     line-height: 100%;

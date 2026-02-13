@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { MainDocsBlock } from "@/components/main/main-docs-block";
-import { MainMenuBlock } from "@/components/main/main-menu-block";
 import { MainReports } from "@/components/main/main-reports";
 import { IonPage, IonHeader } from "@ionic/vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
@@ -9,6 +8,8 @@ import MainHeader from "@/components/main/main-header/main-header.vue";
 import { MainStories } from "@/components/main/main-stories";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
+import { MainNews } from "@/components/main/main-news";
+import { MainExpress } from "@/components/main/main-express";
 
 const { pageId, refresh } = useRefreshPage([]);
 </script>
@@ -27,7 +28,10 @@ const { pageId, refresh } = useRefreshPage([]);
         </div>
         <base-island-block class="main-page__body" :clickable="false" rounded-orient="top" :shadow="false">
           <main-stories />
-          <main-menu-block />
+          <main-news />
+          <!--          <main-menu-block />-->
+
+          <main-express />
           <main-reports />
         </base-island-block>
       </div>
@@ -43,6 +47,8 @@ const { pageId, refresh } = useRefreshPage([]);
   }
 
   &__top {
+    position: sticky;
+    top: 0;
     padding: 0 8px;
     margin-bottom: 8px;
   }
