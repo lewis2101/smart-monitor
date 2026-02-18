@@ -8,23 +8,10 @@ export const useCameraPick = () => {
 
   const globalBackdropStore = useGlobalBackdropStore();
 
-  const cameraPickList = [
-    {
-      label: "Камера",
-      value: "camera",
-    },
-    {
-      label: "Галерея",
-      value: "gallery",
-    },
-  ];
-
   const getPhoto = async () => {
-    const photoTypeSelect = (await globalBackdropStore.push("pick", {
+    const photoTypeSelect = (await globalBackdropStore.push("camera-pick", {
       title: "Прикрепить",
-      props: {
-        list: cameraPickList,
-      },
+      props: {},
     })) as "camera" | "gallery";
 
     const photo = await globalSpinner.execute(() => (photoTypeSelect === "camera" ? takePhoto() : pickGallery()));

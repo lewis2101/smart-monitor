@@ -16,6 +16,7 @@ export enum OrderRoutes {
   order = "order",
   orders = "orders",
   successOrder = "success-order",
+  mockOrder = "mock-order",
 }
 
 export enum CommonRoutes {

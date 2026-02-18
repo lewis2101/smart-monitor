@@ -19,6 +19,7 @@ import FileView from "@/pages/file-view.vue";
 import Search from "@/pages/search.vue";
 import Kpi from "@/pages/kpi.vue";
 import Events from "@/pages/events.vue";
+import MockOrder from "@/pages/mock-order.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -122,6 +123,11 @@ const router = createRouter({
       path: "/events",
       name: CommonRoutes.events,
       component: Events,
+    },
+    {
+      path: "/mock-order/:processKey",
+      name: OrderRoutes.mockOrder,
+      component: MockOrder,
     },
   ],
 });

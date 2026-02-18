@@ -11,6 +11,7 @@ import TimelineBackdrop from "@/widgets/backdrops/timeline-backdrop/timeline-bac
 import MapPinPickerBackdrop from "@/widgets/backdrops/map-pin-picker-backdrop/map-pin-picker-backdrop.vue";
 import DevelopBackdrop from "@/widgets/backdrops/develop-backdrop/develop-backdrop.vue";
 import ProcessListBackdrop from "@/widgets/backdrops/process-list-backdrop/process-list-backdrop.vue";
+import CameraPickBackdrop from "@/widgets/backdrops/camera-pick-backdrop/camera-pick-backdrop.vue";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {
   onSuccess?: S;
@@ -38,4 +39,5 @@ export const backdropComponents = {
   "map-pin-picker": markRaw(MapPinPickerBackdrop),
   develop: markRaw(DevelopBackdrop),
   "process-list": markRaw(ProcessListBackdrop),
+  "camera-pick": markRaw(CameraPickBackdrop),
 } as const;

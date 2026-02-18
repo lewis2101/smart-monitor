@@ -52,6 +52,10 @@ const processList = [
     color: "warning",
     title: "ПАБ",
     description: "Аудит поведения",
+    action: () => {
+      router.push({ name: OrderRoutes.mockOrder, params: { processKey: "PAB" } });
+      emit("closeBackdrop");
+    },
   },
   {
     icon: "search",
