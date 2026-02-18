@@ -1,15 +1,16 @@
 import { type Component, markRaw, type Raw } from "vue";
-import PickBackdrop from "@/widgets/backdrops/pick-backdrop.vue";
-import MapBackdrop from "@/widgets/backdrops/map-backdrop.vue";
-import FilterBackdrop from "@/widgets/backdrops/filter-backdrop.vue";
-import SelectBackdrop from "@/widgets/backdrops/select-backdrop.vue";
-import DatePickerBackdrop from "@/widgets/backdrops/date-picker-backdrop.vue";
+import PickBackdrop from "@/widgets/backdrops/pick-backdrop/pick-backdrop.vue";
+import MapBackdrop from "@/widgets/backdrops/map-backdrop/map-backdrop.vue";
+import FilterBackdrop from "@/widgets/backdrops/filter-backdrop/filter-backdrop.vue";
+import SelectBackdrop from "@/widgets/backdrops/select-backdrop/select-backdrop.vue";
+import DatePickerBackdrop from "@/widgets/backdrops/date-picker-backdrop/date-picker-backdrop.vue";
 import type { ExtractProps } from "@/utils/extractProps.ts";
-import ListTreeBackdrop from "@/widgets/backdrops/list-tree-backdrop.vue";
-import QuantityBackdrop from "@/widgets/backdrops/quantity-backdrop.vue";
-import TimelineBackdrop from "@/widgets/backdrops/timeline-backdrop.vue";
-import MapPinPickerBackdrop from "@/widgets/backdrops/map-pin-picker-backdrop.vue";
-import DevelopBackdrop from "@/widgets/backdrops/develop-backdrop.vue";
+import ListTreeBackdrop from "@/widgets/backdrops/list-tree-backdrop/list-tree-backdrop.vue";
+import QuantityBackdrop from "@/widgets/backdrops/quantity-backdrop/quantity-backdrop.vue";
+import TimelineBackdrop from "@/widgets/backdrops/timeline-backdrop/timeline-backdrop.vue";
+import MapPinPickerBackdrop from "@/widgets/backdrops/map-pin-picker-backdrop/map-pin-picker-backdrop.vue";
+import DevelopBackdrop from "@/widgets/backdrops/develop-backdrop/develop-backdrop.vue";
+import ProcessListBackdrop from "@/widgets/backdrops/process-list-backdrop/process-list-backdrop.vue";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {
   onSuccess?: S;
@@ -36,4 +37,5 @@ export const backdropComponents = {
   timeline: markRaw(TimelineBackdrop),
   "map-pin-picker": markRaw(MapPinPickerBackdrop),
   develop: markRaw(DevelopBackdrop),
+  "process-list": markRaw(ProcessListBackdrop),
 } as const;

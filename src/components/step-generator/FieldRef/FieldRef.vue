@@ -4,7 +4,7 @@ import { computed, type ComputedRef, ref, watch } from "vue";
 import { useResourceDependencyQuery } from "@/api/dependency/resource-dependency.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { IonSpinner } from "@ionic/vue";
-import SelectInput from "@/widgets/select-input.vue";
+import SelectInput from "@/widgets/select-input/select-input.vue";
 import { tryToParseNumber } from "@/utils/tryToParseNumber.ts";
 import { useToast } from "primevue/usetoast";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";

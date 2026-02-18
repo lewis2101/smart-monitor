@@ -12,6 +12,7 @@ import type { FilterType } from "../../types/FilterType.ts";
 import type { SortType } from "../../types/SortType.ts";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { MainTabRoutes } from "@/router/router-list.ts";
 
 const route = useRoute();
 const ordersType = computed(() => route.params.ordersType as string);
@@ -48,7 +49,11 @@ const contentParams = reactive({
   <ion-page class="orders-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header :title="$t('orders.header-title')" hide-back hide-close />
+        <default-layout-header
+          :title="$t('orders.header-title')"
+          :hide-back="route.name === MainTabRoutes.orders"
+          :hide-close="route.name === MainTabRoutes.orders"
+        />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher class="orders-page__content" @refresh="refresh" variant="secondary" :x-offset="false">
@@ -56,7 +61,7 @@ const contentParams = reactive({
         <application-filter v-model:filter="filter" v-model:sort="sort" :params="headerParams" />
       </div>
       <div class="orders-page__content">
-        <application-orders-block v-model:params="contentParams" :key="pageId" />
+        <application-orders-block v-model:params="contentParams" :key="pageId" :ordersType="ordersType" />
       </div>
     </base-content-with-refresher>
   </ion-page>

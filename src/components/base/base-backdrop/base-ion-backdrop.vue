@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonModal } from "@ionic/vue";
+import { IonModal, IonContent } from "@ionic/vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { useTemplateRef } from "vue";
 
@@ -23,62 +23,88 @@ defineExpose({
   <ion-modal
     ref="bottomSheetRef"
     :is-open="model"
-    :initial-breakpoint="1"
-    :breakpoints="[0, 1]"
+    :initial-breakpoint="0.8"
+    :breakpoints="[0, 0.8]"
     handle
     backdrop-dismiss
     swipe-to-close
-    keyboard-attach
+    keyboard-close
+    keep-contents-mounted
     @didDismiss="model = false"
-    :expand-to-scroll="true"
-    class="sheet-modal base-backdrop"
+    :expand-to-scroll="false"
+    class="base-backdrop"
   >
-    <div class="sheet-content">
-      <div class="base-backdrop__header">
-        <div class="base-backdrop__title">
-          {{ title }}
+    <ion-content>
+      <div class="base-backdrop__content">
+<!--        <div class="base-backdrop__handler">-->
+<!--          <div class="base-backdrop__handler-button" />-->
+<!--        </div>-->
+        <div class="base-backdrop__header">
+          <div class="base-backdrop__title">
+            {{ title }}
+          </div>
+          <button class="base-backdrop__close" @click="closeBackdrop">
+            <base-icon name="close" />
+          </button>
         </div>
-        <button class="base-backdrop__close" @click="closeBackdrop">
-          <base-icon name="close" />
-        </button>
+        <div class="base-backdrop__body">
+          <slot />
+        </div>
       </div>
-      <div class="base-backdrop__body">
-        <slot />
-      </div>
-    </div>
+    </ion-content>
   </ion-modal>
 </template>
 
 <style scoped lang="scss">
-ion-modal.sheet-modal {
-  --height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-ion-modal.sheet-modal::part(content) {
-  position: relative;
-  display: block;
-  contain: content;
-}
-ion-modal.sheet-modal .sheet-content {
-  --padding-top: 16px;
-  --padding-bottom: env(safe-area-inset-bottom);
-  --padding-start: 16px;
-  --padding-end: 16px;
-
-  overflow: auto;
-  max-height: 90vh;
-}
-
 .base-backdrop {
-  &__header {
+  ion-content::part(scroll) {
+    padding-top: 53px;
+  }
+
+  //&::part(handle) {
+  //  width: 100%;
+  //  height: 60px;
+  //  top: 0;
+  //  opacity: 0;
+  //}
+
+  &__content {
     position: relative;
+  }
+
+  //&__handler {
+  //  position: fixed;
+  //  top: 0;
+  //  z-index: 13;
+  //
+  //  width: 100%;
+  //  height: 16px;
+  //  background: $white;
+  //  border-radius: 10px 10px 0 0;
+  //
+  //  display: flex;
+  //  align-items: center;
+  //  justify-content: center;
+  //}
+  //
+  //&__handler-button {
+  //  width: 36px;
+  //  height: 5px;
+  //  background: $gray-dark;
+  //  border-radius: 24px;
+  //}
+
+  &__header {
+    position: fixed;
+    top: 0;
+    z-index: 10;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 20px 16px 16px 16px;
+
+    background: $white;
   }
 
   &__title {
@@ -98,6 +124,7 @@ ion-modal.sheet-modal .sheet-content {
   }
 
   &__body {
+    position: relative;
     padding-bottom: env(safe-area-inset-bottom);
   }
 }

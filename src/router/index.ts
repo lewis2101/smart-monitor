@@ -79,6 +79,11 @@ const router = createRouter({
       component: NewOrder,
     },
     {
+      path: "/view/orders/:ordersType",
+      name: OrderRoutes.orders,
+      component: Orders,
+    },
+    {
       path: "/order/:orderId",
       name: OrderRoutes.order,
       component: Order,

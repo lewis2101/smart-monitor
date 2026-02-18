@@ -4,6 +4,7 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
+import { ServicesMenu } from "@/widgets/sevices-menu";
 </script>
 
 <template>
@@ -14,7 +15,7 @@ import { mockRefresh } from "@/utils/mockRefresh.ts";
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
-      <div style="text-align: center">Страница в разработке</div>
+      <services-menu />
     </base-content-with-refresher>
   </ion-page>
 </template>

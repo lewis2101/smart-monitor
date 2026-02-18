@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LinkedInfoBlock from "@/widgets/linked-info-block.vue";
+import LinkedInfoBlock from "@/widgets/linked-info-block/linked-info-block.vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 
 type ListType = InstanceType<typeof LinkedInfoBlock>["$props"]["list"];

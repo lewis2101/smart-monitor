@@ -7,12 +7,16 @@ import ErrorBlock from "@/components/error-block.vue";
 type Params = InstanceType<typeof ApplicationOrdersBlock>["$props"]["params"];
 
 const paramsModel = defineModel<Params>("params", { required: true });
+
+defineProps<{
+  ordersType: string;
+}>();
 </script>
 
 <template>
   <error-boundary>
     <suspense>
-      <application-orders-block v-bind="$attrs" v-model:params="paramsModel" />
+      <application-orders-block v-bind="{ ...$attrs, ...$props }" v-model:params="paramsModel" />
       <template #fallback>
         <skeleton />
       </template>

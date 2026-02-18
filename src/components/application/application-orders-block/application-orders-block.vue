@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, ref, watch, watchEffect } from "vue";
+import { computed, type ComputedRef, ref, watch } from "vue";
 import { useOrdersMineViewQuery, type RawData, type Response } from "@/api/orders/orders-mine-view.ts";
 import { useQuery } from "@tanstack/vue-query";
-import LinkedInfoBlock from "@/widgets/linked-info-block.vue";
+import LinkedInfoBlock from "@/widgets/linked-info-block/linked-info-block.vue";
 import Skeleton from "./skeleton.vue";
 import { formatDateString } from "@/utils/formatDate.ts";
 import { useI18n } from "vue-i18n";
@@ -10,6 +10,10 @@ import { useI18n } from "vue-i18n";
 type ListType = InstanceType<typeof LinkedInfoBlock>["$props"]["list"];
 
 const { t } = useI18n();
+
+const props = defineProps<{
+  ordersType: string;
+}>();
 
 const paramsModel = defineModel<RawData>("params", { required: true });
 const paginationLoading = ref(false);
@@ -19,7 +23,8 @@ const sizeOfList = ref(0);
 
 const contentOptions = useOrdersMineViewQuery({
   params: paramsModel,
-  getUrl: (url) => url + "/!OrdersMine",
+  getUrl: (url) => url + `/${props.ordersType}`,
+  keys: [props.ordersType],
 });
 
 const { suspense, data, isPending, error } = useQuery(contentOptions);
@@ -43,12 +48,6 @@ const linkedInfoList: ComputedRef<ListType> = computed(() => {
       ],
     })) || []
   );
-});
-
-watchEffect(() => {
-  if (error.value) {
-    throw error;
-  }
 });
 
 watch(
@@ -79,6 +78,12 @@ const loadMore = () => {
     paginationLoading.value = true;
   }
 };
+
+watch(error, (value) => {
+  if (value) {
+    throw value;
+  }
+});
 
 await suspense();
 </script>

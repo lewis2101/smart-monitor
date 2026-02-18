@@ -2,6 +2,7 @@
 import { formatDateString } from "@/utils/formatDate.ts";
 import { onMounted, useTemplateRef } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 
 withDefaults(
   defineProps<{
@@ -29,20 +30,45 @@ const getFormattedListMessage = (text: string) => {
 
 <template>
   <div ref="notificationItemRef" :class="['notification-item', isRead && 'notification-item-readed']">
-    <div v-if="!isRead" class="notification-item-new" />
-    <div class="notification-item-title">
-      <div><span class="bold">Заявка: </span> {{ orderNumber }}</div>
-      <div><span class="bold">Инифицатор: </span> {{ userName }}</div>
-      <div><span class="bold">Дата создания: </span> {{ formatDateString(createdAt, { time: true }) }}</div>
+    <div class="notification-item__icon">
+      <base-icon name="info" />
     </div>
-    <div v-for="(text, textIdx) in getFormattedListMessage(message)" :key="text + textIdx">
-      {{ text }}
+    <div>
+      <div v-if="!isRead" class="notification-item-new" />
+      <div class="notification-item-title">
+        <div><span class="bold">Заявка: </span> {{ orderNumber }}</div>
+        <div><span class="bold">Инифицатор: </span> {{ userName }}</div>
+        <div><span class="bold">Дата создания: </span> {{ formatDateString(createdAt, { time: true }) }}</div>
+      </div>
+<!--      <div class="notification-item__content">-->
+<!--        <div v-for="(text, textIdx) in getFormattedListMessage(message)" :key="text + textIdx">-->
+<!--          {{ text }}-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .notification-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &__icon {
+    background: $secondary-color;
+    width: 56px;
+    height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+
+    flex-shrink: 0;
+    color: $white;
+  }
+
   &-readed {
     color: $gray-dark;
   }
@@ -59,7 +85,8 @@ const getFormattedListMessage = (text: string) => {
   }
 
   &-title {
-    margin-bottom: 16px;
+    font-size: 14px;
+    //margin-bottom: 16px;
   }
 
   &-new {

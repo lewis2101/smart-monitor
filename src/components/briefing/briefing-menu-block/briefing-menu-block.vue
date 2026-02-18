@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MenuBlock from "@/widgets/menu-block.vue";
+import MenuBlock from "@/widgets/menu-block/menu-block.vue";
 
 type listType = InstanceType<typeof MenuBlock>["$props"]["list"];
 

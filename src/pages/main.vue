@@ -27,6 +27,9 @@ const { pageId, refresh } = useRefreshPage([]);
           <main-docs-block class="main-docs-block" />
         </div>
         <base-island-block class="main-page__body" :clickable="false" rounded-orient="top" :shadow="false">
+          <div class="main-page__handler">
+            <div class="main-page__handler-button" />
+          </div>
           <main-stories />
           <main-news />
           <!--          <main-menu-block />-->
@@ -46,6 +49,28 @@ const { pageId, refresh } = useRefreshPage([]);
     //--background: $main-color;
   }
 
+  &__handler {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    width: 100%;
+    height: 16px;
+    background: $white;
+    border-radius: 10px 10px 0 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__handler-button {
+    width: 36px;
+    height: 5px;
+    background: $gray-dark;
+    border-radius: 24px;
+  }
+
   &__top {
     position: sticky;
     top: 0;
@@ -56,6 +81,7 @@ const { pageId, refresh } = useRefreshPage([]);
   &__body {
     position: relative;
     z-index: 1;
+    padding: 0 12px 12px 12px;
   }
 
   &__padding {

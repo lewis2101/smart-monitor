@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { StepField } from "@/components/step-generator/types.ts";
-import SelectInput from "@/widgets/select-input.vue";
+import SelectInput from "@/widgets/select-input/select-input.vue";
 import { computed, type ComputedRef, reactive, watch } from "vue";
 import { IonSpinner } from "@ionic/vue";
 import type { OrderPartsContentChild } from "@/api/orders/new-order-parts.ts";

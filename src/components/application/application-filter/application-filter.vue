@@ -29,9 +29,9 @@ const sortValues = computed(() => [
 
 const headerOptions = useOrdersMineHeaderQuery({
   params: props.params,
-  getUrl: (url) => url + "/!OrdersMine",
+  getUrl: (url) => url + `/${props.params.tabName}`,
 });
-const { data, suspense } = useQuery(headerOptions);
+const { data, suspense, error } = useQuery(headerOptions);
 
 const filterModel = defineModel<FilterType[]>("filter", { required: true });
 const sortModel = defineModel<SortType>("sort", { required: true });
@@ -68,6 +68,12 @@ watch(filterModel, () => {
     ...sortModel.value,
     page: 1,
   };
+});
+
+watch(error, (value) => {
+  if (value) {
+    throw value;
+  }
 });
 
 await suspense();

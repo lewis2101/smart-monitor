@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import GlobalBackdrops from "@/widgets/global-backdrops.vue";
+import GlobalBackdrops from "@/widgets/backdrops/global-backdrops.vue";
 import { IonApp, IonRouterOutlet } from "@ionic/vue";
-import GlobalSpinner from "@/widgets/global-spinner.vue";
+import GlobalSpinner from "@/widgets/global-spinner/global-spinner.vue";
 import { nextTick, onMounted } from "vue";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { useStatusBarColor } from "@/composables/native/use-status-bar-color.ts";

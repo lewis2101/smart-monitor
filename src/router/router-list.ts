@@ -4,16 +4,17 @@
  */
 
 export enum MainTabRoutes {
-  home = "home",
-  docs = "docs",
-  briefing = "briefing",
-  orders = "orders",
-  service = "service",
+  home = "mainHome",
+  docs = "mainDocs",
+  briefing = "mainBriefing",
+  orders = "mainOrders",
+  service = "mainService",
 }
 
 export enum OrderRoutes {
   newOrder = "new-order",
   order = "order",
+  orders = "orders",
   successOrder = "success-order",
 }
 

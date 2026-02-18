@@ -3,6 +3,7 @@ import BaseBackdrop from "@/components/base/base-backdrop/base-backdrop.vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import { storeToRefs } from "pinia";
 import { useTemplateRef } from "vue";
+import BaseIonBackdrop from "@/components/base/base-backdrop/base-ion-backdrop.vue";
 
 const globalBackdropStore = useGlobalBackdropStore();
 const { backdrops } = storeToRefs(globalBackdropStore);

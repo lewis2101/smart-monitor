@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SelectInput from "@/widgets/select-input.vue";
+import SelectInput from "@/widgets/select-input/select-input.vue";
 import type { StepField } from "@/components/step-generator/types.ts";
 import { useClientVehiclesQuery, type Vehicle } from "@/api/orders/client-vehicles.ts";
 import { IonSpinner } from "@ionic/vue";

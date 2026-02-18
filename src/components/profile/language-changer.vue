@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SelectInput from "@/widgets/select-input.vue";
+import SelectInput from "@/widgets/select-input/select-input.vue";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 

@@ -11,7 +11,7 @@ import { useResourceDependencyQuery } from "@/api/dependency/resource-dependency
 import { useQuery } from "@tanstack/vue-query";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 
-const BPMN_PROCESS_KEY_RESOURCE = "BpmnProcessKey";
+// const BPMN_PROCESS_KEY_RESOURCE = "BpmnProcessKey";
 
 const router = useIonRouter();
 const route = useRoute();
@@ -24,54 +24,61 @@ const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWit
 
 const createRef = useTemplateRef("createRef");
 
-const resourceDependencyQuery = useResourceDependencyQuery({
-  getUrl: (url) => `${url}/${BPMN_PROCESS_KEY_RESOURCE}`,
-});
+// const resourceDependencyQuery = useResourceDependencyQuery({
+//   getUrl: (url) => `${url}/${BPMN_PROCESS_KEY_RESOURCE}`,
+// });
 
-const { data: processList, refetch: getProcessList } = useQuery({
-  ...resourceDependencyQuery,
-  enabled: false,
-});
+// const { data: processList, refetch: getProcessList } = useQuery({
+//   ...resourceDependencyQuery,
+//   enabled: false,
+// });
 
 onMounted(() => {
   useBubbleAnimate(createRef);
 });
 
-const formattedProcessList = computed(() => {
-  if (processList.value) {
-    return processList.value.content.map((list) => ({
-      label: list.value,
-      value: list.code,
-    }));
-  }
-  return [
-    {
-      label: "Заявка на транспорт",
-      value: "KT_TAXI_PROCESS",
-    },
-    {
-      label: "Техническое обслуживание и ремонт (ТОиР)",
-      value: "LENKRAD_PROCESS",
-    },
-    {
-      label: "Поставка товаров/материалов (ТОиР)",
-      value: "PURCHASE_PROCESS",
-    },
-  ];
-});
+// const formattedProcessList = computed(() => {
+//   if (processList.value) {
+//     return processList.value.content.map((list) => ({
+//       label: list.value,
+//       value: list.code,
+//     }));
+//   }
+//   return [
+//     {
+//       label: "Заявка на транспорт",
+//       value: "KT_TAXI_PROCESS",
+//     },
+//     {
+//       label: "Техническое обслуживание и ремонт (ТОиР)",
+//       value: "LENKRAD_PROCESS",
+//     },
+//     {
+//       label: "Поставка товаров/материалов (ТОиР)",
+//       value: "PURCHASE_PROCESS",
+//     },
+//   ];
+// });
 
-const handleClickCreate = async () => {
-  if (!processList.value) {
-    await globalSpinner.execute(() => getProcessList());
-  }
+// const handleClickCreate = async () => {
+//   if (!processList.value) {
+//     await globalSpinner.execute(() => getProcessList());
+//   }
+//
+//   const processKey = (await globalBackdropStore.push("pick", {
+//     title: "Выберите тип заявки",
+//     props: {
+//       list: formattedProcessList.value,
+//     },
+//   })) as string;
+//   router.push({ name: OrderRoutes.newOrder, params: { processKey } });
+// };
 
-  const processKey = (await globalBackdropStore.push("pick", {
+const handleClickCreate = () => {
+  globalBackdropStore.push("process-list", {
     title: "Выберите тип заявки",
-    props: {
-      list: formattedProcessList.value,
-    },
-  })) as string;
-  router.push({ name: OrderRoutes.newOrder, params: { processKey } });
+    props: {},
+  });
 };
 </script>
 
@@ -95,10 +102,7 @@ const handleClickCreate = async () => {
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="orders" href="/orders/!OrdersMine">
-      <footer-item
-        :class="['main-footer__item', getActiveClass(MainTabRoutes.orders)]"
-        :title="$t('main-tabs.orders')"
-      >
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.orders)]" :title="$t('main-tabs.orders')">
         <base-icon name="application" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>

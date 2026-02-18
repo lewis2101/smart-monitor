@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SelectInput from "@/widgets/select-input.vue";
+import SelectInput from "@/widgets/select-input/select-input.vue";
 
 type SelectList = InstanceType<typeof SelectInput>["$props"]["list"];
 
