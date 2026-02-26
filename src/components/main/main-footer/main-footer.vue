@@ -125,6 +125,8 @@ const handleClickCreate = () => {
   display: flex;
   justify-content: space-between;
 
+  transform: translateZ(1px);
+
   background: $white;
   border: 1px solid #f2f2f7;
   border-bottom: 0;

@@ -29,4 +29,5 @@ export enum CommonRoutes {
   search = "search",
   kpi = "kpi",
   events = "events",
+  aiChat = "ai-chat",
 }

@@ -20,6 +20,7 @@ import Search from "@/pages/search.vue";
 import Kpi from "@/pages/kpi.vue";
 import Events from "@/pages/events.vue";
 import MockOrder from "@/pages/mock-order.vue";
+import AiChat from "@/pages/ai-chat.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -128,6 +129,11 @@ const router = createRouter({
       path: "/mock-order/:processKey",
       name: OrderRoutes.mockOrder,
       component: MockOrder,
+    },
+    {
+      path: "/ai-chat",
+      name: CommonRoutes.aiChat,
+      component: AiChat,
     },
   ],
 });

@@ -5,6 +5,7 @@ import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import { ServicesMenu } from "@/widgets/sevices-menu";
+import { AiAssistantButton } from "@/widgets/ai-assistant-button";
 </script>
 
 <template>
@@ -16,6 +17,7 @@ import { ServicesMenu } from "@/widgets/sevices-menu";
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
       <services-menu />
+      <ai-assistant-button />
     </base-content-with-refresher>
   </ion-page>
 </template>

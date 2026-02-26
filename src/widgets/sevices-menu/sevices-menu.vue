@@ -72,7 +72,7 @@ await mockDelayPromise();
 </script>
 
 <template>
-  <base-island-block class="services-menu" title="Все разделы" :clickable="false">
+  <base-island-block class="services-menu" title="Все разделы" :clickable="false" :shadow="false">
     <div class="services-menu__wrapper">
       <base-island-block
         v-for="item in menuList"

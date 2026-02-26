@@ -4,7 +4,7 @@ import { IonSkeletonText } from "@ionic/vue";
 </script>
 
 <template>
-  <base-island-block class="services-menu" title="Меню" :clickable="false">
+  <base-island-block skeleton-title class="services-menu" :clickable="false" :shadow="false">
     <div class="services-menu__wrapper">
       <base-island-block v-for="i in 10" :key="i" class="services-menu__item-wrapper">
         <div class="services-menu__item">

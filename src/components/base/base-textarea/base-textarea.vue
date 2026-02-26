@@ -1,25 +1,32 @@
 <script setup lang="ts">
-import {IonTextarea } from "@ionic/vue";
-import { ref } from "vue";
+import { IonTextarea } from "@ionic/vue";
+import { computed, ref } from "vue";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     disabled?: boolean;
     placeholder?: string;
     required?: boolean;
+    minHeight?: number;
+    maxHeight?: number;
+    nativePlaceholder?: string;
   }>(),
   {
     disabled: false,
     required: false,
+    minHeight: 150,
+    maxHeight: 150,
   },
 );
 
 const isFocused = ref(false);
 const model = defineModel<string | null>({ required: true });
+const textAreaMinHeight = computed(() => `${props.minHeight}px`);
+const textAreaMaxHeight = computed(() => `${props.maxHeight}px`);
 </script>
 
 <template>
-  <div :class="['base-textarea', disabled && 'base-textarea-disabled']">
+  <div :class="['base-textarea', disabled && 'base-textarea-disabled', placeholder && 'placeholder-offset']">
     <div
       v-if="placeholder"
       :class="['base-textarea__placeholder', (isFocused || model) && 'base-textarea__placeholder_focus']"
@@ -28,9 +35,12 @@ const model = defineModel<string | null>({ required: true });
     </div>
     <ion-textarea
       v-model="model"
+      :placeholder="nativePlaceholder"
       :disabled="disabled"
+      auto-grow="true"
       label-placement="stacked"
       :class="['base-textarea__textarea', disabled && 'base-textarea-disabled']"
+      rows="1"
       @ion-focus="isFocused = true"
       @ion-blur="isFocused = false"
     />
@@ -44,7 +54,10 @@ const model = defineModel<string | null>({ required: true });
   border: 1px solid $gray-light;
   border-radius: 12px;
   box-shadow: 0 2px 3px 0 #0000001a;
-  padding-top: 16px;
+
+  .placeholder-offset {
+    padding-top: 16px;
+  }
 
   &-disabled {
     color: #64748b !important;
@@ -56,11 +69,16 @@ const model = defineModel<string | null>({ required: true });
 
   &__textarea {
     --p-textarea-focus-border-color: transparent;
-    width: 100%;
-    height: 100%;
-    min-height: 150px;
     padding: 0 16px;
-    margin-bottom: 16px;
+
+    &:deep(.native-wrapper) {
+      min-height: v-bind(textAreaMinHeight);
+      max-height: v-bind(textAreaMaxHeight);
+    }
+
+    &:deep(textarea) {
+      overflow: auto;
+    }
 
     &::placeholder {
       color: $txt-description;

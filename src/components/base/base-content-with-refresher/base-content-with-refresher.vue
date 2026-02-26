@@ -41,6 +41,7 @@ const getXOffset = computed(() => (props.xOffset ? "16px 16px calc(16px + env(sa
   border-radius: 24px;
 
   &::part(scroll) {
+    background: var(--background);
     border-radius: 24px 24px 0 0;
   }
 
@@ -52,6 +53,8 @@ const getXOffset = computed(() => (props.xOffset ? "16px 16px calc(16px + env(sa
     position: relative;
     z-index: 1;
     padding: v-bind(getXOffset);
+
+    width: 100%;
   }
 }
 .base-refresher {

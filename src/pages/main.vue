@@ -56,7 +56,6 @@ const { pageId, refresh } = useRefreshPage([]);
 
     width: 100%;
     height: 16px;
-    background: $white;
     border-radius: 10px 10px 0 0;
 
     display: flex;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+import { IonSkeletonText } from "@ionic/vue";
 
 type Radius = "S" | "M" | "L" | "XL";
 type RadiusOrient = "top" | "bottom" | "left" | "right" | "all" | "none";
@@ -28,12 +29,14 @@ const props = withDefaults(
     roundedOrient?: RadiusOrient;
     clickable?: boolean;
     shadow?: boolean;
+    skeletonTitle?: boolean;
   }>(),
   {
     rounded: "M",
     roundedOrient: "all",
     clickable: true,
     shadow: true,
+    skeletonTitle: false,
   },
 );
 
@@ -52,7 +55,8 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
 
 <template>
   <div :class="['base-island-block']" ref="islandBlockRef">
-    <div v-if="title || $slots['top-right']" class="base-island-block__header">
+    <ion-skeleton-text v-if="skeletonTitle" animated />
+    <div v-else-if="title || $slots['top-right']" class="base-island-block__header">
       <span v-if="title" class="base-island-block__title">{{ title }}</span>
       <slot name="top-right" />
     </div>
@@ -74,6 +78,14 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
   flex-direction: column;
   justify-content: center;
   gap: 8px;
+
+  ion-skeleton-text {
+    width: 150px;
+    height: 20px;
+    border-radius: 24px;
+    padding: 4px;
+    margin-bottom: 8px;
+  }
 
   &__header {
     display: flex;
