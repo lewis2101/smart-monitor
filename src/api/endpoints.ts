@@ -50,3 +50,7 @@ export enum NotificationEndpoints {
   getNotifications = "/lenkrad/v1/user/notification",
   readNotification = "/lenkrad/v1/user/notification/read/:orderId",
 }
+
+export enum NaviChatEndpoints {
+  naviChat = "/navi/ai/chat2",
+}

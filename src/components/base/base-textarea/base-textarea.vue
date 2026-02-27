@@ -71,6 +71,8 @@ const textAreaMaxHeight = computed(() => `${props.maxHeight}px`);
     --p-textarea-focus-border-color: transparent;
     padding: 0 16px;
 
+    min-height: v-bind(textAreaMinHeight);
+
     &:deep(.native-wrapper) {
       min-height: v-bind(textAreaMinHeight);
       max-height: v-bind(textAreaMaxHeight);

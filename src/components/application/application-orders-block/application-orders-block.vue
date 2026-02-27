@@ -15,6 +15,12 @@ const props = defineProps<{
   ordersType: string;
 }>();
 
+const statusMap = (statusText: string) => {
+  if (statusText === "Завершена") return "success";
+  if (statusText === "Отменена") return "danger";
+  return "info";
+};
+
 const paramsModel = defineModel<RawData>("params", { required: true });
 const paginationLoading = ref(false);
 
@@ -31,10 +37,13 @@ const { suspense, data, isPending, error } = useQuery(contentOptions);
 
 const linkedInfoList: ComputedRef<ListType> = computed(() => {
   if (isPending.value && !paginationLoading.value) return [];
+
   return (
     list.value?.map((item) => ({
       title: `${item.orderNumber}`,
       to: `/order/${item.id}`,
+      status: statusMap(`${item.taskName?.rus}`),
+      statusText: `${item.taskName?.rus}`,
       list: [
         {
           text: `${t("orders.order.creator")}: ${item.creator}`,

@@ -18,7 +18,7 @@ const name = computed(() => `${userInfoStorage.value.firstName} ${userInfoStorag
 </script>
 
 <template>
-  <base-island-block class="profile-data" :title="$t('profile.title')" :clickable="false">
+  <base-island-block class="profile-data" :title="$t('profile.title')" :clickable="false" :shadow="false">
     <base-input
       :placeholder="$t('profile.login')"
       :model-value="userInfoStorage.username"

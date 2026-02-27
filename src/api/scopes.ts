@@ -27,4 +27,5 @@ export enum Scopes {
   selectedPartsHistoryByOrder = "selected-parts-history",
   getNotifications = "get-notifications",
   readNotification = "read-notification",
+  naviChat = "navi-chat",
 }

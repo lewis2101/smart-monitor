@@ -21,6 +21,8 @@ import Kpi from "@/pages/kpi.vue";
 import Events from "@/pages/events.vue";
 import MockOrder from "@/pages/mock-order.vue";
 import AiChat from "@/pages/ai-chat.vue";
+import Blog from "@/pages/blog.vue";
+import Blogs from "@/pages/blogs.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -134,6 +136,16 @@ const router = createRouter({
       path: "/ai-chat",
       name: CommonRoutes.aiChat,
       component: AiChat,
+    },
+    {
+      path: "/blog/:id",
+      name: CommonRoutes.blog,
+      component: Blog,
+    },
+    {
+      path: "/blogs",
+      name: CommonRoutes.blogs,
+      component: Blogs,
     },
   ],
 });

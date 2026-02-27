@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
-import { IonSkeletonText } from "@ionic/vue";
+import { IonSkeletonText, IonButton } from "@ionic/vue";
 </script>
 
 <template>
@@ -24,6 +24,7 @@ import { IonSkeletonText } from "@ionic/vue";
         </div>
       </div>
     </div>
+    <ion-button class="main-news__button"></ion-button>
   </base-island-block>
 </template>
 
@@ -83,6 +84,11 @@ import { IonSkeletonText } from "@ionic/vue";
     width: 140px;
     height: 14px;
     border-radius: 24px;
+  }
+
+  &__button {
+    margin-top: 8px;
+    width: 100%;
   }
 }
 </style>

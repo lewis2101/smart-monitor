@@ -2,16 +2,11 @@
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { blogs } from "@/mock/blogs.ts";
+import { useIonRouter, IonButton } from "@ionic/vue";
+import { CommonRoutes } from "@/router/router-list.ts";
 
-const { push } = useGlobalBackdropStore();
-
-const handleClick = () => {
-  push("develop", {
-    title: "Этап не доступен",
-    props: {},
-  });
-};
+const router = useIonRouter();
 
 await mockDelayPromise();
 </script>
@@ -19,64 +14,31 @@ await mockDelayPromise();
 <template>
   <base-island-block class="main-news" title="Статьи" :clickable="false">
     <template #top-right>
-      <div class="main-news__all">Все новости</div>
+      <div class="main-news__all">Новости</div>
     </template>
 
     <div class="main-news__wrapper">
-      <div class="main-news__item" @click="handleClick">
+      <div
+        class="main-news__item"
+        v-for="blog in [blogs[0], blogs[1], blogs[2], blogs[3], blogs[4]]"
+        :key="blog.id"
+        @click="router.push({ name: CommonRoutes.blog, params: { id: blog.id } })"
+      >
         <div class="main-news__item-header">
-          <img
-            src="https://images.unsplash.com/photo-1673978483693-9e4be55b2a35?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzYWZldHklMjBoZWxtZXQlMjBjb25zdHJ1Y3Rpb24lMjB3b3JrZXJ8ZW58MXx8fHwxNzcwOTExMTE4fDA&ixlib=rb-4.1.0&q=80&w=1080"
-          />
+          <img :src="blog.image" />
         </div>
         <div class="main-news__item-content">
-          <div class="main-news__title">Новая программа повышения безопасности на рабочих местах</div>
+          <div class="main-news__title">{{ blog.title }}</div>
           <div class="main-news__description">
-            Компания запускает масштабную программу по улучшению стандартов безопасности. Все сотрудники пройдут
-            дополнительное обучение.
+            {{ blog.spoiler }}
           </div>
           <div class="main-news__footer">
-            <div class="main-news__time"><base-icon name="time" /> 5 мин / 10 фев</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="main-news__item" @click="handleClick">
-        <div class="main-news__item-header">
-          <img
-            src="https://images.unsplash.com/photo-1767163934854-655747a35068?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMGlubm92YXRpb24lMjB0ZWFtJTIwbWVldGluZ3xlbnwxfHx8fDE3NzA3OTIwMDN8MA&ixlib=rb-4.1.0&q=80&w=1080"
-          />
-        </div>
-        <div class="main-news__item-content">
-          <div class="main-news__title">Результаты корпоративного конкурса идей</div>
-          <div class="main-news__description">
-            Подведены итоги ежегодного конкурса инновационных предложений. Победители получат гранты на реализацию своих
-            проектов.
-          </div>
-          <div class="main-news__footer">
-            <div class="main-news__time"><base-icon name="time" /> 3 мин / 08 фев</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="main-news__item" @click="handleClick">
-        <div class="main-news__item-header">
-          <img
-            src="https://images.unsplash.com/photo-1628206554160-63e8c921e398?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2xhciUyMHBhbmVscyUyMHJlbmV3YWJsZSUyMGVuZXJneXxlbnwxfHx8fDE3NzA4NDg5NDJ8MA&ixlib=rb-4.1.0&q=80&w=1080"
-          />
-        </div>
-        <div class="main-news__item-content">
-          <div class="main-news__title">Экологическая инициатива: переход на возобновляемые источники</div>
-          <div class="main-news__description">
-            Компания объявляет о долгосрочной стратегии перехода на возобновляемые источники энергии. Цель - углеродная
-            нейтральность к 2030 году.
-          </div>
-          <div class="main-news__footer">
-            <div class="main-news__time"><base-icon name="time" /> 7 мин / 05 фев</div>
+            <div class="main-news__time"><base-icon name="time" /> {{ blog.time }}</div>
           </div>
         </div>
       </div>
     </div>
+    <ion-button @click="router.push({ name: CommonRoutes.blogs })">Все новости</ion-button>
   </base-island-block>
 </template>
 

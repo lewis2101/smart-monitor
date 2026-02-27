@@ -30,4 +30,6 @@ export enum CommonRoutes {
   kpi = "kpi",
   events = "events",
   aiChat = "ai-chat",
+  blog = "blog",
+  blogs = "blogs",
 }

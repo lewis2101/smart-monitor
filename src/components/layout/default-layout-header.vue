@@ -30,26 +30,35 @@ const canGoBack = computed(() => router.canGoBack());
 <template>
   <div :class="['default-layout-header', `default-layout-header__${variant}`]">
     <div class="default-layout-header__content">
-      <base-icon
-        v-if="canGoBack && !hideBack"
-        class="default-layout-header__icon"
-        name="arrow-back"
-        @click="() => router.back()"
-      />
+      <div class="default-layout-header__left">
+        <slot name="left">
+          <base-icon
+            v-if="canGoBack && !hideBack"
+            class="default-layout-header__icon"
+            name="arrow-back"
+            @click="() => router.back()"
+          />
+        </slot>
+      </div>
       <div v-if="loading" class="default-layout-header__skeleton">
         <ion-skeleton-text class="default-layout-header__skeleton_item" />
       </div>
       <div v-else class="default-layout-header__title">
         {{ title }}
       </div>
-      <base-icon
-        v-if="!canGoBack && !hideClose"
-        class="default-layout-header__close"
-        name="close"
-        @click="() => router.replace({ name: MainTabRoutes.home })"
-      />
-      <div v-else-if="info" class="default-layout-header__help">
-        <base-icon name="help" />
+      <div class="default-layout-header__right">
+        <slot name="append-right" />
+        <slot name="right">
+          <base-icon
+            v-if="!canGoBack && !hideClose"
+            class="default-layout-header__close"
+            name="close"
+            @click="() => router.replace({ name: MainTabRoutes.home })"
+          />
+          <div v-else-if="info" class="default-layout-header__help">
+            <base-icon name="help" />
+          </div>
+        </slot>
       </div>
     </div>
   </div>
@@ -79,7 +88,7 @@ const canGoBack = computed(() => router.canGoBack());
     padding: 20px 16px;
   }
 
-  &__icon {
+  &__left {
     position: absolute;
     top: 50%;
     left: 16px;
@@ -87,6 +96,10 @@ const canGoBack = computed(() => router.canGoBack());
 
     flex-shrink: 0;
     height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__title {
@@ -112,12 +125,16 @@ const canGoBack = computed(() => router.canGoBack());
     }
   }
 
-  &__close,
-  &__help {
+  &__right {
     position: absolute;
     top: 50%;
     right: 16px;
     transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
   }
 
   &__help {

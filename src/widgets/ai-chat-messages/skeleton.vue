@@ -4,7 +4,7 @@ import { IonSkeletonText } from "@ionic/vue";
 
 <template>
   <div class="chat">
-    <template v-for="i in 6" :key="i">
+    <template v-for="i in 4" :key="i">
       <div v-if="i % 2" class="chat__message chat__guest">
         <div class="chat__content">
           <ion-skeleton-text animated style="width: 220px" />

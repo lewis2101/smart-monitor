@@ -13,7 +13,9 @@ defineProps<{
       <base-icon v-if="icon" class="base-linked-info__icon" :name="icon" />
       <div class="base-linked-info__title">{{ title }}</div>
     </div>
-    <base-icon class="base-linked-info__chevron" name="chevron" />
+    <slot name="right">
+      <base-icon class="base-linked-info__chevron" name="chevron" />
+    </slot>
   </div>
 </template>
 
