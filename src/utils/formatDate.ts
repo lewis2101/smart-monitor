@@ -4,6 +4,7 @@ export const formatDateString = (
   options?: {
     time?: boolean;
     relative?: boolean;
+    onlyTime?: boolean;
   },
 ): string => {
   const newDate = new Date(date);
@@ -21,6 +22,10 @@ export const formatDateString = (
 
   let result = `${y}-${m}-${d}`;
 
+  if (options?.onlyTime) {
+    return `${h}:${min}`;
+  }
+
   if (options?.relative) {
     if (isSameFullDate(newDate, now)) {
       result = "Сегодня";
@@ -30,8 +35,8 @@ export const formatDateString = (
   }
 
   if (options?.time) {
-    if (isSameFullDate(newDate, now)) {
-      return options?.relative ? `${result} ${h}:${min}` : `${h}:${min}`;
+    if (options?.relative && isSameFullDate(newDate, now)) {
+      return `${result} ${h}:${min}`;
     }
 
     return `${result} (${h}:${min})`;

@@ -4,6 +4,8 @@ import { nextTick, onMounted, useTemplateRef, watch } from "vue";
 import { formatDateString } from "@/utils/formatDate.ts";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 import type { AiChatMessagesProps } from "@/widgets/ai-chat-messages/types.ts";
+import { storeToRefs } from "pinia";
+import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 
 const props = withDefaults(defineProps<AiChatMessagesProps>(), {
   isWriting: false,
@@ -12,6 +14,7 @@ const props = withDefaults(defineProps<AiChatMessagesProps>(), {
 await mockDelayPromise();
 
 const bottomRef = useTemplateRef("bottomRef");
+const { isVisibleKeyboard } = storeToRefs(useKeyboardStore());
 
 const scrollToBottom = async (behavior: "instant" | "smooth" = "instant") => {
   await nextTick();
@@ -33,6 +36,12 @@ watch(
     deep: true,
   },
 );
+
+watch(isVisibleKeyboard, (value) => {
+  if (value) {
+    scrollToBottom("smooth");
+  }
+});
 </script>
 
 <template>
@@ -47,7 +56,7 @@ watch(
       <div v-for="(message, idx) in group.messages" :key="idx" :class="['chat__message', `chat__${message.role}`]">
         <div class="chat__content">{{ message.text }}</div>
         <div class="chat__date">
-          {{ formatDateString(new Date(message.date), { time: true }) }}
+          {{ formatDateString(new Date(message.date), { onlyTime: true }) }}
         </div>
       </div>
     </template>

@@ -116,12 +116,17 @@ const handleClick = async () => {
         <base-textarea
           v-model="inputModel"
           :min-height="30"
-          :disabled="isPending"
           native-placeholder="Введите сообщение..."
           class="chat-footer__input"
         />
-        <ion-button class="chat-footer__button" :disabled="isPending" @click="handleClick">
-          <base-icon name="send" class="chat-footer__icon" />
+        <ion-button
+          class="chat-footer__button"
+          :disabled="isPending || inputModel.length === 0"
+          @mousedown.prevent
+          @click="handleClick"
+        >
+          <ion-spinner v-if="isPending" name="dots" />
+          <base-icon v-else name="send" class="chat-footer__icon" />
         </ion-button>
       </div>
     </ion-footer>
@@ -164,8 +169,8 @@ const handleClick = async () => {
 
     &::part(native) {
       padding: 0;
-      width: 32px;
-      height: 32px;
+      width: 46px;
+      height: 46px;
       min-height: 32px;
       border-radius: 50%;
     }

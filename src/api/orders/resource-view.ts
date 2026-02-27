@@ -36,14 +36,16 @@ export type Response = {
     supplierId: string;
     departmentId: string;
     documentNumber: string | null;
+    isSuccess?: boolean;
+    ipAddress?: string;
   }[];
   modelName: string;
   size: number;
 };
 
-export const useOrdersMineViewQuery = createVueQueryOptions<RawData, Response>({
+export const useResourceViewQuery = createVueQueryOptions<RawData, Response>({
   httpClientOptions: {
-    url: OrdersEndpoints.ordersMineView,
+    url: OrdersEndpoints.resourceView,
     method: "GET",
   },
   scope: Scopes.ordersMineView,

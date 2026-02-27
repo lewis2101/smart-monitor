@@ -2,11 +2,12 @@ export enum AuthEndpoints {
   challenge = "/auth/public/challenge",
   login = "/auth/login",
   refreshToken = "/auth/refreshToken",
+  publicKeyList = "/auth/public-key-list",
 }
 
 export enum OrdersEndpoints {
   ordersMineHeader = "/resource/header",
-  ordersMineView = "/resource/view",
+  resourceView = "/resource/view",
   orderAction = "/lenkrad/v1/order/action",
   orderActionComplete = "/lenkrad/v1/order/action/complete",
   orderMain = "/order/main",

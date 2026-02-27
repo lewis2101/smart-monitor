@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonTextarea } from "@ionic/vue";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref, useTemplateRef } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -19,10 +19,19 @@ const props = withDefaults(
   },
 );
 
+const textareaRef = useTemplateRef("textareaRef");
+
 const isFocused = ref(false);
 const model = defineModel<string | null>({ required: true });
 const textAreaMinHeight = computed(() => `${props.minHeight}px`);
 const textAreaMaxHeight = computed(() => `${props.maxHeight}px`);
+
+defineExpose({
+  setFocus: async () => {
+    await nextTick();
+    textareaRef.value?.$el.setFocus();
+  },
+});
 </script>
 
 <template>
@@ -35,6 +44,7 @@ const textAreaMaxHeight = computed(() => `${props.maxHeight}px`);
     </div>
     <ion-textarea
       v-model="model"
+      ref="textareaRef"
       :placeholder="nativePlaceholder"
       :disabled="disabled"
       auto-grow="true"
@@ -54,10 +64,6 @@ const textAreaMaxHeight = computed(() => `${props.maxHeight}px`);
   border: 1px solid $gray-light;
   border-radius: 12px;
   box-shadow: 0 2px 3px 0 #0000001a;
-
-  .placeholder-offset {
-    padding-top: 16px;
-  }
 
   &-disabled {
     color: #64748b !important;
@@ -116,5 +122,9 @@ const textAreaMaxHeight = computed(() => `${props.maxHeight}px`);
       transform: translate(0, 0);
     }
   }
+}
+
+.placeholder-offset {
+  padding-top: 16px;
 }
 </style>

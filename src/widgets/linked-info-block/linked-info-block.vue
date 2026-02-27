@@ -64,6 +64,7 @@ const handleClick = (to?: string) => {
     font-size: 12px;
     padding: 4px 6px;
     border-radius: 24px;
+    text-align: center;
   }
 
   .success {

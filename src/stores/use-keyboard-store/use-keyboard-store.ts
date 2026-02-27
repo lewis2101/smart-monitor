@@ -14,13 +14,15 @@ export const useKeyboardStore = defineStore("keyboard-store", () => {
       return Promise.resolve();
     }
 
-    const accessoryBar = Keyboard.setAccessoryBarVisible({ isVisible: true });
+    const accessoryBar = Keyboard.setAccessoryBarVisible({ isVisible: false });
     const resizeMode = Keyboard.setResizeMode({
       mode: KeyboardResize.Ionic,
     });
-    const show = Keyboard.addListener("keyboardWillShow", (info) => {
-      keyboardHeight.value = info.keyboardHeight;
-      isVisibleKeyboard.value = true;
+    const show = Keyboard.addListener("keyboardDidShow", (info) => {
+      setTimeout(() => {
+        keyboardHeight.value = info.keyboardHeight;
+        isVisibleKeyboard.value = true;
+      }, 200); // Окончания анимации появления клавиатуры
     });
     const hide = Keyboard.addListener("keyboardDidHide", () => {
       keyboardHeight.value = 0;

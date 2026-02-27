@@ -5,6 +5,8 @@ import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import ProfileData from "@/components/profile/profile-data.vue";
+import { AuthPublicKeyList } from "@/widgets/auth-public-key-list";
+import { ProfileHistory } from "@/widgets/profile-history";
 </script>
 
 <template>
@@ -16,6 +18,8 @@ import ProfileData from "@/components/profile/profile-data.vue";
     </ion-header>
     <base-content-with-refresher class="profile-page__content" @refresh="mockRefresh" variant="secondary">
       <profile-data />
+      <auth-public-key-list />
+      <profile-history />
     </base-content-with-refresher>
   </ion-page>
 </template>

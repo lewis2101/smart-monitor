@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type ComputedRef, ref, watch } from "vue";
-import { useOrdersMineViewQuery, type RawData, type Response } from "@/api/orders/orders-mine-view.ts";
+import { useResourceViewQuery, type RawData, type Response } from "@/api/orders/resource-view.ts";
 import { useQuery } from "@tanstack/vue-query";
 import LinkedInfoBlock from "@/widgets/linked-info-block/linked-info-block.vue";
 import Skeleton from "./skeleton.vue";
@@ -27,7 +27,7 @@ const paginationLoading = ref(false);
 const list = ref<Response["content"]>([]);
 const sizeOfList = ref(0);
 
-const contentOptions = useOrdersMineViewQuery({
+const contentOptions = useResourceViewQuery({
   params: paramsModel,
   getUrl: (url) => url + `/${props.ordersType}`,
   keys: [props.ordersType],
