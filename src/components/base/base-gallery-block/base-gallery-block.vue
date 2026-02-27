@@ -4,6 +4,7 @@ import { useGlobalImageStore } from "@/stores/use-global-image-store/use-global-
 import { storeToRefs } from "pinia";
 import { onMounted, watch } from "vue";
 import { useCameraPick } from "@/composables/useCameraPick.ts";
+import Image from "primevue/image";
 
 defineProps<{
   title?: string;
@@ -46,9 +47,17 @@ watch(currentImage, (value) => {
   <div class="base-gallery-block">
     <div v-if="title" class="base-gallery-block__title">{{ title }}</div>
     <div class="base-gallery-block__images">
-      <div v-for="(image, idx) in images" :key="idx" class="block-image">
+      <div v-for="(img, idx) in images" :key="idx" class="block-image">
         <base-icon name="close" class="block-image__close" @click="removeImage(idx)" />
-        <img :src="image" />
+        <Image
+          :pt="{
+            toolbar: $style.toolbar,
+          }"
+          class="block-image__img"
+          :src="img"
+          preview
+        />
+        <!--        <img :src="image" />-->
       </div>
       <div class="add-photo" @click="handleAddPhoto">
         <base-icon name="add-photo" />
@@ -57,6 +66,12 @@ watch(currentImage, (value) => {
     </div>
   </div>
 </template>
+
+<style module lang="scss">
+.toolbar {
+  margin-top: env(safe-area-inset-top);
+}
+</style>
 
 <style scoped lang="scss">
 .base-gallery-block {
@@ -93,13 +108,19 @@ watch(currentImage, (value) => {
       color: #777777;
       background: #e1e0e1;
       border-radius: 50%;
+      z-index: 1;
     }
 
-    img {
+    &__img {
       width: 100%;
       height: 100%;
-      border-radius: 8px;
-      object-fit: cover;
+
+      &:deep(img) {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+      }
     }
   }
 
