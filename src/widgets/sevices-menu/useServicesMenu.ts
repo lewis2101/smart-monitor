@@ -22,13 +22,13 @@ export const useServicesMenu = () => {
       title: t("mn_dashboard"),
     },
     {
-      icon: "info",
-      color: "green",
+      icon: "nav",
+      color: "purple",
       title: t("mn_new_gps_connection_order"),
     },
     {
-      icon: "info",
-      color: "green",
+      icon: "pin",
+      color: "red",
       title: t("mn_gps_monitoring"),
     },
     {
@@ -61,7 +61,7 @@ export const useServicesMenu = () => {
     },
     {
       icon: "build",
-      color: "blue",
+      color: "light-blue",
       title: t("mn_suppliers"),
     },
     {
@@ -75,13 +75,13 @@ export const useServicesMenu = () => {
       title: t("mn_clients"),
     },
     {
-      icon: "info",
+      icon: "dollar",
       color: "green",
       title: t("mn_prices"),
     },
     {
-      icon: "info",
-      color: "green",
+      icon: "table",
+      color: "light-blue",
       title: t("mn_payment_to_suppliers"),
     },
     {
@@ -105,33 +105,33 @@ export const useServicesMenu = () => {
       title: t("mn_generate_document"),
     },
     {
-      icon: "info",
-      color: "green",
+      icon: "circle",
+      color: "blue",
       title: t("mn_tires"),
     },
-    {
-      icon: "info",
-      color: "green",
-      title: t("catalog_OrdersDispatcherTransport"),
-    },
-    {
-      icon: "pin",
-      color: "green",
-      title: t("catalog_OrdersDispatcherWaybill"),
-    },
+    // {
+    //   icon: "info",
+    //   color: "green",
+    //   title: t("catalog_OrdersDispatcherTransport"),
+    // },
+    // {
+    //   icon: "pin",
+    //   color: "green",
+    //   title: t("catalog_OrdersDispatcherWaybill"),
+    // },
     {
       icon: "people-fix",
       color: "yellow",
       title: t("mn_drivers"),
     },
     {
-      icon: "info",
-      color: "green",
+      icon: "paper-check",
+      color: "light-blue",
       title: t("catalog_EdoAvrSupplier"),
     },
     {
-      icon: "info",
-      color: "green",
+      icon: "paper-dollar",
+      color: "red",
       title: t("mn_outgoing_payment_task"),
     },
     {
@@ -140,8 +140,8 @@ export const useServicesMenu = () => {
       title: t("mn_bonus"),
     },
     {
-      icon: "info",
-      color: "green",
+      icon: "paper-pen",
+      color: "purple",
       title: t("mn_edo_unformed_documents"),
     },
   ]);

@@ -3,6 +3,7 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { useIonRouter } from "@ionic/vue";
 import { OrderRoutes } from "@/router/router-list.ts";
+import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
@@ -64,6 +65,8 @@ const processList = [
     description: "Инспекция",
   },
 ];
+
+await mockDelayPromise();
 </script>
 
 <template>

@@ -10,7 +10,7 @@ import QuantityBackdrop from "@/widgets/backdrops/quantity-backdrop/quantity-bac
 import TimelineBackdrop from "@/widgets/backdrops/timeline-backdrop/timeline-backdrop.vue";
 import MapPinPickerBackdrop from "@/widgets/backdrops/map-pin-picker-backdrop/map-pin-picker-backdrop.vue";
 import DevelopBackdrop from "@/widgets/backdrops/develop-backdrop/develop-backdrop.vue";
-import ProcessListBackdrop from "@/widgets/backdrops/process-list-backdrop/process-list-backdrop.vue";
+import { ProcessListBackdrop } from "@/widgets/backdrops";
 import CameraPickBackdrop from "@/widgets/backdrops/camera-pick-backdrop/camera-pick-backdrop.vue";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {

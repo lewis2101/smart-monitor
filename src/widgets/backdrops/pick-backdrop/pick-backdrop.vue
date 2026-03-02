@@ -39,9 +39,17 @@ const handleClick = (value: string) => {
     line-height: 100%;
     letter-spacing: 0;
 
-    padding: 24px 16px;
-    border-radius: 8px;
-    border-bottom: 1px solid $gray-light;
+    padding: 16px 12px;
+    border-radius: 16px;
+    box-shadow: 0px 2px 3px 0px #0000001a;
+    border: 1px solid #f2f2f7;
+
+    text-align: center;
+
+    margin-top: 8px;
+
+
+
   }
 }
 </style>
