@@ -97,7 +97,7 @@ const processList = [
   padding: 8px 8px calc(8px + env(safe-area-inset-bottom)) 8px;
 
   &__wrapper {
-    padding: 20px;
+    padding: 16px;
     margin-bottom: 8px;
 
     &:last-child {
@@ -133,8 +133,8 @@ const processList = [
   }
 
   &__end {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     background: $gray-light;
 
     display: flex;
@@ -144,8 +144,8 @@ const processList = [
   }
 
   &__icon {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
 
     display: flex;
     align-items: center;
@@ -154,13 +154,13 @@ const processList = [
   }
 
   &__title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
   }
 
   &__description {
     margin-top: 4px;
-    font-size: 14px;
+    font-size: 12px;
     color: $gray-dark;
   }
 }

@@ -49,7 +49,7 @@ const handleDelete = (id: number, name: string) => {
         </div>
       </div>
     </template>
-    <div class="profile-permission-key__empty">
+    <div v-else class="profile-permission-key__empty">
       Нет активных ключей доступа
     </div>
   </base-island-block>
