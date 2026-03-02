@@ -7,6 +7,7 @@ import { useI18n } from "vue-i18n";
 import type { Lang } from "@/i18n/lang.ts";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import LanguageChanger from "@/components/profile/language-changer.vue";
+import { useLogOutMutation } from "@/api/auth/logout.ts";
 
 const { locale } = useI18n();
 

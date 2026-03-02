@@ -10,7 +10,7 @@ import { IonSkeletonText } from "@ionic/vue";
         <ion-skeleton-text animated />
       </div>
       <div class="profile-history__content">
-        <div v-for="i in 3" :key="i" class="profile-history__text">
+        <div v-for="i in 2" :key="i" class="profile-history__text">
           <ion-skeleton-text animated />
         </div>
       </div>

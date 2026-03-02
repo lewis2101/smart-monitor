@@ -11,6 +11,7 @@ import { computed, watch } from "vue";
 import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useToast } from "primevue/usetoast";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
+import { useLogOutMutation } from "@/api/auth/logout.ts";
 
 const loginSchema = toTypedSchema(
   object({
@@ -22,6 +23,7 @@ const loginSchema = toTypedSchema(
 export const useLogin = () => {
   const { mutateAsync: mutateLogin, isPending: loginPending, error: loginError } = useAuthMutation({});
   const { mutateAsync: mutateLoginChallenge, isPending: challengePending } = useAuthChallengeMutation({});
+  const { mutateAsync: mutateLogout } = useLogOutMutation({});
 
   const router = useIonRouter();
   const globalSpinner = useGlobalSpinner();
@@ -29,8 +31,15 @@ export const useLogin = () => {
   const toast = useToast();
   const { getErrorForToast } = useExtractErrorData();
 
-  const { accessTokenStorage, refreshTokenStorage, expiresTokenStorage, setUserInfo, setClientInfo, clearStorage } =
-    useAuthStorage();
+  const {
+    accessTokenStorage,
+    refreshTokenStorage,
+    expiresTokenStorage,
+    setUserInfo,
+    setClientInfo,
+    clearStorage,
+    userInfoStorage,
+  } = useAuthStorage();
 
   const { values, validate, errors } = useForm<{
     username: string;
@@ -78,7 +87,12 @@ export const useLogin = () => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await mutateLogout({
+      data: {
+        userId: userInfoStorage.value.id,
+      },
+    });
     clearStorage();
     location.href = CommonRoutes.login;
   };

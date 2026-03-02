@@ -1,6 +1,7 @@
 export enum AuthEndpoints {
   challenge = "/auth/public/challenge",
   login = "/auth/login",
+  logout = "/auth/logout",
   refreshToken = "/auth/refreshToken",
   publicKeyList = "/auth/public-key-list",
 }

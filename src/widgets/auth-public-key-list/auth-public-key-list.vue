@@ -31,21 +31,26 @@ const handleDelete = (id: number, name: string) => {
 
 <template>
   <base-island-block class="profile-permission-key" title="Ключи доступа" :clickable="false">
-    <div v-for="item in data" :key="item.id" class="profile-permission-key__item">
-      <div class="profile-permission-key__content">
-        <div class="profile-permission-key__icon">
-          <base-icon name="touch" />
+    <template v-if="data && data.length">
+      <div v-for="item in data" :key="item.id" class="profile-permission-key__item">
+        <div class="profile-permission-key__content">
+          <div class="profile-permission-key__icon">
+            <base-icon name="touch" />
+          </div>
+          <div class="profile-permission-key__body">
+            <div class="profile-permission-key__title">{{ item.title }}</div>
+            <div class="profile-permission-key__description">{{ item.subTitle }}</div>
+          </div>
         </div>
-        <div class="profile-permission-key__body">
-          <div class="profile-permission-key__title">{{ item.title }}</div>
-          <div class="profile-permission-key__description">{{ item.subTitle }}</div>
+        <div class="profile-permission-key__delete">
+          <ion-button color="danger" size="small" @click="handleDelete(item.id, item.subTitle)">
+            <base-icon name="trash" />
+          </ion-button>
         </div>
       </div>
-      <div class="profile-permission-key__delete">
-        <ion-button color="danger" size="small" @click="handleDelete(item.id, item.subTitle)">
-          <base-icon name="trash" />
-        </ion-button>
-      </div>
+    </template>
+    <div class="profile-permission-key__empty">
+      Нет активных ключей доступа
     </div>
   </base-island-block>
 </template>
@@ -89,6 +94,14 @@ const handleDelete = (id: number, name: string) => {
       width: 16px;
       height: 16px;
     }
+  }
+
+  &__empty {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 8px 0;
+    color: $gray-dark;
   }
 }
 </style>
