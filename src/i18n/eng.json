@@ -58,6 +58,9 @@
   "new-order": {
     "create": "Create"
   },
+  "MN_CALENDAR_HOLIDAY": "Calendar holidays",
+  "MN_CAMERA": "Camera",
+  "MN_PAYMENT_TO_SUPPLIERS": "Payments to Suppliers Table",
   "PATRONYMIC": "Patronymic",
   "DATEBIRTH": "Birthday",
   "MOBILEPHONE": "Mobile number",
@@ -917,6 +920,7 @@
   "CATALOG_GISPOINT": "GIS. Point",
   "MN_NEW_TSR_PAYMENT_ORDER": "Order to payment(TSR)",
   "CONTRACT_PANEL": "Договоры",
+  "MN_CONTRACTS": "Contracts",
   "NUMBER": "Номер",
   "DIRECTOR": "Директор",
   "ISACTUAL": "Актуально",

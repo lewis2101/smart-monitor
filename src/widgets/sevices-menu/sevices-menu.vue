@@ -2,71 +2,9 @@
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
-import { useIonRouter } from "@ionic/vue";
-import { OrderRoutes } from "@/router/router-list.ts";
+import { useServicesMenu } from "@/widgets/sevices-menu/useServicesMenu.ts";
 
-const router = useIonRouter();
-
-const menuList = [
-  {
-    icon: "stats",
-    color: "green",
-    title: "Показатели",
-  },
-  {
-    icon: "monit",
-    color: "blue",
-    title: "Мониторинг",
-  },
-  {
-    icon: "truck",
-    color: "purple",
-    title: "Транспортные средства",
-  },
-  {
-    icon: "paper-dot",
-    color: "green",
-    title: "Заявка на распределение",
-  },
-  {
-    icon: "paper-line",
-    color: "blue",
-    title: "Договоры",
-  },
-  {
-    icon: "group",
-    color: "light-blue",
-    title: "Потребители",
-  },
-  {
-    icon: "paper-order",
-    color: "red",
-    title: "Все заявки (Админ)",
-    action: () => {
-      router.push({ name: OrderRoutes.orders, params: { ordersType: "AdminOrders" } });
-    },
-  },
-  {
-    icon: "people-fix",
-    color: "yellow",
-    title: "Водители",
-  },
-  {
-    icon: "gift",
-    color: "orange",
-    title: "Бонус",
-  },
-  {
-    icon: "pin",
-    color: "green",
-    title: "Путевые листы",
-  },
-  {
-    icon: "build",
-    color: "blue",
-    title: "Поставщики услуг",
-  },
-];
+const { menuList } = useServicesMenu();
 
 await mockDelayPromise();
 </script>

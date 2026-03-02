@@ -58,6 +58,9 @@
   "new-order": {
     "create": "Құру"
   },
+  "MN_CALENDAR_HOLIDAY": "Демалыс күнтізбесі",
+  "MN_CAMERA": "Камера",
+  "MN_PAYMENT_TO_SUPPLIERS": "Қамтамасыз етушілерге төлемдер кестесі",
   "PATRONYMIC": "Әкесінің аты",
   "DATEBIRTH": "Туылған күні",
   "MOBILEPHONE": "Ұялы телефон нөмірі",
@@ -917,6 +920,7 @@
   "CATALOG_GISPOINT": "GIS. Нүктелер",
   "MN_NEW_TSR_PAYMENT_ORDER": "Төлемге өтініш (ТҚКжЖ)",
   "CONTRACT_PANEL": "Договоры",
+  "MN_CONTRACTS": "Келісім-шарттар",
   "NUMBER": "Номер",
   "DIRECTOR": "Директор",
   "ISACTUAL": "Актуально",
