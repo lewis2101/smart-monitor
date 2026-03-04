@@ -20,6 +20,8 @@ const route = useRoute();
 
 const orderId = computed(() => route.params.orderId as string);
 const statusText = computed(() => statusMap[route.params.status as Status] || statusMap.UPDATED);
+const isMock = computed(() => route.query.mock === "true");
+const nextMockStep = computed(() => route.query.nextMockStep);
 const formattedDate = computed(() => {
   const date = route.query.date as string | undefined;
   if (date) {
@@ -31,6 +33,20 @@ const formattedDate = computed(() => {
 const showSuccess = ref(false);
 const showHomeButton = ref(false);
 const showOrderButton = ref(false);
+
+const handleOpenOrder = () => {
+  if (isMock.value) {
+    router.replace({
+      name: OrderRoutes.mockOrder,
+      params: { processKey: "PAB" },
+      query: { mockOrderStep: nextMockStep.value },
+    });
+
+    return;
+  }
+
+  router.replace({ name: OrderRoutes.order, params: { orderId: orderId } });
+};
 
 onMounted(() => {
   setTimeout(() => {
@@ -60,6 +76,7 @@ onMounted(() => {
       </div>
       <div class="success-order__button-wrapper">
         <ion-button
+          v-if="!isMock"
           fill="outline"
           :class="['success-order__button', showHomeButton && 'success-order__button-show']"
           @click="router.replace({ name: MainTabRoutes.home })"
@@ -68,7 +85,7 @@ onMounted(() => {
         </ion-button>
         <ion-button
           :class="['success-order__button', showOrderButton && 'success-order__button-show']"
-          @click="router.replace({ name: OrderRoutes.order, params: { orderId: orderId } })"
+          @click="handleOpenOrder"
         >
           Перейти в заявку
         </ion-button>

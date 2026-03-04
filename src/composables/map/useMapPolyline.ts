@@ -92,7 +92,11 @@ export const useMapPolyline = ({ mapRef }: { mapRef?: MaybeRefOrGetter<maplibreg
 
     if (!allPoints.length) return;
 
-    const bounds = allPoints.reduce((b, c) => b.extend(c), new maplibregl.LngLatBounds(allPoints[0], allPoints[0]));
+    const bounds = new maplibregl.LngLatBounds();
+
+    allPoints.forEach(([lat, lng]) => {
+      bounds.extend([lat, lng]);
+    });
 
     map.fitBounds(bounds, options);
   };

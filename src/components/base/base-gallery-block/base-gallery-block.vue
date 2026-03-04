@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
-import { useGlobalImageStore } from "@/stores/use-global-image-store/use-global-image-store.ts";
-import { storeToRefs } from "pinia";
-import { onMounted, watch } from "vue";
 import { useCameraPick } from "@/composables/useCameraPick.ts";
 import Image from "primevue/image";
 
-defineProps<{
-  title?: string;
-}>();
+withDefaults(
+  defineProps<{
+    title?: string;
+    canAdd?: boolean;
+    canDelete?: boolean;
+  }>(),
+  {
+    canAdd: false,
+    canDelete: false,
+  },
+);
 
 const images = defineModel<string[]>({ default: () => [], required: true });
 
 const { getPhoto } = useCameraPick();
-
-const globalImageStore = useGlobalImageStore();
-const { currentImage } = storeToRefs(globalImageStore);
 
 const removeImage = (idx: number) => {
   images.value.splice(idx, 1);
@@ -28,19 +30,6 @@ const handleAddPhoto = async () => {
     images.value.push(photo);
   }
 };
-
-onMounted(() => {
-  if (currentImage.value) {
-    images.value.push(currentImage.value);
-    globalImageStore.removeImage();
-  }
-});
-
-watch(currentImage, (value) => {
-  if (value) {
-    images.value.push(value);
-  }
-});
 </script>
 
 <template>
@@ -48,7 +37,7 @@ watch(currentImage, (value) => {
     <div v-if="title" class="base-gallery-block__title">{{ title }}</div>
     <div class="base-gallery-block__images">
       <div v-for="(img, idx) in images" :key="idx" class="block-image">
-        <base-icon name="close" class="block-image__close" @click="removeImage(idx)" />
+        <base-icon v-if="canDelete" name="close" class="block-image__close" @click="removeImage(idx)" />
         <Image
           :pt="{
             toolbar: $style.toolbar,
@@ -59,7 +48,7 @@ watch(currentImage, (value) => {
         />
         <!--        <img :src="image" />-->
       </div>
-      <div class="add-photo" @click="handleAddPhoto">
+      <div v-if="canAdd" class="add-photo" @click="handleAddPhoto">
         <base-icon name="add-photo" />
         <div class="add-photo__title">Добавить файл</div>
       </div>

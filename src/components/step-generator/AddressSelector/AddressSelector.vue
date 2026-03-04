@@ -87,8 +87,7 @@ onMounted(() => {
 watch(model, (value) => {
   if (value) {
     paintRoute(model.value, {
-      padding: 20,
-      zoom: 15,
+      padding: 10,
     });
     isPossibleCreateAddress.value = false;
   }
@@ -97,8 +96,7 @@ watch(model, (value) => {
 watch(isReady, (value) => {
   if (value && model.value) {
     paintRoute(model.value, {
-      padding: 20,
-      zoom: 15,
+      padding: 10,
     });
     isPossibleCreateAddress.value = false;
   }

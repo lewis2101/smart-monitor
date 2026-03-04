@@ -1,4 +1,4 @@
 export type BoundOptions = {
   padding: number;
-  zoom: number;
+  zoom?: number;
 };
