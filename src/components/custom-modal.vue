@@ -1,35 +1,33 @@
 <template>
-  <Teleport to="body">
-    <Transition name="backdrop">
-      <div v-if="isOpen" class="sheet-backdrop" @click="close" />
-    </Transition>
+  <Transition name="backdrop">
+    <div v-if="isOpen" class="sheet-backdrop" :style="backdropStyle" @click="close" />
+  </Transition>
 
-    <div
-      ref="sheetRef"
-      class="sheet"
-      :class="{
-        'sheet--open': isVisible,
-        'sheet--dragging': isDragging,
-      }"
-      :style="dragStyle"
-      @touchstart.passive="onTouchStart"
-    >
-      <div class="sheet__handle-wrap">
-        <div class="sheet__handle" />
-      </div>
+  <div
+    ref="sheetRef"
+    class="sheet"
+    :class="{
+      'sheet--open': isVisible,
+      'sheet--dragging': isDragging,
+    }"
+    :style="sheetStyle"
+    @touchstart.passive="onTouchStart"
+  >
+    <div class="sheet__handle-wrap">
+      <div class="sheet__handle" />
+    </div>
 
-      <div class="sheet__header">
-        <h2 class="sheet__title">{{ title }}</h2>
-        <div class="sheet__close-btn" @click.stop="close" aria-label="Close">
-          <base-icon name="close" />
-        </div>
-      </div>
-
-      <div ref="contentRef" class="sheet__content">
-        <slot />
+    <div class="sheet__header">
+      <h2 class="sheet__title">{{ title }}</h2>
+      <div class="sheet__close-btn" @click.stop="close" aria-label="Close">
+        <base-icon name="close" />
       </div>
     </div>
-  </Teleport>
+
+    <div ref="contentRef" class="sheet__content">
+      <slot />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -39,19 +37,21 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 interface Props {
   title?: string;
   closeThreshold?: number;
+  /**
+   * Stack order: 0 = base sheet, 1 = sheet above it, 2 = sheet above that, etc.
+   * Controls z-index layering and backdrop opacity.
+   */
+  stackIndex?: number;
 }
 
-const { title = "Sheet", closeThreshold = 120 } = defineProps<Props>();
+const { title = "Sheet", closeThreshold = 80, stackIndex = 0 } = defineProps<Props>();
 
 const isOpen = defineModel<boolean>({ default: false });
 
 const sheetRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
 
-// isVisible drives the CSS open class — always lags one tick behind isOpen
-// so the browser has painted the "closed" position before we animate to "open"
 const isVisible = ref(false);
-
 const translateY = ref(0);
 const isDragging = ref(false);
 
@@ -60,17 +60,30 @@ let currentY = 0;
 let rafId: number | null = null;
 let gestureMode: boolean | null = null;
 
-const dragStyle = computed(() => {
-  if (!isDragging.value) return {};
-  return { transform: `translateY(${translateY.value}px)` };
+// Each level: backdrop = BASE + index*10, sheet = BASE + index*10 + 1
+const BASE_Z = 9000;
+const Z_STEP = 10;
+
+const backdropStyle = computed(() => ({
+  zIndex: BASE_Z + stackIndex * Z_STEP,
+  // Deeper sheets get a lighter backdrop so layering feels intentional
+  background: `rgba(0,0,0,${Math.max(0.1, 0.45 - stackIndex * 0.15)})`,
+}));
+
+const sheetStyle = computed(() => {
+  const styles: Record<string, string | number> = {
+    zIndex: BASE_Z + stackIndex * Z_STEP + 1,
+  };
+  if (isDragging.value) {
+    styles.transform = `translateY(${translateY.value}px)`;
+  }
+  return styles;
 });
 
 async function applyOpen(val: boolean) {
   setTimeout(async () => {
     if (val) {
       document.body.style.overflow = "hidden";
-      // wait one tick so the sheet renders at translateY(100%) first,
-      // then flip isVisible to trigger the CSS transition
       await nextTick();
       isVisible.value = true;
     } else {
@@ -81,14 +94,7 @@ async function applyOpen(val: boolean) {
   });
 }
 
-watch(isOpen, applyOpen, {
-  immediate: true,
-});
-
-// Handle the case where v-model is already true on mount
-// onMounted(() => {
-//   if (isOpen.value) applyOpen(true);
-// });
+watch(isOpen, applyOpen, { immediate: true });
 
 function close(): void {
   isOpen.value = false;
@@ -162,10 +168,9 @@ defineExpose({ close });
 .sheet-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  /* z-index and background set via :style */
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-  z-index: 9998;
   cursor: pointer;
 }
 .backdrop-enter-active,
@@ -182,7 +187,7 @@ defineExpose({ close });
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 9999;
+  /* z-index set via :style */
   display: flex;
   flex-direction: column;
   max-height: 80vh;
@@ -195,7 +200,7 @@ defineExpose({ close });
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 
   transform: translateY(100%);
-  transition: all 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
   will-change: transform;
 }
 
@@ -260,7 +265,6 @@ defineExpose({ close });
   overscroll-behavior-y: contain;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   -webkit-overflow-scrolling: touch;
-  transition: height 0.38s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .sheet__content::-webkit-scrollbar {
   width: 4px;

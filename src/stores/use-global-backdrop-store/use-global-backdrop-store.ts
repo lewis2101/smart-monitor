@@ -22,6 +22,7 @@ export const useGlobalBackdropStore = defineStore("global-backdrop-store", () =>
       backdrops.push({
         component: backdropComponents[key],
         title: options.title,
+        id: key,
         props: {
           ...options.props,
           onSuccess: resolve,

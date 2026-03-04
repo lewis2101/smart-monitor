@@ -26,6 +26,7 @@ export type BackdropProps<K extends BackdropKeys> = ExtractProps<(typeof backdro
 export type BackdropItem<C extends BackdropKeys> = {
   component: Raw<Component>;
   title: string;
+  id: C;
   props: BackdropProps<C>;
 };
 
