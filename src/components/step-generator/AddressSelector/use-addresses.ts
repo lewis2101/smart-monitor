@@ -34,7 +34,7 @@ export const useAddresses = (initialData: MaybeRefOrGetter<AddressSelectorRoute[
   const routePointQueryParams = ref<RoutePointRawData | null>(null);
 
   const addresses = reactive<AddressData[]>([]);
-  const isPossibleCreateAddress = ref(true);
+  const isPossibleCreateAddress = ref(false);
 
   const toast = useToast();
 

@@ -5,7 +5,7 @@ import Skeleton from "./skeleton.vue";
 
 <template>
   <Suspense>
-    <process-list-backdrop />
+    <process-list-backdrop v-bind="$attrs" />
 
     <template #fallback>
       <skeleton />

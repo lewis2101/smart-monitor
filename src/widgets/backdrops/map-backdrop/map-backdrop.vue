@@ -4,25 +4,51 @@ import { useMapPolyline } from "@/composables/map/useMapPolyline.ts";
 import { onMounted, useTemplateRef, watch } from "vue";
 import maplibregl from "maplibre-gl";
 import type { AddressSelectorRoute } from "@/composables/order/types.ts";
+import type { AddressData } from "@/components/step-generator/AddressSelector/use-addresses.ts";
+import { useMapPoints } from "@/composables/map/useMapPoint.ts";
 
 const props = defineProps<{
-  initialData?: AddressSelectorRoute[];
+  routes?: AddressSelectorRoute[];
+  points?: AddressData[];
 }>();
 
 const mapRef = useTemplateRef<{ map: maplibregl.Map }>("mapRef");
 
-const { init, paintRoute, isReady } = useMapPolyline({
+const {
+  init: initPolyline,
+  paintRoute,
+  isReady: isReadyPolyline,
+} = useMapPolyline({
+  mapRef: () => mapRef.value?.map ?? null,
+});
+
+const {
+  init: initPoints,
+  paintPins,
+  isReady: isReadyPoints,
+} = useMapPoints({
   mapRef: () => mapRef.value?.map ?? null,
 });
 
 onMounted(() => {
-  init();
+  initPolyline();
+  initPoints();
 });
 
-watch(isReady, (value) => {
-  if (value && props.initialData) {
-    paintRoute(props.initialData, {
-      boundPadding: 100,
+watch(isReadyPolyline, (value) => {
+  if (value && props.routes) {
+    paintRoute(props.routes, {
+      padding: 20,
+      zoom: 15,
+    });
+  }
+});
+
+watch(isReadyPoints, (value) => {
+  if (value && props.points) {
+    paintPins(props.points, {
+      padding: 20,
+      zoom: 15,
     });
   }
 });

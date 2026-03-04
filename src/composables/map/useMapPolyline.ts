@@ -1,162 +1,171 @@
 import { type MaybeRefOrGetter, ref, toValue } from "vue";
 import maplibregl from "maplibre-gl";
 import type { AddressSelectorRoute } from "@/composables/order/types.ts";
+import type { BoundOptions } from "@/composables/map/types.ts";
 
-const SOURCE_ID = "routes-source";
-const LAYER_ID = "routes-layer";
+const ROUTE_SOURCE_ID = "routes-source";
+const ROUTE_LAYER_ID = "routes-layer";
 
 const POINTS_SOURCE_ID = "route-points-source";
 const POINTS_LAYER_ID = "route-points-layer";
 
+const EMPTY_GEOJSON: GeoJSON.FeatureCollection = {
+  type: "FeatureCollection",
+  features: [],
+};
+
 export const useMapPolyline = ({ mapRef }: { mapRef?: MaybeRefOrGetter<maplibregl.Map | null> }) => {
   const isReady = ref(false);
 
-  const init = () => {
+  const getMap = () => {
     const map = toValue(mapRef);
     if (!map) throw new Error("MAP IS NOT INIT");
-
-    if (map.getSource(SOURCE_ID)) return;
-
-    map.on("load", () => {
-      if (!map.getSource(SOURCE_ID)) {
-        map.addSource(SOURCE_ID, {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [],
-          },
-        });
-
-        map.addLayer({
-          id: LAYER_ID,
-          type: "line",
-          source: SOURCE_ID,
-          layout: {
-            "line-join": "round",
-            "line-cap": "round",
-          },
-          paint: {
-            "line-width": 4,
-            "line-color": ["coalesce", ["get", "color"], "#3b82f6"],
-          },
-        });
-      }
-
-      if (!map.getSource(POINTS_SOURCE_ID)) {
-        map.addSource(POINTS_SOURCE_ID, {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [],
-          },
-        });
-
-        map.addLayer({
-          id: POINTS_LAYER_ID,
-          type: "circle",
-          source: POINTS_SOURCE_ID,
-          paint: {
-            "circle-radius": 8,
-            "circle-color": [
-              "coalesce",
-              ["get", "color"],
-              "#3b82f6", // fallback
-            ],
-            "circle-stroke-width": 2,
-            "circle-stroke-color": "#ffffff",
-          },
-        });
-      }
-
-      isReady.value = true;
-    });
+    return map;
   };
 
-  const fitBounds = (paths: AddressSelectorRoute[], boundPadding: number) => {
-    const map = toValue(mapRef);
-    if (!map) return;
-
-    // Реверсим
-    const allPoints = paths.flatMap((p) => p.points).map(([a, b]) => [b, a]);
-
-    if (allPoints.length) {
-      const bounds = allPoints.reduce(
-        (b, c) => b.extend(c as [number, number]),
-        new maplibregl.LngLatBounds(allPoints[0], allPoints[0]),
-      );
-
-      map.fitBounds(bounds, { padding: boundPadding });
+  const addSourceIfNotExists = (map: maplibregl.Map, id: string) => {
+    if (!map.getSource(id)) {
+      map.addSource(id, {
+        type: "geojson",
+        data: EMPTY_GEOJSON,
+      });
     }
   };
 
-  const paintRoute = (paths: AddressSelectorRoute[], options?: { boundPadding: number }) => {
+  const ensureLayers = (map: maplibregl.Map) => {
+    addSourceIfNotExists(map, ROUTE_SOURCE_ID);
+
+    if (!map.getLayer(ROUTE_LAYER_ID)) {
+      map.addLayer({
+        id: ROUTE_LAYER_ID,
+        type: "line",
+        source: ROUTE_SOURCE_ID,
+        layout: {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        paint: {
+          "line-width": 4,
+          "line-color": ["coalesce", ["get", "color"], "#3b82f6"],
+        },
+      });
+    }
+
+    addSourceIfNotExists(map, POINTS_SOURCE_ID);
+
+    if (!map.getLayer(POINTS_LAYER_ID)) {
+      map.addLayer({
+        id: POINTS_LAYER_ID,
+        type: "circle",
+        source: POINTS_SOURCE_ID,
+        paint: {
+          "circle-radius": 8,
+          "circle-color": ["coalesce", ["get", "color"], "#3b82f6"],
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#ffffff",
+        },
+      });
+    }
+  };
+
+  const init = () => {
+    const map = getMap();
+
+    const onLoad = () => {
+      ensureLayers(map);
+      isReady.value = true;
+    };
+
+    if (map.isStyleLoaded()) {
+      onLoad();
+    } else {
+      map.once("load", onLoad);
+    }
+  };
+
+  const fitBounds = (routes: AddressSelectorRoute[], options: BoundOptions) => {
+    const map = toValue(mapRef);
+    if (!map || !routes.length) return;
+
+    // reverse [lat, lng] -> [lng, lat]
+    const allPoints = routes.flatMap((r) => r.points).map(([lat, lng]) => [lng, lat] as [number, number]);
+
+    if (!allPoints.length) return;
+
+    const bounds = allPoints.reduce((b, c) => b.extend(c), new maplibregl.LngLatBounds(allPoints[0], allPoints[0]));
+
+    map.fitBounds(bounds, options);
+  };
+
+  const paintRoute = (routes: AddressSelectorRoute[], options?: BoundOptions) => {
     const map = toValue(mapRef);
     if (!map) return;
 
-    const source = map.getSource(SOURCE_ID) as maplibregl.GeoJSONSource;
+    const source = map.getSource(ROUTE_SOURCE_ID) as maplibregl.GeoJSONSource | undefined;
+
     if (!source) return;
 
     source.setData({
       type: "FeatureCollection",
-      features: paths.map((path, index) => {
-        return {
+      features: routes.map(
+        (route, index): GeoJSON.Feature => ({
           type: "Feature",
           geometry: {
             type: "LineString",
-            // Реверс координат
-            coordinates: path.points.map(([a, b]) => [b, a]),
+            coordinates: route.points.map(([lat, lng]) => [lng, lat] as [number, number]),
           },
           properties: {
             id: index,
-            from: path.wp1,
-            to: path.wp2,
-            color: path.color,
+            from: route.wp1,
+            to: route.wp2,
+            color: route.color,
           },
-        };
-      }),
+        }),
+      ),
     });
 
-    paintPins(paths);
+    paintPins(routes);
 
-    if (options?.boundPadding) {
-      fitBounds(paths, options.boundPadding);
+    if (options) {
+      fitBounds(routes, options);
     }
   };
 
-  const paintPins = (paths: AddressSelectorRoute[]) => {
+  const paintPins = (routes: AddressSelectorRoute[]) => {
     const map = toValue(mapRef);
     if (!map) return;
 
-    const pointSource = map.getSource(POINTS_SOURCE_ID) as maplibregl.GeoJSONSource;
-    if (!pointSource) return;
+    const source = map.getSource(POINTS_SOURCE_ID) as maplibregl.GeoJSONSource | undefined;
 
-    pointSource.setData({
+    if (!source) return;
+
+    source.setData({
       type: "FeatureCollection",
-      features: paths.flatMap((path, index) => [
+      features: routes.flatMap((route, index): GeoJSON.Feature[] => [
         {
           type: "Feature",
           geometry: {
             type: "Point",
-            coordinates: [path.point1.x, path.point1.y],
+            coordinates: [route.point1.x, route.point1.y],
           },
           properties: {
             routeId: index,
             type: "from",
-            name: path.point1.formatted_path,
-            color: path.color,
+            name: route.point1.formatted_path,
+            color: route.color,
           },
         },
         {
           type: "Feature",
           geometry: {
             type: "Point",
-            coordinates: [path.point2.x, path.point2.y],
+            coordinates: [route.point2.x, route.point2.y],
           },
           properties: {
             routeId: index,
             type: "to",
-            name: path.point2.formatted_path,
-            color: path.color,
+            name: route.point2.formatted_path,
+            color: route.color,
           },
         },
       ]),

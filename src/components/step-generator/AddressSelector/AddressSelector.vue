@@ -74,7 +74,7 @@ const openMapRoute = () => {
   globalBackdropStore.push("map", {
     title: "Маршрут",
     props: {
-      initialData: model.value,
+      routes: model.value,
     },
   });
 };
@@ -87,7 +87,8 @@ onMounted(() => {
 watch(model, (value) => {
   if (value) {
     paintRoute(model.value, {
-      boundPadding: 20,
+      padding: 20,
+      zoom: 15,
     });
     isPossibleCreateAddress.value = false;
   }
@@ -96,7 +97,8 @@ watch(model, (value) => {
 watch(isReady, (value) => {
   if (value && model.value) {
     paintRoute(model.value, {
-      boundPadding: 20,
+      padding: 20,
+      zoom: 15,
     });
     isPossibleCreateAddress.value = false;
   }
