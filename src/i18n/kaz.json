@@ -19,6 +19,8 @@
   },
   "orders": {
     "header-title": "Менің өтініштерім",
+    "header-title-all": "Барлық өтініштер",
+    "header-title-admin": "Барлық өтініштер (Админ)",
     "filter": "Сүзгі",
     "sort": "Сұрыптау",
     "order": {

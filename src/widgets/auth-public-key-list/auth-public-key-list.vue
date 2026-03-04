@@ -4,6 +4,10 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
 import { usePublicKeyListMutation } from "@/api/auth/public-key-list.ts";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
+defineProps<{
+  title?: string;
+}>();
+
 const globalBackdropStore = useGlobalBackdropStore();
 
 const { mutateAsync } = usePublicKeyListMutation({});
@@ -30,7 +34,7 @@ const handleDelete = (id: number, name: string) => {
 </script>
 
 <template>
-  <base-island-block class="profile-permission-key" title="Ключи доступа" :clickable="false">
+  <base-island-block class="profile-permission-key" :title="title" :clickable="false">
     <template v-if="data && data.length">
       <div v-for="item in data" :key="item.id" class="profile-permission-key__item">
         <div class="profile-permission-key__content">
@@ -49,16 +53,12 @@ const handleDelete = (id: number, name: string) => {
         </div>
       </div>
     </template>
-    <div v-else class="profile-permission-key__empty">
-      Нет активных ключей доступа
-    </div>
+    <div v-else class="profile-permission-key__empty">Нет активных ключей доступа</div>
   </base-island-block>
 </template>
 
 <style lang="scss" scoped>
 .profile-permission-key {
-  margin-top: 16px;
-
   &__item {
     display: flex;
     align-items: center;

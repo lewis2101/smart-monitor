@@ -3,6 +3,7 @@ import type { CapacitorHttpOptions } from "@/composables/http-client/HttpClient.
 import { AuthEndpoints } from "@/api/endpoints.ts";
 import type { ClientInfo, UserInfo } from "@/api/auth/types.ts";
 import type { CapacitorHttpError, HttpRequestError } from "@/api/error-data.ts";
+import type { Permission, PermissionMethod } from "@/composables/login/types.ts";
 
 type RawData = undefined;
 
@@ -20,7 +21,7 @@ type Response = {
   expiry: number;
   isDeviceRegistered: boolean;
   partners: null;
-  permissions: string[];
+  permissions: Permission<PermissionMethod>[];
   userInfo: UserInfo;
   userOptions: {
     isOrderOnFullScreen: false;

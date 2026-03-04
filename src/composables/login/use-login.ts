@@ -12,6 +12,7 @@ import { useAuthStorage } from "@/composables/login/use-auth-storage.ts";
 import { useToast } from "primevue/usetoast";
 import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
 import { useLogOutMutation } from "@/api/auth/logout.ts";
+import type { PermissionMethod } from "@/composables/login/types.ts";
 
 const loginSchema = toTypedSchema(
   object({
@@ -19,6 +20,14 @@ const loginSchema = toTypedSchema(
     password: string().min(1, "Введите пароль"),
   }),
 );
+
+const permissioMethodMap: Record<PermissionMethod, string> = {
+  GET: "view",
+  PUT: "add",
+  POST: "edit",
+  DELETE: "delete",
+  VIEW: "gui",
+};
 
 export const useLogin = () => {
   const { mutateAsync: mutateLogin, isPending: loginPending, error: loginError } = useAuthMutation({});
@@ -35,6 +44,7 @@ export const useLogin = () => {
     accessTokenStorage,
     refreshTokenStorage,
     expiresTokenStorage,
+    permissionsStorage,
     setUserInfo,
     setClientInfo,
     clearStorage,
@@ -76,6 +86,10 @@ export const useLogin = () => {
         accessTokenStorage.value = data.accessToken;
         refreshTokenStorage.value = data.refreshToken;
         expiresTokenStorage.value = String(data.expiry);
+        permissionsStorage.value = data.permissions.map((perm) => ({
+          ...perm,
+          method: permissioMethodMap[perm.method] || perm.method,
+        }));
 
         setUserInfo(data.userInfo);
         setClientInfo(data.clientInfo);
@@ -88,11 +102,13 @@ export const useLogin = () => {
   };
 
   const logout = async () => {
-    await mutateLogout({
-      data: {
-        userId: userInfoStorage.value.id,
-      },
-    });
+    await globalSpinner.execute(async () =>
+      mutateLogout({
+        data: {
+          userId: userInfoStorage.value.id,
+        },
+      }),
+    );
     clearStorage();
     location.href = CommonRoutes.login;
   };

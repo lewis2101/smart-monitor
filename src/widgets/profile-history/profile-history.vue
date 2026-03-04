@@ -6,6 +6,10 @@ import { useResourceViewQuery } from "@/api/orders/resource-view.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { formatDateString } from "@/utils/formatDate.ts";
 
+defineProps<{
+  title?: string;
+}>();
+
 const { locale } = useI18n();
 
 const resourceViewQuery = useResourceViewQuery({
@@ -39,7 +43,7 @@ await suspense();
 </script>
 
 <template>
-  <base-island-block title="История входа" class="profile-history" :clickable="false">
+  <base-island-block :title="title" class="profile-history" :clickable="false">
     <template v-if="data && data.content.length">
       <div v-for="item in data.content" :key="item.id" class="profile-history__item">
         <div :class="['profile-history__icon', item?.isSuccess ? 'success' : 'failed']">
@@ -59,8 +63,6 @@ await suspense();
 
 <style scoped lang="scss">
 .profile-history {
-  margin-top: 16px;
-
   &__item {
     display: flex;
     align-items: flex-start;

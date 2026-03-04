@@ -18,7 +18,9 @@
     "eng": "Английский"
   },
   "orders": {
-    "header-title": "Мои заявки",
+    "header-title-my": "Мои заявки",
+    "header-title-all": "Все заявки",
+    "header-title-admin": "Все заявки (Админ)",
     "filter": "Фильтр",
     "sort": "Сортировка",
     "order": {

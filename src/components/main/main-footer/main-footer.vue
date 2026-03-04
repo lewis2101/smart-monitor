@@ -10,6 +10,7 @@ import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
 import { useResourceDependencyQuery } from "@/api/dependency/resource-dependency.ts";
 import { useQuery } from "@tanstack/vue-query";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
+import { usePermissions } from "@/composables/login/usePermissions.ts";
 
 // const BPMN_PROCESS_KEY_RESOURCE = "BpmnProcessKey";
 
@@ -18,11 +19,32 @@ const route = useRoute();
 
 const globalBackdropStore = useGlobalBackdropStore();
 const globalSpinner = useGlobalSpinner();
+const { checkPermission } = usePermissions();
 
 const currentPathName = computed(() => route.name as MainTabRoutes);
 const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWith(name) ? "active animate" : "");
 
 const createRef = useTemplateRef("createRef");
+
+const ORDER_MENU_MAP = {
+  mn_mine: "!OrdersMine",
+  mn_admin_orders: "AdminOrders",
+  mn_orders: "!Orders",
+} as const;
+
+type OrderPermissionKey = keyof typeof ORDER_MENU_MAP;
+type OrderMenuValue = (typeof ORDER_MENU_MAP)[OrderPermissionKey];
+
+const orderPath = computed<OrderMenuValue | undefined>(() => {
+  const permittedKey = (Object.entries(ORDER_MENU_MAP) as [OrderPermissionKey, OrderMenuValue][]).find(([key]) =>
+    checkPermission({
+      key,
+      method: "gui",
+    }),
+  );
+
+  return `/orders/${permittedKey?.[1]}`;
+});
 
 // const resourceDependencyQuery = useResourceDependencyQuery({
 //   getUrl: (url) => `${url}/${BPMN_PROCESS_KEY_RESOURCE}`,
@@ -101,7 +123,7 @@ const handleClickCreate = () => {
         </div>
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="orders" href="/orders/!OrdersMine">
+    <ion-tab-button tab="orders" :href="orderPath">
       <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.orders)]" :title="$t('main-tabs.orders')">
         <base-icon name="application" class="main-footer__icon" />
       </footer-item>

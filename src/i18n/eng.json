@@ -19,6 +19,8 @@
   },
   "orders": {
     "header-title": "My orders",
+    "header-title-all": "All orders",
+    "header-title-admin": "All orders (Admin)",
     "filter": "Filter",
     "sort": "Sort",
     "order": {

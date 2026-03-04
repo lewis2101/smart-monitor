@@ -2,16 +2,19 @@ import { useLocalStorage } from "@vueuse/core";
 import {
   accessTokenKey,
   clientInfoKey,
+  permissionsKey,
   refreshTokenKey,
   tokenExpiresKey,
   userInfoKey,
 } from "@/composables/login/auth-storage-keys.ts";
 import type { ClientInfo, UserInfo } from "@/api/auth/types.ts";
+import type { Permission } from "@/composables/login/types.ts";
 
 export const useAuthStorage = () => {
   const accessTokenStorage = useLocalStorage(accessTokenKey, "");
   const refreshTokenStorage = useLocalStorage(refreshTokenKey, "");
   const expiresTokenStorage = useLocalStorage(tokenExpiresKey, "");
+  const permissionsStorage = useLocalStorage<Permission<string>[]>(permissionsKey, []);
 
   const userInfoStorage = useLocalStorage<UserInfo>(userInfoKey, {
     id: "",
@@ -55,6 +58,7 @@ export const useAuthStorage = () => {
     accessTokenStorage.value = "";
     refreshTokenStorage.value = "";
     expiresTokenStorage.value = "";
+    permissionsStorage.value = [];
     userInfoStorage.value = {
       id: "",
       firstName: "",
@@ -81,6 +85,7 @@ export const useAuthStorage = () => {
     refreshTokenStorage,
     expiresTokenStorage,
     clientInfoStorage,
+    permissionsStorage,
     setUserInfo,
     setClientInfo,
     userInfoStorage,

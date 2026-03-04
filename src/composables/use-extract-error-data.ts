@@ -12,12 +12,12 @@ export const useExtractErrorData = () => {
       return value;
     }
 
-    if (value?.extension) {
-      return value.extension;
-    }
-
     if (value?.message) {
       return value.message;
+    }
+
+    if (value?.extension) {
+      return value.extension;
     }
 
     if (!value?.data) {

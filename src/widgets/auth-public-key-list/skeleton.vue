@@ -28,8 +28,6 @@ import { IonSkeletonText } from "@ionic/vue";
 
 <style lang="scss" scoped>
 .profile-permission-key {
-  margin-top: 16px;
-
   &__item {
     display: flex;
     align-items: center;

@@ -33,7 +33,10 @@ const contentOptions = useResourceViewQuery({
   keys: [props.ordersType],
 });
 
-const { suspense, data, isPending, error } = useQuery(contentOptions);
+const { suspense, data, isPending, error } = useQuery({
+  ...contentOptions,
+  enabled: () => !!props.ordersType,
+});
 
 const linkedInfoList: ComputedRef<ListType> = computed(() => {
   if (isPending.value && !paginationLoading.value) return [];

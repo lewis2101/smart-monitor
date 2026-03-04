@@ -14,8 +14,14 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { MainTabRoutes } from "@/router/router-list.ts";
 
+const ordersTitleMap = {
+  "!OrdersMine": "orders.header-title-my",
+  "!Orders": "orders.header-title-all",
+  AdminOrders: "orders.header-title-admin",
+};
+
 const route = useRoute();
-const ordersType = computed(() => route.params.ordersType as string);
+const ordersType = route.params.ordersType as string;
 
 const { pageId, refresh } = useRefreshPage(
   [Scopes.ordersMineHeader, Scopes.ordersMineView],
@@ -25,7 +31,7 @@ const { pageId, refresh } = useRefreshPage(
 const { locale } = useI18n();
 
 const headerParams = reactive({
-  tabName: ordersType.value,
+  tabName: ordersType,
   lng: "rus",
 });
 
@@ -50,7 +56,7 @@ const contentParams = reactive({
     <ion-header>
       <base-toolbar>
         <default-layout-header
-          :title="$t('orders.header-title')"
+          :title="$t(ordersTitleMap?.[ordersType] || '')"
           :hide-back="route.name === MainTabRoutes.orders"
           :hide-close="route.name === MainTabRoutes.orders"
         />

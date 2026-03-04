@@ -4,7 +4,7 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 import { useServicesMenu } from "@/widgets/sevices-menu/useServicesMenu.ts";
 
-const { menuList } = useServicesMenu();
+const { menuList, permittedMenuList } = useServicesMenu();
 
 await mockDelayPromise();
 </script>
@@ -13,7 +13,7 @@ await mockDelayPromise();
   <base-island-block class="services-menu" title="Все разделы" :clickable="false" :shadow="false">
     <div class="services-menu__wrapper">
       <base-island-block
-        v-for="item in menuList"
+        v-for="item in permittedMenuList"
         :key="item.title"
         class="services-menu__item-wrapper"
         @click="item?.action"

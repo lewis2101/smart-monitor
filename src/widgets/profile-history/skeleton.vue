@@ -20,8 +20,6 @@ import { IonSkeletonText } from "@ionic/vue";
 
 <style scoped lang="scss">
 .profile-history {
-  margin-top: 16px;
-
   &__item {
     display: flex;
     align-items: flex-start;
