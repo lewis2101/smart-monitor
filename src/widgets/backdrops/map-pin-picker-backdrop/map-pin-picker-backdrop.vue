@@ -129,7 +129,7 @@ watch(wialonError, (value) => {
 </script>
 
 <template>
-  <div class="map-picker-backdrop" @pointerdown.stop @pointerup.prevent.stop>
+  <div class="map-picker-backdrop" @pointerdown.stop @pointerup.prevent.stop @touchend.stop @touchmove.stop>
     <base-map ref="mapRef" />
     <div class="map-picker-backdrop__address">
       <div class="map-picker-backdrop__wrapper">

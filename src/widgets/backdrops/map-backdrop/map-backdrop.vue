@@ -56,7 +56,7 @@ watch(isReadyPoints, (value) => {
 
 <template>
   <div class="map-backdrop">
-    <base-map ref="mapRef" @pointerdown.stop @pointerup.prevent.stop />
+    <base-map ref="mapRef" @pointerdown.stop @pointerup.prevent.stop @touchend.stop @touchmove.stop />
   </div>
 </template>
 
