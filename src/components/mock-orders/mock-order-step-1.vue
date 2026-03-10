@@ -26,7 +26,7 @@ const mapRef = useTemplateRef<{ map: maplibregl.Map }>("mapRef");
 
 const mockOrderStore = useMockOrderStore();
 const { images, address, description } = storeToRefs(mockOrderStore);
-images.value = [];
+mockOrderStore.clear();
 
 const { init, paintPins, isReady } = useMapPoints({
   mapRef: () => mapRef.value?.map ?? null,
@@ -110,7 +110,7 @@ const createOrder = () => {
 
     router.replace({
       name: OrderRoutes.successOrder,
-      params: { orderId: props.orderId, status: "CREATED" },
+      params: { orderId: props.orderId, status: "MOCK_CREATE" },
       query: { mock: true, nextMockStep: 2 },
     });
   }, 2000);

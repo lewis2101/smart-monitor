@@ -8,19 +8,24 @@ import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import { useRoute } from "vue-router";
 import { formatDateString } from "@/utils/formatDate.ts";
 
-type Status = "CREATED" | "UPDATED";
+type Status = "CREATED" | "UPDATED" | "MOCK_CREATE" | "MOCK_APPROVE" | "MOCK_TAKE" | "MOCK_FINISH";
 
 const statusMap: Record<Status, string> = {
   CREATED: "Успешно создана",
   UPDATED: "Успешно обновлена",
+  MOCK_CREATE: "Вы отправили заявку в отдел ТБ",
+  MOCK_APPROVE: "Заявка отправлена в отдел АХО",
+  MOCK_TAKE: "Заявка отправлена в работу",
+  MOCK_FINISH: "Вы выполнили задачу",
 };
 
 const router = useIonRouter();
 const route = useRoute();
 
 const orderId = computed(() => route.params.orderId as string);
-const statusText = computed(() => statusMap[route.params.status as Status] || statusMap.UPDATED);
 const isMock = computed(() => route.query.mock === "true");
+const statusText = computed(() => statusMap[route.params.status as Status] || statusMap.UPDATED);
+const showHome = computed(() => route.query.mock === "true" && !nextMockStep.value);
 const nextMockStep = computed(() => route.query.nextMockStep);
 const formattedDate = computed(() => {
   const date = route.query.date as string | undefined;
@@ -76,7 +81,7 @@ onMounted(() => {
       </div>
       <div class="success-order__button-wrapper">
         <ion-button
-          v-if="!isMock"
+          v-if="showHome"
           fill="outline"
           :class="['success-order__button', showHomeButton && 'success-order__button-show']"
           @click="router.replace({ name: MainTabRoutes.home })"
@@ -84,6 +89,7 @@ onMounted(() => {
           Вернуть на главную
         </ion-button>
         <ion-button
+          v-if="!showHome"
           :class="['success-order__button', showOrderButton && 'success-order__button-show']"
           @click="handleOpenOrder"
         >

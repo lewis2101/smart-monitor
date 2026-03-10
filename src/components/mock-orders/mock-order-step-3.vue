@@ -27,7 +27,8 @@ const router = useIonRouter();
 const mapRef = useTemplateRef<{ map: maplibregl.Map }>("mapRef");
 
 const mockOrderStore = useMockOrderStore();
-const { images, address, description, categoryId, mustId, dateModel } = storeToRefs(mockOrderStore);
+const { images, address, description, categoryId, mustId, dateModel, eventId, supplierId } =
+  storeToRefs(mockOrderStore);
 
 const { init, paintPins, isReady } = useMapPoints({
   mapRef: () => mapRef.value?.map ?? null,
@@ -60,24 +61,17 @@ const validate = (func: () => { message: string; isValid: boolean }): void => {
   }
 };
 
-const validateCategory = () => {
+const validateEvent = () => {
   validate(() => ({
-    message: "Выберите категорию",
-    isValid: !!categoryId.value,
+    message: "Выберите мероприятие",
+    isValid: !!eventId.value,
   }));
 };
 
-const validateMust = () => {
+const validateSupplier = () => {
   validate(() => ({
-    message: "Выберите Ответственный отдел",
-    isValid: !!mustId.value,
-  }));
-};
-
-const validateDate = () => {
-  validate(() => ({
-    message: "Выберите дату выполннения",
-    isValid: !!dateModel.value,
+    message: "Выберите ответственного",
+    isValid: !!supplierId.value,
   }));
 };
 
@@ -86,31 +80,15 @@ const createOrder = () => {
   setTimeout(() => {
     globalSpinner.hide();
 
-    validateCategory();
-    validateMust();
-    validateDate();
+    validateEvent();
+    validateSupplier();
 
     router.replace({
       name: OrderRoutes.successOrder,
-      params: { orderId: props.orderId, status: "MOCK_APPROVE" },
-      query: { mock: true, nextMockStep: 3 },
+      params: { orderId: props.orderId, status: "MOCK_TAKE" },
+      query: { mock: true, nextMockStep: 4 },
     });
   }, 2000);
-};
-
-const selectDate = async () => {
-  try {
-    const date = (await globalBackdropStore.push("date-picker", {
-      title: "Выберите дату",
-      props: {
-        initialDate: dateModel.value as null,
-      },
-    })) as Date;
-
-    dateModel.value = date;
-  } catch (e) {
-    console.log(e);
-  }
 };
 
 onMounted(() => {
@@ -137,7 +115,7 @@ await mockDelayPromise();
 
 <template>
   <div class="mock-order">
-    <div class="mock-order__status">Новая</div>
+    <div class="mock-order__status">В работе</div>
     <base-island-block title="Изображения" :clickable="false">
       <base-gallery-block v-model="images" global />
     </base-island-block>
@@ -160,6 +138,20 @@ await mockDelayPromise();
         </div>
       </a>
     </base-island-block>
+    <base-island-block title="Модератор" :clickable="false" class="mock-order__contact-wrapper">
+      <a href="tel:+77777777777" class="mock-order__contact">
+        <div class="mock-order__contact-title">
+          <base-icon name="user" class="mock-order__contact-icon" />
+          <div>
+            Ержанов Азамат
+            <div class="mock-order__contact-description">Техник ТБ</div>
+          </div>
+        </div>
+        <div class="mock-order__contact-call">
+          <base-icon name="phone" />
+        </div>
+      </a>
+    </base-island-block>
     <base-island-block title="Выберите адрес" class="mock-order__map-wrapper" :clickable="false">
       <address-input placeholder="Адрес" :label="address.name" :list="[]" disabled />
       <base-map ref="mapRef" class="mock-order__map" @click="handleClickMap" />
@@ -169,6 +161,7 @@ await mockDelayPromise();
       title="Выберите категорию заявки"
       placeholder="Категория заявки"
       :list="mockOrderStore.categoryList"
+      disabled
       class="mock-order__select-list"
     />
     <select-input
@@ -176,17 +169,27 @@ await mockDelayPromise();
       title="Ответственный отдел"
       placeholder="Ответственный отдел"
       :list="mockOrderStore.mustList"
+      disabled
       class="mock-order__select-list"
     />
-    <base-date-picker
-      v-model="dateModel"
-      placeholder="Дата"
-      @select-date="selectDate"
-      class="mock-order__date-picker"
+    <base-date-picker v-model="dateModel" placeholder="Дата" disabled class="mock-order__date-picker" />
+    <select-input
+      v-model="eventId"
+      title="Мероприятие"
+      placeholder="Выберите мероприятие"
+      :list="mockOrderStore.eventList"
+      class="mock-order__select-list"
+    />
+    <select-input
+      v-model="supplierId"
+      title="Ответственный"
+      placeholder="Ответственный"
+      :list="mockOrderStore.supplierList"
+      class="mock-order__select-list"
     />
     <div class="mock-order__button-wrapper">
       <ion-button class="mock-order__button" @click="createOrder"> Отправить в работу </ion-button>
-      <ion-button fill="outline" color="danger" class="mock-order__button"> Отклонить заявку </ion-button>
+      <ion-button fill="outline" color="danger" class="mock-order__button"> Вернуть на доработку в ТБ </ion-button>
     </div>
   </div>
 </template>
@@ -194,7 +197,7 @@ await mockDelayPromise();
 <style scoped lang="scss">
 .mock-order {
   &__status {
-    background: $secondary-color;
+    background: #f0b100;
     color: $white;
     text-align: center;
     padding: 8px 14px;

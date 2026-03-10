@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onUnmounted } from "vue";
+import { ref, computed, watch, nextTick, onUnmounted, onMounted } from "vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 
 interface Props {
@@ -81,20 +81,24 @@ const sheetStyle = computed(() => {
 });
 
 async function applyOpen(val: boolean) {
-  setTimeout(async () => {
-    if (val) {
-      document.body.style.overflow = "hidden";
-      await nextTick();
-      isVisible.value = true;
-    } else {
-      isVisible.value = false;
-      document.body.style.overflow = "";
-    }
-    translateY.value = 0;
-  });
+  if (val) {
+    document.body.style.overflow = "hidden";
+    await nextTick();
+    isVisible.value = true;
+  } else {
+    isVisible.value = false;
+    document.body.style.overflow = "";
+  }
+  translateY.value = 0;
 }
 
-watch(isOpen, applyOpen, { immediate: true });
+watch(isOpen, applyOpen);
+
+onMounted(() => {
+  setTimeout(() => {
+    applyOpen(isOpen.value);
+  }, 100);
+});
 
 function close(): void {
   isOpen.value = false;
