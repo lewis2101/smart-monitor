@@ -28,7 +28,7 @@ const backdropRefs = useTemplateRef("backdropRefs");
   <!--  </base-ion-backdrop>-->
   <custom-modal
     v-for="(backdrop, idx) in backdrops"
-    :key="`${backdrop.id}-${backdrop.title}-${idx}`"
+    :key="`${backdrop.id}-${backdrop.title}`"
     :stack-index="idx"
     ref="backdropRefs"
     v-model="backdrop.model"
