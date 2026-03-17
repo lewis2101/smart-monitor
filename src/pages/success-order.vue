@@ -50,7 +50,7 @@ const handleOpenOrder = () => {
     return;
   }
 
-  router.replace({ name: OrderRoutes.order, params: { orderId: orderId } });
+  router.replace({ name: OrderRoutes.order, params: { orderId: orderId.value } });
 };
 
 onMounted(() => {

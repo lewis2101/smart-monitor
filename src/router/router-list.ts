@@ -32,4 +32,5 @@ export enum CommonRoutes {
   aiChat = "ai-chat",
   blog = "blog",
   blogs = "blogs",
+  camera = "camera",
 }

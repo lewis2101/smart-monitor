@@ -1,5 +1,5 @@
 import { computed, type ComputedRef } from "vue";
-import { OrderRoutes } from "@/router/router-list.ts";
+import { CommonRoutes, OrderRoutes } from "@/router/router-list.ts";
 import { useI18n } from "vue-i18n";
 import { useIonRouter } from "@ionic/vue";
 import { usePermissions } from "@/composables/login/usePermissions.ts";
@@ -148,6 +148,11 @@ export const useServicesMenu = () => {
       color: "green",
       title: t("mn_camera"),
       permissionKey: "mn_camera",
+      action: () => {
+        router.push({
+          name: CommonRoutes.camera,
+        });
+      },
     },
     {
       icon: "calendar",

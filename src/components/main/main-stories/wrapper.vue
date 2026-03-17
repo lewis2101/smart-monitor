@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import MainStories from "@/components/main/main-stories/main-stories.vue";
 import Skeleton from "./skeleton.vue";
+import TransitionSuspense from "@/components/transition-suspense.vue";
 </script>
 
 <template>
-  <Suspense>
+  <TransitionSuspense>
     <main-stories />
 
     <template #fallback>
       <skeleton />
     </template>
-  </Suspense>
+  </TransitionSuspense>
 </template>
 
 <style scoped></style>

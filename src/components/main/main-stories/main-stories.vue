@@ -3,6 +3,7 @@ import { ref, computed, onUnmounted, useTemplateRef, onMounted } from "vue";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
+import TransitionImg from "@/components/transition-img.vue";
 
 const DURATION = 4000;
 const SWIPE_CLOSE_THRESHOLD = 10;
@@ -177,7 +178,7 @@ await mockDelayPromise();
           @click="openStory(index)"
         >
           <div class="stories__avatar" :class="{ viewed: story.viewed }">
-            <img :src="story.image" />
+            <transition-img :src="story.image" />
           </div>
 
           <div class="stories__title">
@@ -205,7 +206,7 @@ await mockDelayPromise();
               </div>
             </div>
 
-            <img :key="currentStory.id" class="viewer__image" :src="currentStory.image" />
+            <transition-img :key="currentStory.id" class="viewer__image" :src="currentStory.image" />
 
             <div class="viewer__content">
               <h2>{{ currentStory.title }}</h2>

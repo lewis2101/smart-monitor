@@ -4,7 +4,7 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 import { useServicesMenu } from "@/widgets/sevices-menu/useServicesMenu.ts";
 
-const { menuList, permittedMenuList } = useServicesMenu();
+const { permittedMenuList } = useServicesMenu();
 
 await mockDelayPromise();
 </script>

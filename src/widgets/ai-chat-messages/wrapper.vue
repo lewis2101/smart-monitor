@@ -2,18 +2,19 @@
 import AiChatMessages from "@/widgets/ai-chat-messages/ai-chat-messages.vue";
 import Skeleton from "./skeleton.vue";
 import type { AiChatMessagesProps } from "@/widgets/ai-chat-messages/types.ts";
+import TransitionSuspense from "@/components/transition-suspense.vue";
 
 defineProps<AiChatMessagesProps>();
 </script>
 
 <template>
-  <Suspense>
+  <TransitionSuspense>
     <ai-chat-messages v-bind="{ ...$attrs, ...$props }" />
 
     <template #fallback>
       <skeleton />
     </template>
-  </Suspense>
+  </TransitionSuspense>
 </template>
 
 <style scoped></style>

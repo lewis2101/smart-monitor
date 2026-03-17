@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import BlogsList from "@/widgets/blogs-list/blogs-list.vue";
 import Skeleton from "./skeleton.vue";
+import TransitionSuspense from "@/components/transition-suspense.vue";
 </script>
 
 <template>
-  <Suspense>
+  <TransitionSuspense>
     <blogs-list />
 
     <template #fallback>
       <skeleton />
     </template>
-  </Suspense>
+  </TransitionSuspense>
 </template>
 
 <style lang="scss" scoped></style>

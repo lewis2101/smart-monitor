@@ -23,6 +23,7 @@ import MockOrder from "@/pages/mock-order.vue";
 import AiChat from "@/pages/ai-chat.vue";
 import Blog from "@/pages/blog.vue";
 import Blogs from "@/pages/blogs.vue";
+import Camera from "@/pages/camera.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -146,6 +147,11 @@ const router = createRouter({
       path: "/blogs",
       name: CommonRoutes.blogs,
       component: Blogs,
+    },
+    {
+      path: "/camera",
+      name: CommonRoutes.camera,
+      component: Camera,
     },
   ],
 });

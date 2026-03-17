@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import BriefingTabs from "@/components/briefing/briefing-tabs/briefing-tabs.vue";
 import Skeleton from "./skeleton.vue";
+import TransitionSuspense from "@/components/transition-suspense.vue";
 </script>
 
 <template>
-  <Suspense>
+  <TransitionSuspense>
     <briefing-tabs />
 
     <template #fallback>
       <skeleton />
     </template>
-  </Suspense>
+  </TransitionSuspense>
 </template>
 
 <style scoped></style>

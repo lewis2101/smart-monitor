@@ -5,6 +5,7 @@ import { computed } from "vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 import { IonButton } from "@ionic/vue";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import TransitionImg from "@/components/transition-img.vue";
 
 const props = defineProps<{
   blogId: string;
@@ -27,7 +28,7 @@ const handleClick = () => {
 <template>
   <div v-if="blogData" class="blog-data">
     <base-island-block class="blog-data__image-wrapper" :clickable="false">
-      <img :src="blogData.image" class="blog-data__image" />
+      <transition-img :src="blogData.image" class="blog-data__image" />
     </base-island-block>
     <base-island-block class="blog-data__content-wrapper" :clickable="false">
       <div class="blog-data__time">{{ blogData.time }}</div>

@@ -3,6 +3,7 @@ import ApplicationOrdersBlock from "@/components/application/application-orders-
 import Skeleton from "./skeleton.vue";
 import ErrorBoundary from "@/components/error-boundary.vue";
 import ErrorBlock from "@/components/error-block.vue";
+import TransitionSuspense from "@/components/transition-suspense.vue";
 
 type Params = InstanceType<typeof ApplicationOrdersBlock>["$props"]["params"];
 
@@ -15,12 +16,12 @@ defineProps<{
 
 <template>
   <error-boundary>
-    <suspense>
+    <TransitionSuspense>
       <application-orders-block v-bind="{ ...$attrs, ...$props }" v-model:params="paramsModel" />
       <template #fallback>
         <skeleton />
       </template>
-    </suspense>
+    </TransitionSuspense>
     <template #error="{ error, clearError }">
       <error-block :error="error" @refresh="clearError" />
     </template>

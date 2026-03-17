@@ -5,6 +5,7 @@ import Skeleton from "./skeleton.vue";
 import type { FilterType } from "../../../../types/FilterType.ts";
 import type { SortType } from "../../../../types/SortType.ts";
 import ErrorBlockSmall from "@/components/error-block-small.vue";
+import TransitionSuspense from "@/components/transition-suspense.vue";
 
 type Params = InstanceType<typeof ApplicationFilter>["$props"]["params"];
 
@@ -18,13 +19,13 @@ const sortModel = defineModel<SortType>("sort", { required: true });
 
 <template>
   <error-boundary>
-    <suspense>
+    <TransitionSuspense>
       <application-filter v-bind="$attrs" :params v-model:filter="filerModel" v-model:sort="sortModel" />
 
       <template #fallback>
         <skeleton />
       </template>
-    </suspense>
+    </TransitionSuspense>
 
     <template #error="{ error, clearError }">
       <error-block-small :error="error" @refresh="clearError" />

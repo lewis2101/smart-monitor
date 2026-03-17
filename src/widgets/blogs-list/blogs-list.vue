@@ -5,6 +5,7 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import { useIonRouter } from "@ionic/vue";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
+import TransitionImg from "@/components/transition-img.vue";
 
 const router = useIonRouter();
 
@@ -18,7 +19,7 @@ await mockDelayPromise();
     :key="blog.id"
     @click="router.push({ name: CommonRoutes.blog, params: { id: blog.id } })"
   >
-    <img :src="blog.image" class="blog-item__image" />
+    <transition-img :src="blog.image" class="blog-item__image" />
     <div class="blog-item__content-wrapper">
       <div class="blog-item__title">
         {{ blog.title }}

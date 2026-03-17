@@ -5,6 +5,7 @@ import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { blogs } from "@/mock/blogs.ts";
 import { useIonRouter, IonButton } from "@ionic/vue";
 import { CommonRoutes } from "@/router/router-list.ts";
+import TransitionImg from "@/components/transition-img.vue";
 
 const router = useIonRouter();
 
@@ -25,7 +26,7 @@ await mockDelayPromise();
         @click="router.push({ name: CommonRoutes.blog, params: { id: blog.id } })"
       >
         <div class="main-news__item-header">
-          <img :src="blog.image" />
+          <transition-img :src="blog.image" />
         </div>
         <div class="main-news__item-content">
           <div class="main-news__title">{{ blog.title }}</div>

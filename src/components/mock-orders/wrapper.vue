@@ -6,6 +6,7 @@ import MockOrderStep2 from "@/components/mock-orders/mock-order-step-2.vue";
 import MockOrderStep3 from "@/components/mock-orders/mock-order-step-3.vue";
 import MockOrderStep4 from "@/components/mock-orders/mock-order-step-4.vue";
 import MockOrderStep5 from "@/components/mock-orders/mock-order-step-5.vue";
+import TransitionSuspense from "@/components/transition-suspense.vue";
 
 const props = defineProps<{
   orderStep: string;
@@ -26,13 +27,13 @@ const currentMockOrderComponent = computed(() => mockOrderStepMap[props.orderSte
 </script>
 
 <template>
-  <Suspense>
+  <TransitionSuspense>
     <component v-bind="{ ...$attrs, ...$props }" :is="currentMockOrderComponent" />
 
     <template #fallback>
       <skeleton />
     </template>
-  </Suspense>
+  </TransitionSuspense>
 </template>
 
 <style lang="scss" scoped></style>

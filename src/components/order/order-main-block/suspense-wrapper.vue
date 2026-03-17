@@ -3,6 +3,7 @@ import ErrorBoundary from "@/components/error-boundary.vue";
 import ErrorBlock from "@/components/error-block.vue";
 import OrderMainBlock from "@/components/order/order-main-block/order-main-block.vue";
 import Skeleton from "./skeleton.vue";
+import TransitionSuspense from "@/components/transition-suspense.vue";
 
 defineProps<{
   orderId: string;
@@ -15,11 +16,11 @@ defineEmits<{
 
 <template>
   <error-boundary>
-    <suspense>
+    <TransitionSuspense>
       <order-main-block :order-id="orderId" @get-label="(value) => $emit('getLabel', value)" />
 
       <template #fallback> <skeleton /> </template>
-    </suspense>
+    </TransitionSuspense>
 
     <template #error="{ error, clearError }">
       <error-block :error="error" @refresh="clearError" />

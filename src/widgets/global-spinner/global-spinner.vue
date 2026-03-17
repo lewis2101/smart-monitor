@@ -17,15 +17,6 @@ const { isVisible } = storeToRefs(useGlobalSpinner());
 </template>
 
 <style scoped lang="scss">
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-.fade-enter-to, .fade-leave-from {
-  opacity: 1;
-}
 .global-spinner {
   position: fixed;
   inset: 0;
@@ -34,8 +25,5 @@ const { isVisible } = storeToRefs(useGlobalSpinner());
   z-index: 500;
 
   background: #00000080;
-
-  &__item {
-  }
 }
 </style>

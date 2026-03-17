@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import ProfileHistory from "@/widgets/profile-history/profile-history.vue";
+import CameraList from "@/components/camera/camera-list/camera-list.vue";
 import Skeleton from "./skeleton.vue";
+import type { CameraListProps } from "@/components/camera/camera-list/types.ts";
 import TransitionSuspense from "@/components/transition-suspense.vue";
+
+defineProps<CameraListProps>();
 </script>
 
 <template>
   <TransitionSuspense>
-    <profile-history />
+    <camera-list v-bind="{ ...$attrs, ...$props }" />
 
     <template #fallback>
       <skeleton />
