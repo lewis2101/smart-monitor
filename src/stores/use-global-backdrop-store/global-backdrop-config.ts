@@ -14,6 +14,7 @@ import { ProcessListBackdrop } from "@/widgets/backdrops";
 import CameraPickBackdrop from "@/widgets/backdrops/camera-pick-backdrop/camera-pick-backdrop.vue";
 import AuthPublicKeyListBackdrop from "@/widgets/backdrops/auth-public-key-list-backdrop/auth-public-key-list-backdrop.vue";
 import ProfileHistoryBackdrop from "@/widgets/backdrops/profile-history-backdrop/profile-history-backdrop.vue";
+import CameraViewBackdrop from "@/widgets/backdrops/camera-view-backdrop/camera-view-backdrop.vue";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {
   onSuccess?: S;
@@ -45,4 +46,5 @@ export const backdropComponents = {
   "camera-pick": markRaw(CameraPickBackdrop),
   "auth-public-key-list": markRaw(AuthPublicKeyListBackdrop),
   "profile-history": markRaw(ProfileHistoryBackdrop),
+  "camera-view": markRaw(CameraViewBackdrop),
 } as const;

@@ -1,17 +1,34 @@
 <script setup lang="ts">
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
-import type { CameraListProps } from "@/components/camera/camera-list/types.ts";
+import type { CameraListItem, CameraListProps } from "@/components/camera/camera-list/types.ts";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
 import TransitionImg from "@/components/transition-img.vue";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
 defineProps<CameraListProps>();
+
+const globalBackdropStore = useGlobalBackdropStore();
+
+const handleClick = (item: CameraListItem) => {
+  globalBackdropStore.push("camera-view", {
+    title: item.title,
+    props: {
+      item,
+    },
+  });
+};
 
 await mockDelayPromise();
 </script>
 
 <template>
   <base-island-block title="Камеры" class="camera-list" :shadow="false" :clickable="false">
-    <base-island-block v-for="item in list" :key="item.title" class="camera-list__item-wrapper">
+    <base-island-block
+      v-for="item in list"
+      :key="item.title"
+      class="camera-list__item-wrapper"
+      @click="handleClick(item)"
+    >
       <div class="camera-list__item">
         <div v-if="item.isLive" class="camera-list__item-badge camera-list__item-live">LIVE</div>
         <div v-if="item.isActive" class="camera-list__item-badge camera-list__item-active">Активно</div>
