@@ -2,15 +2,14 @@
 import FooterItem from "./item.vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { computed, onMounted, useTemplateRef } from "vue";
-import { MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
+import { MainTabRoutes } from "@/router/router-list.ts";
 import { IonTabBar, IonTabButton, useIonRouter } from "@ionic/vue";
 import { useRoute } from "vue-router";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import { useBubbleAnimate } from "@/composables/useBubbleAnimate.ts";
-import { useResourceDependencyQuery } from "@/api/dependency/resource-dependency.ts";
-import { useQuery } from "@tanstack/vue-query";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 import { usePermissions } from "@/composables/login/usePermissions.ts";
+import { useHaptics } from "@/composables/native/use-haptics.ts";
 
 // const BPMN_PROCESS_KEY_RESOURCE = "BpmnProcessKey";
 
@@ -20,6 +19,8 @@ const route = useRoute();
 const globalBackdropStore = useGlobalBackdropStore();
 const globalSpinner = useGlobalSpinner();
 const { checkPermission } = usePermissions();
+
+const { lightHaptic } = useHaptics();
 
 const currentPathName = computed(() => route.name as MainTabRoutes);
 const getActiveClass = (name: MainTabRoutes) => (currentPathName.value.startsWith(name) ? "active animate" : "");
@@ -96,6 +97,10 @@ onMounted(() => {
 //   router.push({ name: OrderRoutes.newOrder, params: { processKey } });
 // };
 
+const handleClickTab = () => {
+  lightHaptic();
+};
+
 const handleClickCreate = () => {
   globalBackdropStore.push("process-list", {
     title: "Выберите тип заявки",
@@ -106,12 +111,12 @@ const handleClickCreate = () => {
 
 <template>
   <ion-tab-bar slot="bottom" class="main-footer">
-    <ion-tab-button tab="home" href="/home">
+    <ion-tab-button tab="home" href="/home" @click="handleClickTab">
       <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.home)]" :title="$t('main-tabs.home')">
         <base-icon name="home" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="docs" href="/docs">
+    <ion-tab-button tab="docs" href="/docs" @click="handleClickTab">
       <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" :title="$t('main-tabs.docs')">
         <base-icon name="docs" class="main-footer__icon" />
       </footer-item>
@@ -123,12 +128,12 @@ const handleClickCreate = () => {
         </div>
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="orders" :href="orderPath">
+    <ion-tab-button tab="orders" :href="orderPath" @click="handleClickTab">
       <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.orders)]" :title="$t('main-tabs.orders')">
         <base-icon name="application" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="service" href="/service">
+    <ion-tab-button tab="service" href="/service" @click="handleClickTab">
       <footer-item
         :class="['main-footer__item', getActiveClass(MainTabRoutes.service)]"
         :title="$t('main-tabs.services')"

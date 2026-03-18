@@ -51,7 +51,7 @@ onMounted(() => {
 .main-header {
   background: $main-color;
   color: $white;
-  padding: calc(12px + env(safe-area-inset-top)) 16px 12px 16px;
+  padding: calc(6px + env(safe-area-inset-top)) 14px 6px 14px;
   border-bottom: 1px solid $opacity-main;
 
   width: 100%;

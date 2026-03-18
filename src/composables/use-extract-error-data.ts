@@ -1,9 +1,11 @@
 import { getOrderErrorMessage } from "@/api/getOrderErrorMessage.ts";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
+import { useHaptics } from "@/composables/native/use-haptics.ts";
 
 export const useExtractErrorData = () => {
   const { t } = useI18n();
+  const { errorHaptic } = useHaptics();
 
   const isShowDetailedError = String(import.meta.env.VITE_SHOW_DETAILED_ERROR) === "true";
 
@@ -46,6 +48,8 @@ export const useExtractErrorData = () => {
   });
 
   const getErrorForToast = (value: any) => {
+    errorHaptic().catch((err) => console.log(err));
+
     return {
       severity: "error",
       summary: "Ошибка",

@@ -1,12 +1,15 @@
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { useQueryClient } from "@tanstack/vue-query";
 import { getUniqueString } from "@/utils/getUniqueString.ts";
 import type { RefresherCustomEvent } from "@ionic/vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
+import { useHaptics } from "@/composables/native/use-haptics.ts";
 
 export const useRefreshPage = (queryClientKeys: string[] | string[][], onFinish?: () => void) => {
   const pageId = ref(getUniqueString());
   const queryClient = useQueryClient();
+
+  const { mediumHaptic } = useHaptics();
 
   const refresh = async (event: RefresherCustomEvent) => {
     if (queryClientKeys) {
@@ -16,6 +19,9 @@ export const useRefreshPage = (queryClientKeys: string[] | string[][], onFinish?
           queryKey: keys,
         });
       });
+
+      await nextTick();
+      await mediumHaptic();
 
       await Promise.all(suspense);
       pageId.value = getUniqueString();

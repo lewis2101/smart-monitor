@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onUnmounted, onMounted } from "vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
+import { useHaptics } from "@/composables/native/use-haptics.ts";
 
 interface Props {
   title?: string;
@@ -45,6 +46,8 @@ interface Props {
 }
 
 const { title = "Sheet", closeThreshold = 80, stackIndex = 0 } = defineProps<Props>();
+
+const { mediumHaptic } = useHaptics();
 
 const isOpen = defineModel<boolean>({ default: false });
 
@@ -85,6 +88,8 @@ async function applyOpen(val: boolean) {
     document.body.style.overflow = "hidden";
     await nextTick();
     isVisible.value = true;
+
+    await mediumHaptic();
   } else {
     isVisible.value = false;
     document.body.style.overflow = "";
