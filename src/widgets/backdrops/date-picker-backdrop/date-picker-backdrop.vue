@@ -114,17 +114,17 @@ watch(model, async (value) => {
 
 <style lang="scss" module>
 .day {
-  --p-datepicker-date-selected-background: #2a61cc;
-  --p-datepicker-date-range-selected-background: #2a61cc;
+  --p-datepicker-date-selected-background: #{$secondary-color};
+  --p-datepicker-date-range-selected-background: #{$secondary-color};
   --p-datepicker-date-range-selected-color: #ffffff;
 }
 
 .month {
-  --p-datepicker-date-selected-background: #2a61cc;
+  --p-datepicker-date-selected-background: #{$secondary-color};
 }
 
 .year {
-  --p-datepicker-date-selected-background: #2a61cc;
+  --p-datepicker-date-selected-background: #{$secondary-color};
 }
 
 .panel {
