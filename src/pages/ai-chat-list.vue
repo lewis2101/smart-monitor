@@ -1,28 +1,30 @@
 <script setup lang="ts">
-import { IonPage, IonHeader } from "@ionic/vue";
-import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
+import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
+import { IonHeader, IonPage } from "@ionic/vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
-import { ServicesMenu } from "@/widgets/sevices-menu";
+import { AiChatList as AiChatListComponent } from "@/widgets/ai-chat-list";
 import { useRefreshPage } from "@/composables/refresh-page.ts";
 
 const { pageId, refresh } = useRefreshPage([]);
 </script>
 
 <template>
-  <ion-page class="service-page">
+  <ion-page class="ai-chat-list-page">
     <ion-header>
       <base-toolbar>
-        <default-layout-header title="Сервисы" hide-back hide-close />
+        <default-layout-header title="Ассистент" hide-back hide-close />
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="refresh" variant="secondary">
-      <services-menu :key="pageId" />
+      <div :key="pageId">
+        <ai-chat-list-component />
+      </div>
     </base-content-with-refresher>
   </ion-page>
 </template>
 
 <style scoped lang="scss">
-.service-page {
+.ai-chat-list-page {
 }
 </style>

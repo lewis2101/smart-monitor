@@ -116,9 +116,9 @@ const handleClickCreate = () => {
         <base-icon name="home" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
-    <ion-tab-button tab="docs" href="/docs" @click="handleClickTab">
-      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.docs)]" :title="$t('main-tabs.docs')">
-        <base-icon name="docs" class="main-footer__icon" />
+    <ion-tab-button tab="aiChatList" href="/ai-chat-list" @click="handleClickTab">
+      <footer-item :class="['main-footer__item', getActiveClass(MainTabRoutes.aiChatList)]" :title="$t('main-tabs.ai-chat')">
+        <base-icon name="robot" class="main-footer__icon" />
       </footer-item>
     </ion-tab-button>
     <ion-tab-button tab="camera" @click="handleClickCreate">
@@ -191,6 +191,7 @@ const handleClickCreate = () => {
 
   &__icon {
     margin-bottom: 12px;
+    height: 16px;
   }
 
   &__create-item {

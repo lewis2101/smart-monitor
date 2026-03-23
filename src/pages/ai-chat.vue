@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseToolbar from "@/components/base/base-toolbar/base-toolbar.vue";
 import DefaultLayoutHeader from "@/components/layout/default-layout-header.vue";
-import { IonHeader, IonPage, IonFooter, IonButton } from "@ionic/vue";
+import { IonHeader, IonPage, IonFooter, IonButton, useIonRouter } from "@ionic/vue";
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import BaseTextarea from "@/components/base/base-textarea/base-textarea.vue";
@@ -13,8 +13,13 @@ import { storeToRefs } from "pinia";
 import type { MessageGroup, MessageRole } from "@/widgets/ai-chat-messages/types.ts";
 import { useActionNaviChat } from "@/api/navi/navi-chat.ts";
 import { useLocalStorage } from "@vueuse/core";
-import { isSameFullDate } from "@/utils/formatDate.ts";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { useRoute } from "vue-router";
+import { MainTabRoutes } from "@/router/router-list.ts";
+
+const router = useIonRouter();
+const route = useRoute();
+const chatIndex = Number(route.params.chat) as number;
 
 const inputModel = ref("");
 
@@ -44,7 +49,10 @@ const openMoreMenu = async () => {
     })) as "clear";
 
     if (result === "clear") {
-      messages.value = [];
+      messages.value = messages.value.filter((_, idx) => idx !== chatIndex);
+      router.replace({
+        name: MainTabRoutes.aiChatList,
+      });
     }
   } catch (e) {
     console.log(e);
@@ -52,10 +60,8 @@ const openMoreMenu = async () => {
 };
 
 const addMessage = (role: MessageRole, text: string) => {
-  const index = messages.value.findIndex((group) => isSameFullDate(new Date(group.date), new Date()));
-
-  if (index >= 0) {
-    messages.value[index]?.messages.push({
+  if (chatIndex >= 0) {
+    messages.value[chatIndex]?.messages.push({
       type: "message",
       role,
       date: new Date(),
@@ -108,7 +114,12 @@ const handleClick = async () => {
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary">
-      <ai-chat-messages :content="messages" hint="Чем могу помочь?" :is-writing="isPending" />
+      <ai-chat-messages
+        :content="messages"
+        hint="Чем могу помочь?"
+        :current-index="chatIndex"
+        :is-writing="isPending"
+      />
     </base-content-with-refresher>
 
     <ion-footer class="chat-footer">

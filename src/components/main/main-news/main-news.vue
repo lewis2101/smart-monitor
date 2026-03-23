@@ -59,9 +59,11 @@ await mockDelayPromise();
   &__wrapper {
     display: flex;
     gap: 8px;
-    overflow: auto;
+    overflow-x: auto;
     padding-bottom: 4px;
     border-radius: 20px;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline-start: 4px;
   }
 
   &__item {
@@ -70,6 +72,7 @@ await mockDelayPromise();
     margin-top: 8px;
     border-radius: 32px;
     box-shadow: 0 0 24px 0 #00000014;
+    scroll-snap-align: start;
 
     &-header {
       width: 100%;

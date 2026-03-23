@@ -15,6 +15,7 @@ export type MessageGroup = {
 
 export type AiChatMessagesProps = {
   content: MessageGroup[];
+  currentIndex: number;
   isWriting?: boolean;
   hint?: string;
 };

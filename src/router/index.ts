@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { CommonRoutes, MainTabRoutes, OrderRoutes } from "@/router/router-list.ts";
 import MainTabs from "@/layouts/main-tabs.vue";
 import Main from "@/pages/main.vue";
-import Docs from "@/pages/docs.vue";
 import Briefing from "@/pages/briefing.vue";
 import Orders from "@/pages/orders.vue";
 import Service from "@/pages/service.vue";
@@ -24,6 +23,7 @@ import AiChat from "@/pages/ai-chat.vue";
 import Blog from "@/pages/blog.vue";
 import Blogs from "@/pages/blogs.vue";
 import Camera from "@/pages/camera.vue";
+import AiChatList from "@/pages/ai-chat-list.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,10 +41,15 @@ const router = createRouter({
           name: MainTabRoutes.home,
           component: Main,
         },
+        // {
+        //   path: "docs",
+        //   name: MainTabRoutes.docs,
+        //   component: Docs,
+        // },
         {
-          path: "docs",
-          name: MainTabRoutes.docs,
-          component: Docs,
+          path: "ai-chat-list",
+          name: MainTabRoutes.aiChatList,
+          component: AiChatList,
         },
         {
           path: "orders/:ordersType",
@@ -134,7 +139,7 @@ const router = createRouter({
       component: MockOrder,
     },
     {
-      path: "/ai-chat",
+      path: "/ai-chat/:chat",
       name: CommonRoutes.aiChat,
       component: AiChat,
     },

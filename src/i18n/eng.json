@@ -9,7 +9,8 @@
     "home": "Home",
     "docs": "Documents",
     "orders": "Orders",
-    "services": "Services"
+    "services": "Services",
+    "ai-chat": "Assistant"
   },
   "lang": {
     "title": "Language",

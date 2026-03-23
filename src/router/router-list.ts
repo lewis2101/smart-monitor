@@ -5,7 +5,8 @@
 
 export enum MainTabRoutes {
   home = "mainHome",
-  docs = "mainDocs",
+  // docs = "mainDocs",
+  aiChatList = "aiChatList",
   briefing = "mainBriefing",
   orders = "mainOrders",
   service = "mainService",

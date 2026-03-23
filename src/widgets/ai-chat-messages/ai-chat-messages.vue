@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { IonSpinner } from "@ionic/vue";
-import { nextTick, onMounted, useTemplateRef, watch } from "vue";
+import { computed, nextTick, onMounted, useTemplateRef, watch } from "vue";
 import { formatDateString } from "@/utils/formatDate.ts";
 import { mockDelayPromise } from "@/utils/mockDelayPromise.ts";
-import type { AiChatMessagesProps } from "@/widgets/ai-chat-messages/types.ts";
+import type { AiChatMessagesProps, MessageGroup } from "@/widgets/ai-chat-messages/types.ts";
 import { storeToRefs } from "pinia";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
 
 const props = withDefaults(defineProps<AiChatMessagesProps>(), {
   isWriting: false,
 });
+
+const currentContent = computed(() => props.content[props.currentIndex] as MessageGroup);
 
 await mockDelayPromise();
 
@@ -46,20 +48,22 @@ watch(isVisibleKeyboard, (value) => {
 
 <template>
   <TransitionGroup name="message" tag="div" class="chat">
-    <template v-for="group in content" :key="group.date">
-      <div class="chat__group">
-        <div class="chat__group-date">
-          {{ formatDateString(group.date, { relative: true }) }}
-        </div>
+    <div class="chat__group">
+      <div class="chat__group-date">
+        {{ formatDateString(currentContent.date, { relative: true }) }}
       </div>
+    </div>
 
-      <div v-for="(message, idx) in group.messages" :key="idx" :class="['chat__message', `chat__${message.role}`]">
-        <div class="chat__content">{{ message.text }}</div>
-        <div class="chat__date">
-          {{ formatDateString(new Date(message.date), { onlyTime: true }) }}
-        </div>
+    <div
+      v-for="(message, idx) in currentContent.messages"
+      :key="idx"
+      :class="['chat__message', `chat__${message.role}`]"
+    >
+      <div class="chat__content">{{ message.text }}</div>
+      <div class="chat__date">
+        {{ formatDateString(new Date(message.date), { onlyTime: true }) }}
       </div>
-    </template>
+    </div>
 
     <div v-if="isWriting" :class="['chat__message chat__other']">
       <div class="chat__content">
@@ -67,7 +71,7 @@ watch(isVisibleKeyboard, (value) => {
       </div>
     </div>
 
-    <div v-if="hint && content.flat().length === 0" class="chat__hint">
+    <div v-if="hint && currentContent.messages.length === 0" class="chat__hint">
       {{ hint }}
     </div>
 
@@ -148,6 +152,7 @@ watch(isVisibleKeyboard, (value) => {
     //background: red;
     text-align: center;
     color: $gray-dark;
+    margin-top: 20px;
   }
 
   &__content {
