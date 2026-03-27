@@ -24,6 +24,7 @@ import Blog from "@/pages/blog.vue";
 import Blogs from "@/pages/blogs.vue";
 import Camera from "@/pages/camera.vue";
 import AiChatList from "@/pages/ai-chat-list.vue";
+import GpsMonitoring from "@/pages/gps-monitoring.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -157,6 +158,11 @@ const router = createRouter({
       path: "/camera",
       name: CommonRoutes.camera,
       component: Camera,
+    },
+    {
+      path: "/gps-monitoring",
+      name: CommonRoutes.gpsMonitoring,
+      component: GpsMonitoring,
     },
   ],
 });

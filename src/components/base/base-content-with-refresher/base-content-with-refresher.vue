@@ -6,10 +6,12 @@ const props = withDefaults(
   defineProps<{
     variant?: "primary" | "secondary";
     xOffset?: boolean;
+    disableRefresh?: boolean;
   }>(),
   {
     variant: "primary",
     xOffset: true,
+    disableRefresh: false,
   },
 );
 
@@ -23,7 +25,12 @@ const getXOffset = computed(() => (props.xOffset ? "16px 16px calc(16px + env(sa
 
 <template>
   <ion-content class="base-content">
-    <ion-refresher class="base-refresher" slot="fixed" @ion-refresh="$emit('refresh', $event)">
+    <ion-refresher
+      class="base-refresher"
+      slot="fixed"
+      @ion-refresh="$emit('refresh', $event)"
+      :disabled="disableRefresh"
+    >
       <ion-refresher-content>
         <slot name="refresher" />
       </ion-refresher-content>

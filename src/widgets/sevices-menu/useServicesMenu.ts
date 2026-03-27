@@ -61,6 +61,9 @@ export const useServicesMenu = () => {
       color: "red",
       title: t("mn_gps_monitoring"),
       permissionKey: "mn_gps_monitoring",
+      action: () => {
+        router.push({ name: CommonRoutes.gpsMonitoring });
+      },
     },
     {
       icon: "monit",

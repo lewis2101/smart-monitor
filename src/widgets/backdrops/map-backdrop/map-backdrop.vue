@@ -39,7 +39,6 @@ watch(isReadyPolyline, (value) => {
   if (value && props.routes) {
     paintRoute(props.routes, {
       padding: 20,
-      zoom: 15,
     });
   }
 });
@@ -48,7 +47,6 @@ watch(isReadyPoints, (value) => {
   if (value && props.points) {
     paintPins(props.points, {
       padding: 20,
-      zoom: 15,
     });
   }
 });

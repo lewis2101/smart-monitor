@@ -34,4 +34,5 @@ export enum CommonRoutes {
   blog = "blog",
   blogs = "blogs",
   camera = "camera",
+  gpsMonitoring = "gpsMonitoring",
 }

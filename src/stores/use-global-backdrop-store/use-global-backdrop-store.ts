@@ -7,34 +7,41 @@ import {
   backdropComponents,
 } from "@/stores/use-global-backdrop-store/global-backdrop-config.ts";
 
+type BackdropSuccessPayload<K extends BackdropKeys> = BackdropProps<K>["onSuccess"] extends (
+  payload: infer P,
+  ...args: any[]
+) => any
+  ? P
+  : void;
+
 export const useGlobalBackdropStore = defineStore("global-backdrop-store", () => {
   const backdrops = reactive<Array<BackdropItem<BackdropKeys> & { model: boolean }>>([]);
 
-  // Нужно исправить типизацию промис резолва
   function push<K extends BackdropKeys>(
     key: K,
     options: {
       title: string;
-      props: BackdropProps<K>;
+      props: Omit<BackdropProps<K>, "onSuccess" | "onFailure">;
     },
   ) {
-    return new Promise((resolve, reject) => {
+    return new Promise<BackdropSuccessPayload<K>>((resolve, reject) => {
       backdrops.push({
         component: backdropComponents[key],
         title: options.title,
         id: key,
         props: {
           ...options.props,
-          onSuccess: resolve,
-          onFailure: reject,
-        },
+          onSuccess: ((payload: BackdropSuccessPayload<K>) => resolve(payload)) as BackdropProps<K>["onSuccess"],
+          onFailure: ((reason?: unknown) => reject(reason)) as BackdropProps<K>["onFailure"],
+        } as BackdropProps<K>,
         model: true,
       });
     });
   }
 
-  watch(backdrops, (value) => {
-    setTimeout(async () => {
+  watch(
+    backdrops,
+    async (value) => {
       await nextTick();
       const filtered = value.filter((b) => {
         if (!b.model) {
@@ -42,9 +49,15 @@ export const useGlobalBackdropStore = defineStore("global-backdrop-store", () =>
         }
         return b.model;
       });
-      backdrops.splice(0, backdrops.length, ...filtered);
-    }, 150); // Дожидаемся закрытия бэкдропа и после очищаем его из списка
-  });
+      if (filtered.length !== value.length) {
+        backdrops.splice(0, backdrops.length, ...filtered);
+      }
+    },
+    {
+      deep: true,
+      flush: "post",
+    },
+  );
 
   return {
     backdrops,
