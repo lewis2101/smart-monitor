@@ -1,7 +1,6 @@
 import {computed, inject, type MaybeRefOrGetter, toValue} from "vue";
 import {httpClientProviderKey} from "@/composables/http-client/http-provider-keys.ts";
 import {type CapacitorHttpOptions, HttpClient} from "@/composables/http-client/HttpClient.ts";
-import {useEndpointBuilder} from "@/composables/http-client/use-endpoint-builder.ts";
 
 export function createRawMutations<RawData, Payload, Response>(options: {
   httpClientOptions: CapacitorHttpOptions<Payload>;
@@ -27,11 +26,10 @@ export function createRawMutations<RawData, Payload, Response>(options: {
 
     return {
       mutateAsync: async ({data}: { data: Payload }): Promise<Response> => {
-        const config = useEndpointBuilder<Payload>(httpClientOptions);
         const url = getUrl?.(httpClientOptions.url) || httpClientOptions.url;
 
         const response = await httpClient.request<Response, Payload>(url, {
-          ...config,
+          ...httpClientOptions,
           data,
           params: p.value!,
         });

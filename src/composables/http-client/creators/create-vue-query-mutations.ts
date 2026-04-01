@@ -2,7 +2,6 @@ import { type MutationOptions, useMutation } from "@tanstack/vue-query";
 import { computed, inject, type MaybeRefOrGetter, toValue } from "vue";
 import { httpClientProviderKey } from "@/composables/http-client/http-provider-keys.ts";
 import { type CapacitorHttpOptions, type CapacitorHttpResponse, HttpClient } from "@/composables/http-client/HttpClient.ts";
-import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-builder.ts";
 
 type MutationPayload<D> = {
   data?: D;
@@ -39,8 +38,6 @@ export function createVueQueryMutations<
     const resolvedParams = computed(() => toValue(params));
     const resolvedKeys = computed(() => toValue(keys ?? []));
 
-    const config = useEndpointBuilder<Payload>(options.httpClientOptions);
-
     return useMutation<CapacitorHttpResponse<Response>, Err, MutationPayload<Payload>>({
       mutationKey: [options.scope, resolvedParams.value, ...resolvedKeys.value],
 
@@ -55,7 +52,7 @@ export function createVueQueryMutations<
         }
 
         const response = await httpClient.request<Response, Payload>(url, {
-          ...config,
+          ...options.httpClientOptions,
           params: resolvedParams.value,
           data,
         });

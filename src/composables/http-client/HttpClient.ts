@@ -1,4 +1,4 @@
-import { CapacitorHttp, type HttpOptions, type HttpResponse } from "@capacitor/core";
+import { CapacitorHttp, type HttpHeaders, type HttpOptions, type HttpResponse } from "@capacitor/core";
 
 export type HttpClientMethod = "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
 export type CapacitorHttpResponse<T> = Omit<HttpResponse, "data"> & { data: T };
@@ -9,6 +9,7 @@ export type CapacitorHttpOptions<D = unknown> = Omit<HttpOptions, "method" | "da
 
 type HttpClientConfig = {
   baseURL: string;
+  headers?: Record<string, string>;
 };
 
 export type InterceptorCallback = (option: HttpResponse) => Promise<{
@@ -17,11 +18,11 @@ export type InterceptorCallback = (option: HttpResponse) => Promise<{
 }>;
 
 export class HttpClient {
-  private readonly baseURL: string;
   private interceptors: InterceptorCallback[] = [];
+  private readonly baseConfig: () => HttpClientConfig;
 
-  constructor(config: HttpClientConfig) {
-    this.baseURL = config.baseURL;
+  constructor(config: () => HttpClientConfig) {
+    this.baseConfig = config;
   }
 
   private normalizeData<T>(data?: T): T | undefined {
@@ -29,12 +30,12 @@ export class HttpClient {
     return JSON.parse(JSON.stringify(data));
   }
 
-  private buildHeaders(headers?: Record<string, string>): Record<string, string> {
+  private buildHeaders(headers?: HttpHeaders): HttpHeaders {
+    const baseConfigHeaders = this.baseConfig().headers || {};
+
     return {
+      ...baseConfigHeaders,
       ...headers,
-      "Content-Type": "application/json; charset=utf-8",
-      Accept: "application/json",
-      "X-TimeZone": Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
   }
 
@@ -77,7 +78,12 @@ export class HttpClient {
     response: HttpResponse,
   ): Promise<CapacitorHttpResponse<Response> | Promise<void>> {
     for (const interceptor of this.interceptors) {
-      const data = await interceptor(response);
+      const interceptorOption = {
+        ...response,
+        url: options.url,
+      };
+
+      const data = await interceptor(interceptorOption);
       if (data.refetch) {
         return this.request<Response>(url, {
           ...options,
@@ -99,7 +105,7 @@ export class HttpClient {
     const response = await CapacitorHttp.request({
       ...rest,
       method,
-      url: `${this.baseURL}${url}`,
+      url: `${this.baseConfig().baseURL}${url}`,
       headers: this.buildHeaders(headers),
       params: params ? this.buildParams(params) : undefined,
       data: this.normalizeData(data),

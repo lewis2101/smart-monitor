@@ -2,7 +2,6 @@ import { queryOptions } from "@tanstack/vue-query";
 import { computed, inject, type MaybeRefOrGetter, toValue } from "vue";
 import { httpClientProviderKey } from "@/composables/http-client/http-provider-keys.ts";
 import { type CapacitorHttpOptions, HttpClient } from "@/composables/http-client/HttpClient.ts";
-import { useEndpointBuilder } from "@/composables/http-client/use-endpoint-builder.ts";
 
 export function createVueQueryOptions<RawData, Response>(options: {
   httpClientOptions: CapacitorHttpOptions;
@@ -34,11 +33,10 @@ export function createVueQueryOptions<RawData, Response>(options: {
       // @ts-expect-error
       queryKey: [scope, p, k],
       queryFn: async () => {
-        const config = useEndpointBuilder(httpClientOptions);
         const url = getUrl?.(httpClientOptions.url) || httpClientOptions.url;
 
         const { data } = await httpClient.request<Response>(url, {
-          ...config,
+          ...httpClientOptions,
           params: p.value!,
         });
         return data;

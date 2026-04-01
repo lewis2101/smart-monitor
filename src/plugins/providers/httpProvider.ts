@@ -8,6 +8,8 @@ import type { HttpResponse } from "@capacitor/core";
 import router from "@/router";
 
 const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback => {
+  const { refreshTokenStorage, accessTokenStorage, expiresTokenStorage } = useAuthStorage();
+
   const { mutateAsync: mutateRefreshToken } = useRefreshTokenRawMutation({
     client: httpClient,
   });
@@ -19,55 +21,60 @@ const refreshTokenInterceptor = (httpClient: HttpClient): InterceptorCallback =>
       !option.url?.includes(AuthEndpoints.login) &&
       !option.url?.includes(AuthEndpoints.refreshToken);
 
-    if (isUnAuthorized) {
-      const { refreshTokenStorage, accessTokenStorage, expiresTokenStorage } = useAuthStorage();
-
-      try {
-        if (!refreshPromise) {
-          refreshPromise = (async () => {
-            const data = await mutateRefreshToken({
-              data: {
-                refresh: refreshTokenStorage.value,
-              },
-            });
-
-            accessTokenStorage.value = data.accessToken;
-            refreshTokenStorage.value = data.refreshToken;
-            expiresTokenStorage.value = data.expiry;
-          })()
-            .catch((e) => {
-              router.replace({ name: CommonRoutes.login });
-              // location.href = CommonRoutes.login;
-              throw e;
-            })
-            .finally(() => {
-              refreshPromise = null;
-            });
-        }
-
-        await refreshPromise;
-
-        return {
-          refetch: true,
-          headers: {
-            Authorization: `Bearer ${accessTokenStorage.value}`,
-          },
-        };
-      } catch (e) {
-        throw e;
-      }
+    if (!isUnAuthorized) {
+      return {
+        refetch: false,
+      };
     }
 
-    return {
-      refetch: false,
-    };
+    try {
+      if (!refreshPromise) {
+        refreshPromise = (async () => {
+          const data = await mutateRefreshToken({
+            data: {
+              refresh: refreshTokenStorage.value,
+            },
+          });
+
+          accessTokenStorage.value = data.accessToken;
+          refreshTokenStorage.value = data.refreshToken;
+          expiresTokenStorage.value = data.expiry;
+        })()
+          .catch((e) => {
+            router.replace({ name: CommonRoutes.login });
+            throw e;
+          })
+          .finally(() => {
+            refreshPromise = null;
+          });
+      }
+
+      await refreshPromise;
+
+      return {
+        refetch: true,
+        headers: {
+          Authorization: `Bearer ${accessTokenStorage.value}`,
+        },
+      };
+    } catch (e) {
+      throw e;
+    }
   };
 };
 
 export const httpProvider = () => {
-  const httpClient = new HttpClient({
+  const { accessTokenStorage } = useAuthStorage();
+
+  const httpClient = new HttpClient(() => ({
     baseURL: import.meta.env.VITE_BASE_URL,
-  });
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      Accept: "application/json",
+      "X-TimeZone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+      Authorization: `Bearer ${accessTokenStorage.value}`,
+    },
+  }));
   httpClient.registerResponseInterceptor(refreshTokenInterceptor(httpClient));
 
   return httpClient;
