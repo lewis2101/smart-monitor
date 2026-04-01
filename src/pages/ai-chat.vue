@@ -5,7 +5,7 @@ import { IonHeader, IonPage, IonFooter, IonButton, useIonRouter } from "@ionic/v
 import BaseContentWithRefresher from "@/components/base/base-content-with-refresher/base-content-with-refresher.vue";
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import BaseTextarea from "@/components/base/base-textarea/base-textarea.vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import { AiChatMessages } from "@/widgets/ai-chat-messages";
 import { useKeyboardStore } from "@/stores/use-keyboard-store/use-keyboard-store.ts";
@@ -16,6 +16,8 @@ import { useLocalStorage } from "@vueuse/core";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 import { useRoute } from "vue-router";
 import { MainTabRoutes } from "@/router/router-list.ts";
+import { useExtractErrorData } from "@/composables/use-extract-error-data.ts";
+import { useToast } from "primevue/usetoast";
 
 const router = useIonRouter();
 const route = useRoute();
@@ -26,13 +28,16 @@ const inputModel = ref("");
 const { isVisibleKeyboard } = storeToRefs(useKeyboardStore());
 const globalBackdropStore = useGlobalBackdropStore();
 
-const { mutateAsync, isPending } = useActionNaviChat({});
+const { mutateAsync, isPending, error } = useActionNaviChat({});
 
 const showKeyboardPadding = computed(() =>
   isVisibleKeyboard.value ? "0 10px 10px 10px" : "0 10px calc(10px + env(safe-area-inset-bottom)) 10px",
 );
 
 const messages = useLocalStorage<MessageGroup[]>("ai-chat-messages", () => []);
+
+const toast = useToast();
+const { getErrorForToast } = useExtractErrorData();
 
 const openMoreMenu = async () => {
   try {
@@ -100,6 +105,12 @@ const handleClick = async () => {
 
   addMessage("other", data.answer);
 };
+
+watch(error, (value) => {
+  if (value) {
+    toast.add(getErrorForToast(value));
+  }
+});
 </script>
 
 <template>
