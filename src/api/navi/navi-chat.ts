@@ -1,4 +1,4 @@
-import { NaviChatEndpoints } from "@/api/endpoints.ts";
+import { NaviEndpoints } from "@/api/endpoints.ts";
 import { createVueQueryMutations } from "@/composables/http-client/creators/create-vue-query-mutations.ts";
 import { Scopes } from "@/api/scopes.ts";
 
@@ -16,7 +16,7 @@ type Payload = {
 
 export const useActionNaviChat = createVueQueryMutations<RawData, Payload, Response, Error>({
   httpClientOptions: {
-    url: NaviChatEndpoints.naviChat,
+    url: NaviEndpoints.naviChat,
     method: "POST",
   },
   scope: Scopes.naviChat,

@@ -62,6 +62,7 @@ const getXOffset = computed(() => (props.xOffset ? "16px 16px calc(16px + env(sa
     padding: v-bind(getXOffset);
 
     width: 100%;
+    height: calc(100% - 50px);
   }
 }
 .base-refresher {

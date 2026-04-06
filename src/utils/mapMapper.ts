@@ -17,4 +17,4 @@ export const mapsMapper: Record<MapMapperKeys, { link: string; crs: string }> = 
     link: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
     crs: "EPSG:3857",
   },
-};
+} as const;

@@ -1,6 +1,6 @@
 import { createVueQueryOptions } from "@/composables/http-client/creators/create-vue-query-options.ts";
 import { DependencyEndpoints } from "@/api/endpoints.ts";
-import { DependencyScope } from "@/api/dependency-scope.ts";
+import { Scopes } from "@/api/scopes.ts";
 
 type RawData = {
   lang: string;
@@ -25,5 +25,5 @@ export const useResourceDependencyQuery = createVueQueryOptions<RawData, Respons
     url: DependencyEndpoints.resourceDependency,
     method: "GET",
   },
-  scope: DependencyScope.resourceDependency,
+  scope: Scopes.resourceDependency,
 });

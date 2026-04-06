@@ -6,6 +6,9 @@ import BaseContentWithRefresher from "@/components/base/base-content-with-refres
 import { mockRefresh } from "@/utils/mockRefresh.ts";
 import GpsMonitoringSegmentButtons from "@/widgets/gps-monitoring/gps-monitoring-segment-buttons/gps-monitoring-segment-buttons.vue";
 import GpsMonitoringSegments from "@/widgets/gps-monitoring/gps-monitoring-segments/gps-monitoring-segments.vue";
+import { useMonitoringSegments } from "@/widgets/gps-monitoring/use-monitoring-segments.ts";
+
+const { segmentModel } = useMonitoringSegments();
 </script>
 
 <template>
@@ -16,7 +19,7 @@ import GpsMonitoringSegments from "@/widgets/gps-monitoring/gps-monitoring-segme
       </base-toolbar>
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary" :x-offset="false" disable-refresh>
-      <gps-monitoring-segment-buttons />
+      <gps-monitoring-segment-buttons v-model="segmentModel" />
       <gps-monitoring-segments />
     </base-content-with-refresher>
   </ion-page>

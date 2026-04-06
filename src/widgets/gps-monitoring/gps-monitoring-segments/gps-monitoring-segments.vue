@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IonSegmentContent, IonSegmentView } from "@ionic/vue";
 import BaseMap from "@/components/map/base-map.vue";
-import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
+import { MonitoringSegment } from "@/widgets/gps-monitoring/gps-monitoring-segments/monitoring-segment";
 </script>
 
 <template>
@@ -12,13 +12,7 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
       </div>
     </ion-segment-content>
     <ion-segment-content id="monitoring" class="monitoring-segment segment-padding">
-      <base-island-block title="Транспорт" :clickable="false" class="monitoring-segment__block">
-        asdfasdf
-      </base-island-block>
-
-      <base-island-block title="Группа" :clickable="false" class="monitoring-segment__block">
-        Группа - 1
-      </base-island-block>
+      <monitoring-segment />
     </ion-segment-content>
     <ion-segment-content id="tracks">tracks</ion-segment-content>
     <ion-segment-content id="reports">reports</ion-segment-content>
@@ -32,7 +26,7 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
 <style scoped lang="scss">
 .monitoring-map {
   width: 100%;
-  height: calc(100vh - 100px);
+  height: 100%;
 }
 .segment-padding {
   padding: 16px;

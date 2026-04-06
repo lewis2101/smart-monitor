@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { IonSegment, IonSegmentButton, IonLabel } from "@ionic/vue";
+
+const model = defineModel<string>({ required: true });
 </script>
 
 <template>
-  <ion-segment scrollable value="map">
+  <ion-segment v-model="model" scrollable>
     <ion-segment-button value="map" content-id="map" class="gps-monitoring-segment-button">
       <ion-label>Карта</ion-label>
     </ion-segment-button>

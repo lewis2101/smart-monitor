@@ -36,10 +36,14 @@ onMounted(() => {
     attributionControl: false,
   });
 
-  mapInstance?.value.on("idle", function () {
+  const resize = () => {
     mapInstance.value?.resize();
     isLoading.value = false;
-  });
+
+    mapInstance.value?.off("idle", resize);
+  };
+
+  mapInstance.value?.on("idle", resize);
 });
 
 defineExpose({ map: mapInstance });

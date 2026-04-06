@@ -28,4 +28,6 @@ export enum Scopes {
   getNotifications = "get-notifications",
   readNotification = "read-notification",
   naviChat = "navi-chat",
+  resourceDependency = "resource-dependency",
+  naviVehicleList = "navi-vehicles-list",
 }
