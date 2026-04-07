@@ -2,17 +2,91 @@
 import { IonSegmentContent, IonSegmentView } from "@ionic/vue";
 import BaseMap from "@/components/map/base-map.vue";
 import { MonitoringSegment } from "@/widgets/gps-monitoring/gps-monitoring-segments/monitoring-segment";
+import { onMounted } from "vue";
+import carUrl from "@/assets/images/car-grey.png?url";
+import { useMap } from "@/composables/map/useMap.ts";
+import type { VehicleItem } from "@/entities/vehicle-list/types.ts";
+
+const emit = defineEmits<{
+  (e: "open-map"): void;
+}>();
+
+const CARS_SOURCE_KEY = "cars-source";
+const CARS_LAYER_KEY = "cars-layer";
+const CARS_ICON_KEY = "cars-icon";
+
+const { mapRef, init, addImage, addSource, addLayer, updateSource, fitBounds } = useMap();
+
+const onRenderCar = async (item: VehicleItem) => {
+  if (item.mess.longitude && item.mess.latitude) {
+    updateSource(CARS_SOURCE_KEY, {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [item.mess.longitude, item.mess.latitude],
+          },
+          properties: {
+            id: item.id,
+            name: item.name,
+            icon: CARS_ICON_KEY,
+          },
+        },
+      ],
+    });
+
+    emit("open-map");
+
+    await fitBounds([
+      {
+        lon: item.mess.longitude,
+        lat: item.mess.latitude,
+      },
+    ]);
+  }
+};
+
+onMounted(async () => {
+  await init();
+  await addImage(carUrl, CARS_ICON_KEY, {
+    width: 100,
+    height: 200,
+  });
+
+  addSource(CARS_SOURCE_KEY, {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features: [],
+    },
+  });
+
+  addLayer({
+    id: CARS_LAYER_KEY,
+    type: "symbol",
+    source: CARS_SOURCE_KEY,
+    layout: {
+      "icon-image": ["get", "icon"],
+      "icon-size": 0.5,
+      "text-field": ["get", "name"],
+      "text-offset": [0, 1.2],
+      "text-anchor": "top",
+    },
+  });
+});
 </script>
 
 <template>
   <ion-segment-view>
     <ion-segment-content id="map">
       <div class="monitoring-map">
-        <base-map class="monitoring-map__map" />
+        <base-map ref="mapRef" class="monitoring-map__map" />
       </div>
     </ion-segment-content>
     <ion-segment-content id="monitoring" class="monitoring-segment segment-padding">
-      <monitoring-segment />
+      <monitoring-segment @render-car="onRenderCar" />
     </ion-segment-content>
     <ion-segment-content id="tracks">tracks</ion-segment-content>
     <ion-segment-content id="reports">reports</ion-segment-content>

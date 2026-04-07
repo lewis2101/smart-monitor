@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { onMounted, ref, useId } from "vue";
+import { nextTick, onMounted, ref, useId } from "vue";
 import { mapsMapper, type MapMapperKeys } from "@/utils/mapMapper.ts";
 
 const mapId = useId();
@@ -12,7 +12,7 @@ const currentMapLayer = ref<MapMapperKeys>("2gis");
 const isLoading = ref(true);
 
 onMounted(() => {
-  mapInstance.value = new maplibregl.Map({
+  const map = new maplibregl.Map({
     container: mapId,
     style: {
       version: 8,
@@ -36,14 +36,13 @@ onMounted(() => {
     attributionControl: false,
   });
 
-  const resize = () => {
+  map.on("load", async () => {
+    await nextTick();
     mapInstance.value?.resize();
     isLoading.value = false;
+  });
 
-    mapInstance.value?.off("idle", resize);
-  };
-
-  mapInstance.value?.on("idle", resize);
+  mapInstance.value = map;
 });
 
 defineExpose({ map: mapInstance });

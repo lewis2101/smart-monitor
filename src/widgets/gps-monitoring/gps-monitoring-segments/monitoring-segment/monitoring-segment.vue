@@ -4,8 +4,12 @@ import { getVehicleList } from "@/entities/vehicle-list/getVehicleList.ts";
 import { formatDateString } from "@/utils/formatDate.ts";
 import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import type { VehicleItem } from "@/entities/vehicle-list/types.ts";
+import { watch } from "vue";
+import type { MonitoringSegmentEmits } from "@/widgets/gps-monitoring/gps-monitoring-segments/monitoring-segment/types.ts";
 
-const { data, suspense } = getVehicleList();
+const emit = defineEmits<MonitoringSegmentEmits>();
+
+const { data, suspense, error } = getVehicleList();
 
 const getVehicleStatus = (mess: VehicleItem["mess"]): "active" | "offline" | "unknown" => {
   if (!mess.latitude && !mess.longitude && !mess.satellites) {
@@ -19,13 +23,28 @@ const getVehicleStatus = (mess: VehicleItem["mess"]): "active" | "offline" | "un
   return "active";
 };
 
+const handleClickItem = (item: VehicleItem) => {
+  emit("render-car", item);
+};
+
+watch(error, (value) => {
+  if (value) {
+    throw value;
+  }
+});
+
 await suspense();
 </script>
 
 <template>
   <div class="monitoring-segment">
     <base-island-block title="Транспорт" :clickable="false" class="monitoring-segment__block">
-      <base-island-block v-for="item in data" :key="item.id" class="monitoring-segment__block-item">
+      <base-island-block
+        v-for="item in data"
+        :key="item.id"
+        class="monitoring-segment__block-item"
+        @click="handleClickItem(item)"
+      >
         <div class="monitoring-segment__item-wrapper">
           <div class="monitoring-segment__item-content">
             <div class="monitoring-segment__item-title">

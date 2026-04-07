@@ -8,7 +8,7 @@ import GpsMonitoringSegmentButtons from "@/widgets/gps-monitoring/gps-monitoring
 import GpsMonitoringSegments from "@/widgets/gps-monitoring/gps-monitoring-segments/gps-monitoring-segments.vue";
 import { useMonitoringSegments } from "@/widgets/gps-monitoring/use-monitoring-segments.ts";
 
-const { segmentModel } = useMonitoringSegments();
+const { segmentModel, handleOpenMap } = useMonitoringSegments();
 </script>
 
 <template>
@@ -20,7 +20,7 @@ const { segmentModel } = useMonitoringSegments();
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary" :x-offset="false" disable-refresh>
       <gps-monitoring-segment-buttons v-model="segmentModel" />
-      <gps-monitoring-segments />
+      <gps-monitoring-segments @open-map="handleOpenMap" />
     </base-content-with-refresher>
   </ion-page>
 </template>
