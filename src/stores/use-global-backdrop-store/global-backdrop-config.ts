@@ -15,6 +15,7 @@ import CameraPickBackdrop from "@/widgets/backdrops/camera-pick-backdrop/camera-
 import AuthPublicKeyListBackdrop from "@/widgets/backdrops/auth-public-key-list-backdrop/auth-public-key-list-backdrop.vue";
 import ProfileHistoryBackdrop from "@/widgets/backdrops/profile-history-backdrop/profile-history-backdrop.vue";
 import CameraViewBackdrop from "@/widgets/backdrops/camera-view-backdrop/camera-view-backdrop.vue";
+import { GpsMonitoringVehicleListBackdrop } from "@/widgets/backdrops/gps-monitoring-vehicle-list-backdrop";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {
   onSuccess?: S;
@@ -47,4 +48,5 @@ export const backdropComponents = {
   "auth-public-key-list": markRaw(AuthPublicKeyListBackdrop),
   "profile-history": markRaw(ProfileHistoryBackdrop),
   "camera-view": markRaw(CameraViewBackdrop),
+  "gps-monitoring-vehicle-list": markRaw(GpsMonitoringVehicleListBackdrop),
 } as const;

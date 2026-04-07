@@ -1,68 +1,47 @@
 <script setup lang="ts">
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
-import { getVehicleList } from "@/entities/vehicle-list/getVehicleList.ts";
-import { formatDateString } from "@/utils/formatDate.ts";
-import BaseIcon from "@/components/base/base-icon/base-icon.vue";
 import type { VehicleItem } from "@/entities/vehicle-list/types.ts";
-import { watch } from "vue";
 import type { MonitoringSegmentEmits } from "@/widgets/gps-monitoring/gps-monitoring-segments/monitoring-segment/types.ts";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { ref } from "vue";
+import VehicleList from "@/widgets/vehicle-list/vehicle-list.vue";
+
+const selectedVehicles = ref<VehicleItem[]>([]);
 
 const emit = defineEmits<MonitoringSegmentEmits>();
 
-const { data, suspense, error } = getVehicleList();
-
-const getVehicleStatus = (mess: VehicleItem["mess"]): "active" | "offline" | "unknown" => {
-  if (!mess.latitude && !mess.longitude && !mess.satellites) {
-    return "unknown";
-  }
-
-  if (!mess.movement && !mess.speed && !mess.ignition) {
-    return "offline";
-  }
-
-  return "active";
-};
+const globalBackdropStore = useGlobalBackdropStore();
 
 const handleClickItem = (item: VehicleItem) => {
-  emit("render-car", item);
+  emit("fit-bounds", item);
 };
 
-watch(error, (value) => {
-  if (value) {
-    throw value;
-  }
-});
+const handleClickSelect = async () => {
+  try {
+    const result = (await globalBackdropStore.push("gps-monitoring-vehicle-list", {
+      title: "Выберите автомобили",
+      props: {
+        initialValue: selectedVehicles.value,
+      },
+    })) as VehicleItem[];
 
-await suspense();
+    selectedVehicles.value = result;
+
+    emit("render-cars", result);
+  } catch (e) {
+    console.log(e);
+  }
+};
 </script>
 
 <template>
   <div class="monitoring-segment">
     <base-island-block title="Транспорт" :clickable="false" class="monitoring-segment__block">
-      <base-island-block
-        v-for="item in data"
-        :key="item.id"
-        class="monitoring-segment__block-item"
-        @click="handleClickItem(item)"
-      >
-        <div class="monitoring-segment__item-wrapper">
-          <div class="monitoring-segment__item-content">
-            <div class="monitoring-segment__item-title">
-              <span :class="['monitoring-segment__item-status', `status-${getVehicleStatus(item.mess)}`]" />
-              {{ item.name }}
-            </div>
-            <div class="monitoring-segment__item-location">
-              {{ item.depName }} ({{ item.mess.satellites }} спутников)
-            </div>
-            <div class="monitoring-segment__item-location">
-              {{ item.mess.timestamp ? formatDateString(new Date(item.mess.timestamp)) : "Нет данных" }}
-            </div>
-          </div>
-          <div class="monitoring-segment__item-menu">
-            <base-icon name="crosshair" />
-          </div>
-        </div>
-      </base-island-block>
+      <template #top-right>
+        <ion-button size="small" @click="handleClickSelect"> Выбрать элементы </ion-button>
+      </template>
+      <vehicle-list v-if="selectedVehicles.length" :vehicle-list="selectedVehicles" @select="handleClickItem" />
+      <div v-else class="monitoring-segment__non-selected">Активные автомобили не выбраны</div>
     </base-island-block>
 
     <base-island-block title="Группа" :clickable="false" class="monitoring-segment__block">
@@ -73,51 +52,11 @@ await suspense();
 
 <style scoped lang="scss">
 .monitoring-segment {
-  &__item-status {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-
-  .status-active {
-    background: $secondary-color;
-  }
-
-  .status-offline {
-    background: $danger;
-  }
-
-  .status-unknown {
-    background: $gray-dark;
-  }
-
-  &__block-item {
-    padding: 20px;
-  }
-
-  &__item-title {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-
-  &__item-location {
+  &__non-selected {
+    text-align: center;
     font-size: 14px;
-    margin-bottom: 4px;
-  }
-
-  &__item-menu {
-    color: $secondary-color;
-  }
-
-  &__item-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 16px;
   }
 }
 </style>

@@ -17,35 +17,54 @@ const CARS_ICON_KEY = "cars-icon";
 
 const { mapRef, init, addImage, addSource, addLayer, updateSource, fitBounds } = useMap();
 
-const onRenderCar = async (item: VehicleItem) => {
-  if (item.mess.longitude && item.mess.latitude) {
-    updateSource(CARS_SOURCE_KEY, {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [item.mess.longitude, item.mess.latitude],
-          },
-          properties: {
-            id: item.id,
-            name: item.name,
-            icon: CARS_ICON_KEY,
-          },
-        },
-      ],
-    });
+const onRenderCars = async (items: VehicleItem[]) => {
+  const filteredItems = items.filter((item) => !!item.mess.longitude && !!item.mess.latitude);
 
-    emit("open-map");
+  updateSource(CARS_SOURCE_KEY, {
+    type: "FeatureCollection",
+    features: filteredItems.map((item) => ({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [item.mess.longitude, item.mess.latitude],
+      },
+      properties: {
+        id: item.id,
+        name: item.name,
+        icon: CARS_ICON_KEY,
+      },
+    })),
+  });
 
-    await fitBounds([
+  emit("open-map");
+
+  await fitBounds(
+    filteredItems.map((item) => ({
+      lon: item.mess.longitude,
+      lat: item.mess.latitude,
+    })),
+    {
+      padding: 20,
+      zoom: 13,
+    },
+  );
+};
+
+const fitBoundOnItem = (item: VehicleItem) => {
+  emit("open-map");
+
+  fitBounds(
+    [
       {
         lon: item.mess.longitude,
         lat: item.mess.latitude,
       },
-    ]);
-  }
+    ],
+    {
+      padding: 20,
+      zoom: 13,
+    },
+  );
 };
 
 onMounted(async () => {
@@ -79,14 +98,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <ion-segment-view>
+  <ion-segment-view :swipe-gesture="false">
     <ion-segment-content id="map">
       <div class="monitoring-map">
         <base-map ref="mapRef" class="monitoring-map__map" />
       </div>
     </ion-segment-content>
     <ion-segment-content id="monitoring" class="monitoring-segment segment-padding">
-      <monitoring-segment @render-car="onRenderCar" />
+      <monitoring-segment @render-cars="onRenderCars" @fit-bounds="fitBoundOnItem" />
     </ion-segment-content>
     <ion-segment-content id="tracks">tracks</ion-segment-content>
     <ion-segment-content id="reports">reports</ion-segment-content>
@@ -98,17 +117,16 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
+ion-segment-view {
+  touch-action: none;
+  overflow: hidden;
+}
+
 .monitoring-map {
   width: 100%;
   height: 100%;
 }
 .segment-padding {
   padding: 16px;
-}
-
-.monitoring-segment {
-  &__block {
-    margin-bottom: 16px;
-  }
 }
 </style>

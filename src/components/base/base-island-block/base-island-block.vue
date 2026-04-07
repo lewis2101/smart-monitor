@@ -92,6 +92,7 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
     justify-content: space-between;
     align-items: flex-start;
     padding: 4px;
+    margin-bottom: 8px;
   }
 
   &__title {
@@ -100,7 +101,6 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
     line-height: 100%;
     letter-spacing: 0;
     padding: 0 4px;
-    margin-bottom: 8px;
   }
 
   &__content {

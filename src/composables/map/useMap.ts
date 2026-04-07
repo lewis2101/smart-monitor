@@ -75,7 +75,7 @@ export const useMap = () => {
     });
   };
 
-  const fitBounds = (coords: BoundsArgs[]) => {
+  const fitBounds = (coords: BoundsArgs[], options?: { padding?: number; zoom?: number }) => {
     if (!map.value) {
       console.log("MAP NOT EXISTS");
       return;
@@ -90,8 +90,8 @@ export const useMap = () => {
     return new Promise<void>((resolve) => {
       nextTick(() => {
         map.value?.fitBounds(bounds, {
-          padding: 20,
-          zoom: 15,
+          padding: options?.padding,
+          maxZoom: options?.zoom,
         });
         resolve();
       });
