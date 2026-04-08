@@ -83,6 +83,8 @@ await mockDelayPromise();
 
 <style scoped lang="scss">
 .ai-chat-list {
+  padding: 0;
+
   &__item {
     padding: 20px;
   }

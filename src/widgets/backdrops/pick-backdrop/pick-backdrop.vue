@@ -6,6 +6,7 @@ const props = defineProps<
     list: {
       label: string;
       value: string;
+      type?: "primary" | "danger";
     }[];
   } & BackdropComponentProps<(value: string) => void, (error: Error) => void>
 >();
@@ -22,7 +23,12 @@ const handleClick = (value: string) => {
 
 <template>
   <div class="pick-backdrop">
-    <div v-for="item in list" :key="item.value" class="pick-backdrop__item" @click="handleClick(item.value)">
+    <div
+      v-for="item in list"
+      :key="item.value"
+      :class="['pick-backdrop__item', item.type]"
+      @click="handleClick(item.value)"
+    >
       {{ item.label }}
     </div>
   </div>
@@ -47,9 +53,11 @@ const handleClick = (value: string) => {
     text-align: center;
 
     margin-top: 8px;
+  }
 
-
-
+  .danger {
+    background: $danger;
+    color: $white;
   }
 }
 </style>

@@ -2,8 +2,10 @@
 import BaseIslandBlock from "@/components/base/base-island-block/base-island-block.vue";
 import type { VehicleItem } from "@/entities/vehicle-list/types.ts";
 import { formatDateString } from "@/utils/formatDate.ts";
+import { useVirtualList } from "@vueuse/core";
+import { computed } from "vue";
 
-defineProps<{
+const props = defineProps<{
   vehicleList: VehicleItem[];
 }>();
 
@@ -22,37 +24,49 @@ const getVehicleStatus = (mess: VehicleItem["mess"]): "active" | "offline" | "un
 
   return "active";
 };
+
+const { list, containerProps, wrapperProps } = useVirtualList(
+  computed(() => props.vehicleList),
+  {
+    itemHeight: 110,
+    overscan: 10,
+  },
+);
 </script>
 
 <template>
-  <div class="vehicle-list">
-    <base-island-block
-      v-for="item in vehicleList"
-      :key="item.id"
-      class="vehicle-list__block-item"
-      @click="$emit('select', item)"
-    >
-      <div class="vehicle-list__item-wrapper">
-        <div class="vehicle-list__item-content">
-          <div class="vehicle-list__item-title">
-            <span :class="['vehicle-list__item-status', `status-${getVehicleStatus(item.mess)}`]" />
-            {{ item.name }}
-          </div>
-          <div class="vehicle-list__item-location">{{ item.depName }} ({{ item.mess.satellites }} спутников)</div>
-          <div class="vehicle-list__item-location">
-            {{ item.mess.timestamp ? formatDateString(new Date(item.mess.timestamp)) : "Нет данных" }}
+  <div v-bind="containerProps" class="vehicle-list">
+    <div v-bind="wrapperProps">
+      <base-island-block
+        v-for="item in list"
+        :key="item.data.id"
+        class="vehicle-list__block-item"
+        @click="$emit('select', item.data)"
+      >
+        <div class="vehicle-list__item-wrapper">
+          <div class="vehicle-list__item-content">
+            <div class="vehicle-list__item-title">
+              <span :class="['vehicle-list__item-status', `status-${getVehicleStatus(item.data.mess)}`]" />
+              {{ item.data.name }}
+            </div>
+            <div class="vehicle-list__item-location">
+              {{ item.data.depName }} ({{ item.data.mess.satellites }} спутников)
+            </div>
+            <div class="vehicle-list__item-location">
+              {{ item.data.mess.timestamp ? formatDateString(new Date(item.data.mess.timestamp)) : "Нет данных" }}
+            </div>
           </div>
         </div>
-        <div class="vehicle-list__item-menu">
-          <base-icon name="crosshair" />
-        </div>
-      </div>
-    </base-island-block>
+      </base-island-block>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .vehicle-list {
+  overflow-y: auto;
+  height: 500px;
+
   &__item-status {
     display: inline-block;
     width: 12px;

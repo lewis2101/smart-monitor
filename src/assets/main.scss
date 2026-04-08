@@ -65,3 +65,7 @@ body {
   --background-focused: #{$main-color};
   --background-hover: #{$secondary-color};
 }
+
+.button-clear {
+  --color: #{$main-color};
+}

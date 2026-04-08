@@ -16,6 +16,7 @@ export const useGlobalBackdropStore = defineStore("global-backdrop-store", () =>
     options: {
       title: string;
       props?: BackdropProps<K>;
+      closeByScroll?: boolean;
     },
   ) {
     return new Promise((resolve, reject) => {
@@ -28,6 +29,7 @@ export const useGlobalBackdropStore = defineStore("global-backdrop-store", () =>
           onSuccess: resolve,
           onFailure: reject,
         },
+        closeByScroll: options.closeByScroll,
         model: true,
       });
     });

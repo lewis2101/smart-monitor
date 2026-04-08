@@ -15,6 +15,7 @@ export const getVehicleList = () => {
   const { data, ...q } = useQuery({
     ...getNaviVehicleList,
     select: prepareVehicleList,
+    structuralSharing: true,
   });
 
   return {

@@ -62,7 +62,7 @@ const contentParams = reactive({
         />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher class="orders-page__content" @refresh="refresh" variant="secondary" :x-offset="false">
+    <base-content-with-refresher class="orders-page__content" @refresh="refresh" variant="secondary">
       <div class="orders-page__filter">
         <application-filter v-model:filter="filter" v-model:sort="sort" :params="headerParams" />
       </div>
@@ -77,16 +77,13 @@ const contentParams = reactive({
 .orders-page {
   &__filter {
     position: sticky;
-    top: 0;
+    top: 16px;
     left: 0;
     z-index: 1;
     background: $white;
-
-    padding: 16px 16px 0 16px;
   }
 
   &__content {
-    padding: 16px;
   }
 }
 </style>

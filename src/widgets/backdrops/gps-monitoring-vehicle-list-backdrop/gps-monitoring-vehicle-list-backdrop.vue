@@ -7,6 +7,7 @@ import { ref, watch } from "vue";
 import Checkbox from "primevue/checkbox";
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import type { GpsMonitoringVehicleListBackdropProps } from "@/widgets/backdrops/gps-monitoring-vehicle-list-backdrop/types.ts";
+import { useVirtualList } from "@vueuse/core";
 
 const props = defineProps<GpsMonitoringVehicleListBackdropProps>();
 
@@ -24,6 +25,7 @@ const getInitialValue = () => {
 const { data, suspense, error } = getVehicleList();
 
 const selectModel = ref<number[]>(getInitialValue());
+const allSelectedModel = ref(false);
 
 const getVehicleStatus = (mess: VehicleItem["mess"]): "active" | "offline" | "unknown" => {
   if (!mess.latitude && !mess.longitude && !mess.satellites) {
@@ -44,6 +46,19 @@ const handleSave = () => {
   emit("closeBackdrop");
 };
 
+const { list, containerProps, wrapperProps } = useVirtualList(data, {
+  itemHeight: 110,
+  overscan: 10,
+});
+
+watch(allSelectedModel, (value) => {
+  if (value) {
+    selectModel.value = data.value.map((item) => item.id);
+  } else {
+    selectModel.value = [];
+  }
+});
+
 watch(error, (value) => {
   if (value) {
     throw value;
@@ -54,9 +69,17 @@ await suspense();
 </script>
 
 <template>
-  <div class="gps-monitoring-vehicle-list-backdrop">
+  <div v-bind="containerProps" class="gps-monitoring-vehicle-list-backdrop">
     <div class="gps-monitoring-vehicle-list-backdrop__search">
-      <base-input placeholder="Поиск" />
+      <div class="gps-monitoring-vehicle-list-backdrop__input-wrapper">
+        <base-input placeholder="Поиск" class="gps-monitoring-vehicle-list-backdrop__input" />
+        <checkbox
+          v-model="allSelectedModel"
+          binary
+          size="large"
+          class="gps-monitoring-vehicle-list-backdrop__all-checkbox"
+        />
+      </div>
       <Transition name="fade">
         <div v-if="selectModel.length" class="gps-monitoring-vehicle-list-backdrop__selected">
           <div>Выбрано</div>
@@ -64,50 +87,74 @@ await suspense();
         </div>
       </Transition>
     </div>
-    <base-island-block
-      v-for="item in data"
-      :key="item.id"
-      :class="['gps-monitoring-vehicle-list-backdrop__block-item', selectModel.includes(item.id) && 'selected']"
-      :clickable="false"
-    >
-      <label class="gps-monitoring-vehicle-list-backdrop__item-wrapper">
-        <div class="ps-monitoring-vehicle-list-backdrop__select">
-          <checkbox v-model="selectModel" :value="item.id" />
+    <div v-bind="wrapperProps">
+      <base-island-block
+        v-for="item in list"
+        :key="item.data.id"
+        is="label"
+        :class="['gps-monitoring-vehicle-list-backdrop__block-item', selectModel.includes(item.data.id) && 'selected']"
+        :clickable="false"
+      >
+        <div class="gps-monitoring-vehicle-list-backdrop__item-wrapper">
+          <div class="ps-monitoring-vehicle-list-backdrop__select">
+            <checkbox v-model="selectModel" :value="item.data.id" />
+          </div>
+          <div class="gps-monitoring-vehicle-list-backdrop__item-content">
+            <div class="gps-monitoring-vehicle-list-backdrop__item-title">
+              <span
+                :class="[
+                  'gps-monitoring-vehicle-list-backdrop__item-status',
+                  `status-${getVehicleStatus(item.data.mess)}`,
+                ]"
+              />
+              {{ item.data.name }}
+            </div>
+            <div class="gps-monitoring-vehicle-list-backdrop__item-location">
+              {{ item.data.depName }} ({{ item.data.mess.satellites }} спутников)
+            </div>
+            <div class="gps-monitoring-vehicle-list-backdrop__item-location">
+              {{ item.data.mess.timestamp ? formatDateString(new Date(item.data.mess.timestamp)) : "Нет данных" }}
+            </div>
+          </div>
         </div>
-        <div class="gps-monitoring-vehicle-list-backdrop__item-content">
-          <div class="gps-monitoring-vehicle-list-backdrop__item-title">
-            <span
-              :class="['gps-monitoring-vehicle-list-backdrop__item-status', `status-${getVehicleStatus(item.mess)}`]"
-            />
-            {{ item.name }}
-          </div>
-          <div class="gps-monitoring-vehicle-list-backdrop__item-location">
-            {{ item.depName }} ({{ item.mess.satellites }} спутников)
-          </div>
-          <div class="gps-monitoring-vehicle-list-backdrop__item-location">
-            {{ item.mess.timestamp ? formatDateString(new Date(item.mess.timestamp)) : "Нет данных" }}
-          </div>
-        </div>
-      </label>
 
-      <Transition name="fade">
-        <div v-if="selectModel.length" class="gps-monitoring-vehicle-list-backdrop__button-wrapper">
-          <ion-button class="gps-monitoring-vehicle-list-backdrop__button" @click="handleSave"> Сохранить </ion-button>
-        </div>
-      </Transition>
-    </base-island-block>
+        <Transition name="fade">
+          <div v-if="selectModel.length" class="gps-monitoring-vehicle-list-backdrop__button-wrapper">
+            <ion-button class="gps-monitoring-vehicle-list-backdrop__button" @click="handleSave">
+              Сохранить
+            </ion-button>
+          </div>
+        </Transition>
+      </base-island-block>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .gps-monitoring-vehicle-list-backdrop {
-  padding: 8px 8px calc(8px + env(safe-area-inset-bottom)) 8px;
+  padding: 94px 8px calc(8px + env(safe-area-inset-bottom)) 8px;
+  overflow-y: auto;
+  height: 600px;
+
+  &__all-checkbox {
+    margin-right: 8px;
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__input {
+    width: 100%;
+  }
 
   &__button-wrapper {
     position: fixed;
     bottom: calc(4px + env(safe-area-inset-bottom));
-    left: 4px;
-    right: 4px;
+    left: 8px;
+    right: 8px;
   }
 
   &__button {
@@ -115,9 +162,11 @@ await suspense();
   }
 
   &__search {
-    position: sticky;
+    position: fixed;
     z-index: 1;
-    top: 8px;
+    top: 64px;
+    left: 8px;
+    right: 8px;
     margin-bottom: 8px;
 
     background: $white;

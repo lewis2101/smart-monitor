@@ -6,65 +6,39 @@ import { onMounted } from "vue";
 import carUrl from "@/assets/images/car-grey.png?url";
 import { useMap } from "@/composables/map/useMap.ts";
 import type { VehicleItem } from "@/entities/vehicle-list/types.ts";
+import { buildVehicleSource, CARS_SOURCE_KEY, getEmptySource } from "@/composables/map/sources.ts";
+import { getVehicleLayer } from "@/composables/map/layers.ts";
+import { CARS_ICON_KEY } from "@/composables/map/images.ts";
 
 const emit = defineEmits<{
   (e: "open-map"): void;
 }>();
 
-const CARS_SOURCE_KEY = "cars-source";
-const CARS_LAYER_KEY = "cars-layer";
-const CARS_ICON_KEY = "cars-icon";
-
 const { mapRef, init, addImage, addSource, addLayer, updateSource, fitBounds } = useMap();
 
-const onRenderCars = async (items: VehicleItem[]) => {
-  const filteredItems = items.filter((item) => !!item.mess.longitude && !!item.mess.latitude);
+const getFilteredItemsWithCoordinated = (items: VehicleItem[]) =>
+  items.filter((item) => !!item.mess.longitude && !!item.mess.latitude && !!item.mess.angle);
 
-  updateSource(CARS_SOURCE_KEY, {
-    type: "FeatureCollection",
-    features: filteredItems.map((item) => ({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [item.mess.longitude, item.mess.latitude],
-      },
-      properties: {
-        id: item.id,
-        name: item.name,
-        icon: CARS_ICON_KEY,
-      },
-    })),
-  });
+const getCoordinatedFromVehicles = (items: VehicleItem[]) =>
+  items.map((item) => ({
+    lon: item.mess.longitude,
+    lat: item.mess.latitude,
+  }));
 
-  emit("open-map");
-
-  await fitBounds(
-    filteredItems.map((item) => ({
-      lon: item.mess.longitude,
-      lat: item.mess.latitude,
-    })),
-    {
-      padding: 20,
-      zoom: 13,
-    },
-  );
+const onRenderCars = (items: VehicleItem[]) => {
+  const filteredItems = getFilteredItemsWithCoordinated(items);
+  updateSource(CARS_SOURCE_KEY, buildVehicleSource(filteredItems));
 };
 
-const fitBoundOnItem = (item: VehicleItem) => {
+const fitBoundsItems = async (items: VehicleItem[]) => {
+  const filteredItems = getFilteredItemsWithCoordinated(items);
+
   emit("open-map");
 
-  fitBounds(
-    [
-      {
-        lon: item.mess.longitude,
-        lat: item.mess.latitude,
-      },
-    ],
-    {
-      padding: 20,
-      zoom: 13,
-    },
-  );
+  await fitBounds(getCoordinatedFromVehicles(filteredItems), {
+    padding: 20,
+    zoom: 13,
+  });
 };
 
 onMounted(async () => {
@@ -74,26 +48,8 @@ onMounted(async () => {
     height: 200,
   });
 
-  addSource(CARS_SOURCE_KEY, {
-    type: "geojson",
-    data: {
-      type: "FeatureCollection",
-      features: [],
-    },
-  });
-
-  addLayer({
-    id: CARS_LAYER_KEY,
-    type: "symbol",
-    source: CARS_SOURCE_KEY,
-    layout: {
-      "icon-image": ["get", "icon"],
-      "icon-size": 0.5,
-      "text-field": ["get", "name"],
-      "text-offset": [0, 1.2],
-      "text-anchor": "top",
-    },
-  });
+  addSource(CARS_SOURCE_KEY, getEmptySource());
+  addLayer(getVehicleLayer());
 });
 </script>
 
@@ -105,7 +61,7 @@ onMounted(async () => {
       </div>
     </ion-segment-content>
     <ion-segment-content id="monitoring" class="monitoring-segment segment-padding">
-      <monitoring-segment @render-cars="onRenderCars" @fit-bounds="fitBoundOnItem" />
+      <monitoring-segment @render-cars="onRenderCars" @fit-bounds="fitBoundsItems" />
     </ion-segment-content>
     <ion-segment-content id="tracks">tracks</ion-segment-content>
     <ion-segment-content id="reports">reports</ion-segment-content>

@@ -21,6 +21,7 @@ defineEmits<{
 
 const getVariantColor = computed(() => (props.variant === "primary" ? "#066046" : "#FFFFFF"));
 const getXOffset = computed(() => (props.xOffset ? "16px 16px calc(16px + env(safe-area-inset-bottom)) 16px" : 0));
+const getHeight = computed(() => (props.xOffset ? "auto" : "calc(100% - 50px)"));
 </script>
 
 <template>
@@ -62,7 +63,7 @@ const getXOffset = computed(() => (props.xOffset ? "16px 16px calc(16px + env(sa
     padding: v-bind(getXOffset);
 
     width: 100%;
-    height: calc(100% - 50px);
+    height: v-bind(getHeight);
   }
 }
 .base-refresher {

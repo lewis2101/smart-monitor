@@ -31,6 +31,8 @@ await mockDelayPromise();
 
 <style scoped lang="scss">
 .services-menu {
+  padding: 0;
+
   &__wrapper {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

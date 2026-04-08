@@ -38,6 +38,7 @@ import { useHaptics } from "@/composables/native/use-haptics.ts";
 interface Props {
   title?: string;
   closeThreshold?: number;
+  closeByScroll?: boolean;
   /**
    * Stack order: 0 = base sheet, 1 = sheet above it, 2 = sheet above that, etc.
    * Controls z-index layering and backdrop opacity.
@@ -45,7 +46,7 @@ interface Props {
   stackIndex?: number;
 }
 
-const { title = "Sheet", closeThreshold = 80, stackIndex = 0 } = defineProps<Props>();
+const { title = "Sheet", closeThreshold = 80, stackIndex = 0, closeByScroll = false } = defineProps<Props>();
 
 const { mediumHaptic } = useHaptics();
 
@@ -112,6 +113,7 @@ function close(): void {
 
 function onTouchStart(e: TouchEvent): void {
   if (!isOpen.value) return;
+  if (!closeByScroll) return;
   startY = e.touches[0].clientY;
   currentY = startY;
   gestureMode = null;

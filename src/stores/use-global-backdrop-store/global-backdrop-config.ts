@@ -16,6 +16,7 @@ import AuthPublicKeyListBackdrop from "@/widgets/backdrops/auth-public-key-list-
 import ProfileHistoryBackdrop from "@/widgets/backdrops/profile-history-backdrop/profile-history-backdrop.vue";
 import CameraViewBackdrop from "@/widgets/backdrops/camera-view-backdrop/camera-view-backdrop.vue";
 import { GpsMonitoringVehicleListBackdrop } from "@/widgets/backdrops/gps-monitoring-vehicle-list-backdrop";
+import VehicleAdditionalDataBackdrop from "@/widgets/backdrops/vehicle-additional-data-backdrop/vehicle-additional-data-backdrop.vue";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {
   onSuccess?: S;
@@ -30,6 +31,7 @@ export type BackdropItem<C extends BackdropKeys> = {
   title: string;
   id: C;
   props: BackdropProps<C>;
+  closeByScroll?: boolean;
 };
 
 export const backdropComponents = {
@@ -49,4 +51,5 @@ export const backdropComponents = {
   "profile-history": markRaw(ProfileHistoryBackdrop),
   "camera-view": markRaw(CameraViewBackdrop),
   "gps-monitoring-vehicle-list": markRaw(GpsMonitoringVehicleListBackdrop),
+  "vehicle-additional-data": markRaw(VehicleAdditionalDataBackdrop),
 } as const;

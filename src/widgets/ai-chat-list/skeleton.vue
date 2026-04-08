@@ -21,6 +21,8 @@ import BaseIslandBlock from "@/components/base/base-island-block/base-island-blo
 
 <style scoped lang="scss">
 .ai-chat-list {
+  padding: 0;
+
   &__item {
     padding: 20px;
   }

@@ -30,6 +30,7 @@ const backdropRefs = useTemplateRef("backdropRefs");
     v-for="(backdrop, idx) in backdrops"
     :key="`${backdrop.id}-${backdrop.title}`"
     :stack-index="idx"
+    :close-by-scroll="backdrop.closeByScroll"
     ref="backdropRefs"
     v-model="backdrop.model"
     :title="backdrop.title"

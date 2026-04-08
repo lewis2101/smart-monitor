@@ -30,6 +30,7 @@ const props = withDefaults(
     clickable?: boolean;
     shadow?: boolean;
     skeletonTitle?: boolean;
+    is?: string;
   }>(),
   {
     rounded: "M",
@@ -37,6 +38,7 @@ const props = withDefaults(
     clickable: true,
     shadow: true,
     skeletonTitle: false,
+    is: "div",
   },
 );
 
@@ -54,7 +56,7 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
 </script>
 
 <template>
-  <div :class="['base-island-block']" ref="islandBlockRef">
+  <component :is="is" :class="['base-island-block']" ref="islandBlockRef">
     <ion-skeleton-text v-if="skeletonTitle" animated />
     <div v-else-if="title || $slots['top-right']" class="base-island-block__header">
       <span v-if="title" class="base-island-block__title">{{ title }}</span>
@@ -63,7 +65,7 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
     <div class="base-island-block__content">
       <slot />
     </div>
-  </div>
+  </component>
 </template>
 
 <style scoped lang="scss">
