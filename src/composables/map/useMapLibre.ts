@@ -92,6 +92,7 @@ export const useMapLibre = () => {
         map.value?.fitBounds(bounds, {
           padding: options?.padding,
           maxZoom: options?.zoom,
+          duration: 600,
         });
         resolve();
       });
