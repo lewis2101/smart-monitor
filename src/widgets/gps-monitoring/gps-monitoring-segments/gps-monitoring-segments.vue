@@ -4,7 +4,7 @@ import BaseMap from "@/components/map/base-map.vue";
 import { MonitoringSegment } from "@/widgets/gps-monitoring/gps-monitoring-segments/monitoring-segment";
 import { onMounted } from "vue";
 import carUrl from "@/assets/images/car-grey.png?url";
-import { useMap } from "@/composables/map/useMap.ts";
+import { useMapLibre } from "@/composables/map/useMapLibre.ts";
 import type { VehicleItem } from "@/entities/vehicle-list/types.ts";
 import { buildVehicleSource, CARS_SOURCE_KEY, getEmptySource } from "@/composables/map/sources.ts";
 import { getVehicleLayer } from "@/composables/map/layers.ts";
@@ -14,7 +14,7 @@ const emit = defineEmits<{
   (e: "open-map"): void;
 }>();
 
-const { mapRef, init, addImage, addSource, addLayer, updateSource, fitBounds } = useMap();
+const { mapRef, init, addImage, addSource, addLayer, updateSource, fitBounds } = useMapLibre();
 
 const getFilteredItemsWithCoordinated = (items: VehicleItem[]) =>
   items.filter((item) => !!item.mess.longitude && !!item.mess.latitude && !!item.mess.angle);

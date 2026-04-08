@@ -6,7 +6,7 @@ type BoundsArgs = {
   lat: number;
 };
 
-export const useMap = () => {
+export const useMapLibre = () => {
   const mapRef = ref<{ map: maplibregl.Map }>();
 
   const addLayer = (layer: maplibregl.AddLayerObject) => {

@@ -87,7 +87,7 @@ const handleClickDeleteAll = async () => {
 const handleClickSelect = async () => {
   try {
     const result = (await globalBackdropStore.push("gps-monitoring-vehicle-list", {
-      title: "Выберите автомобили",
+      title: "Выберите транспорт",
       props: {
         initialValue: selectedVehicles.value,
       },
