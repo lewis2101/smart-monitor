@@ -113,7 +113,7 @@ function close(): void {
 
 function onTouchStart(e: TouchEvent): void {
   if (!isOpen.value) return;
-  if (!closeByScroll) return;
+  if (closeByScroll) return;
   startY = e.touches[0].clientY;
   currentY = startY;
   gestureMode = null;

@@ -56,4 +56,5 @@ export enum NotificationEndpoints {
 export enum NaviEndpoints {
   naviChat = "/navi/ai/chat2",
   vehicleList = "/navi/vehicle-list",
+  naviGroup = "/navi/group",
 }

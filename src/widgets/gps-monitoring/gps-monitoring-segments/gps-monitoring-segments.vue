@@ -2,17 +2,27 @@
 import { IonSegmentContent, IonSegmentView } from "@ionic/vue";
 import BaseMap from "@/components/map/base-map.vue";
 import { MonitoringSegment } from "@/widgets/gps-monitoring/gps-monitoring-segments/monitoring-segment";
-import { onMounted } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import carUrl from "@/assets/images/car-grey.png?url";
 import { useMapLibre } from "@/composables/map/useMapLibre.ts";
 import type { VehicleItem } from "@/entities/vehicle-list/types.ts";
 import { buildVehicleSource, CARS_SOURCE_KEY, getEmptySource } from "@/composables/map/sources.ts";
-import { getVehicleLayer } from "@/composables/map/layers.ts";
+import { CARS_LAYER_KEY, getVehicleLayer } from "@/composables/map/layers.ts";
 import { CARS_ICON_KEY } from "@/composables/map/images.ts";
+import type { MapGeoJSONFeature, MapMouseEvent } from "maplibre-gl";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+
+defineProps<{
+  segment: string;
+}>();
 
 const emit = defineEmits<{
   (e: "open-map"): void;
 }>();
+
+const globalBackdropStore = useGlobalBackdropStore();
+
+const renderedCars = ref<VehicleItem[]>([]);
 
 const { mapRef, init, addImage, addSource, addLayer, updateSource, fitBounds } = useMapLibre();
 
@@ -27,6 +37,8 @@ const getCoordinatedFromVehicles = (items: VehicleItem[]) =>
 
 const onRenderCars = (items: VehicleItem[]) => {
   const filteredItems = getFilteredItemsWithCoordinated(items);
+  renderedCars.value = filteredItems;
+
   updateSource(CARS_SOURCE_KEY, buildVehicleSource(filteredItems));
 };
 
@@ -41,6 +53,28 @@ const fitBoundsItems = async (items: VehicleItem[]) => {
   });
 };
 
+const handleVehicleClick = (
+  e?: MapMouseEvent & {
+    features?: MapGeoJSONFeature[];
+  },
+) => {
+  const feature = e.features?.[0];
+  if (!feature) return;
+
+  const vehicleId = feature.properties.id;
+  if (!vehicleId) return;
+
+  const vehicle = renderedCars.value.find((item) => item.id === vehicleId);
+  if (!vehicle) return;
+
+  globalBackdropStore.push("gps-monitoring-vehicle-info", {
+    title: vehicle.name,
+    props: {
+      vehicle,
+    },
+  });
+};
+
 onMounted(async () => {
   await init();
   await addImage(carUrl, CARS_ICON_KEY, {
@@ -50,11 +84,17 @@ onMounted(async () => {
 
   addSource(CARS_SOURCE_KEY, getEmptySource());
   addLayer(getVehicleLayer());
+
+  mapRef.value?.map.on("click", CARS_LAYER_KEY, handleVehicleClick);
+});
+
+onBeforeUnmount(() => {
+  mapRef.value?.map.off("click", CARS_LAYER_KEY, handleVehicleClick);
 });
 </script>
 
 <template>
-  <ion-segment-view :swipe-gesture="false">
+  <ion-segment-view :value="segment" :swipe-gesture="false">
     <ion-segment-content id="map">
       <div class="monitoring-map">
         <base-map ref="mapRef" class="monitoring-map__map" />

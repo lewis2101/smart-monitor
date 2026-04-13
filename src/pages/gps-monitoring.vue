@@ -20,7 +20,7 @@ const { segmentModel, handleOpenMap } = useMonitoringSegments();
     </ion-header>
     <base-content-with-refresher @refresh="mockRefresh" variant="secondary" :x-offset="false" disable-refresh>
       <gps-monitoring-segment-buttons v-model="segmentModel" />
-      <gps-monitoring-segments @open-map="handleOpenMap" />
+      <gps-monitoring-segments :segment="segmentModel" @open-map="handleOpenMap" />
     </base-content-with-refresher>
   </ion-page>
 </template>

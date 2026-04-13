@@ -16,7 +16,8 @@ import AuthPublicKeyListBackdrop from "@/widgets/backdrops/auth-public-key-list-
 import ProfileHistoryBackdrop from "@/widgets/backdrops/profile-history-backdrop/profile-history-backdrop.vue";
 import CameraViewBackdrop from "@/widgets/backdrops/camera-view-backdrop/camera-view-backdrop.vue";
 import { GpsMonitoringVehicleListBackdrop } from "@/widgets/backdrops/gps-monitoring-vehicle-list-backdrop";
-import VehicleAdditionalDataBackdrop from "@/widgets/backdrops/vehicle-additional-data-backdrop/vehicle-additional-data-backdrop.vue";
+import { GpsMonitoringGroupBackdrop } from "@/widgets/backdrops/gps-monitoring-group-backdrop";
+import GpsMonitoringVehicleInfoBackdrop from "@/widgets/backdrops/gps-monitoring-vehicle-info-backdrop/gps-monitoring-vehicle-info-backdrop.vue";
 
 export type BackdropComponentProps<S = (...args: unknown[]) => unknown, F = (...args: unknown[]) => unknown> = {
   onSuccess?: S;
@@ -51,5 +52,6 @@ export const backdropComponents = {
   "profile-history": markRaw(ProfileHistoryBackdrop),
   "camera-view": markRaw(CameraViewBackdrop),
   "gps-monitoring-vehicle-list": markRaw(GpsMonitoringVehicleListBackdrop),
-  "vehicle-additional-data": markRaw(VehicleAdditionalDataBackdrop),
+  "gps-monitoring-group": markRaw(GpsMonitoringGroupBackdrop),
+  "gps-monitoring-vehicle-info": markRaw(GpsMonitoringVehicleInfoBackdrop),
 } as const;

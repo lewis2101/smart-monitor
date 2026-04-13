@@ -117,15 +117,14 @@ await suspense();
             </div>
           </div>
         </div>
-
-        <Transition name="fade">
-          <div v-if="selectModel.length" class="gps-monitoring-vehicle-list-backdrop__button-wrapper">
-            <ion-button class="gps-monitoring-vehicle-list-backdrop__button" @click="handleSave">
-              Сохранить
-            </ion-button>
-          </div>
-        </Transition>
       </base-island-block>
+      <Transition name="fade">
+        <div v-if="selectModel.length" class="gps-monitoring-vehicle-list-backdrop__button-wrapper">
+          <ion-button class="gps-monitoring-vehicle-list-backdrop__button" @click="handleSave">
+            Сохранить
+          </ion-button>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
@@ -151,7 +150,7 @@ await suspense();
   }
 
   &__button-wrapper {
-    position: fixed;
+    position: sticky;
     bottom: calc(4px + env(safe-area-inset-bottom));
     left: 8px;
     right: 8px;
