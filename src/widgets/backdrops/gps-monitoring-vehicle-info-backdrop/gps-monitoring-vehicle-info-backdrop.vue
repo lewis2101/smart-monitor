@@ -30,7 +30,7 @@ const listData = computed(() => [
   },
   {
     label: "Высота над уровнем моря",
-    value: props.vehicle.mess.altitude,
+    value: `${props.vehicle.mess.altitude} м`,
   },
   {
     label: "Связь с спутниками",

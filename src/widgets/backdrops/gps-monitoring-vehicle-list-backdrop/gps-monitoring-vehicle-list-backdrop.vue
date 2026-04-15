@@ -151,7 +151,7 @@ await suspense();
 
   &__button-wrapper {
     position: sticky;
-    bottom: calc(4px + env(safe-area-inset-bottom));
+    bottom: 0;
     left: 8px;
     right: 8px;
   }

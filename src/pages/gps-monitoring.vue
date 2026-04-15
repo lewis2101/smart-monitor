@@ -18,7 +18,7 @@ const { segmentModel, handleOpenMap } = useMonitoringSegments();
         <default-layout-header title="GPS мониторинг" />
       </base-toolbar>
     </ion-header>
-    <base-content-with-refresher @refresh="mockRefresh" variant="secondary" :x-offset="false" disable-refresh>
+    <base-content-with-refresher @refresh="mockRefresh" variant="secondary" :x-offset="false">
       <gps-monitoring-segment-buttons v-model="segmentModel" />
       <gps-monitoring-segments :segment="segmentModel" @open-map="handleOpenMap" />
     </base-content-with-refresher>

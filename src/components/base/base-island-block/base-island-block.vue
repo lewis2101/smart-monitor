@@ -92,7 +92,7 @@ const boxShadow = computed(() => (props.shadow ? `0 0 24px 0 #00000014` : "none"
   &__header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding: 4px;
     margin-bottom: 8px;
   }

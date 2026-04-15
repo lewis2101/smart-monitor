@@ -12,11 +12,19 @@ import type { VehicleGroup } from "@/entities/vehicle-group/types.ts";
 import { getVehicleList } from "@/entities/vehicle-list/getVehicleList.ts";
 import { useGlobalSpinner } from "@/stores/use-global-spinner/use-global-spinner.ts";
 
-const props = defineProps<BackdropComponentProps<(groups: VehicleGroup[]) => void, (error: Error) => void>>();
+const props = defineProps<
+  {
+    initialValue: VehicleGroup[];
+  } & BackdropComponentProps<(groups: VehicleGroup[]) => void, (error: Error) => void>
+>();
 
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
 }>();
+
+const getInitialValueIds = () => {
+  return props.initialValue.map((group) => group.id);
+};
 
 const globalSpinner = useGlobalSpinner();
 
@@ -25,7 +33,7 @@ const { data: groupData, suspense, error } = useQuery(naviGroup);
 
 const { data: vehiclesListData, suspense: vehicleListSuspense, error: vehicleListError } = getVehicleList();
 
-const groupModel = ref<string[]>([]);
+const groupModel = ref<string[]>(getInitialValueIds() || []);
 
 const handleSave = () => {
   globalSpinner.show();
@@ -76,11 +84,9 @@ await Promise.all([suspense(), vehicleListSuspense()]);
       </AccordionPanel>
     </Accordion>
 
-    <Transition name="fade">
-      <div v-if="groupModel.length" class="gps-monitoring-group-backdrop__button-wrapper">
-        <ion-button class="gps-monitoring-group-backdrop__button" @click="handleSave"> Сохранить </ion-button>
-      </div>
-    </Transition>
+    <div class="gps-monitoring-group-backdrop__button-wrapper">
+      <ion-button class="gps-monitoring-group-backdrop__button" @click="handleSave"> Сохранить </ion-button>
+    </div>
   </div>
 </template>
 

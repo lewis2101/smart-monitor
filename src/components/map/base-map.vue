@@ -49,7 +49,7 @@ defineExpose({ map: mapInstance });
 </script>
 
 <template>
-  <div :id="mapId" class="base-map">
+  <div :id="mapId" class="base-map" @pointerdown.stop @pointerup.prevent.stop @touchend.stop @touchmove.stop>
     <Transition name="fade">
       <div v-if="isLoading" class="base-map__spinner-wrapper">
         <ion-spinner name="circular" class="base-map__spinner" />

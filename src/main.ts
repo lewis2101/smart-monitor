@@ -21,11 +21,14 @@ registerPrimeVue(app);
 app.use(dependencyInjectionProvider);
 app.use(createPinia());
 
-const { disableScroll } = useKeyboardStore();
+await app.runWithContext(() => {
+  const { disableScroll } = useKeyboardStore();
 
-const pwaElements = defineCustomElements(window);
-const capacitorKeyboard = disableScroll();
-await Promise.all([pwaElements, capacitorKeyboard]);
+  const pwaElements = defineCustomElements(window);
+  const capacitorKeyboard = disableScroll();
+
+  return Promise.all([pwaElements, capacitorKeyboard]);
+});
 
 app.use(IonicVue, {
   mode: "ios",

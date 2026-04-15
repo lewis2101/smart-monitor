@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { IonSegmentContent, IonSegmentView } from "@ionic/vue";
 import BaseMap from "@/components/map/base-map.vue";
 import { MonitoringSegment } from "@/widgets/gps-monitoring/gps-monitoring-segments/monitoring-segment";
 import { onBeforeUnmount, onMounted, ref } from "vue";
@@ -94,25 +93,29 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <ion-segment-view :value="segment" :swipe-gesture="false">
-    <ion-segment-content id="map">
-      <div class="monitoring-map">
+  <div class="gps-monitoring-segments">
+    <Transition name="fade">
+      <div v-show="segment === 'map'" class="monitoring-map">
         <base-map ref="mapRef" class="monitoring-map__map" />
       </div>
-    </ion-segment-content>
-    <ion-segment-content id="monitoring" class="monitoring-segment segment-padding">
-      <monitoring-segment @render-cars="onRenderCars" @fit-bounds="fitBoundsItems" />
-    </ion-segment-content>
-    <ion-segment-content id="tracks">tracks</ion-segment-content>
-    <ion-segment-content id="reports">reports</ion-segment-content>
-    <ion-segment-content id="geozone">geozone</ion-segment-content>
-    <ion-segment-content id="inWork">inWork</ion-segment-content>
-    <ion-segment-content id="drivers">drivers</ion-segment-content>
-    <ion-segment-content id="settings">settings</ion-segment-content>
-  </ion-segment-view>
+    </Transition>
+    <Transition name="fade">
+      <div v-show="segment === 'monitoring'" class="gps-monitoring-segments__layout">
+        <monitoring-segment @render-cars="onRenderCars" @fit-bounds="fitBoundsItems" />
+      </div>
+    </Transition>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.gps-monitoring-segments {
+  height: 100%;
+
+  &__layout {
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom)) 8px;
+  }
+}
+
 ion-segment-view {
   touch-action: none;
   overflow: hidden;

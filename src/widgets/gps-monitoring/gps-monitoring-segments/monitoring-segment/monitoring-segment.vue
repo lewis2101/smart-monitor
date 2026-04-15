@@ -120,6 +120,9 @@ const handleClickSelectGroup = async () => {
   try {
     const result = (await globalBackdropStore.push("gps-monitoring-group", {
       title: "Выберите группу транспортов",
+      props: {
+        initialValue: selectedGroups.value,
+      },
     })) as VehicleGroup[];
 
     selectedGroups.value = result;
@@ -238,7 +241,6 @@ const handleFitBoundsAllGroups = () => {
     align-items: center;
     gap: 8px;
     justify-content: flex-end;
-    margin-bottom: 16px;
   }
 
   &__non-selected {
