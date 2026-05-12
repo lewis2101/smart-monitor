@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseMap from "@/components/map/base-map.vue";
 import { MonitoringSegment } from "@/widgets/gps-monitoring/gps-monitoring-segments/monitoring-segment";
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import carUrl from "@/assets/images/car-grey.png?url";
 import { useMapLibre } from "@/composables/map/useMapLibre.ts";
 import type { VehicleItem } from "@/entities/vehicle-list/types.ts";
@@ -10,6 +10,9 @@ import { CARS_LAYER_KEY, getVehicleLayer } from "@/composables/map/layers.ts";
 import { CARS_ICON_KEY } from "@/composables/map/images.ts";
 import type { MapGeoJSONFeature, MapMouseEvent } from "maplibre-gl";
 import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
+import { useNaviSessionMutation } from "@/api/navi/navi-sesson.ts";
+import { useQuery } from "@tanstack/vue-query";
+import { useNaviPoll } from "@/api/navi/navi-poll.ts";
 
 defineProps<{
   segment: string;
@@ -22,6 +25,22 @@ const emit = defineEmits<{
 const globalBackdropStore = useGlobalBackdropStore();
 
 const renderedCars = ref<VehicleItem[]>([]);
+const sessionId = ref<string | null>(null);
+const baseTs = ref<number | null>(null);
+const lastId = ref<string | null>(null);
+
+const naviSessionMutation = useNaviSessionMutation({});
+const { data: pollData } = useQuery({
+  ...useNaviPoll({
+    params: () => ({
+      sessionId: sessionId.value,
+      _ts: baseTs.value,
+      lastId: lastId.value,
+    }),
+  }),
+  enabled: () => renderedCars.value.length > 0 && !!sessionId.value,
+  refetchInterval: 3000,
+});
 
 const { mapRef, init, addImage, addSource, addLayer, updateSource, fitBounds } = useMapLibre();
 
@@ -34,11 +53,35 @@ const getCoordinatedFromVehicles = (items: VehicleItem[]) =>
     lat: item.mess.latitude,
   }));
 
-const onRenderCars = (items: VehicleItem[]) => {
+const cleanObserveActiveCars = () => {
+  sessionId.value = null;
+  baseTs.value = null;
+  lastId.value = null;
+};
+
+const onRenderCars = async (items: VehicleItem[]) => {
   const filteredItems = getFilteredItemsWithCoordinated(items);
   renderedCars.value = filteredItems;
 
   updateSource(CARS_SOURCE_KEY, buildVehicleSource(filteredItems));
+
+  if (filteredItems.length === 0) {
+    return cleanObserveActiveCars();
+  }
+
+  try {
+    const { data } = await naviSessionMutation.mutateAsync({
+      data: {
+        sessionId: sessionId.value,
+        targets: filteredItems.map((item) => item.id),
+      },
+    });
+
+    baseTs.value = data.baseTs;
+    sessionId.value = data.sessionId;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const fitBoundsItems = async (items: VehicleItem[]) => {
@@ -89,6 +132,31 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   mapRef.value?.map.off("click", CARS_LAYER_KEY, handleVehicleClick);
+});
+
+watch(pollData, (data) => {
+  if (data?.lastId) {
+    lastId.value = data.lastId;
+  }
+
+  if (data?.messages && data.messages.length > 0) {
+    renderedCars.value = renderedCars.value.map((car) => {
+      const updatedData = data.messages?.find((i) => i.vehicleId === String(car.id));
+
+      if (updatedData) {
+        return {
+          ...car,
+          ...updatedData,
+        };
+      }
+
+      return car;
+    });
+
+    console.log("RENDER NEW DATA: ", renderedCars.value);
+
+    updateSource(CARS_SOURCE_KEY, buildVehicleSource(renderedCars.value));
+  }
 });
 </script>
 

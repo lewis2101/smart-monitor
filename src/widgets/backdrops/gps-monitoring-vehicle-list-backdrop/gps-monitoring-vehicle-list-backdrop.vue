@@ -7,7 +7,7 @@ import { ref, watch } from "vue";
 import Checkbox from "primevue/checkbox";
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import type { GpsMonitoringVehicleListBackdropProps } from "@/widgets/backdrops/gps-monitoring-vehicle-list-backdrop/types.ts";
-import { useVirtualList } from "@vueuse/core";
+import { useVirtualList, watchDebounced } from "@vueuse/core";
 
 const props = defineProps<GpsMonitoringVehicleListBackdropProps>();
 
@@ -25,6 +25,7 @@ const getInitialValue = () => {
 const { data, suspense, error } = getVehicleList();
 
 const selectModel = ref<number[]>(getInitialValue());
+const searchModel = ref("");
 const allSelectedModel = ref(false);
 
 const getVehicleStatus = (mess: VehicleItem["mess"]): "active" | "offline" | "unknown" => {
@@ -59,6 +60,12 @@ watch(allSelectedModel, (value) => {
   }
 });
 
+watchDebounced(searchModel, (value) => {
+  console.log({ value });
+}, {
+  debounce: 500,
+});
+
 watch(error, (value) => {
   if (value) {
     throw value;
@@ -72,7 +79,7 @@ await suspense();
   <div v-bind="containerProps" class="gps-monitoring-vehicle-list-backdrop">
     <div class="gps-monitoring-vehicle-list-backdrop__search">
       <div class="gps-monitoring-vehicle-list-backdrop__input-wrapper">
-        <base-input placeholder="Поиск" class="gps-monitoring-vehicle-list-backdrop__input" />
+        <base-input v-model="searchModel" placeholder="Поиск" class="gps-monitoring-vehicle-list-backdrop__input" />
         <checkbox
           v-model="allSelectedModel"
           binary
@@ -120,9 +127,7 @@ await suspense();
       </base-island-block>
       <Transition name="fade">
         <div v-if="selectModel.length" class="gps-monitoring-vehicle-list-backdrop__button-wrapper">
-          <ion-button class="gps-monitoring-vehicle-list-backdrop__button" @click="handleSave">
-            Сохранить
-          </ion-button>
+          <ion-button class="gps-monitoring-vehicle-list-backdrop__button" @click="handleSave"> Сохранить </ion-button>
         </div>
       </Transition>
     </div>

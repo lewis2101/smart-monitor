@@ -31,4 +31,6 @@ export enum Scopes {
   naviGroup = "navi-group",
   resourceDependency = "resource-dependency",
   naviVehicleList = "navi-vehicles-list",
+  naviSession = "navi-session",
+  naviPoll = "navi-poll",
 }
