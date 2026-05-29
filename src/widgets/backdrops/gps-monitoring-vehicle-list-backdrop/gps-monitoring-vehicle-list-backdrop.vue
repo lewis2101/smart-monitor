@@ -8,12 +8,44 @@ import Checkbox from "primevue/checkbox";
 import BaseInput from "@/components/base/base-input/base-input.vue";
 import type { GpsMonitoringVehicleListBackdropProps } from "@/widgets/backdrops/gps-monitoring-vehicle-list-backdrop/types.ts";
 import { useVirtualList, watchDebounced } from "@vueuse/core";
+import { useGlobalBackdropStore } from "@/stores/use-global-backdrop-store/use-global-backdrop-store.ts";
 
 const props = defineProps<GpsMonitoringVehicleListBackdropProps>();
 
 const emit = defineEmits<{
   (e: "closeBackdrop"): void;
 }>();
+
+type FilterValues = "byModel" | "byNumber" | "byFilial" | "byStatus" | "bySatellites" | "byActive";
+const filterList: {
+  label: string;
+  value: FilterValues;
+}[] = [
+  {
+    label: "По модели",
+    value: "byModel",
+  },
+  {
+    label: "По номеру",
+    value: "byNumber",
+  },
+  {
+    label: "По филиалу",
+    value: "byFilial",
+  },
+  {
+    label: "По статусу",
+    value: "byStatus",
+  },
+  {
+    label: "По спутникам",
+    value: "bySatellites",
+  },
+  {
+    label: "По связам",
+    value: "byActive",
+  },
+];
 
 const getInitialValue = () => {
   if (props.initialValue) {
@@ -23,6 +55,7 @@ const getInitialValue = () => {
 };
 
 const { data, suspense, error } = getVehicleList();
+const globalBackdropStore = useGlobalBackdropStore();
 
 const selectModel = ref<number[]>(getInitialValue());
 const searchModel = ref("");
@@ -47,6 +80,25 @@ const handleSave = () => {
   emit("closeBackdrop");
 };
 
+const handleClickAllSelected = () => {
+  allSelectedModel.value = !allSelectedModel.value;
+};
+
+const handleClickFilter = async () => {
+  try {
+    const result = (await globalBackdropStore.push("select", {
+      title: "Фильтр",
+      props: {
+        list: filterList,
+      },
+    })) as FilterValues;
+
+    console.log({ result });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const { list, containerProps, wrapperProps } = useVirtualList(data, {
   itemHeight: 110,
   overscan: 10,
@@ -60,11 +112,15 @@ watch(allSelectedModel, (value) => {
   }
 });
 
-watchDebounced(searchModel, (value) => {
-  console.log({ value });
-}, {
-  debounce: 500,
-});
+watchDebounced(
+  searchModel,
+  (value) => {
+    console.log({ value });
+  },
+  {
+    debounce: 500,
+  },
+);
 
 watch(error, (value) => {
   if (value) {
@@ -80,19 +136,13 @@ await suspense();
     <div class="gps-monitoring-vehicle-list-backdrop__search">
       <div class="gps-monitoring-vehicle-list-backdrop__input-wrapper">
         <base-input v-model="searchModel" placeholder="Поиск" class="gps-monitoring-vehicle-list-backdrop__input" />
-        <checkbox
-          v-model="allSelectedModel"
-          binary
-          size="large"
-          class="gps-monitoring-vehicle-list-backdrop__all-checkbox"
-        />
       </div>
-      <Transition name="fade">
-        <div v-if="selectModel.length" class="gps-monitoring-vehicle-list-backdrop__selected">
-          <div>Выбрано</div>
-          <div>{{ selectModel.length }}</div>
-        </div>
-      </Transition>
+      <div class="gps-monitoring-vehicle-list-backdrop__filter">
+        <ion-button size="small" @click="handleClickFilter"> Фильтр </ion-button>
+        <ion-button size="small" @click="handleClickAllSelected">
+          {{ allSelectedModel ? "Очистить всё" : "Выбрать всё" }}
+        </ion-button>
+      </div>
     </div>
     <div v-bind="wrapperProps">
       <base-island-block
@@ -127,7 +177,9 @@ await suspense();
       </base-island-block>
       <Transition name="fade">
         <div v-if="selectModel.length" class="gps-monitoring-vehicle-list-backdrop__button-wrapper">
-          <ion-button class="gps-monitoring-vehicle-list-backdrop__button" @click="handleSave"> Сохранить </ion-button>
+          <ion-button class="gps-monitoring-vehicle-list-backdrop__button" @click="handleSave">
+            Сохранить ({{ selectModel.length }})
+          </ion-button>
         </div>
       </Transition>
     </div>
@@ -136,7 +188,7 @@ await suspense();
 
 <style scoped lang="scss">
 .gps-monitoring-vehicle-list-backdrop {
-  padding: 94px 8px calc(8px + env(safe-area-inset-bottom)) 8px;
+  padding: 100px 8px calc(8px + env(safe-area-inset-bottom)) 8px;
   overflow-y: auto;
   height: 600px;
 
@@ -152,6 +204,18 @@ await suspense();
 
   &__input {
     width: 100%;
+  }
+
+  &__filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    //background: $gray-light;
+    border-radius: 12px;
+    height: 100%;
+    padding: 6px 12px;
   }
 
   &__button-wrapper {
